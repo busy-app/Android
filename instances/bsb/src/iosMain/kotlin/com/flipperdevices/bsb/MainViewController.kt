@@ -1,8 +1,8 @@
+package com.flipperdevices.bsb
+
 import androidx.compose.ui.window.ComposeUIViewController
 import com.arkivanov.decompose.ComponentContext
-import com.flipperdevices.bsb.App
-import com.flipperdevices.bsb.di.IOSAppComponent
-import com.flipperdevices.bsb.di.create
+import com.flipperdevices.bsb.di.getIOSAppComponent
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.observable.makeObservable
@@ -18,7 +18,7 @@ fun MainViewController(
     val applicationScope = CoroutineScope(
         SupervisorJob() + FlipperDispatchers.default
     )
-    val appComponent = IOSAppComponent::class.create(
+    val appComponent = getIOSAppComponent(
         settings.makeObservable(),
         applicationScope
     )

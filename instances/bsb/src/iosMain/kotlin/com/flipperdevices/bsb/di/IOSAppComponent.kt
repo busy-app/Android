@@ -12,3 +12,5 @@ abstract class IOSAppComponent(
     override val observableSettings: ObservableSettings,
     override val scope: CoroutineScope
 ) : AppComponent
+
+expect fun getIOSAppComponent(observableSettingsDelegate: ObservableSettings, scopeDelegate: CoroutineScope): IOSAppComponent
