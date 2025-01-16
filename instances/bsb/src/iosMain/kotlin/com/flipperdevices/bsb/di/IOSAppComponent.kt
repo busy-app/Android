@@ -1,8 +1,10 @@
 package com.flipperdevices.bsb.di
 
+import com.flipperdevices.bsb.appblocker.api.FamilyControlApi
 import com.flipperdevices.core.di.AppGraph
 import com.russhwolf.settings.ObservableSettings
 import kotlinx.coroutines.CoroutineScope
+import me.tatarka.inject.annotations.Provides
 import software.amazon.lastmile.kotlin.inject.anvil.MergeComponent
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
@@ -10,7 +12,12 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 abstract class IOSAppComponent(
     override val observableSettings: ObservableSettings,
-    override val scope: CoroutineScope
+    override val scope: CoroutineScope,
+    @get:Provides val familyControlApi: FamilyControlApi
 ) : AppComponent
 
-expect fun getIOSAppComponent(observableSettingsDelegate: ObservableSettings, scopeDelegate: CoroutineScope): IOSAppComponent
+expect fun getIOSAppComponent(
+    observableSettingsDelegate: ObservableSettings,
+    scopeDelegate: CoroutineScope,
+    familyControlApi: FamilyControlApi
+): IOSAppComponent

@@ -15,9 +15,19 @@ androidDependencies {
     implementation(projects.components.core.activityholder)
 
     implementation(projects.components.bsb.timer.background.api)
-    implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.deeplink.api)
 
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.datetime)
 }
+
+iosDependencies {
+    implementation(projects.components.bsb.preference.api)
+    implementation(projects.components.bsb.timer.background.api)
+
+    implementation(projects.components.core.log)
+
+    implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlin.datetime)
+}
+

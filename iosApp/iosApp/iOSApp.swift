@@ -13,9 +13,13 @@ struct iOSApp: App {
         appDelegate.rootHolder
     }
 
+    var familyControl: FamilyControlApi {
+        appDelegate.familyControl
+    }
+
     var body: some Scene {
         WindowGroup {
-            ComposeView(componentContext: rootHolder.componentContext)
+            ComposeView(componentContext: rootHolder.componentContext, familyControl: familyControl)
                 .ignoresSafeArea()
                 .onChange(of: scenePhase) { newPhase in
                     switch newPhase {

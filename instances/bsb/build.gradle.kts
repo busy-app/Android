@@ -59,6 +59,7 @@ kotlin {
             export(libs.decompose)
             export(libs.essenty.lifecycle)
             export(libs.settings)
+            export(projects.components.bsb.appblocker.api)
         }
     }
 
@@ -100,6 +101,7 @@ kotlin {
             api(libs.essenty.lifecycle)
             api(libs.settings)
 
+            api(projects.components.bsb.appblocker.api)
             implementation(libs.settings.observable)
         }
         wasmJsMain.dependencies {
