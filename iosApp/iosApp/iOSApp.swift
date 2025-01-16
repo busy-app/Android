@@ -16,6 +16,7 @@ struct iOSApp: App {
     var body: some Scene {
         WindowGroup {
             ComposeView(componentContext: rootHolder.componentContext)
+                .ignoresSafeArea()
                 .onChange(of: scenePhase) { newPhase in
                     switch newPhase {
                     case .background: LifecycleRegistryExtKt.stop(rootHolder.lifecycle)
