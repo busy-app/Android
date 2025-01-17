@@ -10,5 +10,6 @@ enum class AuthWay {
     EMAIL,
     GOOGLE,
     MICROSOFT,
-    APPLE
+    APPLE,
+    PASSKEY
 }
