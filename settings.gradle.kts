@@ -87,6 +87,8 @@ include(
     ":components:bsb:auth:within:oauth:impl",
     ":components:bsb:auth:within:onetap:api",
     ":components:bsb:auth:within:onetap:impl",
+    ":components:bsb:auth:within:passkey:api",
+    ":components:bsb:auth:within:passkey:impl",
 
     ":components:bsb:timer:common",
     ":components:bsb:timer:setup:api",
