@@ -7,6 +7,8 @@ plugins {
 
 commonDependencies {
     implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.metronome.api)
+    implementation(projects.components.bsb.liveactivity.api)
 
     implementation(projects.components.core.di)
     implementation(projects.components.core.ktx)

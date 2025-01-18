@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.di
 
 import com.flipperdevices.bsb.appblocker.api.FamilyControlApi
+import com.flipperdevices.bsb.metronome.api.AudioPlayerApi
 import com.flipperdevices.core.di.AppGraph
 import com.russhwolf.settings.ObservableSettings
 import kotlinx.coroutines.CoroutineScope
@@ -13,11 +14,13 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 abstract class IOSAppComponent(
     override val observableSettings: ObservableSettings,
     override val scope: CoroutineScope,
-    @get:Provides val familyControlApi: FamilyControlApi
+    @get:Provides val familyControlApi: FamilyControlApi,
+    @get:Provides val audioPlayer: AudioPlayerApi
 ) : AppComponent
 
 expect fun getIOSAppComponent(
     observableSettingsDelegate: ObservableSettings,
     scopeDelegate: CoroutineScope,
-    familyControlApi: FamilyControlApi
+    familyControlApi: FamilyControlApi,
+    audioPlayer: AudioPlayerApi
 ): IOSAppComponent

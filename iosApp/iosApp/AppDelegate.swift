@@ -7,6 +7,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
     let familyControl: FamilyControlApi = FamilyControl()
 
+    let audioPlayer: ApiAudioPlayerApi = AudioPlayer()
+
     func applicationWillTerminate(_ application: UIApplication) {
         familyControl.disableFamilyControls()
     }

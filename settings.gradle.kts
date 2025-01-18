@@ -64,6 +64,9 @@ include(
     ":components:bsb:deeplink:impl",
     ":components:bsb:inappnotification:api",
     ":components:bsb:inappnotification:impl",
+    ":components:bsb:metronome:api",
+    ":components:bsb:metronome:impl",
+    ":components:bsb:liveactivity:api",
 
     ":components:bsb:auth:common",
     ":components:bsb:auth:main:impl",

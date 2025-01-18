@@ -7,4 +7,6 @@
     <string name="preference_version">Version %1$s</string>
     <string name="preference_auth">Auth</string>
     <string name="preference_auth_desc">Email: %1$s</string>
+    <string name="preference_selected_app_blocker_title">Select apps &amp; categories</string>
+    <string name="preference_metronome_title">Metronome</string>
 </resources>

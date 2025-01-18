@@ -42,6 +42,10 @@ class AppBlockerImpl(
         preferenceApi.set(SettingsEnum.APP_BLOCKING, false)
     }
 
+    override fun count(): Int {
+        return familyControlApi.count()
+    }
+
     private suspend fun requestPermissions(): Unit = suspendCoroutine { continuation ->
         familyControlApi.familyControlsAuthorize(
             onAuthorized = {

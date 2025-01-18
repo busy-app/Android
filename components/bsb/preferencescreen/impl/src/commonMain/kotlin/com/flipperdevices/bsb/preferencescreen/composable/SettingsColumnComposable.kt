@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import busystatusbar.components.bsb.preferencescreen.impl.generated.resources.Res
 import busystatusbar.components.bsb.preferencescreen.impl.generated.resources.preference_app_blocker_desc
 import busystatusbar.components.bsb.preferencescreen.impl.generated.resources.preference_app_blocker_title
+import busystatusbar.components.bsb.preferencescreen.impl.generated.resources.preference_metronome_title
 import busystatusbar.components.bsb.preferencescreen.impl.generated.resources.preference_notification_desc
 import busystatusbar.components.bsb.preferencescreen.impl.generated.resources.preference_notification_title
 import com.flipperdevices.bsb.preferencescreen.composable.debug.AuthComposable
@@ -46,6 +47,20 @@ fun SettingsColumnComposable(
                 description = Res.string.preference_app_blocker_desc,
                 enabled = screenState.isAppBlockActive,
                 onSwitch = { onAction(SettingsAction.SwitchAppBlocking(it)) }
+            )
+
+            SettingsSelectedAppBlockerComposable(
+                modifier = Modifier,
+                blockedApps = screenState.blockedApps ?: 0,
+                onUpdate = { onAction(SettingsAction.UpdateBlockedApps) }
+            )
+
+            SettingItemComposable(
+                modifier = Modifier,
+                title = Res.string.preference_metronome_title,
+                description = null,
+                enabled = screenState.isMetronomeActive,
+                onSwitch = { onAction(SettingsAction.SwitchMetronome(it)) }
             )
 
             if (screenState.devMode) {

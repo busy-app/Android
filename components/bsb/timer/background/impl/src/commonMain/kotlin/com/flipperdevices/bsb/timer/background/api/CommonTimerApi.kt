@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.timer.background.api
 
+import com.flipperdevices.bsb.metronome.api.MetronomeApi
 import com.flipperdevices.bsb.timer.background.api.delegates.CompositeTimerStateListener
 import com.flipperdevices.bsb.timer.background.api.delegates.TimerLoopJob
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -28,7 +29,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 class CommonTimerApi(
     private val scope: CoroutineScope,
-    private val compositeListeners: CompositeTimerStateListener
+    private val compositeListeners: CompositeTimerStateListener,
+    private val metronomeApi: MetronomeApi
 ) : TimerApi, LogTagProvider {
     override val TAG = "CommonTimerApi"
 
@@ -60,6 +62,7 @@ class CommonTimerApi(
                             stopSelf()
                         } else {
                             state.emit(internalState.toPublicState())
+                            metronomeApi.play()
                         }
                     }.launchIn(scope)
             }

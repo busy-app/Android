@@ -17,18 +17,26 @@ struct iOSApp: App {
         appDelegate.familyControl
     }
 
+    var audioPlayer: ApiAudioPlayerApi {
+        appDelegate.audioPlayer
+    }
+
     var body: some Scene {
         WindowGroup {
-            ComposeView(componentContext: rootHolder.componentContext, familyControl: familyControl)
-                .ignoresSafeArea()
-                .onChange(of: scenePhase) { newPhase in
-                    switch newPhase {
-                    case .background: LifecycleRegistryExtKt.stop(rootHolder.lifecycle)
-                    case .inactive: LifecycleRegistryExtKt.pause(rootHolder.lifecycle)
-                    case .active: LifecycleRegistryExtKt.resume(rootHolder.lifecycle)
-                    @unknown default: break
-                    }
+            ComposeView(
+                componentContext: rootHolder.componentContext,
+                familyControl: familyControl,
+                audioPlayer: audioPlayer
+            )
+            .ignoresSafeArea()
+            .onChange(of: scenePhase) { _, newPhase in
+                switch newPhase {
+                case .background: LifecycleRegistryExtKt.stop(rootHolder.lifecycle)
+                case .inactive: LifecycleRegistryExtKt.pause(rootHolder.lifecycle)
+                case .active: LifecycleRegistryExtKt.resume(rootHolder.lifecycle)
+                @unknown default: break
                 }
+            }
         }
     }
 }
