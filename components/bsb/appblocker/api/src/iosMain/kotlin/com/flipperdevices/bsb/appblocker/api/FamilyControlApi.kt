@@ -1,5 +1,7 @@
 package com.flipperdevices.bsb.appblocker.api
 
+import platform.UIKit.UIViewController
+
 interface FamilyControlApi {
     fun isAuthorized(): Boolean
     fun familyControlsAuthorize(
@@ -9,4 +11,7 @@ interface FamilyControlApi {
 
     fun enableFamilyControls()
     fun disableFamilyControls()
+
+    fun count(): Int
+    fun getVC(onDismiss: () -> Unit): UIViewController
 }

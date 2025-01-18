@@ -6,6 +6,7 @@ plugins {
 
 commonDependencies {
     implementation(projects.components.bsb.appblocker.api)
+    implementation(projects.components.bsb.preference.api)
     implementation(projects.components.core.di)
 }
 
@@ -22,7 +23,6 @@ androidDependencies {
 }
 
 iosDependencies {
-    implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.timer.background.api)
 
     implementation(projects.components.core.log)
