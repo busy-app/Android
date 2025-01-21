@@ -22,7 +22,4 @@ sealed interface AuthRootNavigationConfig {
         val preFilledPassword: String?,
         val deeplink: Deeplink.Root.Auth.VerifyEmailLink.SignUp?
     ) : AuthRootNavigationConfig
-
-    @Serializable
-    data class WebView(val oAuthProvider: OAuthProvider) : AuthRootNavigationConfig
 }

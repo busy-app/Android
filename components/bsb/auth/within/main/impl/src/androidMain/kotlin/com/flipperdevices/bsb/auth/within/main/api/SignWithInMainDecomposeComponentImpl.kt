@@ -27,7 +27,6 @@ class SignWithInMainDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted withInStateListener: SignWithInStateListener,
     @Assisted deeplink: Deeplink.Root.Auth.OAuth?,
-    @Assisted openWebView: (OAuthProvider) -> Unit,
     oneTapAuthDecomposeComponent: GoogleOneTapAuthDecomposeComponent.Factory,
     oAuthElementDecomposeComponent: OAuthElementDecomposeComponent.Factory
 ) : SignWithInMainDecomposeComponent(componentContext),
@@ -40,13 +39,11 @@ class SignWithInMainDecomposeComponentImpl(
         componentContext = childContext("signWithIn_apple"),
         oAuthProvider = OAuthProvider.APPLE,
         withInStateListener = withInStateListener,
-        openWebView = { openWebView(OAuthProvider.APPLE) }
     )
     private val microsoftAuth = oAuthElementDecomposeComponent(
         componentContext = childContext("signWithIn_microsoft"),
         oAuthProvider = OAuthProvider.MICROSOFT,
         withInStateListener = withInStateListener,
-        openWebView = { openWebView(OAuthProvider.MICROSOFT) }
     )
 
     init {
@@ -87,8 +84,8 @@ class SignWithInMainDecomposeComponentImpl(
 
     override fun handleDeeplink(deeplink: Deeplink.Root.Auth.OAuth) {
         when (deeplink) {
-            is Deeplink.Root.Auth.OAuth.Apple -> appleAuth.onReceiveAuthToken(deeplink.token)
-            is Deeplink.Root.Auth.OAuth.Microsoft -> microsoftAuth.onReceiveAuthToken(deeplink.token)
+            is Deeplink.Root.Auth.OAuth.Apple -> appleAuth.onReceiveAuthToken(deeplink.authCode)
+            is Deeplink.Root.Auth.OAuth.Microsoft -> microsoftAuth.onReceiveAuthToken(deeplink.authCode)
         }
     }
 
@@ -98,15 +95,13 @@ class SignWithInMainDecomposeComponentImpl(
         private val factory: (
             componentContext: ComponentContext,
             withInStateListener: SignWithInStateListener,
-            deeplink: Deeplink.Root.Auth.OAuth?,
-            openWebView: (OAuthProvider) -> Unit,
+            deeplink: Deeplink.Root.Auth.OAuth?
         ) -> SignWithInMainDecomposeComponentImpl
     ) : SignWithInMainDecomposeComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             withInStateListener: SignWithInStateListener,
             deeplink: Deeplink.Root.Auth.OAuth?,
-            openWebView: (OAuthProvider) -> Unit,
-        ) = factory(componentContext, withInStateListener, deeplink, openWebView)
+        ) = factory(componentContext, withInStateListener, deeplink)
     }
 }

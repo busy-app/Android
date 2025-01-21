@@ -8,6 +8,7 @@ import com.flipperdevices.bsb.cloud.model.BSBResponse
 import com.flipperdevices.bsb.cloud.model.BSBUser
 import com.flipperdevices.bsb.cloud.model.exception.BSBApiError
 import com.flipperdevices.bsb.cloud.model.exception.BSBApiErrorException
+import com.flipperdevices.bsb.cloud.model.request.BSBApiAuthCodeExchangeRequest
 import com.flipperdevices.bsb.cloud.model.request.BSBApiCheckUserRequest
 import com.flipperdevices.bsb.cloud.model.request.BSBApiCreateAccountRequest
 import com.flipperdevices.bsb.cloud.model.request.BSBApiResetPasswordRequest
@@ -34,6 +35,9 @@ import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
+import io.ktor.http.URLBuilder
+import io.ktor.http.buildUrl
+import io.ktor.http.path
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -81,7 +85,26 @@ class BSBAuthApiImpl(
         }.transform { signIn(it.success.token.token) }
     }
 
-    override suspend fun signIn(token: String): Result<Unit> {
+    override suspend fun signIn(
+        authCode: String,
+        codeChallenge: String,
+        codeVerification: String
+    ): Result<Unit> = withContext(networkDispatcher) {
+        runCatching {
+            httpClient.post {
+                url("${NetworkConstants.BASE_URL}/v0/auth/exchange")
+                setBody(
+                    BSBApiAuthCodeExchangeRequest(
+                        authCode = authCode,
+                        codeChallenge = codeChallenge,
+                        codeVerifier = codeVerification
+                    )
+                )
+            }.body<BSBResponse<BSBApiToken>>()
+        }.transform { signIn(it.success.token) }
+    }
+
+    private suspend fun signIn(token: String): Result<Unit> {
         return runCatching {
             preferenceApi.setString(SettingsEnum.AUTH_TOKEN, token)
         }.transform { getUser() }
@@ -89,6 +112,7 @@ class BSBAuthApiImpl(
                 preferenceApi.set(SettingsEnum.USER_DATA, bsbUser)
             }.map { }
     }
+
 
     override suspend fun getUser(): Result<BSBUser> = withContext(networkDispatcher) {
         return@withContext runCatching {
@@ -181,18 +205,26 @@ class BSBAuthApiImpl(
     }
 
     override fun getUrlForOauth(
-        oAuthProvider: BSBOAuthWebProvider
+        oAuthProvider: BSBOAuthWebProvider,
+        codeChallenge: String
     ): BSBOAuthInformation {
         val providerKey = when (oAuthProvider) {
             BSBOAuthWebProvider.MICROSOFT -> "microsoft"
             BSBOAuthWebProvider.APPLE -> "apple"
         }
+        val redirectUrl = when (oAuthProvider) {
+            BSBOAuthWebProvider.MICROSOFT -> "android_deeplink_microsoft"
+            BSBOAuthWebProvider.APPLE -> "android_deeplink_apple"
+        }
+
+
+        val url = URLBuilder("${NetworkConstants.BASE_URL}/v0/oauth2/$providerKey/sign-in").apply {
+            parameters.append("redirect", redirectUrl)
+            parameters.append("code_challenge", codeChallenge)
+        }.toString()
+
         return BSBOAuthInformation(
-            providerUrl = """
-                ${NetworkConstants.BASE_URL}/v0/oauth2/$providerKey/sign-in?redirect=busy-cloud-oauth-callback
-            """.trimIndent(),
-            handleUrl = "${NetworkConstants.HOST_URL}/login/oauth-callback",
-            tokenQueryKey = "token"
+            providerUrl = url
         )
     }
 }

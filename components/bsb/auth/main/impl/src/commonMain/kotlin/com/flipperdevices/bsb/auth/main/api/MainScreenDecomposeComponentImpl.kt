@@ -27,7 +27,6 @@ class MainScreenDecomposeComponentImpl(
     @Assisted authNavigation: StackNavigation<AuthRootNavigationConfig>,
     @Assisted onComplete: () -> Unit,
     @Assisted deeplink: Deeplink.Root.Auth?,
-    @Assisted openWebView: (OAuthProvider) -> Unit,
     authMainViewModel: (
         StackNavigation<AuthRootNavigationConfig>,
         onComplete: () -> Unit
@@ -40,8 +39,7 @@ class MainScreenDecomposeComponentImpl(
     private val signWithInDecomposeComponent = signWithInMainDecomposeComponent(
         componentContext = childContext("signWithIn_main"),
         withInStateListener = authViewModel,
-        deeplink = deeplink as? Deeplink.Root.Auth.OAuth,
-        openWebView = openWebView
+        deeplink = deeplink as? Deeplink.Root.Auth.OAuth
     )
 
     @Composable

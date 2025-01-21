@@ -14,8 +14,7 @@ abstract class SignWithInMainDecomposeComponent(
         operator fun invoke(
             componentContext: ComponentContext,
             withInStateListener: SignWithInStateListener,
-            deeplink: Deeplink.Root.Auth.OAuth?,
-            openWebView: (OAuthProvider) -> Unit,
+            deeplink: Deeplink.Root.Auth.OAuth?
         ): SignWithInMainDecomposeComponent
     }
 }

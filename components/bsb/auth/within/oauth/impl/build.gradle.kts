@@ -15,13 +15,21 @@ commonDependencies {
 
 androidDependencies {
     implementation(projects.components.core.log)
+    implementation(projects.components.core.ktx)
     implementation(projects.components.core.ui.lifecycle)
     implementation(projects.components.bsb.core.theme)
+
+    implementation(projects.components.bsb.preference.api)
+    implementation(projects.components.bsb.deeplink.api)
 
     implementation(projects.components.bsb.auth.within.main.api)
     implementation(projects.components.bsb.auth.within.common)
 
     implementation(projects.components.bsb.cloud.api)
 
-    implementation(libs.webview)
+    implementation(libs.androidx.browser)
+}
+
+androidUnitTestDependencies {
+    implementation(libs.kotlin.test)
 }

@@ -14,8 +14,7 @@ abstract class OAuthElementDecomposeComponent(
         operator fun invoke(
             componentContext: ComponentContext,
             oAuthProvider: OAuthProvider,
-            withInStateListener: SignWithInStateListener,
-            openWebView: () -> Unit
+            withInStateListener: SignWithInStateListener
         ): OAuthElementDecomposeComponent
     }
 }

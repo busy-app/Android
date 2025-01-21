@@ -12,7 +12,6 @@ import com.arkivanov.decompose.router.stack.pushToFront
 import com.flipperdevices.bsb.auth.login.api.LoginDecomposeComponent
 import com.flipperdevices.bsb.auth.main.model.AuthRootNavigationConfig
 import com.flipperdevices.bsb.auth.signup.api.SignupDecomposeComponent
-import com.flipperdevices.bsb.auth.within.oauth.api.OAuthWebViewDecomposeComponent
 import com.flipperdevices.bsb.auth.within.oauth.model.OAuthProvider
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.deeplink.model.Deeplink
@@ -37,11 +36,9 @@ class AuthDecomposeComponentImpl(
         StackNavigation<AuthRootNavigationConfig>,
         onComplete: () -> Unit,
         deeplink: Deeplink.Root.Auth?,
-        openWebView: (OAuthProvider) -> Unit,
     ) -> MainScreenDecomposeComponentImpl,
     private val loginDecomposeComponentFactory: LoginDecomposeComponent.Factory,
-    private val signupDecomposeComponentFactory: SignupDecomposeComponent.Factory,
-    private val oAuthWebViewDecomposeComponentFactory: OAuthWebViewDecomposeComponent.Factory
+    private val signupDecomposeComponentFactory: SignupDecomposeComponent.Factory
 ) : AuthDecomposeComponent<AuthRootNavigationConfig>(),
     ComponentContext by componentContext,
     LogTagProvider {
@@ -87,7 +84,6 @@ class AuthDecomposeComponentImpl(
             navigation,
             onBackParameter::invoke,
             config.deeplink,
-            { oauth -> navigation.pushToFront(AuthRootNavigationConfig.WebView(oauth)) }
         )
 
         is AuthRootNavigationConfig.LogIn -> loginDecomposeComponentFactory(
@@ -106,20 +102,6 @@ class AuthDecomposeComponentImpl(
             onComplete = onBackParameter::invoke,
             preFilledPassword = config.preFilledPassword,
             deeplink = config.deeplink
-        )
-
-        is AuthRootNavigationConfig.WebView -> oAuthWebViewDecomposeComponentFactory(
-            componentContext,
-            config.oAuthProvider,
-            onComplete = { token ->
-                navigation.pop()
-                when (config.oAuthProvider) {
-                    OAuthProvider.APPLE -> handleDeeplink(Deeplink.Root.Auth.OAuth.Apple(token))
-                    OAuthProvider.MICROSOFT -> {
-                        handleDeeplink(Deeplink.Root.Auth.OAuth.Microsoft(token))
-                    }
-                }
-            }
         )
     }
 

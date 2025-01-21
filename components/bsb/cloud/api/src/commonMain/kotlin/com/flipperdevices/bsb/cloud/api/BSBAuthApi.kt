@@ -15,7 +15,9 @@ interface BSBAuthApi {
     ): Result<Unit>
 
     suspend fun signIn(
-        token: String
+        authCode: String,
+        codeChallenge: String,
+        codeVerification: String
     ): Result<Unit>
 
     suspend fun jwtAuth(token: String): Result<Unit>
@@ -45,5 +47,5 @@ interface BSBAuthApi {
         password: String
     ): Result<Unit>
 
-    fun getUrlForOauth(oAuthProvider: BSBOAuthWebProvider): BSBOAuthInformation
+    fun getUrlForOauth(oAuthProvider: BSBOAuthWebProvider, codeChallenge: String): BSBOAuthInformation
 }

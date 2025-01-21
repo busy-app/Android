@@ -40,6 +40,12 @@
                     android:pathPrefix="/login/email-callback"
                     android:scheme="https" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="busyapp" />
+            </intent-filter>
         </activity>
     </application>
 
