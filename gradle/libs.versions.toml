@@ -1,8 +1,9 @@
 [versions]
 agp = "8.7.3"
-androidx-activityCompose = "1.9.3"
+androidx-activityCompose = "1.10.0"
 androidx-annotation = "1.9.1"
 androidx-core = "1.15.0"
+androidx-browser = "1.8.0"
 appcompat = "1.7.0" # https://developer.android.com/jetpack/androidx/releases/appcompat
 constraintlayout = "0.5.0"
 compose-plugin = "1.7.3"
@@ -30,7 +31,6 @@ detekt-ruleset-decompose = "1.0.1" # https://github.com/LionZXY/detekt-decompose
 buildkonfig = "5.5.1"
 atomicflu = "0.26.1" # https://github.com/Kotlin/kotlinx-atomicfu
 lifecycle = "2.8.7" # https://developer.android.com/jetpack/androidx/releases/lifecycle
-webview = "0.33.6"
 compose-placeholder = "1.0.8" # https://github.com/eygraber/compose-placeholder/releases
 
 
@@ -79,6 +79,7 @@ markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", v
 
 compose-placeholder = { module = "com.eygraber:compose-placeholder", version.ref = "compose-placeholder" }
 
+androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
 
 settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
@@ -94,8 +95,6 @@ ktor-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
-
-webview = { module = "io.github.kevinnzou:compose-webview", version.ref = "webview" }
 
 atomicflu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicflu" }
 

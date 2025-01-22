@@ -8,4 +8,4 @@ actual fun SettingsSelectedAppBlockerComposable(
     blockedApps: Int,
     onUpdate: () -> Unit,
     modifier: Modifier
-) {}
+) = Unit

@@ -30,4 +30,3 @@ iosDependencies {
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.datetime)
 }
-

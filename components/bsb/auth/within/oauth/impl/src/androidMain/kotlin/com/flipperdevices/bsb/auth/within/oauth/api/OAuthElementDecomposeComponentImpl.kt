@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.auth.within.oauth.api
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.auth.within.common.composable.SignInWithButtonComposable
 import com.flipperdevices.bsb.auth.within.main.model.SignWithInState
@@ -22,7 +23,6 @@ class OAuthElementDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted oAuthProvider: OAuthProvider,
     @Assisted withInStateListener: SignWithInStateListener,
-    @Assisted private val openWebView: () -> Unit,
     private val viewModelFactory: (
         withInStateListener: SignWithInStateListener,
         oAuthProvider: InternalOAuthProvider
@@ -36,6 +36,7 @@ class OAuthElementDecomposeComponentImpl(
 
     @Composable
     override fun Render(modifier: Modifier, authState: SignWithInState) {
+        val context = LocalContext.current
         SignInWithButtonComposable(
             modifier = modifier,
             icon = if (MaterialTheme.colors.isLight) {
@@ -43,14 +44,16 @@ class OAuthElementDecomposeComponentImpl(
             } else {
                 provider.darkIconId
             },
-            onClick = { openWebView() },
+            onClick = {
+                viewModel.onStartAuth(context)
+            },
             inProgress = authState is SignWithInState.InProgress &&
                 authState.authWay == provider.authWay
         )
     }
 
-    override fun onReceiveAuthToken(token: String) {
-        viewModel.onTokenReceive(token)
+    override fun onReceiveAuthToken(authCode: String) {
+        viewModel.onAuthCodeReceive(authCode)
     }
 
     @Inject
@@ -59,15 +62,13 @@ class OAuthElementDecomposeComponentImpl(
         private val factory: (
             componentContext: ComponentContext,
             oAuthProvider: OAuthProvider,
-            withInStateListener: SignWithInStateListener,
-            openWebView: () -> Unit
+            withInStateListener: SignWithInStateListener
         ) -> OAuthElementDecomposeComponentImpl
     ) : OAuthElementDecomposeComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             oAuthProvider: OAuthProvider,
             withInStateListener: SignWithInStateListener,
-            openWebView: () -> Unit
-        ) = factory(componentContext, oAuthProvider, withInStateListener, openWebView)
+        ) = factory(componentContext, oAuthProvider, withInStateListener)
     }
 }

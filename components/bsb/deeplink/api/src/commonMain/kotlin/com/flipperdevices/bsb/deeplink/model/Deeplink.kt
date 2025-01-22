@@ -16,13 +16,13 @@ sealed interface Deeplink {
 
             @Serializable
             sealed interface OAuth : Auth {
-                val token: String
+                val authCode: String
 
                 @Serializable
-                data class Microsoft(override val token: String) : OAuth
+                data class Microsoft(override val authCode: String) : OAuth
 
                 @Serializable
-                data class Apple(override val token: String) : OAuth
+                data class Apple(override val authCode: String) : OAuth
             }
 
             @Serializable

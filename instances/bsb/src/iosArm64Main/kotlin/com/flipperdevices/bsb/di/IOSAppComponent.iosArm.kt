@@ -11,5 +11,10 @@ actual fun getIOSAppComponent(
     familyControlApi: FamilyControlApi,
     audioPlayer: AudioPlayerApi
 ): IOSAppComponent {
-    return KotlinInjectIOSAppComponent::class.create(observableSettingsDelegate, scopeDelegate, familyControlApi, audioPlayer)
+    return KotlinInjectIOSAppComponent::class.create(
+        observableSettingsDelegate,
+        scopeDelegate,
+        familyControlApi,
+        audioPlayer
+    )
 }

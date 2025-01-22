@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.metronome.api
 
-import com.flipperdevices.bsb.metronome.api.MetronomeApi
 import com.flipperdevices.core.di.AppGraph
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding

@@ -5,7 +5,6 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.auth.within.main.model.SignWithInState
 import com.flipperdevices.bsb.auth.within.main.model.SignWithInStateListener
-import com.flipperdevices.bsb.auth.within.oauth.model.OAuthProvider
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import com.flipperdevices.core.di.AppGraph
 import me.tatarka.inject.annotations.Assisted
@@ -33,7 +32,6 @@ class SignWithInMainDecomposeComponentNoop(
             componentContext: ComponentContext,
             withInStateListener: SignWithInStateListener,
             deeplink: Deeplink.Root.Auth.OAuth?,
-            openWebView: (OAuthProvider) -> Unit,
         ) = factory(componentContext)
     }
 }
