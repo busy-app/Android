@@ -15,7 +15,6 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.stack.animation.LocalStackAnimationProvider
-import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet
 import com.flipperdevices.bsb.core.theme.generated.getDarkPallet
 import com.flipperdevices.bsb.core.theme.generated.getLightPallet
 import com.flipperdevices.bsb.core.theme.generated.toAnimatePallet
