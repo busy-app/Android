@@ -163,7 +163,6 @@ commonDependencies {
     implementation(projects.components.bsb.inappnotification.impl)
     implementation(projects.components.bsb.metronome.api)
     implementation(projects.components.bsb.metronome.impl)
-//    implementation(projects.components.bsb.liveactivity.api)
 
     implementation(projects.components.bsb.auth.main.api)
     implementation(projects.components.bsb.auth.main.impl)

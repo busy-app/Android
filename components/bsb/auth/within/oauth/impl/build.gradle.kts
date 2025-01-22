@@ -4,7 +4,7 @@ plugins {
     id("flipper.multiplatform-dependencies")
 }
 
-commonDependencies {
+androidDependencies {
     implementation(projects.components.bsb.auth.within.oauth.api)
 
     implementation(projects.components.core.di)
