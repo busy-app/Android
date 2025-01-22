@@ -2,7 +2,6 @@ package com.flipperdevices.bsb.auth.within.oauth.utils
 
 import android.content.Context
 import android.content.Intent
-import com.flipperdevices.bsb.auth.within.main.model.AuthWay
 import com.flipperdevices.bsb.cloud.model.BSBOAuthWebProvider
 import com.flipperdevices.bsb.deeplink.api.DEEPLINK_BUSYAPP_SCHEME
 import com.flipperdevices.bsb.deeplink.api.DeepLinkParserDelegate
@@ -33,7 +32,7 @@ class OAuthDeeplinkSchemeParser : DeepLinkParserDelegate, LogTagProvider {
         val intentData = intent.data ?: return null
         val host = intentData.host ?: return null
 
-        if (host != OAUTH_PATH_APPLE && host !=  OAUTH_PATH_MICROSOFT) {
+        if (host != OAUTH_PATH_APPLE && host != OAUTH_PATH_MICROSOFT) {
             return null
         }
         return DeepLinkParserDelegatePriority.DEFAULT
@@ -59,7 +58,7 @@ class OAuthDeeplinkSchemeParser : DeepLinkParserDelegate, LogTagProvider {
 
         val authCode = intentData.getQueryParameter("auth_code") ?: return null
 
-        return when(authWay) {
+        return when (authWay) {
             BSBOAuthWebProvider.MICROSOFT -> Deeplink.Root.Auth.OAuth.Microsoft(authCode)
             BSBOAuthWebProvider.APPLE -> Deeplink.Root.Auth.OAuth.Apple(authCode)
         }

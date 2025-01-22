@@ -48,7 +48,7 @@ class OAuthElementDecomposeComponentImpl(
                 viewModel.onStartAuth(context)
             },
             inProgress = authState is SignWithInState.InProgress &&
-                    authState.authWay == provider.authWay
+                authState.authWay == provider.authWay
         )
     }
 

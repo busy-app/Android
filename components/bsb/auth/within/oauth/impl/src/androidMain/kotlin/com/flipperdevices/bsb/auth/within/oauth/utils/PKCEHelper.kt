@@ -2,10 +2,8 @@ package com.flipperdevices.bsb.auth.within.oauth.utils
 
 import android.util.Base64
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.SecureRandom
-
 
 private const val VERIFIER_BYTE_SIZE = 32
 private const val DEFAULT_BASE64_CHARSET = "US-ASCII"

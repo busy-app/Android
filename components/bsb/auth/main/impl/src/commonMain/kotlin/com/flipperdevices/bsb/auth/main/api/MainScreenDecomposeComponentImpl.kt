@@ -13,7 +13,6 @@ import com.flipperdevices.bsb.auth.main.model.AuthRootNavigationConfig
 import com.flipperdevices.bsb.auth.main.viewmodel.AuthMainViewModel
 import com.flipperdevices.bsb.auth.within.main.api.SignWithInMainDecomposeComponent
 import com.flipperdevices.bsb.auth.within.main.model.SignWithInState
-import com.flipperdevices.bsb.auth.within.oauth.model.OAuthProvider
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent

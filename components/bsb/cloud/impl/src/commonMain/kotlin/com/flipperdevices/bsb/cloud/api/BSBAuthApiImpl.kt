@@ -36,8 +36,6 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.URLBuilder
-import io.ktor.http.buildUrl
-import io.ktor.http.path
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -48,6 +46,7 @@ private val networkDispatcher = FlipperDispatchers.default
 
 @Inject
 @ContributesBinding(AppGraph::class, BSBAuthApi::class)
+@Suppress("TooManyFunctions")
 class BSBAuthApiImpl(
     private val httpClient: HttpClient,
     private val preferenceApi: PreferenceApi
@@ -112,7 +111,6 @@ class BSBAuthApiImpl(
                 preferenceApi.set(SettingsEnum.USER_DATA, bsbUser)
             }.map { }
     }
-
 
     override suspend fun getUser(): Result<BSBUser> = withContext(networkDispatcher) {
         return@withContext runCatching {
@@ -216,7 +214,6 @@ class BSBAuthApiImpl(
             BSBOAuthWebProvider.MICROSOFT -> "android_deeplink_microsoft"
             BSBOAuthWebProvider.APPLE -> "android_deeplink_apple"
         }
-
 
         val url = URLBuilder("${NetworkConstants.BASE_URL}/v0/oauth2/$providerKey/sign-in").apply {
             parameters.append("redirect", redirectUrl)

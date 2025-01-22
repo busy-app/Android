@@ -14,7 +14,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class AppBlockerTimerListener(
     private val appBlockerApi: AppBlockerApi,
     private val familyControlApi: FamilyControlApi
-): TimerStateListener {
+) : TimerStateListener {
     override fun onTimerStart() {
         if (appBlockerApi.isAppBlockerSupportActive()) {
             familyControlApi.enableFamilyControls()
