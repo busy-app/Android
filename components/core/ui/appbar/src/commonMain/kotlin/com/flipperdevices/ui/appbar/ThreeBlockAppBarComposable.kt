@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.auth.common.composable.appbar
+package com.flipperdevices.ui.appbar
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

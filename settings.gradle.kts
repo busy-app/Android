@@ -41,6 +41,7 @@ include(
     ":components:core:build-konfig",
     ":components:core:ui:decompose",
     ":components:core:ui:lifecycle",
+    ":components:core:ui:appbar",
 
     ":components:bsb:core:theme",
     ":components:bsb:core:res",

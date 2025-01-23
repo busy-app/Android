@@ -7,6 +7,5 @@ commonDependencies {
     implementation(projects.components.bsb.core.theme)
     implementation(projects.components.bsb.core.res)
     implementation(projects.components.core.ktx)
-
-    implementation(libs.constraintlayout)
+    implementation(projects.components.core.ui.appbar)
 }

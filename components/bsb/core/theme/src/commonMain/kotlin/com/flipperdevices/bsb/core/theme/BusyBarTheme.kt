@@ -15,6 +15,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.stack.animation.LocalStackAnimationProvider
+import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet
 import com.flipperdevices.bsb.core.theme.generated.getDarkPallet
 import com.flipperdevices.bsb.core.theme.generated.getLightPallet
 import com.flipperdevices.bsb.core.theme.generated.toAnimatePallet
@@ -33,10 +34,10 @@ private fun getThemedPallet(isLight: Boolean): BusyBarPallet {
 }
 
 internal fun BusyBarPallet.toMaterialColors(isLight: Boolean) = Colors(
-    primary = brand.primary,
-    primaryVariant = brand.primary,
-    secondary = brand.secondary,
-    secondaryVariant = brand.secondary,
+    primary = accent.device.primary,
+    primaryVariant = accent.device.primary,
+    secondary = accent.device.secondary,
+    secondaryVariant = accent.device.secondary,
     background = surface.primary,
     surface = surface.primary,
     error = danger.primary,
@@ -49,7 +50,7 @@ internal fun BusyBarPallet.toMaterialColors(isLight: Boolean) = Colors(
 )
 
 internal fun BusyBarPallet.toTextSelectionColors() = TextSelectionColors(
-    handleColor = brand.primary,
+    handleColor = accent.device.primary,
     backgroundColor = surface.primary
 )
 

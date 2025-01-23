@@ -16,6 +16,7 @@ import busystatusbar.components.bsb.core.res.generated.resources.ic_back
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.core.ktx.common.clickableRipple
+import com.flipperdevices.ui.appbar.ThreeBlockAppBarComposable
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
