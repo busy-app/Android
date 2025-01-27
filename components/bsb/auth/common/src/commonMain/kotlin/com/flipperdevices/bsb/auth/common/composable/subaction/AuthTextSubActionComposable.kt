@@ -52,7 +52,7 @@ fun AuthTextSubActionComposable(
             fontSize = 16.sp,
             fontFamily = LocalBusyBarFonts.current.ppNeueMontreal,
             fontWeight = FontWeight.W500,
-            color = LocalPallet.current.brand.primary,
+            color = LocalPallet.current.accent.device.primary,
             textAlign = TextAlign.End
         )
 
@@ -61,8 +61,8 @@ fun AuthTextSubActionComposable(
                 Modifier
                     .size(22.dp)
                     .padding(1.2.dp),
-                color = LocalPallet.current.brand.primary,
-                backgroundColor = LocalPallet.current.brand.secondary,
+                color = LocalPallet.current.accent.device.primary,
+                backgroundColor = LocalPallet.current.accent.device.secondary,
                 strokeWidth = 1.dp
             )
         }

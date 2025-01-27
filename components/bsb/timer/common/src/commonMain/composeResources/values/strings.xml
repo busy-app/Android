@@ -1,0 +1,5 @@
+<resources>
+    <string name="timer_button_start">Start</string>
+    <string name="timer_button_stop">Stop</string>
+    <string name="timer_button_pause">Pause</string>
+</resources>

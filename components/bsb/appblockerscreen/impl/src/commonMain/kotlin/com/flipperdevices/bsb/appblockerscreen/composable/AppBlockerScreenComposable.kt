@@ -40,7 +40,7 @@ fun AppBlockerScreenComposable(
             modifier = Modifier
                 .padding(bottom = 18.dp)
                 .clip(RoundedCornerShape(28.dp))
-                .background(LocalPallet.current.brand.primary)
+                .background(LocalPallet.current.accent.device.primary)
                 .clickableRipple(onClick = onBack)
                 .padding(
                     vertical = 12.dp,

@@ -52,7 +52,7 @@ fun SettingItemComposable(
                     checked = enabled,
                     onCheckedChange = onSwitch,
                     colors = SwitchDefaults.colors(
-                        checkedThumbColor = LocalPallet.current.brand.primary,
+                        checkedThumbColor = LocalPallet.current.accent.device.primary,
                         uncheckedThumbColor = LocalPallet.current.neutral.quaternary,
                         uncheckedTrackColor = LocalPallet.current.white.onColor
                     )
