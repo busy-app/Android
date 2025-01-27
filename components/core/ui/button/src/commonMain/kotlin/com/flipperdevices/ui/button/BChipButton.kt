@@ -2,6 +2,7 @@ package com.flipperdevices.ui.button
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -61,7 +62,7 @@ fun BChipButton(
 @Composable
 fun BChipButton(
     text: String?,
-    painter: Painter? = null,
+    painter: Painter?,
     contentColor: Color = LocalPallet.current.white.invert,
     background: Color = LocalPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f),
     modifier: Modifier = Modifier,
@@ -116,10 +117,22 @@ fun BChipButton(
 @Preview
 private fun BChipButtonPreview() {
     BusyBarThemeInternal {
-        BChipButton(
-            text = "Hello",
-            painter = rememberVectorPainter(Icons.Filled.Call),
-            onClick = {}
-        )
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            BChipButton(
+                text = "Hello",
+                painter = rememberVectorPainter(Icons.Filled.Call),
+                onClick = {}
+            )
+            BChipButton(
+                text = "Hello",
+                painter = null,
+                onClick = {}
+            )
+            BChipButton(
+                text = null,
+                painter = rememberVectorPainter(Icons.Filled.Call),
+                onClick = {}
+            )
+        }
     }
 }
