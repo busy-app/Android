@@ -4,5 +4,6 @@ plugins {
 }
 
 commonDependencies {
-    implementation(libs.constraintlayout)
+    implementation(projects.components.bsb.core.theme)
 }
+

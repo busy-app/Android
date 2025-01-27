@@ -42,6 +42,7 @@ include(
     ":components:core:ui:decompose",
     ":components:core:ui:lifecycle",
     ":components:core:ui:appbar",
+    ":components:core:ui:button",
 
     ":components:bsb:core:theme",
     ":components:bsb:core:res",

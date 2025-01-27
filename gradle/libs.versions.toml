@@ -31,7 +31,8 @@ detekt-ruleset-decompose = "1.0.1" # https://github.com/LionZXY/detekt-decompose
 buildkonfig = "5.5.1"
 atomicflu = "0.26.1" # https://github.com/Kotlin/kotlinx-atomicfu
 lifecycle = "2.8.7" # https://developer.android.com/jetpack/androidx/releases/lifecycle
-compose-placeholder = "1.0.8" # https://github.com/eygraber/compose-placeholder/releases
+compose-placeholder = "1.0.8"
+androidx-compose = "1.7.6" # https://github.com/eygraber/compose-placeholder/releases
 
 
 [libraries]
@@ -99,6 +100,7 @@ ktor-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 atomicflu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicflu" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidx-compose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

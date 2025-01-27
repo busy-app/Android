@@ -41,6 +41,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.timer_butto
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.ui.button.BChipButton
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -51,7 +52,11 @@ enum class ButtonTimerState {
 }
 
 @Composable
-fun ButtonTimerComposable(state: ButtonTimerState, modifier: Modifier = Modifier) {
+fun ButtonTimerComposable(
+    state: ButtonTimerState,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val backgroundColor by animateColorAsState(
         targetValue = when (state) {
             ButtonTimerState.STARTED -> Color(0xFF2DAF18).copy(alpha = 0.1f) // todo
@@ -70,66 +75,27 @@ fun ButtonTimerComposable(state: ButtonTimerState, modifier: Modifier = Modifier
             ButtonTimerState.PAUSED -> LocalPallet.current.transparent.whiteInvert.primary.copy(alpha = 0.5f) // todo
         }
     )
-
-    Button(
-        modifier = modifier.animateContentSize(),
-        contentPadding = PaddingValues(
-            horizontal = 46.dp,
-            vertical = 24.dp
-        ),
-        shape = RoundedCornerShape(112.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = backgroundColor,
-            contentColor = contentColor
-        ),
-        onClick = {
-        },
-        content = {
-            Row(
-                modifier = Modifier.animateContentSize(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                content = {
-                    val painter: Painter = painterResource(
-                        resource = when (state) {
-                            ButtonTimerState.STARTED -> CommonRes.drawable.ic_play
-                            ButtonTimerState.STOPPED -> CommonRes.drawable.ic_stop
-                            ButtonTimerState.PAUSED -> CommonRes.drawable.ic_pause
-                        }
-                    )
-                    Icon(
-                        painter = painter,
-                        contentDescription = null,
-                        tint = contentColor
-                    )
-                    Spacer(Modifier.width(12.dp))
-                    val text: String = stringResource(
-                        resource = when (state) {
-                            ButtonTimerState.STARTED -> Res.string.timer_button_start
-                            ButtonTimerState.STOPPED -> Res.string.timer_button_stop
-                            ButtonTimerState.PAUSED -> Res.string.timer_button_pause
-                        }
-                    )
-                    Text(
-                        modifier = Modifier.wrapContentWidth(),
-                        text = text,
-                        maxLines = 1,
-                        style = TextStyle(
-                            textAlign = TextAlign.Start,
-                            lineHeight = 24.sp,
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Bottom,
-                                trim = LineHeightStyle.Trim.LastLineBottom
-                            ),
-                            color = contentColor,
-                            fontFamily = LocalBusyBarFonts.current.pragmatica,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.W500,
-                        )
-                    )
-                }
-            )
+    val text: String = stringResource(
+        resource = when (state) {
+            ButtonTimerState.STARTED -> Res.string.timer_button_start
+            ButtonTimerState.STOPPED -> Res.string.timer_button_stop
+            ButtonTimerState.PAUSED -> Res.string.timer_button_pause
         }
+    )
+    val painter: Painter = painterResource(
+        resource = when (state) {
+            ButtonTimerState.STARTED -> CommonRes.drawable.ic_play
+            ButtonTimerState.STOPPED -> CommonRes.drawable.ic_stop
+            ButtonTimerState.PAUSED -> CommonRes.drawable.ic_pause
+        }
+    )
+    BChipButton(
+        text = text,
+        painter = painter,
+        contentColor = contentColor,
+        background = backgroundColor,
+        onClick = onClick,
+        modifier = modifier
     )
 }
 
@@ -146,9 +112,11 @@ private fun ButtonTimerComposablePreview() {
                     modifier = Modifier.clickable { i++ }
                 )
 
-                ButtonTimerComposable(ButtonTimerState.entries[i % ButtonTimerState.entries.size])
+                ButtonTimerComposable(
+                    state = ButtonTimerState.entries[i % ButtonTimerState.entries.size],
+                    onClick = {})
                 ButtonTimerState.entries.forEach { entry ->
-                    ButtonTimerComposable(entry)
+                    ButtonTimerComposable(state = entry, onClick = {})
                 }
             }
         }
