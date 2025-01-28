@@ -8,9 +8,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.root.api.LocalRootNavigation
-import com.flipperdevices.bsb.root.model.RootNavigationConfig
 import com.flipperdevices.bsb.timer.background.api.TimerApi
-import com.flipperdevices.bsb.timer.main.composable.MainScreenComposableScreen
 import com.flipperdevices.bsb.timer.setup.api.TimerSetupScreenDecomposeComponent
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -33,15 +31,8 @@ class TimerMainScreenDecomposeComponentImpl(
         val state by setupDecomposeComponent.timerState.collectAsState()
         val rootNavigation = LocalRootNavigation.current
 
-        MainScreenComposableScreen(
-            modifier = modifier,
-            setupComponent = { setupDecomposeComponent.Render(it) },
-            onStart = {
-                timerApi.startTimer(state)
-            },
-            onOpenSettings = {
-                rootNavigation.push(RootNavigationConfig.Settings)
-            }
-        )
+//        MainScreenComposableScreen(
+//            modifier = modifier,
+//        )
     }
 }

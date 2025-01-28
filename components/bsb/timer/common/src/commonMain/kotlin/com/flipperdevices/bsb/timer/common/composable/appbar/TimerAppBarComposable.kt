@@ -3,12 +3,10 @@ package com.flipperdevices.bsb.timer.common.composable.appbar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -28,17 +26,17 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun TimerAppBarComposable(
     statusType: StatusType,
-    text: String? = null
+    modifier: Modifier = Modifier,
+    text: String? = null,
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = modifier.fillMaxWidth().padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
         Box(
             modifier = Modifier.align(Alignment.CenterStart),
             contentAlignment = Alignment.Center
         ) {
-
         }
 
         Column(
@@ -77,7 +75,6 @@ fun TimerAppBarComposable(
         }
     }
 }
-
 
 @Composable
 @Preview

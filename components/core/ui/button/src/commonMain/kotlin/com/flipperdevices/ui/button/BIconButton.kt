@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.runtime.Composable
@@ -26,7 +25,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun BIconButton(
     painter: Painter,
-    onClick: ()-> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     enabled: Boolean = true,
