@@ -116,20 +116,15 @@ fun BChipButton(
                             tint = contentColor
                         )
                     }
+
                     if (text != null) {
                         Text(
                             modifier = Modifier,
                             text = text,
                             maxLines = 1,
-                            style = TextStyle(
+                            style = PragmaticaTextStyle().copy(
                                 textAlign = TextAlign.Start,
-                                lineHeight = 24.sp,
-                                lineHeightStyle = LineHeightStyle(
-                                    alignment = LineHeightStyle.Alignment.Bottom,
-                                    trim = LineHeightStyle.Trim.LastLineBottom
-                                ),
                                 color = contentColor,
-                                fontFamily = LocalBusyBarFonts.current.pragmatica,
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.W500,
                             )
