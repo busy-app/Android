@@ -27,7 +27,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun TimerAppBarComposable(
     statusType: StatusType,
     modifier: Modifier = Modifier,
-    text: String? = null,
+    workPhaseText: String? = null,
 ) {
     Box(
         modifier = modifier.fillMaxWidth().padding(16.dp),
@@ -48,9 +48,9 @@ fun TimerAppBarComposable(
                 type = statusType,
                 modifier = Modifier.height(48.dp)
             )
-            text?.let {
+            workPhaseText?.let {
                 Text(
-                    text = text,
+                    text = workPhaseText,
                     style = PragmaticaTextStyle().copy(
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
@@ -82,7 +82,7 @@ private fun TimerAppBarComposablePreview() {
     BusyBarThemeInternal {
         TimerAppBarComposable(
             statusType = StatusType.BUSY,
-            text = "1/4\nwork phase"
+            workPhaseText = "1/4\nwork phase"
         )
     }
 }

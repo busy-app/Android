@@ -30,13 +30,15 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Suppress("LongMethod")
-fun MainScreenComposableScreen(
+fun TimerOffComposableScreen(
     modifier: Modifier = Modifier,
+    workPhaseText: String? = null
 ) {
     Box(modifier = modifier) {
         TimerAppBarComposable(
             statusType = StatusType.OFF,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(Alignment.TopCenter),
+            workPhaseText = workPhaseText
         )
 
         Column(
@@ -100,8 +102,9 @@ fun MainScreenComposableScreen(
 @Preview
 private fun MainScreenComposableScreenPreview() {
     BusyBarThemeInternal {
-        MainScreenComposableScreen(
+        TimerOffComposableScreen(
             modifier = Modifier.fillMaxSize(),
+            workPhaseText = "1/4\nwork phase"
         )
     }
 }
