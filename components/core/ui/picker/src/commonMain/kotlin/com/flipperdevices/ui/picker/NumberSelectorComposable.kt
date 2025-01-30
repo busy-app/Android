@@ -1,8 +1,11 @@
 package com.flipperdevices.ui.picker
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.PagerDefaults
@@ -47,6 +50,7 @@ fun NumberSelectorComposable(
     numberSelectorState: NumberSelectorState,
     onValueChanged: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    postfix: String? = null
 ) {
     val pagerState = numberSelectorState.rememberPagerState()
     LaunchedEffect(pagerState) {
@@ -65,13 +69,15 @@ fun NumberSelectorComposable(
         pagerSnapDistance = NoLimitPagerSnapDistance
     )
     var contentHeightDp by remember { mutableStateOf<Dp?>(null) }
+    var contentWidthDp by remember { mutableStateOf<Dp?>(null) }
     val backgroundColor = MaterialTheme.colors.background
-    BoxWithConstraints(modifier = modifier) {
+    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         val contentPadding = contentHeightDp?.let {
             (maxHeight - it) / 2
         } ?: 0.dp
         VerticalPager(
             modifier = Modifier.wrapContentHeight()
+                .align(Alignment.Center)
                 .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
                 .drawWithContent {
                     drawContent()
@@ -116,10 +122,29 @@ fun NumberSelectorComposable(
             NumberElementComposable(
                 modifier = Modifier.onGloballyPositioned { coordinates ->
                     contentHeightDp = with(localDensity) { coordinates.size.height.toDp() }
+                    contentWidthDp = with(localDensity) { coordinates.size.width.toDp() }
                 },
                 number = numberSelectorState.toValue(page.mod(numberSelectorState.maxPages)),
                 color = textColor
             )
+        }
+
+        contentWidthDp?.let { contentWidthDp ->
+            postfix?.let {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(horizontal = contentWidthDp/2),
+                    text = postfix,
+                    fontSize = 24.sp,
+                    color = LocalPallet.current
+                        .white
+                        .invert,
+                    fontWeight = FontWeight.W500,
+                    fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
@@ -143,7 +168,7 @@ private fun NumberElementComposable(
         numberText.forEach { symbol ->
             Text(
                 modifier = Modifier
-                    .width(64.dp)
+                    .width(48.dp)
                     .wrapContentHeight(
                         align = Alignment.CenterVertically, // aligns to the center vertically (default value)
                         unbounded = true // Makes sense if the container size less than text's height

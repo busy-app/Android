@@ -33,7 +33,7 @@ fun PickerContent(
     onSaveClick: (Int) -> Unit
 ) {
     val numberSelectorState = rememberTimerState(
-        0..8 step 2,
+        0..60 step 5,
     )
     Column(
         verticalArrangement = Arrangement.spacedBy(32.dp),
@@ -60,6 +60,7 @@ fun PickerContent(
             NumberSelectorComposable(
                 modifier = Modifier,
                 numberSelectorState = numberSelectorState,
+                postfix = "min",
                 onValueChanged = {
                     println("VALUE CHANGED: ${it}")
                 }
