@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.timer.main.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,10 +8,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -32,9 +36,16 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Suppress("LongMethod")
 fun TimerOffComposableScreen(
     modifier: Modifier = Modifier,
-    workPhaseText: String? = null
+    workPhaseText: String? = null,
+    onTagsOpenClick: () -> Unit
 ) {
-    Box(modifier = modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFF191919))
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
         TimerAppBarComposable(
             statusType = StatusType.OFF,
             modifier = Modifier.align(Alignment.TopCenter),
@@ -84,7 +95,7 @@ fun TimerOffComposableScreen(
                     vertical = 8.dp,
                     horizontal = 12.dp
                 ),
-                onClick = {},
+                onClick = onTagsOpenClick,
             )
             HintBubble(
                 text = "What would you like to focus on?"
@@ -104,7 +115,8 @@ private fun MainScreenComposableScreenPreview() {
     BusyBarThemeInternal {
         TimerOffComposableScreen(
             modifier = Modifier.fillMaxSize(),
-            workPhaseText = "1/4\nwork phase"
+            workPhaseText = "1/4\nwork phase",
+            onTagsOpenClick = {}
         )
     }
 }

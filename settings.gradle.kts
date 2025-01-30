@@ -43,6 +43,7 @@ include(
     ":components:core:ui:lifecycle",
     ":components:core:ui:appbar",
     ":components:core:ui:button",
+    ":components:core:ui:sheet",
 
     ":components:bsb:core:theme",
     ":components:bsb:core:res",

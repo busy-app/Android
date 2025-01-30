@@ -1,20 +1,20 @@
 package com.flipperdevices.ui.button
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -47,16 +47,15 @@ fun BChipButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     background: Color = LocalPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f),
-    contentColor: Color = LocalPallet.current.white.invert,
     contentPadding: PaddingValues = PaddingValues(
         horizontal = 46.dp,
         vertical = 24.dp
     ),
     enabled: Boolean = true,
     dashedBorderColor: Color? = null,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable BoxScope.() -> Unit
 ) {
-    Button(
+    Box(
         modifier = modifier
             .then(
                 if (dashedBorderColor == null) {
@@ -66,7 +65,7 @@ fun BChipButton(
                         drawRoundRect(
                             color = dashedBorderColor,
                             style = Stroke(
-                                width = 2f,
+                                width = 6f,
                                 pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
                             ),
                             cornerRadius = CornerRadius(112.dp.toPx())
@@ -74,16 +73,13 @@ fun BChipButton(
                     }
                 }
             )
-            .animateContentSize(),
-        contentPadding = contentPadding,
-        shape = RoundedCornerShape(112.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = background,
-            contentColor = contentColor
-        ),
-        onClick = onClick,
-        enabled = enabled,
-        content = content,
+            .animateContentSize()
+            .clip(RoundedCornerShape(112.dp))
+            .background(background)
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(contentPadding),
+        contentAlignment = Alignment.Center,
+        content = content
     )
 }
 
@@ -98,14 +94,15 @@ fun BChipButton(
     enabled: Boolean = true,
     fontSize: TextUnit = 24.sp,
     contentPadding: PaddingValues = PaddingValues(
-        horizontal = 46.dp,
-        vertical = 24.dp
+        horizontal = 12.dp,
+        vertical = 16.dp
     ),
     onClick: () -> Unit
 ) {
+    val animatedContentColor = animateColorAsState(contentColor)
+    val animatedBackgroundColor = animateColorAsState(background)
     BChipButton(
-        contentColor = contentColor,
-        background = background,
+        background = animatedBackgroundColor.value,
         modifier = modifier,
         onClick = onClick,
         dashedBorderColor = dashedBorderColor,
@@ -121,7 +118,7 @@ fun BChipButton(
                         Icon(
                             painter = painter,
                             contentDescription = null,
-                            tint = contentColor
+                            tint = animatedContentColor.value
                         )
                     }
 
@@ -132,7 +129,7 @@ fun BChipButton(
                             maxLines = 1,
                             style = PragmaticaTextStyle().copy(
                                 textAlign = TextAlign.Start,
-                                color = contentColor,
+                                color = animatedContentColor.value,
                                 fontSize = fontSize,
                                 fontWeight = FontWeight.W500,
                             )

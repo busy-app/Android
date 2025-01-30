@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.timer.main.composable
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,17 +10,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
@@ -29,15 +26,13 @@ import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
-import com.flipperdevices.bsb.timer.common.composable.appbar.HintBubble
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.TimerAppBarComposable
 import com.flipperdevices.ui.button.BChipButton
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
 
 @Composable
 @Suppress("LongMethod")
@@ -139,20 +134,24 @@ fun TimerOnComposableScreen(
             }
         }
         Column(
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ButtonTimerComposable(
+                    modifier = Modifier.weight(1f),
                     state = ButtonTimerState.PAUSE,
                     onClick = {}
                 )
                 ButtonTimerComposable(
+                    modifier = Modifier.weight(1f),
                     state = ButtonTimerState.STOP,
                     onClick = {}
                 )

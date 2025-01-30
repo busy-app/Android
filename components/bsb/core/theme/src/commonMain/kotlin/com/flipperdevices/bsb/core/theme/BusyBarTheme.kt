@@ -30,6 +30,7 @@ private fun getThemedPallet(isLight: Boolean): BusyBarPallet {
         } else {
             getDarkPallet()
         }
+        getLightPallet() // todo
     }.toAnimatePallet()
 }
 

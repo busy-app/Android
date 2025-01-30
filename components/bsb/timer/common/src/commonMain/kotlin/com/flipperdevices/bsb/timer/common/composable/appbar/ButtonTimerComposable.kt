@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -78,7 +79,11 @@ fun ButtonTimerComposable(
         contentColor = contentColor,
         background = backgroundColor,
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier,
+        contentPadding = PaddingValues(
+            horizontal = 48.dp,
+            vertical = 24.dp
+        )
     )
 }
 
