@@ -62,9 +62,9 @@ fun NumberSelectorComposable(
                     val brush = Brush.verticalGradient(
                         0f to backgroundColor.copy(alpha = 0f),
                         0.1f to backgroundColor.copy(alpha = 0f),
-                        0.3f to backgroundColor.copy(alpha = 0.3f),
+                        0.2f to backgroundColor.copy(alpha = 0.3f),
                         0.5f to backgroundColor.copy(alpha = 1f),
-                        0.7f to backgroundColor.copy(alpha = 0.3f),
+                        0.8f to backgroundColor.copy(alpha = 0.3f),
                         0.9f to backgroundColor.copy(alpha = 0f),
                         1f to backgroundColor.copy(alpha = 0f),
                     )
@@ -132,10 +132,10 @@ private fun NumberElementComposable(
                         unbounded = true // Makes sense if the container size less than text's height
                     ),
                 text = symbol.toString(),
-                fontSize = 100.sp,
+                fontSize = 64.sp,
                 color = color,
                 fontWeight = FontWeight.W500,
-                fontFamily = LocalBusyBarFonts.current.pragmatica,
+                fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
                 textAlign = TextAlign.Center
             )
         }
