@@ -12,10 +12,12 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -35,14 +37,29 @@ import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import kotlin.math.absoluteValue
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 
 @Composable
 @Suppress("LongMethod")
 fun NumberSelectorComposable(
-    count: Int,
-    pagerState: PagerState,
+    numberSelectorState: NumberSelectorState,
+    onValueChanged: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val pagerState = numberSelectorState.rememberPagerState()
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.isScrollInProgress }
+            .distinctUntilChanged()
+            .filter { isScrollInProgress -> !isScrollInProgress }
+            .drop(1)
+            .collect {
+                val page = pagerState.currentPage.mod(numberSelectorState.maxPages)
+                val value = numberSelectorState.toValue(page)
+                onValueChanged.invoke(value)
+            }
+    }
     val fling = PagerDefaults.flingBehavior(
         state = pagerState,
         pagerSnapDistance = NoLimitPagerSnapDistance
@@ -85,9 +102,9 @@ fun NumberSelectorComposable(
                 pagerState.currentPageOffsetFraction
             ) {
                 val pageOffset = (
-                    (pagerState.currentPage - page) + pagerState
-                        .currentPageOffsetFraction
-                    ).absoluteValue
+                        (pagerState.currentPage - page) + pagerState
+                            .currentPageOffsetFraction
+                        ).absoluteValue
                 lerp(
                     start = activeColor,
                     stop = inactiveColor,
@@ -100,7 +117,7 @@ fun NumberSelectorComposable(
                 modifier = Modifier.onGloballyPositioned { coordinates ->
                     contentHeightDp = with(localDensity) { coordinates.size.height.toDp() }
                 },
-                number = page.mod(count),
+                number = numberSelectorState.toValue(page.mod(numberSelectorState.maxPages)),
                 color = textColor
             )
         }
@@ -142,20 +159,48 @@ private fun NumberElementComposable(
     }
 }
 
+class NumberSelectorState(
+    val intProgression: IntProgression,
+    val initialValue: Int,
+) {
+    val maxPages: Int = intProgression.last.div(intProgression.step)
+    val initialPage: Int = initialValue.div(intProgression.step)
+    fun toPage(value: Int) = value.div(intProgression.step)
+    fun toValue(page: Int) = page.times(intProgression.step)
+
+}
+
 @Composable
-fun rememberTimerState(count: Int, initialNumber: Int): PagerState {
+fun NumberSelectorState.rememberPagerState(): PagerState {
     val pagerSize = Int.MAX_VALUE - 1
     val initialPage = remember(
-        pagerSize,
-        initialNumber,
-        count
-    ) {
-        (pagerSize / 2).floorDiv(count) * count + initialNumber
-    }
+        key1 = pagerSize,
+        key2 = initialValue,
+        key3 = maxPages,
+        calculation = {
+            (pagerSize / 2).floorDiv(maxPages) * maxPages + initialValue
+        }
+    )
     return rememberPagerState(
         initialPage = initialPage,
         pageCount = {
             pagerSize
         }
     )
+}
+
+@Composable
+fun rememberTimerState(
+    intProgression: IntProgression,
+    initialValue: Int = intProgression.first
+): NumberSelectorState {
+    val fixedIntProgression = remember(intProgression) {
+        intProgression.first..intProgression.last.plus(intProgression.step) step intProgression.step
+    }
+    return remember(fixedIntProgression, initialValue) {
+        NumberSelectorState(
+            intProgression = fixedIntProgression,
+            initialValue = initialValue
+        )
+    }
 }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -30,10 +29,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun PickerContent(
     title: String,
     desc: String,
-    minutesState: PagerState,
     modifier: Modifier = Modifier,
     onSaveClick: (Int) -> Unit
 ) {
+    val numberSelectorState = rememberTimerState(
+        0..8 step 2,
+    )
     Column(
         verticalArrangement = Arrangement.spacedBy(32.dp),
         horizontalAlignment = Alignment.Start,
@@ -58,8 +59,10 @@ fun PickerContent(
         ) {
             NumberSelectorComposable(
                 modifier = Modifier,
-                count = 2,
-                pagerState = minutesState
+                numberSelectorState = numberSelectorState,
+                onValueChanged = {
+                    println("VALUE CHANGED: ${it}")
+                }
             )
         }
 
@@ -75,7 +78,7 @@ fun PickerContent(
         BChipButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                onSaveClick.invoke(minutesState.currentPage)
+//                onSaveClick.invoke(numberSelectorState.currentPage)
             },
             painter = null,
             text = "Save",
@@ -99,10 +102,6 @@ private fun PickerContentPreview() {
             title = "Long rest",
             desc = "Pick how long you want to relax after completing several cycles",
             onSaveClick = {},
-            minutesState = rememberTimerState(
-                count = 2,
-                initialNumber = 1
-            )
         )
     }
 }
