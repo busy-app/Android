@@ -10,8 +10,9 @@ import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.root.api.LocalRootNavigation
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.main.composable.TimerOffComposableScreen
-import com.flipperdevices.bsb.timer.setup.api.RestSheetDecomposeComponentImpl
+import com.flipperdevices.bsb.timer.setup.api.IntervalsSetupSheetDecomposeComponentImpl
 import com.flipperdevices.bsb.timer.setup.api.TimerSetupScreenDecomposeComponent
+import com.flipperdevices.bsb.timer.setup.api.TimerSetupSheetDecomposeComponentImpl
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import me.tatarka.inject.annotations.Assisted
@@ -23,13 +24,14 @@ class TimerOffScreenDecomposeComponentImpl(
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     timerSetupDecomposeComponentFactory: TimerSetupScreenDecomposeComponent.Factory,
     private val timerApi: TimerApi,
-    private val restSheetDecomposeComponentFactory: (ComponentContext) -> RestSheetDecomposeComponentImpl
+    private val timerSetupSheetDecomposeComponentFactory: (ComponentContext) -> TimerSetupSheetDecomposeComponentImpl
 ) : ScreenDecomposeComponent(componentContext), StatusBarIconStyleProvider by iconStyleProvider {
     private val setupDecomposeComponent = timerSetupDecomposeComponentFactory(
         componentContext = childContext("setupTimerDecomposeComponent")
     )
-    private val restSheetDecomposeComponent = restSheetDecomposeComponentFactory(
-        childContext("restSheetDecomposeComponent")
+
+    private val timerSetupSheetDecomposeComponent = timerSetupSheetDecomposeComponentFactory(
+        childContext("timerSetupSheetDecomposeComponent")
     )
 
     @Composable
@@ -40,8 +42,8 @@ class TimerOffScreenDecomposeComponentImpl(
         TimerOffComposableScreen(
             onTagsOpenClick = {
             },
-            onTimeClick = { restSheetDecomposeComponent.openSheet() }
+            onTimeClick = { timerSetupSheetDecomposeComponent.show() }
         )
-        restSheetDecomposeComponent.Render(Modifier)
+        timerSetupSheetDecomposeComponent.Render(Modifier)
     }
 }

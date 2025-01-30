@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +26,7 @@ import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.picker.NumberSelectorComposable
+import com.flipperdevices.ui.picker.NumberSelectorState
 import com.flipperdevices.ui.picker.rememberTimerState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -29,12 +34,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun PickerContent(
     title: String,
     desc: String,
+    postfix: String? = null,
+    numberSelectorState: NumberSelectorState,
     modifier: Modifier = Modifier,
     onSaveClick: (Int) -> Unit
 ) {
-    val numberSelectorState = rememberTimerState(
-        0..60 step 5,
-    )
+    var value by remember(numberSelectorState) {
+        mutableStateOf(numberSelectorState.initialValue)
+    }
     Column(
         verticalArrangement = Arrangement.spacedBy(32.dp),
         horizontalAlignment = Alignment.Start,
@@ -60,9 +67,9 @@ fun PickerContent(
             NumberSelectorComposable(
                 modifier = Modifier,
                 numberSelectorState = numberSelectorState,
-                postfix = "min",
-                onValueChanged = {
-                    println("VALUE CHANGED: ${it}")
+                postfix = postfix,
+                onValueChanged = { newValue ->
+                    value = newValue
                 }
             )
         }
@@ -79,7 +86,7 @@ fun PickerContent(
         BChipButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-//                onSaveClick.invoke(numberSelectorState.currentPage)
+                onSaveClick.invoke(value)
             },
             painter = null,
             text = "Save",
@@ -103,6 +110,9 @@ private fun PickerContentPreview() {
             title = "Long rest",
             desc = "Pick how long you want to relax after completing several cycles",
             onSaveClick = {},
+            numberSelectorState = rememberTimerState(
+                0..60 step 5,
+            )
         )
     }
 }
