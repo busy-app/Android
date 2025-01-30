@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.setup.composable
+package com.flipperdevices.ui.picker
 
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -33,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
-import com.flipperdevices.bsb.timer.setup.utils.NoLimitPagerSnapDistance
 import kotlin.math.absoluteValue
 
 @Composable
@@ -61,9 +61,12 @@ fun NumberSelectorComposable(
                     @Suppress("MagicNumber")
                     val brush = Brush.verticalGradient(
                         0f to backgroundColor.copy(alpha = 0f),
-                        0.35f to backgroundColor.copy(alpha = 1f),
-                        0.7f to backgroundColor.copy(alpha = 1f),
-                        1f to backgroundColor.copy(alpha = 0f)
+                        0.1f to backgroundColor.copy(alpha = 0f),
+                        0.3f to backgroundColor.copy(alpha = 0.3f),
+                        0.5f to backgroundColor.copy(alpha = 1f),
+                        0.7f to backgroundColor.copy(alpha = 0.3f),
+                        0.9f to backgroundColor.copy(alpha = 0f),
+                        1f to backgroundColor.copy(alpha = 0f),
                     )
                     drawRect(brush = brush, blendMode = BlendMode.DstIn)
                 },
@@ -72,8 +75,8 @@ fun NumberSelectorComposable(
             flingBehavior = fling,
             horizontalAlignment = Alignment.End
         ) { page ->
-            val activeColor = LocalPallet.current.black.invert
-            val inactiveColor = LocalPallet.current.transparent.blackInvert.tertiary
+            val activeColor = LocalPallet.current.white.invert
+            val inactiveColor = LocalPallet.current.white.invert
             val textColor = remember(
                 activeColor,
                 inactiveColor,
@@ -118,7 +121,7 @@ private fun NumberElementComposable(
         number.toString()
     }
     Row(
-        modifier
+        modifier = modifier
     ) {
         numberText.forEach { symbol ->
             Text(
@@ -137,4 +140,22 @@ private fun NumberElementComposable(
             )
         }
     }
+}
+
+@Composable
+fun rememberTimerState(count: Int, initialNumber: Int): PagerState {
+    val pagerSize = Int.MAX_VALUE - 1
+    val initialPage = remember(
+        pagerSize,
+        initialNumber,
+        count
+    ) {
+        (pagerSize / 2).floorDiv(count) * count + initialNumber
+    }
+    return rememberPagerState(
+        initialPage = initialPage,
+        pageCount = {
+            pagerSize
+        }
+    )
 }

@@ -44,6 +44,7 @@ include(
     ":components:core:ui:appbar",
     ":components:core:ui:button",
     ":components:core:ui:sheet",
+    ":components:core:ui:picker",
 
     ":components:bsb:core:theme",
     ":components:bsb:core:res",

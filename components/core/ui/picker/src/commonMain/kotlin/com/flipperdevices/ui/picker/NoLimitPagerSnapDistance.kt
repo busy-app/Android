@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.setup.utils
+package com.flipperdevices.ui.picker
 
 import androidx.compose.foundation.pager.PagerSnapDistance
 

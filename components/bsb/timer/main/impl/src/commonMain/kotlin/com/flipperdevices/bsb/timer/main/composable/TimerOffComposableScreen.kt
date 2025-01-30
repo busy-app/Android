@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.main.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +38,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun TimerOffComposableScreen(
     modifier: Modifier = Modifier,
     workPhaseText: String? = null,
-    onTagsOpenClick: () -> Unit
+    onTagsOpenClick: () -> Unit,
+    onTimeClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -58,6 +60,7 @@ fun TimerOffComposableScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
+                modifier = Modifier.clickable(onClick = onTimeClick),
                 text = buildAnnotatedString {
                     withStyle(
                         style = SpanStyle(
@@ -116,7 +119,8 @@ private fun MainScreenComposableScreenPreview() {
         TimerOffComposableScreen(
             modifier = Modifier.fillMaxSize(),
             workPhaseText = "1/4\nwork phase",
-            onTagsOpenClick = {}
+            onTagsOpenClick = {},
+            onTimeClick = {}
         )
     }
 }

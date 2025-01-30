@@ -9,12 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +25,8 @@ import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_cent
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.core.data.timer.TimerState
+import com.flipperdevices.ui.picker.NumberSelectorComposable
+import com.flipperdevices.ui.picker.rememberTimerState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.painterResource
 import kotlin.time.Duration.Companion.hours
@@ -52,7 +51,7 @@ fun TimerSetupComposable(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            val minutesState = getPager(count = TOTAL_MINUTES, initialNumber = DEFAULT_MINUTE)
+            val minutesState = rememberTimerState(count = TOTAL_MINUTES, initialNumber = DEFAULT_MINUTE)
             NumberSelectorComposable(
                 modifier = Modifier.fillMaxHeight(),
                 count = TOTAL_MINUTES,
@@ -67,7 +66,7 @@ fun TimerSetupComposable(
                 fontFamily = LocalBusyBarFonts.current.pragmatica,
                 textAlign = TextAlign.Center
             )
-            val secondsState = getPager(count = TOTAL_SECONDS, initialNumber = DEFAULT_SECOND)
+            val secondsState = rememberTimerState(count = TOTAL_SECONDS, initialNumber = DEFAULT_SECOND)
             NumberSelectorComposable(
                 modifier = Modifier.fillMaxHeight(),
                 count = TOTAL_SECONDS,
@@ -88,24 +87,6 @@ fun TimerSetupComposable(
         }
         CenterSelectorComposable()
     }
-}
-
-@Composable
-private fun getPager(count: Int, initialNumber: Int): PagerState {
-    val pagerSize = Int.MAX_VALUE - 1
-    val initialPage = remember(
-        pagerSize,
-        initialNumber,
-        count
-    ) {
-        (pagerSize / 2).floorDiv(count) * count + initialNumber
-    }
-    return rememberPagerState(
-        initialPage = initialPage,
-        pageCount = {
-            pagerSize
-        }
-    )
 }
 
 @Composable
