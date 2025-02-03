@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,25 +28,31 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
+import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
-import com.flipperdevices.bsb.timer.setup.composable.PickerContent
+import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import com.flipperdevices.ui.picker.NumberSelectorComposable
 import com.flipperdevices.ui.picker.rememberTimerState
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
 import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
+import kotlin.time.Duration.Companion.minutes
 
 @Inject
 class TimerSetupSheetDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val intervalsSetupSheetDecomposeComponentFactory: (ComponentContext) -> IntervalsSetupSheetDecomposeComponentImpl,
+    private val intervalsSetupSheetDecomposeComponentFactory:
+    (ComponentContext) -> IntervalsSetupSheetDecomposeComponentImpl,
+    timerSetupViewModelFactory: () -> TimerSetupViewModel
 ) : ScreenDecomposeComponent(componentContext) {
+    private val timerSetupViewModel = instanceKeeper.getOrCreate {
+        timerSetupViewModelFactory.invoke()
+    }
     private val intervalsSetupSheetDecomposeComponent = intervalsSetupSheetDecomposeComponentFactory(
         childContext("restSheetDecomposeComponent")
     )
@@ -117,11 +124,11 @@ class TimerSetupSheetDecomposeComponentImpl(
                 )
             }
         }
-
     }
 
     @Composable
     override fun Render(modifier: Modifier) {
+        val state = timerSetupViewModel.state.collectAsState()
         ModalBottomSheetSlot(
             slot = childSlot,
             initialDetent = SheetDetent.FullyExpanded,
@@ -154,11 +161,11 @@ class TimerSetupSheetDecomposeComponentImpl(
                                 modifier = Modifier,
                                 numberSelectorState = rememberTimerState(
                                     intProgression = 0..60 step 5,
-                                    initialValue = 25
+                                    initialValue = state.value.timer.inWholeMinutes.toInt()
                                 ),
                                 postfix = "min",
-                                onValueChanged = { newValue ->
-                                    intervalsSetupSheetDecomposeComponent.showCycles()
+                                onValueChanged = { value ->
+                                    timerSetupViewModel.setTimer(value.minutes)
                                 }
                             )
                         }
@@ -168,17 +175,17 @@ class TimerSetupSheetDecomposeComponentImpl(
                         ) {
                             IntervalComposable(
                                 text = "Rest, min",
-                                value = "5",
+                                value = "${state.value.intervalsSettings.rest.inWholeMinutes}",
                                 onClick = { intervalsSetupSheetDecomposeComponent.showRest() }
                             )
                             IntervalComposable(
                                 text = "Long rest, min",
-                                value = "15",
+                                value = "${state.value.intervalsSettings.longRest.inWholeMinutes}",
                                 onClick = { intervalsSetupSheetDecomposeComponent.showLongRest() }
                             )
                             IntervalComposable(
                                 text = "Cycles",
-                                value = "4",
+                                value = "${state.value.intervalsSettings.cycles}",
                                 onClick = { intervalsSetupSheetDecomposeComponent.showCycles() }
                             )
                         }

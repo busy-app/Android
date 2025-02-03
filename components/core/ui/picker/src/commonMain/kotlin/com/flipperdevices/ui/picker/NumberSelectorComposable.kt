@@ -1,6 +1,5 @@
 package com.flipperdevices.ui.picker
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -39,10 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
-import kotlin.math.absoluteValue
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
+import kotlin.math.absoluteValue
 
 @Composable
 @Suppress("LongMethod")
@@ -108,9 +107,9 @@ fun NumberSelectorComposable(
                 pagerState.currentPageOffsetFraction
             ) {
                 val pageOffset = (
-                        (pagerState.currentPage - page) + pagerState
-                            .currentPageOffsetFraction
-                        ).absoluteValue
+                    (pagerState.currentPage - page) + pagerState
+                        .currentPageOffsetFraction
+                    ).absoluteValue
                 lerp(
                     start = activeColor,
                     stop = inactiveColor,
@@ -134,7 +133,7 @@ fun NumberSelectorComposable(
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .padding(horizontal = contentWidthDp/2),
+                        .padding(horizontal = contentWidthDp / 2),
                     text = postfix,
                     fontSize = 24.sp,
                     color = LocalPallet.current
@@ -192,7 +191,6 @@ class NumberSelectorState(
     val initialPage: Int = initialValue.div(intProgression.step)
     fun toPage(value: Int) = value.div(intProgression.step)
     fun toValue(page: Int) = page.times(intProgression.step)
-
 }
 
 @Composable
@@ -203,7 +201,7 @@ fun NumberSelectorState.rememberPagerState(): PagerState {
         key2 = initialValue,
         key3 = maxPages,
         calculation = {
-            (pagerSize / 2).floorDiv(maxPages) * maxPages + initialValue
+            (pagerSize / 2).floorDiv(maxPages) * maxPages + initialPage
         }
     )
     return rememberPagerState(

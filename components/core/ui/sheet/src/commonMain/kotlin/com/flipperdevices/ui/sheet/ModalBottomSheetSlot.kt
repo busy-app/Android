@@ -37,8 +37,8 @@ fun <C : Any> ModalBottomSheetSlot(
     LaunchedEffect(modalSheetState) {
         snapshotFlow {
             modalSheetState.targetDetent == SheetDetent.Companion.Hidden &&
-                    modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
-                    modalSheetState.isIdle
+                modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
+                modalSheetState.isIdle
         }
             .distinctUntilChanged()
             .drop(1)

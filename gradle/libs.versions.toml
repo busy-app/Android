@@ -34,7 +34,7 @@ lifecycle = "2.8.7" # https://developer.android.com/jetpack/androidx/releases/li
 compose-placeholder = "1.0.8"
 androidx-compose = "1.7.6" # https://github.com/eygraber/compose-placeholder/releases
 composables = "1.11.2" # https://github.com/composablehorizons/compose-unstyled
-
+klibs-kstorage = "3.2.0" # https://github.com/makeevrserg/klibs.kstorage
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -44,6 +44,7 @@ detekt-gradle = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", v
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-gradle = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 composables = { module = "com.composables:core", version.ref = "composables" }
+klibs-kstorage = { module = "ru.astrainteractive.klibs:kstorage", version.ref = "klibs-kstorage" }
 
 # Linters
 detekt-ruleset-compiler = { module = "com.braisgabin.detekt:kotlin-compiler-wrapper", version.ref = "detekt-ruleset-compiler" }
