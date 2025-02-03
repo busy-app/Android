@@ -38,7 +38,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun TimerOffComposableScreen(
     modifier: Modifier = Modifier,
     workPhaseText: String? = null,
-    onTagsOpenClick: () -> Unit,
     onTimeClick: () -> Unit
 ) {
     Box(
@@ -82,24 +81,6 @@ fun TimerOffComposableScreen(
                     )
                 }
             )
-            BChipButton(
-                text = "Work >",
-                painter = null,
-                contentColor = LocalPallet.current.transparent
-                    .whiteInvert
-                    .primary
-                    .copy(alpha = 0.5f),
-                background = LocalPallet.current.transparent
-                    .whiteInvert
-                    .quaternary
-                    .copy(alpha = 0.05f),
-                fontSize = 14.sp,
-                contentPadding = PaddingValues(
-                    vertical = 8.dp,
-                    horizontal = 12.dp
-                ),
-                onClick = onTagsOpenClick,
-            )
             HintBubble(
                 text = "What would you like to focus on?"
             )
@@ -119,7 +100,6 @@ private fun MainScreenComposableScreenPreview() {
         TimerOffComposableScreen(
             modifier = Modifier.fillMaxSize(),
             workPhaseText = "1/4\nwork phase",
-            onTagsOpenClick = {},
             onTimeClick = {}
         )
     }

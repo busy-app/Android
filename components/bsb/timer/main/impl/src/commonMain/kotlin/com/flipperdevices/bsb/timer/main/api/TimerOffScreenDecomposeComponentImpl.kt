@@ -39,8 +39,6 @@ class TimerOffScreenDecomposeComponentImpl(
         val rootNavigation = LocalRootNavigation.current
 
         TimerOffComposableScreen(
-            onTagsOpenClick = {
-            },
             onTimeClick = { timerSetupSheetDecomposeComponent.show() }
         )
         timerSetupSheetDecomposeComponent.Render(Modifier)
