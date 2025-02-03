@@ -102,6 +102,8 @@ include(
     ":components:bsb:timer:main:impl",
     ":components:bsb:timer:finish:api",
     ":components:bsb:timer:finish:impl",
+    ":components:bsb:timer:done:api",
+    ":components:bsb:timer:done:impl",
     ":components:bsb:timer:background:api",
     ":components:bsb:timer:background:impl",
     ":components:bsb:timer:active:api",
