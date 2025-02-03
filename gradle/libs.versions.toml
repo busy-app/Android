@@ -34,7 +34,7 @@ lifecycle = "2.8.7" # https://developer.android.com/jetpack/androidx/releases/li
 compose-placeholder = "1.0.8"
 androidx-compose = "1.7.6" # https://github.com/eygraber/compose-placeholder/releases
 composables = "1.11.2" # https://github.com/composablehorizons/compose-unstyled
-klibs-kstorage = "3.2.0" # https://github.com/makeevrserg/klibs.kstorage
+klibs-kstorage = "3.2.6" # https://github.com/makeevrserg/klibs.kstorage
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
