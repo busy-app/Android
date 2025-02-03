@@ -18,8 +18,10 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.composable.StopButtonComposable
+import com.flipperdevices.bsb.timer.active.composable.TimerActiveComposableScreen
 import com.flipperdevices.bsb.timer.active.composable.TimerContainerComposable
 import com.flipperdevices.bsb.timer.background.api.TimerApi
+import com.flipperdevices.bsb.timer.background.model.TimerAction
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import me.tatarka.inject.annotations.Assisted
@@ -35,58 +37,15 @@ class ActiveTimerScreenDecomposeComponentImpl(
     StatusBarIconStyleProvider by iconStyleProvider {
     @Composable
     override fun Render(modifier: Modifier) {
-        Column(
-            modifier
-        ) {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = 0.dp,
-                            topEnd = 0.dp,
-                            bottomEnd = 16.dp,
-                            bottomStart = 16.dp
-                        )
-                    )
-                    .background(Color(color = 0xFFF42323))
-                    .statusBarsPadding()
-                    .padding(top = 16.dp)
+        timerApi.getState().collectAsState().value?.let { timerState ->
+            TimerActiveComposableScreen(
+                modifier = modifier,
+                workPhaseText = null,
+                timerState = timerState,
+                onStopClick = {},
+                onPauseClick = { timerApi.onAction(TimerAction.PAUSE) },
+                onSkipClick = {},
             )
-            val state by timerApi.getState().collectAsState()
-            val localState = state ?: return
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(top = 2.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = 16.dp,
-                            topEnd = 16.dp,
-                            bottomEnd = 0.dp,
-                            bottomStart = 0.dp
-                        )
-                    )
-                    .background(Color(color = 0xFFF42323))
-            ) {
-                TimerContainerComposable(
-                    modifier = Modifier.weight(1f),
-                    timerState = localState,
-                    onAction = timerApi::onAction
-                )
-
-                StopButtonComposable(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 16.dp,
-                            bottom = 128.dp,
-                            start = 16.dp,
-                            end = 16.dp
-                        ),
-                    onClick = timerApi::stopTimer
-                )
-            }
         }
     }
 

@@ -39,7 +39,11 @@ enum class ButtonTimerState {
 fun ButtonTimerComposable(
     state: ButtonTimerState,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(
+        horizontal = 48.dp,
+        vertical = 24.dp
+    )
 ) {
     val backgroundColor by animateColorAsState(
         targetValue = when (state) {
@@ -80,10 +84,7 @@ fun ButtonTimerComposable(
         background = backgroundColor,
         onClick = onClick,
         modifier = modifier,
-        contentPadding = PaddingValues(
-            horizontal = 48.dp,
-            vertical = 24.dp
-        )
+        contentPadding = contentPadding
     )
 }
 
