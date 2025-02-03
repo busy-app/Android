@@ -33,6 +33,7 @@ import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
+import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import com.flipperdevices.ui.picker.NumberSelectorComposable
 import com.flipperdevices.ui.picker.rememberTimerState
@@ -42,19 +43,19 @@ import kotlinx.serialization.builtins.serializer
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import kotlin.time.Duration.Companion.minutes
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
 class TimerSetupSheetDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val intervalsSetupSheetDecomposeComponentFactory:
-    (ComponentContext) -> IntervalsSetupSheetDecomposeComponentImpl,
+    intervalsSetupSheetDecomposeComponentFactory: IntervalsSetupSheetDecomposeComponent.Factory,
     timerSetupViewModelFactory: () -> TimerSetupViewModel
-) : ScreenDecomposeComponent(componentContext) {
+) : TimerSetupSheetDecomposeComponent(componentContext) {
     private val timerSetupViewModel = instanceKeeper.getOrCreate {
         timerSetupViewModelFactory.invoke()
     }
     private val intervalsSetupSheetDecomposeComponent = intervalsSetupSheetDecomposeComponentFactory(
-        childContext("restSheetDecomposeComponent")
+        componentContext = childContext("restSheetDecomposeComponent")
     )
     private val slot = SlotNavigation<Unit>()
     private val childSlot = childSlot(
@@ -65,7 +66,7 @@ class TimerSetupSheetDecomposeComponentImpl(
         }
     )
 
-    fun show() {
+    override fun show() {
         slot.activate(Unit)
     }
 
@@ -194,5 +195,17 @@ class TimerSetupSheetDecomposeComponentImpl(
             }
         )
         intervalsSetupSheetDecomposeComponent.Render(Modifier)
+    }
+
+    @Inject
+    @ContributesBinding(AppGraph::class, TimerSetupSheetDecomposeComponent.Factory::class)
+    class Factory(
+        private val factory: (
+            componentContext: ComponentContext
+        ) -> TimerSetupSheetDecomposeComponentImpl
+    ) : TimerSetupSheetDecomposeComponent.Factory {
+        override fun invoke(
+            componentContext: ComponentContext
+        ) = factory(componentContext)
     }
 }

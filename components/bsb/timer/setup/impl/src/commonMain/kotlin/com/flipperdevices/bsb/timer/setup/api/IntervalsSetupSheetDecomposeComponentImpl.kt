@@ -12,6 +12,7 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.timer.setup.composable.PickerContent
 import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
+import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import com.flipperdevices.ui.picker.rememberTimerState
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
@@ -20,12 +21,14 @@ import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import kotlin.time.Duration.Companion.minutes
+import kotlinx.serialization.builtins.serializer
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
 class IntervalsSetupSheetDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     timerSetupViewModelFactory: () -> TimerSetupViewModel
-) : ScreenDecomposeComponent(componentContext) {
+) : IntervalsSetupSheetDecomposeComponent(componentContext) {
     private val timerSetupViewModel = instanceKeeper.getOrCreate {
         timerSetupViewModelFactory.invoke()
     }
@@ -51,15 +54,15 @@ class IntervalsSetupSheetDecomposeComponentImpl(
         data object Cycles : PickerConfiguration
     }
 
-    fun showRest() {
+    override fun showRest() {
         slot.activate(PickerConfiguration.Rest)
     }
 
-    fun showLongRest() {
+    override fun showLongRest() {
         slot.activate(PickerConfiguration.LongRest)
     }
 
-    fun showCycles() {
+    override fun showCycles() {
         slot.activate(PickerConfiguration.Cycles)
     }
 
@@ -127,5 +130,17 @@ class IntervalsSetupSheetDecomposeComponentImpl(
                 }
             }
         )
+    }
+
+    @Inject
+    @ContributesBinding(AppGraph::class, IntervalsSetupSheetDecomposeComponent.Factory::class)
+    class Factory(
+        private val factory: (
+            componentContext: ComponentContext
+        ) -> IntervalsSetupSheetDecomposeComponentImpl
+    ) : IntervalsSetupSheetDecomposeComponent.Factory {
+        override fun invoke(
+            componentContext: ComponentContext
+        ) = factory(componentContext)
     }
 }

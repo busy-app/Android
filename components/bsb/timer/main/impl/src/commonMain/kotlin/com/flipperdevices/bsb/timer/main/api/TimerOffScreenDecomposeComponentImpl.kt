@@ -9,7 +9,7 @@ import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.main.composable.TimerOffComposableScreen
-import com.flipperdevices.bsb.timer.setup.api.TimerSetupSheetDecomposeComponentImpl
+import com.flipperdevices.bsb.timer.setup.api.TimerSetupSheetDecomposeComponent
 import com.flipperdevices.core.data.timer.TimerState
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -24,10 +24,10 @@ class TimerOffScreenDecomposeComponentImpl(
     private val iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
     private val krateApi: KrateApi,
-    timerSetupSheetDecomposeComponentFactory: (ComponentContext) -> TimerSetupSheetDecomposeComponentImpl
+    timerSetupSheetDecomposeComponentFactory: TimerSetupSheetDecomposeComponent.Factory
 ) : ScreenDecomposeComponent(componentContext), StatusBarIconStyleProvider by iconStyleProvider {
     private val timerSetupSheetDecomposeComponent = timerSetupSheetDecomposeComponentFactory(
-        childContext("timerSetupSheetDecomposeComponent")
+        componentContext = childContext("timerSetupSheetDecomposeComponent")
     )
 
     @Composable
