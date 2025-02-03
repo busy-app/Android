@@ -38,7 +38,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun TimerOffComposableScreen(
     modifier: Modifier = Modifier,
     workPhaseText: String? = null,
-    onTimeClick: () -> Unit
+    onTimeClick: () -> Unit,
+    onStartClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -87,7 +88,7 @@ fun TimerOffComposableScreen(
             Spacer(Modifier.height(60.dp.minus(8.dp * 2)))
             ButtonTimerComposable(
                 state = ButtonTimerState.START,
-                onClick = {}
+                onClick = onStartClick
             )
         }
     }
@@ -100,7 +101,8 @@ private fun MainScreenComposableScreenPreview() {
         TimerOffComposableScreen(
             modifier = Modifier.fillMaxSize(),
             workPhaseText = "1/4\nwork phase",
-            onTimeClick = {}
+            onTimeClick = {},
+            onStartClick = {}
         )
     }
 }
