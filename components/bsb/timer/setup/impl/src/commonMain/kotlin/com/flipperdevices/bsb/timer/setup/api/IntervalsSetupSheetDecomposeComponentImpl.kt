@@ -13,16 +13,15 @@ import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.timer.setup.composable.PickerContent
 import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.core.di.AppGraph
-import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import com.flipperdevices.ui.picker.rememberTimerState
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
 import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-import kotlin.time.Duration.Companion.minutes
-import kotlinx.serialization.builtins.serializer
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import kotlin.time.Duration.Companion.minutes
 
 @Inject
 class IntervalsSetupSheetDecomposeComponentImpl(

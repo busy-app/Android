@@ -34,7 +34,6 @@ import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.core.di.AppGraph
-import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import com.flipperdevices.ui.picker.NumberSelectorComposable
 import com.flipperdevices.ui.picker.rememberTimerState
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
@@ -42,8 +41,8 @@ import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
 import kotlinx.serialization.builtins.serializer
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-import kotlin.time.Duration.Companion.minutes
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import kotlin.time.Duration.Companion.minutes
 
 @Inject
 class TimerSetupSheetDecomposeComponentImpl(
