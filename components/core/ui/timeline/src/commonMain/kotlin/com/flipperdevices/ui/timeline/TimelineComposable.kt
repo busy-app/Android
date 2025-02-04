@@ -3,11 +3,15 @@ package com.flipperdevices.ui.timeline
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FloatSpringSpec
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.calculateTargetValue
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -27,10 +31,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.consumePositionChange
@@ -50,9 +58,11 @@ import com.flipperdevices.bsb.core.theme.LocalPallet
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
+import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val BarWidth = 2.dp
@@ -165,7 +175,7 @@ fun PodcastSlider(
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
-                .drag(state, density),
+                .drag(state = state, numSegments = numSegments, density = density),
             contentAlignment = Alignment.TopCenter,
         ) {
             val segmentWidth = maxWidth / density
@@ -182,6 +192,7 @@ fun PodcastSlider(
                 val offsetX = (i - state.currentValue) * segmentWidthPx
                 // indicator at center is at 1f, indicators at edges are at 0.25f
                 val alpha = 1f - (1f - MinAlpha) * (offsetX / maxOffset).absoluteValue
+                val isSelected = alpha > (1f - 0.03f)
                 Box(
                     modifier = Modifier
                         .graphicsLayer(
@@ -195,28 +206,37 @@ fun PodcastSlider(
                 )
                 Column(
                     modifier = Modifier
-                        .padding(top = with(LocalDensity.current) { 85.sp.toDp() })
+                        .padding(top = with(LocalDensity.current) { 64.sp.toDp() })
                         .width(segmentWidth)
+                        .height(BarHeight.plus(20.dp))
                         .graphicsLayer(
                             alpha = alpha,
                             translationX = offsetX
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    if (i % numSegments != 0) {
-                        Spacer(Modifier.height(10.dp.div(2)))
-                    }
                     Box(
                         modifier = Modifier
                             .width(BarWidth)
                             .height(
                                 BarHeight
                                     .plus(if (i % numSegments == 0) 10.dp else 0.dp)
-                                    .plus(if (i % numSegments == 0) alpha.times(10.dp) else 0.dp)
+                                    .plus(
+                                        animateDpAsState(
+                                            targetValue = if (isSelected) 10.dp else 0.dp,
+                                            animationSpec = spring(stiffness = Spring.StiffnessLow)
+                                        ).value
+                                    )
                             )
-                            .background(barColor.copy(alpha))
+                            .background(
+                                animateColorAsState(
+                                    targetValue = if (isSelected) barColor else barColor.copy(0.2f),
+                                    animationSpec = spring(stiffness = Spring.StiffnessLow)
+                                ).value
+                            )
                     )
+
                 }
             }
         }
@@ -226,9 +246,10 @@ fun PodcastSlider(
 private fun Modifier.drag(
     state: PodcastSliderState,
     numSegments: Int,
+    density: Int
 ) = pointerInput(Unit) {
     val decay = splineBasedDecay<Float>(this)
-    val segmentWidthPx = size.width / numSegments
+    val segmentWidthPx = size.width / density
     coroutineScope {
         while (true) {
             val pointerId = awaitPointerEventScope { awaitFirstDown().id }
@@ -245,10 +266,11 @@ private fun Modifier.drag(
                     change.consumePositionChange()
                 }
             }
-            val velocity = tracker.calculateVelocity().x / numSegments
-            val targetValue = decay.calculateTargetValue(state.currentValue, -velocity)
+            val value = (state.currentValue.toInt() / numSegments) * numSegments.toFloat()
+//            val velocity = tracker.calculateVelocity().x / density
+            val targetValue = decay.calculateTargetValue(value, 0f)
             launch {
-                state.decayTo(velocity, targetValue)
+                state.decayTo(0f, targetValue)
             }
         }
     }
@@ -267,6 +289,10 @@ private fun Int.formattedTime(): String {
 private fun TimelineComposablePreview() {
     BusyBarThemeInternal {
         val numSegments = 5
+        val state = rememberPodcastSliderState(
+            currentValue = 0.seconds.inWholeSeconds.toFloat(),
+            range = 0..9.hours.inWholeSeconds.toInt()
+        )
         Surface(modifier = Modifier.fillMaxWidth(), color = Color.Black) {
             PodcastSlider(
                 modifier = Modifier
@@ -274,10 +300,7 @@ private fun TimelineComposablePreview() {
                     .padding(vertical = 16.dp),
                 density = 25,
                 numSegments = numSegments,
-                state = rememberPodcastSliderState(
-                    currentValue = 0.seconds.inWholeSeconds.toFloat(),
-                    range = 0..9.hours.inWholeSeconds.toInt()
-                ),
+                state = state,
                 indicatorLabel = { progress, value ->
                     val duration = value.seconds
                     duration.toComponents { days, hours, minutes, seconds, nanoseconds ->
@@ -288,44 +311,45 @@ private fun TimelineComposablePreview() {
                             value == 0 -> "∞"
                             else -> "$seconds"
                         }
-                        when {
-                            value % 5 == 0 -> {
-                                Box(
-                                    modifier = Modifier
-                                        .height(with(LocalDensity.current) { 85.sp.toDp() }),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        modifier = Modifier.wrapContentHeight(
-                                            align = Alignment.CenterVertically, // aligns to the center vertically (default value)
-                                            unbounded = true // Makes sense if the container size less than text's height
-                                        ),
-                                        text = text,
-                                        textAlign = TextAlign.Center,
-                                        fontSize = animateIntAsState(
-                                            when {
-                                                value == 0 && progress > 0.9f -> 85
-                                                progress < 0.8f -> 24
-                                                else -> 48
-                                            }
-                                        ).value.sp,
-                                        color = animateColorAsState(
-                                            when {
-                                                value % 10 == 0 -> LocalPallet.current
-                                                    .white
-                                                    .invert
-                                                    .copy(progress)
-
-                                                value % 5 == 0 && progress > 0.7f -> LocalPallet.current
-                                                    .white
-                                                    .invert
-                                                    .copy(progress)
-
-                                                else -> Color.Transparent
-                                            }
-                                        ).value
-                                    )
-                                }
+                        if (value % 5 == 0) {
+                            Box(
+                                modifier = Modifier
+                                    .height(with(LocalDensity.current) { 85.sp.toDp() }),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    modifier = Modifier.wrapContentHeight(
+                                        align = Alignment.CenterVertically, // aligns to the center vertically (default value)
+                                        unbounded = true // Makes sense if the container size less than text's height
+                                    ),
+                                    text = text,
+                                    textAlign = TextAlign.Center,
+                                    fontSize = animateIntAsState(
+                                        targetValue = 24.let { target ->
+                                            target.plus(
+                                                when {
+                                                    value == 0 -> (85 - target) * (progress.takeIf { it > 0.8f } ?: 0f)
+                                                    else -> (48 - target) * (progress.takeIf { it > 0.8f } ?: 0f)
+                                                }.toInt()
+                                            )
+                                        },
+                                        animationSpec = tween()
+                                    ).value.sp,
+                                    fontFamily = LocalBusyBarFonts.current.pragmatica,
+                                    color = animateColorAsState(
+                                        targetValue = LocalPallet.current
+                                            .white
+                                            .invert
+                                            .copy(
+                                                when {
+                                                    value % 10 == 0 -> progress
+                                                    value % 5 == 0 && progress < 0.8f -> 0f
+                                                    else -> progress
+                                                }
+                                            ),
+                                        animationSpec = tween()
+                                    ).value
+                                )
                             }
                         }
                     }
