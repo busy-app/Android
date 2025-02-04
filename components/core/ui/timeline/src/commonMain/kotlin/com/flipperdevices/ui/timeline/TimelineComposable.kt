@@ -1,17 +1,13 @@
 package com.flipperdevices.ui.timeline
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FloatSpringSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -20,7 +16,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,14 +26,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.consumePositionChange
@@ -46,23 +38,18 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.times
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
-import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val BarWidth = 2.dp
@@ -284,13 +271,57 @@ private fun Int.formattedTime(): String {
     return if (this < 10) "0$this" else "$this"
 }
 
+
+@Composable
+fun TextContent(value: Int, isSelected: Boolean, alpha: Float) {
+    val duration = value.seconds
+    duration.toComponents { days, hours, minutes, seconds, nanoseconds ->
+        val text = when {
+            days > 0 -> "${days}:${hours}:${minutes.formattedTime()}:${seconds.formattedTime()}"
+            hours > 0 -> "${hours}:${minutes.formattedTime()}:${seconds.formattedTime()}"
+            minutes > 0 -> "${minutes}:${seconds.formattedTime()}"
+            value == 0 -> "∞"
+            else -> "$seconds"
+        }
+        Text(
+            modifier = Modifier.wrapContentHeight(
+                align = Alignment.CenterVertically, // aligns to the center vertically (default value)
+                unbounded = true // Makes sense if the container size less than text's height
+            ),
+            text = text,
+            textAlign = TextAlign.Center,
+            fontSize = animateFloatAsState(
+                when {
+                    isSelected && value == 0 -> 85f
+                    isSelected && value != 0 -> 48f
+                    else -> 24f
+                }
+            ).value.sp,
+            fontFamily = LocalBusyBarFonts.current.pragmatica,
+            color = animateColorAsState(
+                LocalPallet.current
+                    .white
+                    .invert
+                    .copy(
+                        when {
+                            isSelected -> 1f
+                            value % 10 == 0 -> 0.4f
+                            value % 5 == 0 && alpha > 0.8f -> 1f
+                            else -> 0f
+                        }
+                    )
+            ).value
+        )
+    }
+}
+
 @Preview
 @Composable
-private fun TimelineComposablePreview() {
+fun TimelineComposablePreview() {
     BusyBarThemeInternal {
         val numSegments = 5
         val state = rememberPodcastSliderState(
-            currentValue = 0.seconds.inWholeSeconds.toFloat(),
+            currentValue = 75.seconds.inWholeSeconds.toFloat(),
             range = 0..9.hours.inWholeSeconds.toInt()
         )
         Surface(modifier = Modifier.fillMaxWidth(), color = Color.Black) {
@@ -301,56 +332,18 @@ private fun TimelineComposablePreview() {
                 density = 25,
                 numSegments = numSegments,
                 state = state,
-                indicatorLabel = { progress, value ->
-                    val duration = value.seconds
-                    duration.toComponents { days, hours, minutes, seconds, nanoseconds ->
-                        val text = when {
-                            days > 0 -> "${days}:${hours}:${minutes.formattedTime()}:${seconds.formattedTime()}"
-                            hours > 0 -> "${hours}:${minutes.formattedTime()}:${seconds.formattedTime()}"
-                            minutes > 0 -> "${minutes}:${seconds.formattedTime()}"
-                            value == 0 -> "∞"
-                            else -> "$seconds"
-                        }
-                        if (value % 5 == 0) {
-                            Box(
-                                modifier = Modifier
-                                    .height(with(LocalDensity.current) { 85.sp.toDp() }),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    modifier = Modifier.wrapContentHeight(
-                                        align = Alignment.CenterVertically, // aligns to the center vertically (default value)
-                                        unbounded = true // Makes sense if the container size less than text's height
-                                    ),
-                                    text = text,
-                                    textAlign = TextAlign.Center,
-                                    fontSize = animateIntAsState(
-                                        targetValue = 24.let { target ->
-                                            target.plus(
-                                                when {
-                                                    value == 0 -> (85 - target) * (progress.takeIf { it > 0.8f } ?: 0f)
-                                                    else -> (48 - target) * (progress.takeIf { it > 0.8f } ?: 0f)
-                                                }.toInt()
-                                            )
-                                        },
-                                        animationSpec = tween()
-                                    ).value.sp,
-                                    fontFamily = LocalBusyBarFonts.current.pragmatica,
-                                    color = animateColorAsState(
-                                        targetValue = LocalPallet.current
-                                            .white
-                                            .invert
-                                            .copy(
-                                                when {
-                                                    value % 10 == 0 -> progress
-                                                    value % 5 == 0 && progress < 0.8f -> 0f
-                                                    else -> progress
-                                                }
-                                            ),
-                                        animationSpec = tween()
-                                    ).value
-                                )
-                            }
+                indicatorLabel = { alpha, value ->
+                    val isSelected = remember(value, alpha) { alpha > (1f - 0.03f) }
+                    if (value % 5 == 0) {
+                        Box(
+                            modifier = Modifier.height(with(LocalDensity.current) { 85.sp.toDp() }),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            TextContent(
+                                value = value,
+                                isSelected = isSelected,
+                                alpha = alpha
+                            )
                         }
                     }
                 }
