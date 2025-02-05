@@ -1,6 +1,8 @@
 package com.flipperdevices.ui.timeline
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,12 +31,12 @@ fun TimelineComposablePreview() {
             range = 0..9.hours.inWholeSeconds.toInt()
         )
         val animatedTextState = remember { AnimatedTextState(24f, 0.4f) }
-        Surface(modifier = Modifier.fillMaxWidth(), color = Color.Black) {
+        BoxWithConstraints(modifier = Modifier.fillMaxWidth().background(Color.Black)) {
             PodcastSlider(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp),
-                density = with(LocalDensity.current) { 25.dp.toPx().toInt() },
+                density = with(LocalDensity.current) { maxWidth.toPx()/32 }.toInt(),
                 numSegments = numSegments,
                 state = state,
                 minAlpha = 1f,
