@@ -2,12 +2,14 @@ package com.flipperdevices.ui.timeline
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.FloatSpringSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -27,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -72,10 +75,10 @@ class PodcastSliderStateImpl(
 ) : PodcastSliderState {
 
     private val floatRange = range.start.toFloat()..range.endInclusive.toFloat()
-    private val animatable = Animatable(currentValue)
+    private val animatable: Animatable<Float, AnimationVector1D> = Animatable(currentValue)
     private val decayAnimationSpec = FloatSpringSpec(
-        dampingRatio = Spring.DampingRatioLowBouncy,
-        stiffness = Spring.StiffnessLow,
+        dampingRatio = Spring.DampingRatioNoBouncy,
+        stiffness = Spring.StiffnessHigh,
     )
 
     override val currentValue: Float
@@ -179,7 +182,7 @@ fun PodcastSlider(
                 val offsetX = (i - state.currentValue) * segmentWidthPx
                 // indicator at center is at 1f, indicators at edges are at 0.25f
                 val alpha = 1f - (1f - MinAlpha) * (offsetX / maxOffset).absoluteValue
-                val isSelected = alpha > (1f - 0.03f)
+                val isSelected = state.currentValue.roundToInt() == i
                 Box(
                     modifier = Modifier
                         .graphicsLayer(
@@ -253,8 +256,12 @@ private fun Modifier.drag(
                     change.consumePositionChange()
                 }
             }
-            val value = (state.currentValue.toInt() / numSegments) * numSegments.toFloat()
-//            val velocity = tracker.calculateVelocity().x / density
+
+            val value = state.currentValue.roundToInt().let { roundValue ->
+                val mod = roundValue % numSegments
+                val addition = if (mod > numSegments.div(2)) numSegments else 0
+                (roundValue / numSegments) * numSegments.toFloat() + addition
+            }
             val targetValue = decay.calculateTargetValue(value, 0f)
             launch {
                 state.decayTo(0f, targetValue)
@@ -272,16 +279,54 @@ private fun Int.formattedTime(): String {
 }
 
 
+object States {
+    val map = mutableMapOf<Int, Animatable<Float, AnimationVector1D>>()
+}
+
 @Composable
-fun TextContent(value: Int, isSelected: Boolean, alpha: Float) {
+fun TextContent(
+    value: Int,
+    isSelected: Boolean,
+    alpha: Float,
+    targetValue: Float
+) {
+    val targetIntValue = targetValue.roundToInt()
+    val diff = (targetIntValue - targetValue).absoluteValue
+    val progress = 1f - diff
+    val scope = rememberCoroutineScope()
+
     val duration = value.seconds
     duration.toComponents { days, hours, minutes, seconds, nanoseconds ->
         val text = when {
-            days > 0 -> "${days}:${hours}:${minutes.formattedTime()}:${seconds.formattedTime()}"
-            hours > 0 -> "${hours}:${minutes.formattedTime()}:${seconds.formattedTime()}"
-            minutes > 0 -> "${minutes}:${seconds.formattedTime()}"
+            days > 0 -> "${days}d ${hours}h ${minutes.formattedTime()}m ${seconds.formattedTime()}s"
+            hours > 0 -> "${hours}h ${minutes.formattedTime()}m ${seconds.formattedTime()}s"
+            minutes > 0 -> "${minutes}m ${seconds.formattedTime()}s"
             value == 0 -> "∞"
-            else -> "$seconds"
+            else -> "${seconds}s"
+        }
+        val fontSize = States.map.getOrPut(value) {
+            Animatable(24f)
+        }
+        scope.launch {
+            val target = 24f.plus(
+                when {
+                    value == 0 -> (85f.minus(24))
+                        .times((progress.takeIf { targetIntValue == value } ?: 0f))
+
+
+                    value != 0 -> (48f.minus(24))
+                        .times((progress.takeIf { targetIntValue == value } ?: 0f))
+
+
+                    else -> 0f
+                }
+            )
+            if (fontSize.value == target) return@launch
+            fontSize.animateTo(
+                targetValue = target,
+                animationSpec = tween(50)
+            )
+            if (target == 24f) States.map.remove(value)
         }
         Text(
             modifier = Modifier.wrapContentHeight(
@@ -290,13 +335,7 @@ fun TextContent(value: Int, isSelected: Boolean, alpha: Float) {
             ),
             text = text,
             textAlign = TextAlign.Center,
-            fontSize = animateFloatAsState(
-                when {
-                    isSelected && value == 0 -> 85f
-                    isSelected && value != 0 -> 48f
-                    else -> 24f
-                }
-            ).value.sp,
+            fontSize = fontSize.value.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             color = animateColorAsState(
                 LocalPallet.current
@@ -329,7 +368,7 @@ fun TimelineComposablePreview() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp),
-                density = 25,
+                density = with(LocalDensity.current) { 25.dp.toPx().toInt() },
                 numSegments = numSegments,
                 state = state,
                 indicatorLabel = { alpha, value ->
@@ -342,13 +381,13 @@ fun TimelineComposablePreview() {
                             TextContent(
                                 value = value,
                                 isSelected = isSelected,
-                                alpha = alpha
+                                alpha = alpha,
+                                targetValue = state.currentValue
                             )
                         }
                     }
                 }
             )
-
         }
     }
 }
