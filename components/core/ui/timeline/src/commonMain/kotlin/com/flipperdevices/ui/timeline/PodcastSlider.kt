@@ -1,9 +1,7 @@
 package com.flipperdevices.ui.timeline
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,19 +13,118 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import kotlin.math.absoluteValue
+import kotlinx.coroutines.launch
 
 internal val BarWidth = 4.dp
-internal val BarHeight = 24.dp
+internal val SmallBarHeight = 24.dp
+internal val SmallSelectedBarHeight = SmallBarHeight.plus(10.dp)
+
+internal val MediumBarHeight = SmallSelectedBarHeight
+internal val MediumSelectedBarHeight = MediumBarHeight.plus(10.dp)
+
+class BarItemState(
+    height: Dp,
+    color: Color
+) {
+    val animatedHeight = Animatable(height.value)
+    val animatedColor = androidx.compose.animation.Animatable(color)
+
+    val height: Float
+        get() = animatedHeight.value
+    val color: Color
+        get() = animatedColor.value
+
+    suspend fun animateColorChange(color: Color) {
+        if (animatedColor.targetValue == color) return
+        animatedColor.animateTo(color, tween(700))
+    }
+
+    suspend fun animateHeightChange(height: Dp) {
+        if (animatedHeight.targetValue == height.value) return
+        animatedHeight.animateTo(height.value, tween(700))
+    }
+}
+
+@Composable
+fun BarItem(
+    segmentWidth: Dp,
+    alpha: Float,
+    offsetX: Float,
+    numSegments: Int,
+    i: Int,
+    isSelected: Boolean,
+    barColor: Color,
+    barStatesMap: MutableMap<Int, BarItemState>,
+) {
+    val state = barStatesMap.getOrPut(i) {
+        BarItemState(
+            height = when {
+                isSelected && i % numSegments == 0 -> MediumSelectedBarHeight
+                isSelected -> SmallSelectedBarHeight
+                i % numSegments == 0 -> MediumBarHeight
+                else -> SmallBarHeight
+            },
+            color = if (isSelected) barColor else barColor.copy(0.2f)
+        )
+    }
+
+    rememberCoroutineScope().launch {
+        launch {
+            val targetHeight = when {
+                isSelected && i % numSegments == 0 -> MediumSelectedBarHeight
+                isSelected -> SmallSelectedBarHeight
+                i % numSegments == 0 -> MediumBarHeight
+                else -> SmallBarHeight
+            }
+            if (state.animatedHeight.targetValue == targetHeight.value) return@launch
+            state.animateHeightChange(targetHeight)
+            if (targetHeight == MediumBarHeight) barStatesMap.remove(i)
+            if (targetHeight == SmallBarHeight) barStatesMap.remove(i)
+        }
+        launch {
+            val targetColor = if (isSelected) barColor else barColor.copy(0.2f)
+            if (state.animatedColor.targetValue == targetColor) return@launch
+            state.animateColorChange(targetColor)
+            if (targetColor == barColor.copy(0.2f)) barStatesMap.remove(i)
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .padding(top = with(LocalDensity.current) { 64.sp.toDp() })
+            .width(segmentWidth)
+            .height(MediumSelectedBarHeight)
+            .graphicsLayer(
+                alpha = alpha,
+                translationX = offsetX
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .width(BarWidth)
+                .height(state.height.dp)
+                .clip(RoundedCornerShape(3.dp))
+                .background(state.color)
+        )
+
+    }
+}
 
 @Composable
 fun PodcastSlider(
@@ -59,6 +156,7 @@ fun PodcastSlider(
                 .coerceAtMost(state.range.endInclusive)
 
             val maxOffset = constraints.maxWidth / 2f
+            val barStatesMap = remember { HashMap<Int, BarItemState>() }
             for (i in start..end) {
                 val offsetX = (i - state.currentValue) * segmentWidthPx
                 // indicator at center is at 1f, indicators at edges are at 0.25f
@@ -78,41 +176,16 @@ fun PodcastSlider(
                         indicatorLabel(alpha, i)
                     }
                 )
-                Column(
-                    modifier = Modifier
-                        .padding(top = with(LocalDensity.current) { 64.sp.toDp() })
-                        .width(segmentWidth)
-                        .height(BarHeight.plus(20.dp))
-                        .graphicsLayer(
-                            alpha = alpha,
-                            translationX = offsetX
-                        ),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .width(BarWidth)
-                            .height(
-                                BarHeight
-                                    .plus(if (i % numSegments == 0) 10.dp else 0.dp)
-                                    .plus(
-                                        animateDpAsState(
-                                            targetValue = if (isSelected) 10.dp else 0.dp,
-                                            animationSpec = spring(stiffness = Spring.StiffnessLow)
-                                        ).value
-                                    )
-                            )
-                            .clip(RoundedCornerShape(3.dp))
-                            .background(
-                                animateColorAsState(
-                                    targetValue = if (isSelected) barColor else barColor.copy(0.2f),
-                                    animationSpec = spring(stiffness = Spring.StiffnessLow)
-                                ).value
-                            )
-                    )
-
-                }
+                BarItem(
+                    segmentWidth = segmentWidth,
+                    alpha = alpha,
+                    offsetX = offsetX,
+                    numSegments = numSegments,
+                    i = i,
+                    isSelected = isSelected,
+                    barColor = barColor,
+                    barStatesMap = barStatesMap,
+                )
             }
         }
     }

@@ -28,7 +28,6 @@ private class PodcastSliderStateImpl(
     currentValue: Float,
     override val range: ClosedRange<Int>,
 ) : PodcastSliderState {
-
     override val selected = mutableIntStateOf(currentValue.toInt())
     private val floatRange = range.start.toFloat()..range.endInclusive.toFloat()
     private val animatable: Animatable<Float, AnimationVector1D> = Animatable(currentValue)
