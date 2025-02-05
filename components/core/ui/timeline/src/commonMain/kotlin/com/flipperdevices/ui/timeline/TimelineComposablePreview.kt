@@ -37,6 +37,7 @@ fun TimelineComposablePreview() {
                 density = with(LocalDensity.current) { 25.dp.toPx().toInt() },
                 numSegments = numSegments,
                 state = state,
+                minAlpha = 1f,
                 indicatorLabel = { alpha, value ->
                     if (value % 5 == 0) {
                         Box(

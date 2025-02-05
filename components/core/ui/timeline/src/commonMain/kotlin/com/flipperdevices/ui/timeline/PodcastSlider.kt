@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -24,9 +26,8 @@ import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import kotlin.math.absoluteValue
 
-internal val BarWidth = 2.dp
+internal val BarWidth = 4.dp
 internal val BarHeight = 24.dp
-internal const val MinAlpha = .25f
 
 @Composable
 fun PodcastSlider(
@@ -34,6 +35,7 @@ fun PodcastSlider(
     state: PodcastSliderState = rememberPodcastSliderState(),
     density: Int,
     numSegments: Int,
+    minAlpha: Float = .25f,
     barColor: Color = LocalPallet.current.white.invert,
     indicatorLabel: @Composable (Float, Int) -> Unit
 ) {
@@ -60,8 +62,10 @@ fun PodcastSlider(
             for (i in start..end) {
                 val offsetX = (i - state.currentValue) * segmentWidthPx
                 // indicator at center is at 1f, indicators at edges are at 0.25f
-                val alpha = 1f - (1f - MinAlpha) * (offsetX / maxOffset).absoluteValue
-//                val isSelected = state.currentValue.roundToInt() == i
+                val alpha = when {
+                    minAlpha == 1f -> 1f
+                    else -> 1f - (1f - minAlpha) * (offsetX / maxOffset).absoluteValue
+                }
                 val isSelected = state.selected.value == i
                 Box(
                     modifier = Modifier
@@ -99,6 +103,7 @@ fun PodcastSlider(
                                         ).value
                                     )
                             )
+                            .clip(RoundedCornerShape(3.dp))
                             .background(
                                 animateColorAsState(
                                     targetValue = if (isSelected) barColor else barColor.copy(0.2f),
