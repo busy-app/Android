@@ -30,6 +30,7 @@ import kotlin.math.absoluteValue
 import kotlinx.coroutines.launch
 
 internal val BarWidth = 4.dp
+internal val BarSelectedWidth = BarWidth.plus(4.dp)
 internal val SmallBarHeight = 24.dp
 internal val SmallSelectedBarHeight = SmallBarHeight.plus(10.dp)
 
@@ -38,13 +39,17 @@ internal val MediumSelectedBarHeight = MediumBarHeight.plus(10.dp)
 
 class BarItemState(
     height: Dp,
+    width: Dp,
     color: Color
 ) {
     val animatedHeight = Animatable(height.value)
     val animatedColor = androidx.compose.animation.Animatable(color)
+    val animatedWidth = Animatable(width.value)
 
     val height: Float
         get() = animatedHeight.value
+    val width: Float
+        get() = animatedWidth.value
     val color: Color
         get() = animatedColor.value
 
@@ -56,6 +61,11 @@ class BarItemState(
     suspend fun animateHeightChange(height: Dp) {
         if (animatedHeight.targetValue == height.value) return
         animatedHeight.animateTo(height.value, tween(700))
+    }
+
+    suspend fun animateWidthChange(width: Dp) {
+        if (animatedWidth.targetValue == width.value) return
+        animatedWidth.animateTo(width.value, tween(700))
     }
 }
 
@@ -78,10 +88,12 @@ fun BarItem(
                 i % numSegments == 0 -> MediumBarHeight
                 else -> SmallBarHeight
             },
-            color = if (isSelected) barColor else barColor.copy(0.2f)
+            color = if (isSelected) barColor else barColor.copy(0.2f),
+            width = if (isSelected) BarSelectedWidth else BarWidth
         )
     }
 
+    // I'm sorry
     rememberCoroutineScope().launch {
         launch {
             val targetHeight = when {
@@ -101,6 +113,11 @@ fun BarItem(
             state.animateColorChange(targetColor)
             if (targetColor == barColor.copy(0.2f)) barStatesMap.remove(i)
         }
+        launch {
+            val targetWidth = if (isSelected) BarSelectedWidth else BarWidth
+            if (state.animatedWidth.targetValue == targetWidth.value) return@launch
+            state.animateWidthChange(targetWidth)
+        }
     }
 
     Column(
@@ -117,7 +134,7 @@ fun BarItem(
     ) {
         Box(
             modifier = Modifier
-                .width(BarWidth)
+                .width(state.width.dp)
                 .height(state.height.dp)
                 .clip(RoundedCornerShape(3.dp))
                 .background(state.color)
