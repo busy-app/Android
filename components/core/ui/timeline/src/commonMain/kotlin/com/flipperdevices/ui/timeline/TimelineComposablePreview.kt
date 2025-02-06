@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,18 +24,18 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun TimelineComposablePreview() {
     BusyBarThemeInternal {
-        val numSegments = 5
+        val map = remember { HashMap<Int, AnimatedTextState>() }
+        val numSegments = remember { 5 }
         val state = rememberPodcastSliderState(
             currentValue = 75.seconds.inWholeSeconds.toFloat(),
             range = 0..9.hours.inWholeSeconds.toInt()
         )
-        val animatedTextState = remember { AnimatedTextState(24f, 0.4f) }
         BoxWithConstraints(modifier = Modifier.fillMaxWidth().background(Color.Black)) {
             PodcastSlider(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp),
-                density = with(LocalDensity.current) { maxWidth.toPx()/32 }.toInt(),
+                density = with(LocalDensity.current) { maxWidth.toPx() / 32 }.toInt(),
                 numSegments = numSegments,
                 state = state,
                 minAlpha = 1f,
@@ -48,8 +47,8 @@ fun TimelineComposablePreview() {
                         ) {
                             TextContent(
                                 value = value,
-                                isSelected = state.selected.value == value,
-                                animatedTextState = animatedTextState
+                                selected = state.selected.value,
+                                map = map
                             )
                         }
                     }
