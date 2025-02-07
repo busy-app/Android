@@ -1,5 +1,7 @@
 package com.flipperdevices.bsb
 
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
@@ -9,6 +11,7 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.flipperdevices.bsb.di.DesktopAppComponent
 import com.flipperdevices.bsb.di.create
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
+import com.flipperdevices.ui.timeline.TimelineComposablePreview
 import com.russhwolf.settings.PreferencesSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -34,7 +37,7 @@ fun main() {
         )
     }
     application {
-        val windowState = rememberWindowState()
+        val windowState = rememberWindowState(size = DpSize(1920.dp,400.dp))
 
         LifecycleController(lifecycle, windowState)
         Window(
@@ -42,7 +45,8 @@ fun main() {
             state = windowState,
             title = "BusyStatusBar",
         ) {
-            App(root, appComponent)
+            TimelineComposablePreview()
+//            App(root, appComponent)
         }
     }
 }

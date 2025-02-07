@@ -45,6 +45,7 @@ include(
     ":components:core:ui:button",
     ":components:core:ui:sheet",
     ":components:core:ui:picker",
+    ":components:core:ui:option",
     ":components:core:ui:timeline",
 
     ":components:bsb:core:theme",

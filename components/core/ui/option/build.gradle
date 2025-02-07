@@ -6,3 +6,4 @@ plugins {
 commonDependencies {
     implementation(projects.components.bsb.core.theme)
 }
+

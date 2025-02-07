@@ -95,6 +95,8 @@ kotlin {
             implementation(libs.decompose.composeExtension)
 
             implementation(libs.kotlin.coroutines.swing)
+
+            implementation(projects.components.core.ui.timeline)
         }
         iosMain.dependencies {
             api(libs.decompose)
