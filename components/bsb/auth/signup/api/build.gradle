@@ -1,5 +1,5 @@
 plugins {
-    id("flipper.multiplatform-compose")
+    id("flipper.multiplatform.noandroidlib")
     id("flipper.multiplatform-dependencies")
 }
 

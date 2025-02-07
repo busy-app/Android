@@ -9,4 +9,9 @@ plugins {
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.atomicflu) apply false
+    id("flipper.java.version") apply false
+}
+
+allprojects {
+    apply(plugin = "flipper.java.version")
 }

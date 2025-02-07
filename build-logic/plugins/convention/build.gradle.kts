@@ -17,11 +17,11 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
+//    jvmToolchain {
+//        languageVersion.set(JavaLanguageVersion.of(17))
+//    }
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
+//        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
@@ -31,6 +31,11 @@ gradlePlugin {
             id = name
             implementationClass =
                 "com.flipperdevices.buildlogic.plugin.FlipperMultiplatformDependenciesPlugin"
+        }
+        create("flipper.java.version") {
+            id = name
+            implementationClass =
+                "com.flipperdevices.buildlogic.plugin.JavaVersionPlugin"
         }
     }
 }
