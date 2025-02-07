@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 
 internal val BarWidth = 4.dp
 internal val BarSelectedWidth = BarWidth.plus(4.dp)
-internal val SmallBarHeight = 24.dp
+internal val SmallBarHeight = 15.dp
 internal val SmallSelectedBarHeight = SmallBarHeight.plus(10.dp)
 
 internal val MediumBarHeight = SmallSelectedBarHeight
@@ -122,7 +122,7 @@ fun BarItem(
 
     Column(
         modifier = Modifier
-            .padding(top = with(LocalDensity.current) { 64.sp.toDp() })
+            .padding(top = with(LocalDensity.current) { 54.sp.toDp() })
             .width(segmentWidth)
             .height(MediumSelectedBarHeight)
             .graphicsLayer(

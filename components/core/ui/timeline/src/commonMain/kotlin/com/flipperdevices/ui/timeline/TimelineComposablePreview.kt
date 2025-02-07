@@ -35,7 +35,7 @@ fun TimelineComposablePreview() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp),
-                density = with(LocalDensity.current) { maxWidth.toPx() / 32 }.toInt(),
+                density = with(LocalDensity.current) { maxWidth.toPx() / 10.dp.toPx() }.toInt(),
                 numSegments = numSegments,
                 state = state,
                 minAlpha = 1f,

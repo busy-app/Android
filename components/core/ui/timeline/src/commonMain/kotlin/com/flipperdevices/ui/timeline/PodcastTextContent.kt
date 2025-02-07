@@ -9,7 +9,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
@@ -27,8 +30,18 @@ private fun Int.formattedTime(): String {
 class AnimatedTextState(fontSize: Float, alpha: Float) {
     val fontSizeAnimated = Animatable(fontSize)
     val alphaAnimated = Animatable(alpha)
+    val offsetAnimated = Animatable(0f)
     suspend fun animateFontSize(targetValue: Float) {
         val animation = fontSizeAnimated
+        if (animation.targetValue == targetValue && animation.isRunning) return
+        animation.animateTo(
+            targetValue = targetValue,
+            animationSpec = tween(400)
+        )
+    }
+
+    suspend fun animateOffset(targetValue: Float) {
+        val animation = offsetAnimated
         if (animation.targetValue == targetValue && animation.isRunning) return
         animation.animateTo(
             targetValue = targetValue,
@@ -56,8 +69,8 @@ fun TextContent(
         val isSelected = selected == value
         when {
             value == 0 && isSelected -> 85f
-            isSelected -> 48f
-            else -> 24f
+            isSelected -> 40f
+            else -> 15f
         }
     }
     val getAlpha = {
@@ -65,6 +78,13 @@ fun TextContent(
         when {
             isSelected -> 1f
             value % 10 == 0 -> 0.4f
+            else -> 0f
+        }
+    }
+    val getOffset = {
+        val isSelected = selected == value
+        when {
+            isSelected -> 24f
             else -> 0f
         }
     }
@@ -79,12 +99,15 @@ fun TextContent(
             state.animateFontSize(getFontSize.invoke())
         }
         launch {
+            state.animateOffset(getOffset.invoke())
+        }
+        launch {
             state.animateColor(getAlpha.invoke())
         }
         launch {
             if (state.alphaAnimated.isRunning) return@launch
             if (state.fontSizeAnimated.isRunning) return@launch
-            if (state.fontSizeAnimated.value == 24f) map.remove(value)
+            if (state.fontSizeAnimated.value == 15f) map.remove(value)
             if (state.alphaAnimated.value == 0f) map.remove(value)
             if (state.alphaAnimated.value == 0.4f) map.remove(value)
         }
@@ -95,7 +118,7 @@ fun TextContent(
         val text = when {
             days > 0 -> "${days}d ${hours}h ${minutes.formattedTime()}m ${seconds.formattedTime()}s"
             hours > 0 -> "${hours}h ${minutes.formattedTime()}m ${seconds.formattedTime()}s"
-            minutes > 0 -> "${minutes}m${seconds.formattedTime()}s"
+            minutes > 0 -> "${minutes}m ${seconds.formattedTime()}s"
             value == 0 -> "∞"
             else -> "${seconds}s"
         }
@@ -104,6 +127,8 @@ fun TextContent(
             modifier = Modifier.wrapContentHeight(
                 align = Alignment.CenterVertically, // aligns to the center vertically (default value)
                 unbounded = true // Makes sense if the container size less than text's height
+            ).graphicsLayer(
+                translationY = -with(LocalDensity.current) { state.offsetAnimated.value.dp.toPx()}
             ),
             text = text,
             textAlign = TextAlign.Center,
