@@ -9,11 +9,8 @@ import com.flipperdevices.bsb.core.theme.LocalPallet
 /**
  * @param lineWidth The width of each vertical line in the picker. Default is `2.dp`.
  * @param selectedLineHeight The height of the selected item (line) in the picker. Default is `64.dp`.
- * @param multipleOfFiveLineHeight The height of lines at indices that are multiples of 5. Default is `40.dp`.
+ * @param stepLineHeight The height of lines at indices that are multiples of 5. Default is `40.dp`.
  * @param normalLineHeight The height of lines that are not the selected item or multiples of 5. Default is `30.dp`.
- * @param selectedMultipleOfFiveLinePaddingBottom The padding bottom for the selected item (line) that are multiples of 5. Default is `0.dp`.
- * @param normalMultipleOfFiveLinePaddingBottom The padding bottom for lines that are multiples of 5. Default is `6.dp`.
- * @param normalLinePaddingBottom The padding bottom for normal lines. Default is `8.dp`.
  * @param lineSpacing The spacing between each line in the picker. Default is `8.dp`.
  * @param lineRoundedCorners The corner radius of each vertical line, applied to create rounded corners. Default is `2.dp`.
  * @param selectedLineColor The color of the selected item (line) in the picker. Default is `Color(0xFF00D1FF)`.
@@ -25,11 +22,8 @@ data class LineStyle(
     val lineWidth: Dp = 4.dp,
     val selectedLineWidth: Dp = 8.dp,
     val selectedLineHeight: Dp = 64.dp,
-    val multipleOfFiveLineHeight: Dp = 40.dp,
+    val stepLineHeight: Dp = 40.dp,
     val normalLineHeight: Dp = 30.dp,
-    val selectedMultipleOfFiveLinePaddingBottom: Dp = 0.dp,
-    val normalMultipleOfFiveLinePaddingBottom: Dp = 3.dp,
-    val normalLinePaddingBottom: Dp = 8.dp,
     val lineSpacing: Dp = 8.dp,
     val lineRoundedCorners: Dp = 2.dp,
     val selectedLineColor: Color,

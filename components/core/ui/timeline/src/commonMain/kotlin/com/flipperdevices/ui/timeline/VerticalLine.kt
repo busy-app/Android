@@ -48,7 +48,7 @@ internal fun VerticalLine(
     val paddingBottom by animateDpAsState(
         targetValue = when {
             isSelected -> sqrt(style.selectedLineHeight.value).dp
-            index % progression.step == 0 -> -style.multipleOfFiveLineHeight.value.dp/4
+            index % progression.step == 0 -> -style.stepLineHeight.value.dp/4
             else -> -sqrt(style.normalLineHeight.value).dp
         },
         animationSpec = tween(400)
@@ -56,7 +56,7 @@ internal fun VerticalLine(
     val lineHeight by animateDpAsState(
         when {
             isSelected -> style.selectedLineHeight
-            index % progression.step == 0 -> style.multipleOfFiveLineHeight
+            index % progression.step == 0 -> style.stepLineHeight
             else -> style.normalLineHeight
         },
         tween(600)
