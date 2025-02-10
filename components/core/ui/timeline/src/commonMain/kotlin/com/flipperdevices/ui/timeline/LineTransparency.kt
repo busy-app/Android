@@ -17,6 +17,8 @@ package com.flipperdevices.ui.timeline
  * @return A `Float` value representing the calculated transparency level for the line.
  *
  */
+// todo this code still WIP
+@Suppress("LongMethod", "LongParameterList")
 internal fun calculateLineTransparency(
     lineIndex: Int,
     totalLines: Int,

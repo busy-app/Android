@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.LocalPallet
 
+@Suppress("MaxLineLength")
 /**
  * @param lineWidth The width of each vertical line in the picker. Default is `2.dp`.
  * @param selectedLineHeight The height of the selected item (line) in the picker. Default is `64.dp`.

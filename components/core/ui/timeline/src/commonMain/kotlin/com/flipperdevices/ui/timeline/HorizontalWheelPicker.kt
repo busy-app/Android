@@ -49,12 +49,14 @@ import kotlin.time.Duration.Companion.seconds
  *
  */
 @Composable
+// todo this code is still WIP
+@Suppress("LambdaParameterInRestartableEffect", "MagicNumber", "MaxLineLength", "LongMethod")
 fun BoxWithConstraintsScope.HorizontalWheelPicker(
+    progression: IntProgression,
+    onItemSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
     wheelPickerWidth: Dp? = null,
-    progression: IntProgression,
     initialSelectedItem: Int = progression.first,
-    onItemSelect: (Int) -> Unit,
     lineStyle: LineStyle = LineStyle.Default
 ) {
     check(progression.step % 5 == 0) {
@@ -96,11 +98,12 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     }
 
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         LazyRow(
-            modifier = modifier.width(effectiveWidth),
+            modifier = Modifier.width(effectiveWidth),
             state = scrollState,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -138,6 +141,8 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     }
 }
 
+// todo this code is still WIP
+@Suppress("PreviewPublic")
 @Preview
 @Composable
 fun HorizontalWheelPickerPreview(

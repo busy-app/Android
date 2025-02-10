@@ -6,6 +6,7 @@ import kotlin.time.Duration
  * Format seconds 0 -> 00
  * Need when 9:2:3 -> 0:02:03
  */
+@Suppress("MagicNumber")
 internal fun Int.toFormattedTime(): String {
     return if (this < 10) "0$this" else "$this"
 }

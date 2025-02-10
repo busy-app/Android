@@ -38,6 +38,7 @@ import kotlin.time.Duration.Companion.seconds
  *
  */
 @Composable
+@Suppress("MagicNumber", "CyclomaticComplexMethod", "LongMethod")
 internal fun VerticalLine(
     index: Int,
     isSelected: Boolean,
