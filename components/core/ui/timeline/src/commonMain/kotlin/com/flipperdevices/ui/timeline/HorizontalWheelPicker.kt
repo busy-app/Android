@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -120,8 +122,8 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     normalLinePaddingBottom: Dp = 8.sdp,
     lineSpacing: Dp = 8.sdp,
     lineRoundedCorners: Dp = 2.sdp,
-    selectedLineColor: Color = Color(0xFF00D1FF),
-    unselectedLineColor: Color = Color.LightGray,
+    selectedLineColor: Color = LocalPallet.current.white.invert,
+    unselectedLineColor: Color = LocalPallet.current.white.invert.copy(0.2f),
     fadeOutLinesCount: Int = 4,
     maxFadeTransparency: Float = 0.7f,
     onItemSelected: (Int) -> Unit
@@ -176,7 +178,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                     currentSelectedItem = adjustedIndex
                 }
 
-                val lineHeight = animateDpAsState(
+                val lineHeight by animateDpAsState(
                     when {
                         index == middleIndex -> selectedLineHeight
                         adjustedIndex % 5 == 0 -> multipleOfFiveLineHeight
@@ -185,11 +187,14 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                     tween(600)
                 )
 
-                val paddingBottom = when {
-                    index == middleIndex -> selectedMultipleOfFiveLinePaddingBottom
-                    adjustedIndex % 5 == 0 -> normalMultipleOfFiveLinePaddingBottom
-                    else -> normalLinePaddingBottom
-                }
+                val paddingBottom by animateDpAsState(
+                    targetValue = when {
+                        index == middleIndex -> selectedMultipleOfFiveLinePaddingBottom
+                        adjustedIndex % 5 == 0 -> normalMultipleOfFiveLinePaddingBottom
+                        else -> normalLinePaddingBottom
+                    },
+                    animationSpec = tween(400)
+                )
 
                 val lineTransparency = animateFloatAsState(
                     calculateLineTransparency(
@@ -208,13 +213,14 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                     i = adjustedIndex,
                     lineWidth = lineWidth,
                     selectedLineWidth = selectedLineWidth,
-                    lineHeight = lineHeight.value,
+                    lineHeight = lineHeight,
                     paddingBottom = paddingBottom,
                     roundedCorners = lineRoundedCorners,
                     indexAtCenter = index == middleIndex,
                     lineTransparency = lineTransparency.value,
                     selectedLineColor = selectedLineColor,
-                    unselectedLineColor = unselectedLineColor
+                    unselectedLineColor = unselectedLineColor,
+                    maxLineHeight = selectedLineHeight
                 )
 
 
@@ -253,7 +259,8 @@ private fun VerticalLine(
     indexAtCenter: Boolean,
     lineTransparency: Float,
     selectedLineColor: Color,
-    unselectedLineColor: Color
+    unselectedLineColor: Color,
+    maxLineHeight: Dp
 ) {
     val textMeasurer = rememberTextMeasurer()
     val fontSizeFloat by animateFloatAsState(
@@ -297,15 +304,12 @@ private fun VerticalLine(
         tween(600)
     )
     val localDensity = LocalDensity.current
-    Canvas(Modifier.width(1.dp).height(54.dp)) {
-        drawRect(
-            topLeft = Offset(0f, 64f),
-            color = color.copy(alpha = lineTransparency),
-            size = Size(
-                width = with(localDensity) { width.toPx() },
-                height = with(localDensity) { lineHeight.toPx() }),
-        )
 
+    Canvas(
+        Modifier
+            .width(1.dp)
+            .height(maxLineHeight.plus(with(localDensity) { result.size.height.toDp() }))
+    ) {
         if (i % 10 == 0) {
             drawText(
                 textLayoutResult = result,
@@ -315,6 +319,18 @@ private fun VerticalLine(
                 )
             )
         }
+
+        drawRect(
+            topLeft = Offset(
+                x = -with(localDensity) { width.toPx() } / 2,
+                y = with(localDensity) { paddingBottom.toPx() }
+                    .plus(result.size.height)
+            ),
+            color = color.copy(alpha = lineTransparency.coerceAtMost(color.alpha)),
+            size = Size(
+                width = with(localDensity) { width.toPx() },
+                height = with(localDensity) { lineHeight.toPx() }),
+        )
     }
 }
 
