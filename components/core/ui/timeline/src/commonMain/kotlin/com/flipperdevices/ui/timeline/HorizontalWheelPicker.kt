@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -185,28 +186,12 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
         ) {
             items(totalItems + totalVisibleItems) { index ->
                 val adjustedIndex = index - bufferIndices
+                val isSelected = index == middleIndex
 
-                if (index == middleIndex && !isIndexUpdateBlocked) {
+                if (isSelected && !isIndexUpdateBlocked) {
                     currentSelectedItem = adjustedIndex
                 }
 
-                val lineHeight by animateDpAsState(
-                    when {
-                        index == middleIndex -> lineStyle.selectedLineHeight
-                        adjustedIndex % 5 == 0 -> lineStyle.multipleOfFiveLineHeight
-                        else -> lineStyle.normalLineHeight
-                    },
-                    tween(600)
-                )
-
-                val paddingBottom by animateDpAsState(
-                    targetValue = when {
-                        index == middleIndex -> lineStyle.selectedMultipleOfFiveLinePaddingBottom
-                        adjustedIndex % 5 == 0 -> lineStyle.normalMultipleOfFiveLinePaddingBottom
-                        else -> lineStyle.normalLinePaddingBottom
-                    },
-                    animationSpec = tween(400)
-                )
 
                 val lineTransparency = animateFloatAsState(
                     calculateLineTransparency(
@@ -222,9 +207,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                 )
 
                 VerticalLine(
-                    i = adjustedIndex,
-                    lineHeight = lineHeight,
-                    paddingBottom = paddingBottom,
+                    index = adjustedIndex,
                     isSelected = index == middleIndex,
                     lineTransparency = lineTransparency.value,
                     style = lineStyle,
@@ -245,25 +228,37 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
  * selectable item as a vertical line. The line's appearance can be customized with
  * different heights, padding, rounded corners, colors, and transparency effects.
  *
- * @param lineHeight The height of the vertical line.
- * @param paddingBottom The padding applied to the bottom of the line.
  * @param isSelected A boolean flag indicating if the line is at the center (selected item).
  * @param lineTransparency The transparency level applied to the line.
  *
  */
 @Composable
 private fun VerticalLine(
-    i: Int,
-    lineHeight: Dp,
-    paddingBottom: Dp,
+    index: Int,
     isSelected: Boolean,
     lineTransparency: Float,
     style: LineStyle
 ) {
+    val paddingBottom by animateDpAsState(
+        targetValue = when {
+            isSelected -> style.selectedMultipleOfFiveLinePaddingBottom
+            index % 5 == 0 -> style.normalMultipleOfFiveLinePaddingBottom
+            else -> style.normalLinePaddingBottom
+        },
+        animationSpec = tween(400)
+    )
+    val lineHeight by animateDpAsState(
+        when {
+            isSelected -> style.selectedLineHeight
+            index % 5 == 0 -> style.multipleOfFiveLineHeight
+            else -> style.normalLineHeight
+        },
+        tween(600)
+    )
     val textMeasurer = rememberTextMeasurer()
     val fontSizeFloat by animateFloatAsState(
         targetValue = when {
-            isSelected && i == 0 -> 50f
+            isSelected && index == 0 -> 50f
             isSelected -> 40f
             else -> 15f
         },
@@ -284,15 +279,15 @@ private fun VerticalLine(
     val textColor by animateColorAsState(
         fontColor.copy(
             alpha = when {
-                i % 10 == 0 -> 1f
-                (isSelected && i % 5 == 0) -> 1f
+                index % 10 == 0 -> 1f
+                (isSelected && index % 5 == 0) -> 1f
                 else -> 0f
             }.coerceAtMost(fontColor.alpha)
         )
     )
-    val result = remember(isSelected, textColor, fontSizeFloat, fontColor, i) {
+    val result = remember(isSelected, textColor, fontSizeFloat, fontColor, index) {
         textMeasurer.measure(
-            text = i.seconds.formattedTime(),
+            text = index.seconds.formattedTime(),
             style = TextStyle(
                 fontSize = fontSizeFloat.sp,
                 color = textColor,
@@ -321,7 +316,7 @@ private fun VerticalLine(
             .width(1.dp)
             .height(style.selectedLineHeight.plus(with(localDensity) { result.size.height.toDp().times(2) }))
     ) {
-        if (i % 5 == 0) {
+        if (index % 5 == 0) {
             drawText(
                 textLayoutResult = result,
                 topLeft = Offset(
@@ -331,7 +326,11 @@ private fun VerticalLine(
             )
         }
 
-        drawRect(
+        drawRoundRect(
+            cornerRadius = CornerRadius(
+                with(localDensity) { style.lineRoundedCorners.toPx() },
+                with(localDensity) { style.lineRoundedCorners.toPx() }
+            ),
             topLeft = Offset(
                 x = -with(localDensity) { width.toPx() } / 2,
                 y = with(localDensity) { paddingBottom.toPx() }
