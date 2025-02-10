@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.ui.button.BIconButton
-import com.flipperdevices.ui.button.PragmaticaTextStyle
+import com.flipperdevices.ui.button.rememberPragmaticaTextStyle
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -51,7 +51,7 @@ fun TimerAppBarComposable(
             workPhaseText?.let {
                 Text(
                     text = workPhaseText,
-                    style = PragmaticaTextStyle().copy(
+                    style = rememberPragmaticaTextStyle().copy(
                         fontSize = 18.sp,
                         textAlign = TextAlign.Center,
                         color = LocalPallet.current.transparent

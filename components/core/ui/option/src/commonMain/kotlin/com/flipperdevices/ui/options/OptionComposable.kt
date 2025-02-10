@@ -1,6 +1,5 @@
 package com.flipperdevices.ui.options
 
-
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,11 +37,11 @@ fun OptionComposable(
         .secondary
         .copy(alpha = 0.3f),
     infoText: String? = null,
-    onClicked: (() -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier
-            .then(if (onClicked != null) Modifier.clickable(onClick = onClicked) else Modifier)
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .then(modifier),
         horizontalArrangement = Arrangement.spacedBy(
             8.dp,
@@ -92,6 +91,7 @@ fun OptionComposable(
 
 @Composable
 @Preview
+@Suppress("LongMethod")
 private fun OptionComposablePreview() {
     val modifier = Modifier.padding(
         horizontal = 8.dp,
@@ -102,7 +102,7 @@ private fun OptionComposablePreview() {
             OptionComposable(
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier,
                 end = {
                     Text("Hello!")
@@ -112,7 +112,7 @@ private fun OptionComposablePreview() {
             OptionComposable(
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = LONG_TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier,
                 end = {
                     Text("Hello!")
@@ -123,7 +123,7 @@ private fun OptionComposablePreview() {
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = TEXT,
                 infoText = TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier,
                 end = {
                     Text("Hello!")
@@ -134,7 +134,7 @@ private fun OptionComposablePreview() {
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = LONG_TEXT,
                 infoText = TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier,
                 end = {
                     Text("Hello!")
@@ -145,7 +145,7 @@ private fun OptionComposablePreview() {
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = LONG_TEXT,
                 infoText = LONG_TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier,
                 end = {
                     Text("Hello!")
@@ -156,7 +156,7 @@ private fun OptionComposablePreview() {
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = TEXT,
                 infoText = LONG_TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier,
                 end = {
                     Text("Hello!")

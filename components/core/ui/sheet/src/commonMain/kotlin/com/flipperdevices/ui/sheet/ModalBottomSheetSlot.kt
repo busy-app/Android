@@ -21,11 +21,12 @@ private val emptyContent: @Composable ModalBottomSheetScope.() -> Unit = {
     BModalBottomSheetContent { Box(Modifier) }
 }
 
+@Suppress("LambdaParameterInRestartableEffect")
 @Composable
 fun <C : Any> ModalBottomSheetSlot(
-    initialDetent: SheetDetent = SheetDetent.Companion.Hidden,
     instance: C?,
     onDismiss: () -> Unit,
+    initialDetent: SheetDetent = SheetDetent.Companion.Hidden,
     content: @Composable ModalBottomSheetScope.(C) -> Unit
 ) {
     val childContent = remember { mutableStateOf(emptyContent) }
@@ -69,9 +70,9 @@ fun <C : Any> ModalBottomSheetSlot(
 
 @Composable
 fun <C : Any, T : Any> ModalBottomSheetSlot(
-    initialDetent: SheetDetent = SheetDetent.Companion.Hidden,
     slot: ChildSlot<C, T>,
     onDismiss: () -> Unit,
+    initialDetent: SheetDetent = SheetDetent.Companion.Hidden,
     content: @Composable ModalBottomSheetScope.(T) -> Unit
 ) {
     ModalBottomSheetSlot(
@@ -84,9 +85,9 @@ fun <C : Any, T : Any> ModalBottomSheetSlot(
 
 @Composable
 fun <C : Any, T : Any> ModalBottomSheetSlot(
-    initialDetent: SheetDetent = SheetDetent.Companion.Hidden,
     slot: Value<ChildSlot<C, T>>,
     onDismiss: () -> Unit,
+    initialDetent: SheetDetent = SheetDetent.Companion.Hidden,
     content: @Composable ModalBottomSheetScope.(T) -> Unit
 ) {
     ModalBottomSheetSlot(

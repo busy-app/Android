@@ -27,8 +27,10 @@ import com.composables.core.Scrim
 import com.composables.core.Sheet
 
 @Composable
+// Here modifier is missing is intentional. As it represents itself basic design of BottomSheet
+@Suppress("ModifierMissing")
 fun ModalBottomSheetScope.BModalBottomSheetContent(
-    background: Color = Color(0xFF1E1E1E),
+    background: Color = Color(color = 0xFF1E1E1E), // todo
     content: @Composable BottomSheetScope.() -> Unit
 ) {
     Scrim()

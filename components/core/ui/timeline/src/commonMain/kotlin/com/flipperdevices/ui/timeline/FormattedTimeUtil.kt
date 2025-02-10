@@ -2,7 +2,6 @@ package com.flipperdevices.ui.timeline
 
 import kotlin.time.Duration
 
-
 /**
  * Format seconds 0 -> 00
  * Need when 9:2:3 -> 0:02:03

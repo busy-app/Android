@@ -48,7 +48,7 @@ internal fun VerticalLine(
     val paddingBottom by animateDpAsState(
         targetValue = when {
             isSelected -> sqrt(style.selectedLineHeight.value).dp
-            index % progression.step == 0 -> -style.stepLineHeight.value.dp/4
+            index % progression.step == 0 -> -style.stepLineHeight.value.dp / 4
             else -> -sqrt(style.normalLineHeight.value).dp
         },
         animationSpec = tween(400)
@@ -72,14 +72,16 @@ internal fun VerticalLine(
     )
     val fontColor by animateColorAsState(
         targetValue = when {
-            isSelected -> LocalPallet.current
-                .white
-                .invert
+            isSelected ->
+                LocalPallet.current
+                    .white
+                    .invert
 
-            else -> LocalPallet.current
-                .white
-                .invert
-                .copy(0.2f)
+            else ->
+                LocalPallet.current
+                    .white
+                    .invert
+                    .copy(0.2f)
         }
     )
     val textColor by animateColorAsState(
@@ -104,8 +106,11 @@ internal fun VerticalLine(
     }
 
     val textYOffset by animateFloatAsState(
-        if (isSelected) -result.size.height.div(2).toFloat()
-        else result.size.height.div(2).toFloat()
+        if (isSelected) {
+            -result.size.height.div(2).toFloat()
+        } else {
+            result.size.height.div(2).toFloat()
+        }
     )
     val color by animateColorAsState(
         if (isSelected) style.selectedLineColor else style.unselectedLineColor,
@@ -145,7 +150,8 @@ internal fun VerticalLine(
             color = color.copy(alpha = lineTransparency.coerceAtMost(color.alpha)),
             size = Size(
                 width = with(localDensity) { width.toPx() },
-                height = with(localDensity) { lineHeight.toPx() }),
+                height = with(localDensity) { lineHeight.toPx() }
+            ),
         )
     }
 }

@@ -31,13 +31,15 @@ import com.flipperdevices.ui.button.BChipButton
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+// todo This method will be rewritten with another design
+@Suppress("LongMethod")
 @Composable
 fun FinishComposableContent(
-    modifier: Modifier = Modifier,
     breakType: FinishTimerScreenDecomposeComponent.BreakType,
     doneRange: IntRange,
-    onRestClick: ()-> Unit,
-    onDoneClick: ()-> Unit
+    onRestClick: () -> Unit,
+    onDoneClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Box(
@@ -140,7 +142,6 @@ fun FinishComposableContent(
                     .copy(alpha = 0.5f)
             )
         }
-
     }
 }
 

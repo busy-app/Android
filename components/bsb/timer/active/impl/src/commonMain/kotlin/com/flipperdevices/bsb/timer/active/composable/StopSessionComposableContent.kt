@@ -58,7 +58,7 @@ fun StopSessionComposableContent(
                     .transparent
                     .whiteInvert
                     .tertiary
-                    .copy(0.1f),
+                    .copy(alpha = 0.1f),
             )
             BChipButton(
                 modifier = Modifier.fillMaxWidth(),

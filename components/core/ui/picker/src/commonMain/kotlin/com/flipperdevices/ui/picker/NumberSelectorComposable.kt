@@ -47,7 +47,7 @@ import kotlin.math.absoluteValue
 @Suppress("LongMethod")
 fun NumberSelectorComposable(
     numberSelectorState: NumberSelectorState,
-    onValueChanged: (Int) -> Unit,
+    onValueChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     postfix: String? = null
 ) {
@@ -60,7 +60,7 @@ fun NumberSelectorComposable(
             .collect {
                 val page = pagerState.currentPage.mod(numberSelectorState.maxPages)
                 val value = numberSelectorState.toValue(page)
-                onValueChanged.invoke(value)
+                onValueChange.invoke(value)
             }
     }
     val fling = PagerDefaults.flingBehavior(

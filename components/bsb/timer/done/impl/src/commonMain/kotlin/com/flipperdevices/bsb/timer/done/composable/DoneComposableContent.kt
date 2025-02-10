@@ -29,12 +29,12 @@ import busystatusbar.components.bsb.timer.done.impl.generated.resources.ic_star
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.ui.button.BChipButton
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 private fun RoadmapComposableItem(
@@ -77,6 +77,8 @@ private fun RoadmapComposableItem(
     }
 }
 
+// todo This method will be rewritten with another design
+@Suppress("LongMethod")
 @Composable
 fun DoneComposableContent(
     modifier: Modifier = Modifier,
@@ -89,8 +91,8 @@ fun DoneComposableContent(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xFF27486C), // todo
-                            Color(0xFF0E1E48), // todo
+                            Color(color = 0xFF27486C), // todo
+                            Color(color = 0xFF0E1E48), // todo
                         )
                     )
                 )

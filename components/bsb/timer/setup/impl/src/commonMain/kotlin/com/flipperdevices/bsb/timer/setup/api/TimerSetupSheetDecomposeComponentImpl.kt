@@ -126,6 +126,8 @@ class TimerSetupSheetDecomposeComponentImpl(
         }
     }
 
+    // todo This method will be rewritten with another design
+    @Suppress("LongMethod")
     @Composable
     override fun Render(modifier: Modifier) {
         val state = timerSetupViewModel.state.collectAsState()
@@ -154,7 +156,7 @@ class TimerSetupSheetDecomposeComponentImpl(
                                 .fillMaxWidth()
                                 .height(224.dp)
                                 .clip(RoundedCornerShape(32.dp))
-                                .background(Color(0xFF2E2E2E)),
+                                .background(Color(color = 0xFF2E2E2E)), // todo
                             contentAlignment = Alignment.Center
                         ) {
                             NumberSelectorComposable(
@@ -164,7 +166,7 @@ class TimerSetupSheetDecomposeComponentImpl(
                                     initialValue = state.value.timer.inWholeMinutes.toInt()
                                 ),
                                 postfix = "min",
-                                onValueChanged = { value ->
+                                onValueChange = { value ->
                                     timerSetupViewModel.setTimer(value.minutes)
                                 }
                             )

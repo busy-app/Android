@@ -51,7 +51,7 @@ fun HintBubble(
                     .transparent
                     .blackInvert
                     .secondary
-                    .copy(0.3f),
+                    .copy(alpha = 0.3f),
                 shape = TriangleEdgeShape(
                     angle = 32,
                     arrowSize = with(LocalDensity.current) {
@@ -66,7 +66,7 @@ fun HintBubble(
                     .transparent
                     .blackInvert
                     .secondary
-                    .copy(0.3f)
+                    .copy(alpha = 0.3f)
             )
             .padding(horizontal = 24.dp)
             .padding(vertical = 16.dp),

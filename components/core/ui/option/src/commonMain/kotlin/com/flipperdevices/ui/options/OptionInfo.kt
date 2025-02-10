@@ -1,6 +1,5 @@
 package com.flipperdevices.ui.options
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,7 +50,7 @@ fun OptionInfo(
             )
         }
         Column(
-            modifier = Modifier.weight(1f,true),
+            modifier = Modifier.weight(1f, true),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {

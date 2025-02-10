@@ -65,6 +65,8 @@ class IntervalsSetupSheetDecomposeComponentImpl(
         slot.activate(PickerConfiguration.Cycles)
     }
 
+    // todo This method will be rewritten with another design
+    @Suppress("LongMethod")
     @Composable
     override fun Render(modifier: Modifier) {
         val state = timerSetupViewModel.state.collectAsState()

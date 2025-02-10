@@ -16,8 +16,8 @@ fun BSheetDragIndicator(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .height(5.dp)
-            .fillMaxWidth(0.3f)
+            .fillMaxWidth(fraction = 0.3f)
             .clip(RoundedCornerShape(100.dp))
-            .background(LocalPallet.current.transparent.whiteInvert.tertiary.copy(0.1f))
+            .background(LocalPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f))
     )
 }

@@ -31,10 +31,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CommonRes
 
-enum class ButtonTimerState {
-    START, STOP, PAUSE
-}
-
 @Composable
 fun ButtonTimerComposable(
     state: ButtonTimerState,
@@ -47,20 +43,37 @@ fun ButtonTimerComposable(
 ) {
     val backgroundColor by animateColorAsState(
         targetValue = when (state) {
-            ButtonTimerState.START -> Color(0xFF2DAF18).copy(alpha = 0.1f) // todo
-            ButtonTimerState.STOP -> LocalPallet.current.transparent.whiteInvert.quaternary.copy(
-                alpha = 0.05f
-            ) // todo
-            ButtonTimerState.PAUSE -> LocalPallet.current.transparent.whiteInvert.quaternary.copy(
-                alpha = 0.05f
-            ) // todo
+            ButtonTimerState.START -> Color(color = 0xFF2DAF18)
+                .copy(alpha = 0.1f) // todo
+            ButtonTimerState.STOP ->
+                LocalPallet.current
+                    .transparent
+                    .whiteInvert
+                    .quaternary
+                    .copy(alpha = 0.05f) // todo
+            ButtonTimerState.PAUSE ->
+                LocalPallet.current
+                    .transparent
+                    .whiteInvert
+                    .quaternary
+                    .copy(alpha = 0.05f) // todo
         }
     )
     val contentColor by animateColorAsState(
         targetValue = when (state) {
-            ButtonTimerState.START -> Color(0xFF2DAF18) // todo
-            ButtonTimerState.STOP -> LocalPallet.current.transparent.whiteInvert.primary
-            ButtonTimerState.PAUSE -> LocalPallet.current.transparent.whiteInvert.primary.copy(alpha = 0.5f) // todo
+            ButtonTimerState.START -> Color(color = 0xFF2DAF18) // todo
+            ButtonTimerState.STOP ->
+                LocalPallet.current
+                    .transparent
+                    .whiteInvert
+                    .primary
+
+            ButtonTimerState.PAUSE ->
+                LocalPallet.current
+                    .transparent
+                    .whiteInvert
+                    .primary
+                    .copy(alpha = 0.5f) // todo
         }
     )
     val text: String = stringResource(
@@ -86,6 +99,10 @@ fun ButtonTimerComposable(
         modifier = modifier,
         contentPadding = contentPadding
     )
+}
+
+enum class ButtonTimerState {
+    START, STOP, PAUSE
 }
 
 @Preview

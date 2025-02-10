@@ -1,61 +1,48 @@
 package com.flipperdevices.bsb.timer.active.composable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.model.TimerAction
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
-import com.flipperdevices.bsb.timer.common.composable.appbar.HintBubble
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.TimerAppBarComposable
 import com.flipperdevices.core.data.timer.TimerState
 import com.flipperdevices.ui.button.BChipButton
-import kotlin.time.Duration.Companion.minutes
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.time.Duration.Companion.minutes
 
 @Composable
 @Suppress("LongMethod")
 fun TimerActiveComposableScreen(
-    modifier: Modifier = Modifier,
-    workPhaseText: String? = null,
     timerState: ControlledTimerState,
     onPauseClick: () -> Unit,
     onStopClick: () -> Unit,
-    onSkipClick: (() -> Unit)?
+    onSkipClick: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+    workPhaseText: String? = null
 ) {
-
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFF191919))
+            .background(Color(color = 0xFF191919)) // todo
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {

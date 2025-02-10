@@ -32,9 +32,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ExpandableOptionComposable(
     isExpanded: Boolean,
-    content: @Composable () -> Unit,
     header: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -81,11 +81,11 @@ private fun ExpandableOptionComposablePreview() {
             isExpanded = isExpanded,
             content = {
                 Column {
-                    repeat(4) {
+                    repeat(times = 4) {
                         OptionHref(
                             icon = rememberVectorPainter(Icons.Default.Call),
                             text = TEXT,
-                            onClicked = {},
+                            onClick = {},
                         )
                     }
                 }

@@ -30,14 +30,15 @@ import com.flipperdevices.ui.picker.NumberSelectorState
 import com.flipperdevices.ui.picker.rememberTimerState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Suppress("LongMethod") // todo in progress
 @Composable
 fun PickerContent(
     title: String,
     desc: String,
-    postfix: String? = null,
     numberSelectorState: NumberSelectorState,
+    onSaveClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    onSaveClick: (Int) -> Unit
+    postfix: String? = null
 ) {
     var value by remember(numberSelectorState) {
         mutableStateOf(numberSelectorState.initialValue)
@@ -61,14 +62,14 @@ fun PickerContent(
                 .fillMaxWidth()
                 .height(224.dp)
                 .clip(RoundedCornerShape(32.dp))
-                .background(Color(0xFF2E2E2E)),
+                .background(Color(color = 0xFF2E2E2E)),
             contentAlignment = Alignment.Center
         ) {
             NumberSelectorComposable(
                 modifier = Modifier,
                 numberSelectorState = numberSelectorState,
                 postfix = postfix,
-                onValueChanged = { newValue ->
+                onValueChange = { newValue ->
                     value = newValue
                 }
             )
@@ -102,6 +103,7 @@ fun PickerContent(
     }
 }
 
+@Suppress("MagicNumber")
 @Composable
 @Preview
 private fun PickerContentPreview() {
@@ -111,7 +113,7 @@ private fun PickerContentPreview() {
             desc = "Pick how long you want to relax after completing several cycles",
             onSaveClick = {},
             numberSelectorState = rememberTimerState(
-                0..60 step 5,
+                intProgression = 0..60 step 5,
             )
         )
     }

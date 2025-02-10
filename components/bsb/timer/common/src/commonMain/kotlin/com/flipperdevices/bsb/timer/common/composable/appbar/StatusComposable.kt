@@ -18,6 +18,20 @@ import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Composable
+fun StatusComposable(
+    type: StatusType,
+    modifier: Modifier = Modifier,
+    contentDescription: String? = null
+) {
+    Icon(
+        painter = type.toPainter(),
+        contentDescription = contentDescription,
+        modifier = modifier,
+        tint = Color.Unspecified
+    )
+}
+
 enum class StatusType {
     BUSY, OFF, REST, LONG_REST
 }
@@ -32,20 +46,6 @@ private fun StatusType.toResource() = when (this) {
 @Composable
 private fun StatusType.toPainter(): Painter {
     return painterResource(toResource())
-}
-
-@Composable
-fun StatusComposable(
-    type: StatusType,
-    modifier: Modifier = Modifier,
-    contentDescription: String? = null
-) {
-    Icon(
-        painter = type.toPainter(),
-        contentDescription = contentDescription,
-        modifier = modifier,
-        tint = Color.Unspecified
-    )
 }
 
 @Composable

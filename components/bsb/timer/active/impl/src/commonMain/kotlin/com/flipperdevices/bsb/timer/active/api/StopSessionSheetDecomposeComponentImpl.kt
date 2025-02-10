@@ -53,7 +53,8 @@ class StopSessionSheetDecomposeComponentImpl(
                         onConfirm = {
                             slot.dismiss()
                             coroutineScope.launch {
-                                delay(200L)
+                                // Wait a bit so bottom sheet animation will complete
+                                delay(timeMillis = 200L)
                                 onConfirm.invoke()
                             }
                         },

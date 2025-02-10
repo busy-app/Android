@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 
 @Composable
-fun PragmaticaTextStyle(): TextStyle {
+fun rememberPragmaticaTextStyle(): TextStyle {
     return TextStyle(
 //        lineHeight = 24.sp,
 //        lineHeightStyle = LineHeightStyle(

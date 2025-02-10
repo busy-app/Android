@@ -3,9 +3,7 @@ package com.flipperdevices.bsb.timer.done.api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
-import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
-import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import me.tatarka.inject.annotations.Assisted
@@ -16,16 +14,11 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class DoneTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
-    private val timerApi: TimerApi,
-    private val krateApi: KrateApi,
 ) : DoneTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
     @Composable
-    override fun Render(modifier: Modifier) {
-
-
-    }
+    override fun Render(modifier: Modifier) = Unit
 
     @Inject
     @ContributesBinding(AppGraph::class, DoneTimerScreenDecomposeComponent.Factory::class)

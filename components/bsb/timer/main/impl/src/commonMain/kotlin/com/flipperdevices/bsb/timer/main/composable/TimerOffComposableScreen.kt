@@ -34,15 +34,15 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Suppress("LongMethod")
 fun TimerOffComposableScreen(
-    modifier: Modifier = Modifier,
-    workPhaseText: String? = null,
     onTimeClick: () -> Unit,
-    onStartClick: () -> Unit
+    onStartClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    workPhaseText: String? = null
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFF191919))
+            .background(Color(color = 0xFF191919)) // todo
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {

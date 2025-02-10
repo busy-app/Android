@@ -1,6 +1,5 @@
 package com.flipperdevices.ui.options
 
-
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun OptionHref(
     text: String,
-    onClicked: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     icon: Painter? = null,
     iconTint: Color = LocalPallet.current
@@ -44,7 +43,7 @@ fun OptionHref(
     isEnabled: Boolean = true,
 ) {
     Row(
-        modifier = Modifier.clickable { onClicked.invoke() }.then(modifier),
+        modifier = Modifier.clickable { onClick.invoke() }.then(modifier),
         horizontalArrangement = Arrangement.spacedBy(
             8.dp,
             Alignment.CenterHorizontally
@@ -97,13 +96,13 @@ fun OptionHref(
                 .copy(alpha = 0.3f),
             modifier = Modifier.size(24.dp)
                 .clip(CircleShape)
-                .clickable(enabled = isEnabled) { onClicked.invoke() }
+                .clickable(enabled = isEnabled) { onClick.invoke() }
         )
     }
 }
 
 internal const val TEXT = "Some text"
-internal  val LONG_TEXT = List(10) {
+internal val LONG_TEXT = List(size = 10) {
     TEXT
 }.joinToString(" ", "", "")
 
@@ -119,14 +118,14 @@ private fun OptionHrefPreview() {
             OptionHref(
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionHref(
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = LONG_TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier
             )
             OptionSeparator(Modifier.fillMaxWidth())
@@ -134,7 +133,7 @@ private fun OptionHrefPreview() {
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = TEXT,
                 infoText = TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier
             )
             OptionSeparator(Modifier.fillMaxWidth())
@@ -142,7 +141,7 @@ private fun OptionHrefPreview() {
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = LONG_TEXT,
                 infoText = TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier
             )
             OptionSeparator(Modifier.fillMaxWidth())
@@ -150,7 +149,7 @@ private fun OptionHrefPreview() {
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = LONG_TEXT,
                 infoText = LONG_TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier
             )
             OptionSeparator(Modifier.fillMaxWidth())
@@ -158,7 +157,7 @@ private fun OptionHrefPreview() {
                 icon = rememberVectorPainter(Icons.Default.Call),
                 text = TEXT,
                 infoText = LONG_TEXT,
-                onClicked = {},
+                onClick = {},
                 modifier = modifier
             )
         }

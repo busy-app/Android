@@ -1,6 +1,5 @@
 package com.flipperdevices.ui.timeline
 
-
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
@@ -30,10 +29,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
 
 /**
  * A customizable wheel picker component for Android Jetpack Compose.
@@ -47,7 +45,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
  * @param wheelPickerWidth The width of the entire picker. If null, the picker will use the full screen width. Default is `null`.
  * @param totalItems The total number of items in the picker.
  * @param initialSelectedItem The index of the item that is initially selected.
- * @param onItemSelected A callback function invoked when a new item is selected, passing the selected index as a parameter.
+ * @param onItemSelect A callback function invoked when a new item is selected, passing the selected index as a parameter.
  *
  */
 @Composable
@@ -56,7 +54,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     wheelPickerWidth: Dp? = null,
     progression: IntProgression,
     initialSelectedItem: Int = progression.first,
-    onItemSelected: (Int) -> Unit,
+    onItemSelect: (Int) -> Unit,
     lineStyle: LineStyle = LineStyle.Default
 ) {
     check(progression.step % 5 == 0) {
@@ -83,7 +81,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     val bufferIndices = totalVisibleItems / 2
 
     LaunchedEffect(middleIndex, currentSelectedItem, scrollState.isScrollInProgress) {
-        onItemSelected(currentSelectedItem + progression.first)
+        onItemSelect(currentSelectedItem + progression.first)
         val step = progression.step
         val mod = currentSelectedItem % step
         val div = currentSelectedItem / step
@@ -97,18 +95,15 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
         textScrollState.animateScrollToItem(nonAdjustedIndex)
     }
 
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         LazyRow(
             modifier = modifier.width(effectiveWidth),
             state = scrollState,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-
             items(((progression.last - progression.first)) + totalVisibleItems) { index ->
                 val adjustedIndex = index - bufferIndices
                 val isSelected = index == middleIndex
@@ -116,7 +111,6 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                 if (isSelected && !isIndexUpdateBlocked) {
                     currentSelectedItem = adjustedIndex
                 }
-
 
                 val lineTransparency = animateFloatAsState(
                     targetValue = calculateLineTransparency(
@@ -144,7 +138,6 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     }
 }
 
-
 @Preview
 @Composable
 fun HorizontalWheelPickerPreview(
@@ -163,7 +156,7 @@ fun HorizontalWheelPickerPreview(
                     HorizontalWheelPicker(
                         lineStyle = style ?: LineStyle.Default,
                         progression = (30.seconds.inWholeSeconds.toInt()..1.hours.inWholeSeconds.toInt() step 5),
-                        onItemSelected = { item -> }
+                        onItemSelect = { item -> }
                     )
                 }
             }

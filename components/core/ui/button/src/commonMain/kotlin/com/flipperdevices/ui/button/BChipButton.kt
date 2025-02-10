@@ -42,6 +42,9 @@ import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Suppress("MagicNumber")
+private val DASH_INTERVALS = floatArrayOf(10f, 10f)
+
 @Composable
 fun BChipButton(
     onClick: () -> Unit,
@@ -66,7 +69,7 @@ fun BChipButton(
                             color = dashedBorderColor,
                             style = Stroke(
                                 width = 6f,
-                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                                pathEffect = PathEffect.dashPathEffect(intervals = DASH_INTERVALS, phase = 0f)
                             ),
                             cornerRadius = CornerRadius(112.dp.toPx())
                         )
@@ -127,7 +130,7 @@ fun BChipButton(
                             modifier = Modifier,
                             text = text,
                             maxLines = 1,
-                            style = PragmaticaTextStyle().copy(
+                            style = rememberPragmaticaTextStyle().copy(
                                 textAlign = TextAlign.Start,
                                 color = animatedContentColor.value,
                                 fontSize = fontSize,
