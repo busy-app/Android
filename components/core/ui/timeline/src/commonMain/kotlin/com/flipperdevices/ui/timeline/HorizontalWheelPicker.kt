@@ -6,26 +6,19 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,15 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -57,10 +44,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.flow.firstOrNull
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+
+/**
+ * Format seconds 0 -> 00
+ * Need when 9:2:3 -> 0:02:03
+ */
+internal fun Int.formattedTime(): String {
+    return if (this < 10) "0$this" else "$this"
+}
+
+internal fun Duration.formattedTime(): String {
+    return this.toComponents { days, hours, minutes, seconds, nanoseconds ->
+        when {
+            days > 0 -> "${days}d ${hours}h ${minutes.formattedTime()}m ${seconds.formattedTime()}s"
+            hours > 0 -> "${hours}h ${minutes.formattedTime()}m ${seconds.formattedTime()}s"
+            minutes > 0 -> "${minutes}m ${seconds.formattedTime()}s"
+            seconds == 0 -> "∞"
+            else -> "${seconds}s"
+        }
+    }
+}
 
 private val Number.sdp: Dp
     @Composable
@@ -248,19 +256,38 @@ private fun VerticalLine(
     unselectedLineColor: Color
 ) {
     val textMeasurer = rememberTextMeasurer()
-    val result = remember {
+    val fontSizeFloat by animateFloatAsState(
+        targetValue = when {
+            indexAtCenter && i == 0 -> 50f
+            indexAtCenter -> 40f
+            else -> 15f
+        },
+        animationSpec = tween()
+    )
+    val fontColor by animateColorAsState(
+        targetValue = when {
+            indexAtCenter -> LocalPallet.current
+                .white
+                .invert
+
+            else -> LocalPallet.current
+                .white
+                .invert
+                .copy(0.2f)
+        }
+    )
+    val result = remember(fontSizeFloat, fontColor, i) {
         textMeasurer.measure(
             text = i.seconds.formattedTime(),
             style = TextStyle(
-                fontSize = 14.sp,
-                color = Color.Red,
+                fontSize = fontSizeFloat.sp,
+                color = fontColor,
                 textAlign = TextAlign.Center
             ),
             overflow = TextOverflow.Clip
         )
     }
 
-    val measurer = rememberTextMeasurer()
     val color by animateColorAsState(
         if (indexAtCenter) selectedLineColor else unselectedLineColor,
         tween(600)
@@ -270,15 +297,6 @@ private fun VerticalLine(
         tween(600)
     )
     val localDensity = LocalDensity.current
-//    Box(
-//        modifier = Modifier
-//            .width(width)
-//            .height(lineHeight)
-//            .clip(RoundedCornerShape(roundedCorners))
-//            .alpha(lineTransparency)
-//            .background(color)
-//            .padding(bottom = paddingBottom)
-//    )
     Canvas(Modifier.width(1.dp).height(54.dp)) {
         drawRect(
             topLeft = Offset(0f, 64f),
@@ -289,25 +307,13 @@ private fun VerticalLine(
         )
 
         if (i % 10 == 0) {
-
             drawText(
                 textLayoutResult = result,
-                topLeft = Offset(-result.size.width.div(2).toFloat().plus(result.size.width % 2),0f)
+                topLeft = Offset(
+                    x = -result.size.width.div(2).toFloat().plus(result.size.width % 2),
+                    y = -result.size.height.div(2).toFloat()
+                )
             )
-//            drawText(
-//                text = i.seconds.formattedTime(),
-//                textMeasurer = measurer,
-//                topLeft = Offset.Zero,
-//                size = Size(
-//                    width = 1000f,
-//                    height = 1000f
-//                ),
-//                style = TextStyle(
-//                    fontSize = 14.sp,
-//                    color = Color.Red,
-//                    textAlign = TextAlign.Center
-//                )
-//            )
         }
     }
 }
@@ -359,18 +365,18 @@ private fun calculateLineTransparency(
 @Composable
 fun HorizontalWheelPickerPreview() {
     BusyBarThemeInternal {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 var selectedItem by remember { mutableIntStateOf(15) }
                 Text(
                     text = selectedItem.seconds.formattedTime(),
-                    fontSize = 46.sp
+                    fontSize = 46.sp,
+                    color = Color.Red
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
