@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -216,7 +214,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                     lineHeight = lineHeight,
                     paddingBottom = paddingBottom,
                     roundedCorners = lineRoundedCorners,
-                    indexAtCenter = index == middleIndex,
+                    isSelected = index == middleIndex,
                     lineTransparency = lineTransparency.value,
                     selectedLineColor = selectedLineColor,
                     unselectedLineColor = unselectedLineColor,
@@ -242,7 +240,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
  * @param lineHeight The height of the vertical line.
  * @param paddingBottom The padding applied to the bottom of the line.
  * @param roundedCorners The corner radius applied to the line, creating rounded corners.
- * @param indexAtCenter A boolean flag indicating if the line is at the center (selected item).
+ * @param isSelected A boolean flag indicating if the line is at the center (selected item).
  * @param lineTransparency The transparency level applied to the line.
  * @param selectedLineColor The color of the line if it is the selected item.
  * @param unselectedLineColor The color of the line if it is not the selected item.
@@ -256,7 +254,7 @@ private fun VerticalLine(
     lineHeight: Dp,
     paddingBottom: Dp,
     roundedCorners: Dp,
-    indexAtCenter: Boolean,
+    isSelected: Boolean,
     lineTransparency: Float,
     selectedLineColor: Color,
     unselectedLineColor: Color,
@@ -265,15 +263,15 @@ private fun VerticalLine(
     val textMeasurer = rememberTextMeasurer()
     val fontSizeFloat by animateFloatAsState(
         targetValue = when {
-            indexAtCenter && i == 0 -> 50f
-            indexAtCenter -> 40f
+            isSelected && i == 0 -> 50f
+            isSelected -> 40f
             else -> 15f
         },
         animationSpec = tween()
     )
     val fontColor by animateColorAsState(
         targetValue = when {
-            indexAtCenter -> LocalPallet.current
+            isSelected -> LocalPallet.current
                 .white
                 .invert
 
@@ -283,24 +281,37 @@ private fun VerticalLine(
                 .copy(0.2f)
         }
     )
-    val result = remember(fontSizeFloat, fontColor, i) {
+    val textColor by animateColorAsState(
+        fontColor.copy(
+            alpha = when {
+                i % 10 == 0 -> 1f
+                (isSelected && i % 5 == 0) -> 1f
+                else -> 0f
+            }.coerceAtMost(fontColor.alpha)
+        )
+    )
+    val result = remember(isSelected,textColor, fontSizeFloat, fontColor, i) {
         textMeasurer.measure(
             text = i.seconds.formattedTime(),
             style = TextStyle(
                 fontSize = fontSizeFloat.sp,
-                color = fontColor,
+                color = textColor,
                 textAlign = TextAlign.Center
             ),
             overflow = TextOverflow.Clip
         )
     }
 
+    val textYOffset by animateFloatAsState(
+        if (isSelected) -result.size.height.div(2).toFloat()
+        else result.size.height.div(2).toFloat()
+    )
     val color by animateColorAsState(
-        if (indexAtCenter) selectedLineColor else unselectedLineColor,
+        if (isSelected) selectedLineColor else unselectedLineColor,
         tween(600)
     )
     val width by animateDpAsState(
-        if (indexAtCenter) selectedLineWidth else lineWidth,
+        if (isSelected) selectedLineWidth else lineWidth,
         tween(600)
     )
     val localDensity = LocalDensity.current
@@ -308,14 +319,14 @@ private fun VerticalLine(
     Canvas(
         Modifier
             .width(1.dp)
-            .height(maxLineHeight.plus(with(localDensity) { result.size.height.toDp() }))
+            .height(maxLineHeight.plus(with(localDensity) { result.size.height.toDp().times(2) }))
     ) {
-        if (i % 10 == 0) {
+        if (i % 5 == 0) {
             drawText(
                 textLayoutResult = result,
                 topLeft = Offset(
                     x = -result.size.width.div(2).toFloat().plus(result.size.width % 2),
-                    y = -result.size.height.div(2).toFloat()
+                    y = textYOffset
                 )
             )
         }
@@ -324,7 +335,7 @@ private fun VerticalLine(
             topLeft = Offset(
                 x = -with(localDensity) { width.toPx() } / 2,
                 y = with(localDensity) { paddingBottom.toPx() }
-                    .plus(result.size.height)
+                    .plus(result.size.height * 2)
             ),
             color = color.copy(alpha = lineTransparency.coerceAtMost(color.alpha)),
             size = Size(
