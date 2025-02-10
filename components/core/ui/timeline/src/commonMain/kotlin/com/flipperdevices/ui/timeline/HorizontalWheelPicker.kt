@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -27,13 +26,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -58,11 +54,17 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun BoxWithConstraintsScope.HorizontalWheelPicker(
     modifier: Modifier = Modifier,
     wheelPickerWidth: Dp? = null,
-    totalItems: Int,
-    initialSelectedItem: Int,
+    progression: IntProgression,
+    initialSelectedItem: Int = progression.first,
     onItemSelected: (Int) -> Unit,
     lineStyle: LineStyle = LineStyle.Default
 ) {
+    check(progression.step % 5 == 0) {
+        "Progression step must be divided by 5!"
+    }
+    check(progression.step >= 5) {
+        "Progression step must be more than 5!"
+    }
     val density = LocalDensity.current.density
     val screenWidthDp = (with(LocalDensity.current) { maxWidth.toPx() } / density).dp
     val effectiveWidth = wheelPickerWidth ?: screenWidthDp
@@ -81,8 +83,8 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     val bufferIndices = totalVisibleItems / 2
 
     LaunchedEffect(middleIndex, currentSelectedItem, scrollState.isScrollInProgress) {
-        onItemSelected(currentSelectedItem)
-        val step = 5
+        onItemSelected(currentSelectedItem + progression.first)
+        val step = progression.step
         val mod = currentSelectedItem % step
         val div = currentSelectedItem / step
         val result = if (mod < (step / 2)) div.times(step) else div.times(step) + step
@@ -106,7 +108,8 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
             state = scrollState,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            items(totalItems + totalVisibleItems) { index ->
+
+            items(((progression.last - progression.first)) + totalVisibleItems) { index ->
                 val adjustedIndex = index - bufferIndices
                 val isSelected = index == middleIndex
 
@@ -116,23 +119,24 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
 
 
                 val lineTransparency = animateFloatAsState(
-                    calculateLineTransparency(
-                        index,
-                        totalItems,
-                        bufferIndices,
-                        firstVisibleItemIndex,
-                        lastVisibleItemIndex,
-                        lineStyle.fadeOutLinesCount,
-                        lineStyle.maxFadeTransparency
+                    targetValue = calculateLineTransparency(
+                        lineIndex = index,
+                        totalLines = progression.last - progression.first,
+                        bufferIndices = bufferIndices,
+                        firstVisibleItemIndex = firstVisibleItemIndex,
+                        lastVisibleItemIndex = lastVisibleItemIndex,
+                        fadeOutLinesCount = lineStyle.fadeOutLinesCount,
+                        maxFadeTransparency = lineStyle.maxFadeTransparency
                     ),
-                    tween(600)
+                    animationSpec = tween(600)
                 )
 
                 VerticalLine(
-                    index = adjustedIndex,
+                    index = adjustedIndex + progression.first,
                     isSelected = index == middleIndex,
                     lineTransparency = lineTransparency.value,
                     style = lineStyle,
+                    progression = progression
                 )
                 Spacer(modifier = Modifier.width(lineStyle.lineSpacing))
             }
@@ -154,16 +158,12 @@ fun HorizontalWheelPickerPreview(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                var selectedItem by remember { mutableIntStateOf(15) }
                 Spacer(modifier = Modifier.height(8.dp))
                 BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                     HorizontalWheelPicker(
                         lineStyle = style ?: LineStyle.Default,
-                        totalItems = 24.hours.inWholeSeconds.toInt(),
-                        initialSelectedItem = selectedItem,
-                        onItemSelected = { item ->
-                            selectedItem = item
-                        }
+                        progression = (30.seconds.inWholeSeconds.toInt()..1.hours.inWholeSeconds.toInt() step 5),
+                        onItemSelected = { item -> }
                     )
                 }
             }

@@ -41,12 +41,13 @@ internal fun VerticalLine(
     index: Int,
     isSelected: Boolean,
     lineTransparency: Float,
-    style: LineStyle
+    style: LineStyle,
+    progression: IntProgression
 ) {
     val paddingBottom by animateDpAsState(
         targetValue = when {
             isSelected -> -style.selectedLineHeight.div(2)
-            index % 5 == 0 -> style.normalMultipleOfFiveLinePaddingBottom
+            index % progression.step == 0 -> style.normalMultipleOfFiveLinePaddingBottom
             else -> style.normalLinePaddingBottom
         },
         animationSpec = tween(400)
@@ -54,7 +55,7 @@ internal fun VerticalLine(
     val lineHeight by animateDpAsState(
         when {
             isSelected -> style.selectedLineHeight
-            index % 5 == 0 -> style.multipleOfFiveLineHeight
+            index % progression.step == 0 -> style.multipleOfFiveLineHeight
             else -> style.normalLineHeight
         },
         tween(600)
@@ -83,8 +84,8 @@ internal fun VerticalLine(
     val textColor by animateColorAsState(
         fontColor.copy(
             alpha = when {
-                index % 10 == 0 -> 1f
-                (isSelected && index % 5 == 0) -> 1f
+                index % progression.step.times(2) == 0 -> 1f
+                (isSelected && index % progression.step == 0) -> 1f
                 else -> 0f
             }.coerceAtMost(fontColor.alpha)
         )
@@ -120,7 +121,7 @@ internal fun VerticalLine(
             .width(1.dp)
             .height(style.selectedLineHeight.plus(with(localDensity) { result.size.height.toDp().times(2) }))
     ) {
-        if (index % 5 == 0) {
+        if (index % progression.step == 0) {
             drawText(
                 textLayoutResult = result,
                 topLeft = Offset(
