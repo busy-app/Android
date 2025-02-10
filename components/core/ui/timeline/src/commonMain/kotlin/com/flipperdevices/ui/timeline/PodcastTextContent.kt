@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.launch
 
@@ -23,8 +24,19 @@ import kotlinx.coroutines.launch
  * Format seconds 0 -> 00
  * Need when 9:2:3 -> 0:02:03
  */
-private fun Int.formattedTime(): String {
+internal fun Int.formattedTime(): String {
     return if (this < 10) "0$this" else "$this"
+}
+internal fun Duration.formattedTime(): String {
+    return this.toComponents { days, hours, minutes, seconds, nanoseconds ->
+        when {
+            days > 0 -> "${days}d ${hours}h ${minutes.formattedTime()}m ${seconds.formattedTime()}s"
+            hours > 0 -> "${hours}h ${minutes.formattedTime()}m ${seconds.formattedTime()}s"
+            minutes > 0 -> "${minutes}m ${seconds.formattedTime()}s"
+            seconds == 0 -> "∞"
+            else -> "${seconds}s"
+        }
+    }
 }
 
 class AnimatedTextState(fontSize: Float, alpha: Float) {

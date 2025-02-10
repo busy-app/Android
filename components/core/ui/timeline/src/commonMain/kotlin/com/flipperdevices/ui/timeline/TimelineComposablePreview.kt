@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -22,20 +23,24 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable
-fun TimelineComposablePreview() {
+fun TimelineComposablePreview(
+    currentValue: Duration = 75.seconds,
+    range: ClosedRange<Int> = 0..9.hours.inWholeSeconds.toInt(),
+    numSegments: Int = 5,
+    density: Int = 10
+) {
     BusyBarThemeInternal {
         val map = remember { HashMap<Int, AnimatedTextState>() }
-        val numSegments = remember { 5 }
         val state = rememberPodcastSliderState(
-            currentValue = 75.seconds.inWholeSeconds.toFloat(),
-            range = 0..9.hours.inWholeSeconds.toInt()
+            currentValue = currentValue.inWholeSeconds.toFloat(),
+            range = range
         )
         BoxWithConstraints(modifier = Modifier.fillMaxWidth().background(Color.Black)) {
             PodcastSlider(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp),
-                density = with(LocalDensity.current) { maxWidth.toPx() / 10.dp.toPx() }.toInt(),
+                density = with(LocalDensity.current) { maxWidth.toPx() / density.dp.toPx() }.toInt(),
                 numSegments = numSegments,
                 state = state,
                 minAlpha = 1f,
