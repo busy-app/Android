@@ -241,7 +241,7 @@ private fun VerticalLine(
 ) {
     val paddingBottom by animateDpAsState(
         targetValue = when {
-            isSelected -> style.selectedMultipleOfFiveLinePaddingBottom
+            isSelected -> -style.selectedLineHeight.div(2)
             index % 5 == 0 -> style.normalMultipleOfFiveLinePaddingBottom
             else -> style.normalLinePaddingBottom
         },
