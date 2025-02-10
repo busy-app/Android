@@ -71,23 +71,11 @@ internal fun Duration.formattedTime(): String {
 }
 
 private val Number.sdp: Dp
-    @Composable
     get() {
         return this.toFloat().dp
     }
 
 /**
- * A customizable wheel picker component for Android Jetpack Compose.
- *
- * The `HorizontalWheelPicker` allows users to select an item using a list of vertical lines displayed horizontally
- * as vertical lines. The selected item is highlighted, and surrounding items can be
- * customized with different heights, colors, and transparency effects. The component
- * supports dynamic width, customizable item spacing, and rounded corners.
- *
- * @param modifier The modifier to be applied to the `WheelPicker` component.
- * @param wheelPickerWidth The width of the entire picker. If null, the picker will use the full screen width. Default is `null`.
- * @param totalItems The total number of items in the picker.
- * @param initialSelectedItem The index of the item that is initially selected.
  * @param lineWidth The width of each vertical line in the picker. Default is `2.sdp`.
  * @param selectedLineHeight The height of the selected item (line) in the picker. Default is `64.sdp`.
  * @param multipleOfFiveLineHeight The height of lines at indices that are multiples of 5. Default is `40.sdp`.
@@ -101,6 +89,45 @@ private val Number.sdp: Dp
  * @param unselectedLineColor The color of the unselected items (lines) in the picker. Default is `Color.LightGray`.
  * @param fadeOutLinesCount The number of lines at the edges of the picker that will gradually fade out. Default is `4`.
  * @param maxFadeTransparency The maximum transparency level applied to the fading lines. Default is `0.7f`.
+ */
+data class LineStyle(
+    val lineWidth: Dp = 4.sdp,
+    val selectedLineWidth: Dp = 8.dp,
+    val selectedLineHeight: Dp = 64.sdp,
+    val multipleOfFiveLineHeight: Dp = 40.sdp,
+    val normalLineHeight: Dp = 30.sdp,
+    val selectedMultipleOfFiveLinePaddingBottom: Dp = 0.sdp,
+    val normalMultipleOfFiveLinePaddingBottom: Dp = 6.sdp,
+    val normalLinePaddingBottom: Dp = 8.sdp,
+    val lineSpacing: Dp = 8.sdp,
+    val lineRoundedCorners: Dp = 2.sdp,
+    val selectedLineColor: Color,
+    val unselectedLineColor: Color,
+    val fadeOutLinesCount: Int = 4,
+    val maxFadeTransparency: Float = 0.7f,
+) {
+    companion object {
+        val Default: LineStyle
+            @Composable
+            get() = LineStyle(
+                selectedLineColor = LocalPallet.current.white.invert,
+                unselectedLineColor = LocalPallet.current.white.invert.copy(0.2f)
+            )
+    }
+}
+
+/**
+ * A customizable wheel picker component for Android Jetpack Compose.
+ *
+ * The `HorizontalWheelPicker` allows users to select an item using a list of vertical lines displayed horizontally
+ * as vertical lines. The selected item is highlighted, and surrounding items can be
+ * customized with different heights, colors, and transparency effects. The component
+ * supports dynamic width, customizable item spacing, and rounded corners.
+ *
+ * @param modifier The modifier to be applied to the `WheelPicker` component.
+ * @param wheelPickerWidth The width of the entire picker. If null, the picker will use the full screen width. Default is `null`.
+ * @param totalItems The total number of items in the picker.
+ * @param initialSelectedItem The index of the item that is initially selected.
  * @param onItemSelected A callback function invoked when a new item is selected, passing the selected index as a parameter.
  *
  */
@@ -110,21 +137,8 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     wheelPickerWidth: Dp? = null,
     totalItems: Int,
     initialSelectedItem: Int,
-    lineWidth: Dp = 4.sdp,
-    selectedLineWidth: Dp = 8.dp,
-    selectedLineHeight: Dp = 64.sdp,
-    multipleOfFiveLineHeight: Dp = 40.sdp,
-    normalLineHeight: Dp = 30.sdp,
-    selectedMultipleOfFiveLinePaddingBottom: Dp = 0.sdp,
-    normalMultipleOfFiveLinePaddingBottom: Dp = 6.sdp,
-    normalLinePaddingBottom: Dp = 8.sdp,
-    lineSpacing: Dp = 8.sdp,
-    lineRoundedCorners: Dp = 2.sdp,
-    selectedLineColor: Color = LocalPallet.current.white.invert,
-    unselectedLineColor: Color = LocalPallet.current.white.invert.copy(0.2f),
-    fadeOutLinesCount: Int = 4,
-    maxFadeTransparency: Float = 0.7f,
-    onItemSelected: (Int) -> Unit
+    onItemSelected: (Int) -> Unit,
+    lineStyle: LineStyle = LineStyle.Default
 ) {
     val density = LocalDensity.current.density
     val screenWidthDp = (with(LocalDensity.current) { maxWidth.toPx() } / density).dp
@@ -178,18 +192,18 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
 
                 val lineHeight by animateDpAsState(
                     when {
-                        index == middleIndex -> selectedLineHeight
-                        adjustedIndex % 5 == 0 -> multipleOfFiveLineHeight
-                        else -> normalLineHeight
+                        index == middleIndex -> lineStyle.selectedLineHeight
+                        adjustedIndex % 5 == 0 -> lineStyle.multipleOfFiveLineHeight
+                        else -> lineStyle.normalLineHeight
                     },
                     tween(600)
                 )
 
                 val paddingBottom by animateDpAsState(
                     targetValue = when {
-                        index == middleIndex -> selectedMultipleOfFiveLinePaddingBottom
-                        adjustedIndex % 5 == 0 -> normalMultipleOfFiveLinePaddingBottom
-                        else -> normalLinePaddingBottom
+                        index == middleIndex -> lineStyle.selectedMultipleOfFiveLinePaddingBottom
+                        adjustedIndex % 5 == 0 -> lineStyle.normalMultipleOfFiveLinePaddingBottom
+                        else -> lineStyle.normalLinePaddingBottom
                     },
                     animationSpec = tween(400)
                 )
@@ -201,28 +215,23 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                         bufferIndices,
                         firstVisibleItemIndex,
                         lastVisibleItemIndex,
-                        fadeOutLinesCount,
-                        maxFadeTransparency
+                        lineStyle.fadeOutLinesCount,
+                        lineStyle.maxFadeTransparency
                     ),
                     tween(600)
                 )
 
                 VerticalLine(
                     i = adjustedIndex,
-                    lineWidth = lineWidth,
-                    selectedLineWidth = selectedLineWidth,
                     lineHeight = lineHeight,
                     paddingBottom = paddingBottom,
-                    roundedCorners = lineRoundedCorners,
                     isSelected = index == middleIndex,
                     lineTransparency = lineTransparency.value,
-                    selectedLineColor = selectedLineColor,
-                    unselectedLineColor = unselectedLineColor,
-                    maxLineHeight = selectedLineHeight
+                    style = lineStyle,
                 )
 
 
-                Spacer(modifier = Modifier.width(lineSpacing))
+                Spacer(modifier = Modifier.width(lineStyle.lineSpacing))
             }
         }
     }
@@ -236,29 +245,20 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
  * selectable item as a vertical line. The line's appearance can be customized with
  * different heights, padding, rounded corners, colors, and transparency effects.
  *
- * @param lineWidth The width of the vertical line.
  * @param lineHeight The height of the vertical line.
  * @param paddingBottom The padding applied to the bottom of the line.
- * @param roundedCorners The corner radius applied to the line, creating rounded corners.
  * @param isSelected A boolean flag indicating if the line is at the center (selected item).
  * @param lineTransparency The transparency level applied to the line.
- * @param selectedLineColor The color of the line if it is the selected item.
- * @param unselectedLineColor The color of the line if it is not the selected item.
  *
  */
 @Composable
 private fun VerticalLine(
     i: Int,
-    lineWidth: Dp,
-    selectedLineWidth: Dp,
     lineHeight: Dp,
     paddingBottom: Dp,
-    roundedCorners: Dp,
     isSelected: Boolean,
     lineTransparency: Float,
-    selectedLineColor: Color,
-    unselectedLineColor: Color,
-    maxLineHeight: Dp
+    style: LineStyle
 ) {
     val textMeasurer = rememberTextMeasurer()
     val fontSizeFloat by animateFloatAsState(
@@ -290,7 +290,7 @@ private fun VerticalLine(
             }.coerceAtMost(fontColor.alpha)
         )
     )
-    val result = remember(isSelected,textColor, fontSizeFloat, fontColor, i) {
+    val result = remember(isSelected, textColor, fontSizeFloat, fontColor, i) {
         textMeasurer.measure(
             text = i.seconds.formattedTime(),
             style = TextStyle(
@@ -307,11 +307,11 @@ private fun VerticalLine(
         else result.size.height.div(2).toFloat()
     )
     val color by animateColorAsState(
-        if (isSelected) selectedLineColor else unselectedLineColor,
+        if (isSelected) style.selectedLineColor else style.unselectedLineColor,
         tween(600)
     )
     val width by animateDpAsState(
-        if (isSelected) selectedLineWidth else lineWidth,
+        if (isSelected) style.selectedLineWidth else style.lineWidth,
         tween(600)
     )
     val localDensity = LocalDensity.current
@@ -319,7 +319,7 @@ private fun VerticalLine(
     Canvas(
         Modifier
             .width(1.dp)
-            .height(maxLineHeight.plus(with(localDensity) { result.size.height.toDp().times(2) }))
+            .height(style.selectedLineHeight.plus(with(localDensity) { result.size.height.toDp().times(2) }))
     ) {
         if (i % 5 == 0) {
             drawText(
