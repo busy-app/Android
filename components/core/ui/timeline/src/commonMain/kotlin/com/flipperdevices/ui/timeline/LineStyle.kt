@@ -28,7 +28,7 @@ data class LineStyle(
     val multipleOfFiveLineHeight: Dp = 40.dp,
     val normalLineHeight: Dp = 30.dp,
     val selectedMultipleOfFiveLinePaddingBottom: Dp = 0.dp,
-    val normalMultipleOfFiveLinePaddingBottom: Dp = 6.dp,
+    val normalMultipleOfFiveLinePaddingBottom: Dp = 3.dp,
     val normalLinePaddingBottom: Dp = 8.dp,
     val lineSpacing: Dp = 8.dp,
     val lineRoundedCorners: Dp = 2.dp,

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import kotlin.math.sqrt
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -46,9 +47,9 @@ internal fun VerticalLine(
 ) {
     val paddingBottom by animateDpAsState(
         targetValue = when {
-            isSelected -> -style.selectedLineHeight.div(2)
-            index % progression.step == 0 -> style.normalMultipleOfFiveLinePaddingBottom
-            else -> style.normalLinePaddingBottom
+            isSelected -> sqrt(style.selectedLineHeight.value).dp
+            index % progression.step == 0 -> -style.multipleOfFiveLineHeight.value.dp/4
+            else -> -sqrt(style.normalLineHeight.value).dp
         },
         animationSpec = tween(400)
     )
@@ -138,8 +139,8 @@ internal fun VerticalLine(
             ),
             topLeft = Offset(
                 x = -with(localDensity) { width.toPx() } / 2,
-                y = with(localDensity) { paddingBottom.toPx() }
-                    .plus(result.size.height * 2)
+                y = with(localDensity) { 50.sp.toPx() }
+                    .plus(with(localDensity) { paddingBottom.toPx() })
             ),
             color = color.copy(alpha = lineTransparency.coerceAtMost(color.alpha)),
             size = Size(
