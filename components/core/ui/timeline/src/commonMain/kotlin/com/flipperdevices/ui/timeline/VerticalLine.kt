@@ -26,6 +26,7 @@ import com.flipperdevices.bsb.core.theme.LocalPallet
 import kotlin.math.sqrt
 import kotlin.time.Duration.Companion.seconds
 
+
 /**
  * A composable function that renders a single vertical line in the `WheelPicker`.
  *
@@ -63,11 +64,12 @@ internal fun VerticalLine(
         tween(600)
     )
     val textMeasurer = rememberTextMeasurer()
-    val fontSizeFloat by animateFloatAsState(
+
+    val fontSize by animateTextUnitAsState(
         targetValue = when {
-            isSelected && index == 0 -> 50f
-            isSelected -> 40f
-            else -> 15f
+            isSelected && index == 0 -> style.selectedZeroFontSize
+            isSelected -> style.selectedFontSize
+            else -> style.unselectedFontSize
         },
         animationSpec = tween()
     )
@@ -94,11 +96,11 @@ internal fun VerticalLine(
             }.coerceAtMost(fontColor.alpha)
         )
     )
-    val result = remember(isSelected, textColor, fontSizeFloat, fontColor, index) {
+    val result = remember(isSelected, textColor, fontSize, fontColor, index) {
         textMeasurer.measure(
             text = index.seconds.toFormattedTime(),
             style = TextStyle(
-                fontSize = fontSizeFloat.sp,
+                fontSize = fontSize,
                 color = textColor,
                 textAlign = TextAlign.Center
             ),
