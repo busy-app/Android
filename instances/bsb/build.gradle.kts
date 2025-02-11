@@ -186,6 +186,9 @@ commonDependencies {
     implementation(projects.components.bsb.auth.within.passkey.api)
     implementation(projects.components.bsb.auth.within.passkey.impl)
 
+    implementation(projects.components.bsb.profile.main.api)
+    implementation(projects.components.bsb.profile.main.impl)
+
     implementation(projects.components.bsb.timer.setup.api)
     implementation(projects.components.bsb.timer.setup.impl)
     implementation(projects.components.bsb.timer.main.api)

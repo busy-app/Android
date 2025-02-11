@@ -73,7 +73,7 @@ fun TimerAppBarComposable(
                 modifier = Modifier.size(44.dp),
                 painter = rememberVectorPainter(Icons.Filled.Person), // todo
                 onClick = {
-                    rootNavigation.push(RootNavigationConfig.Auth(null))
+                    rootNavigation.push(RootNavigationConfig.Profile(null))
                 },
                 enabled = true,
             )

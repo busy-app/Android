@@ -98,8 +98,8 @@ class LoginDecomposeComponentImpl(
     }
 
     override fun handleDeeplink(deeplink: Deeplink.Root.Auth.VerifyEmailLink.ResetPassword) {
-        val child = stack.findChildByConfig(LoginNavigationConfig.ResetPassword::class) ?: return
-        val component = child.instance
+        val child = stack.findChildByConfig(LoginNavigationConfig.ResetPassword::class)
+        val component = child?.instance
         if (component != null && component is AuthOtpScreenDecomposeComponent) {
             component.handleDeeplink(deeplink)
             navigation.pushToFront(child.configuration)

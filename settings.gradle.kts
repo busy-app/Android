@@ -99,6 +99,9 @@ include(
     ":components:bsb:auth:within:passkey:api",
     ":components:bsb:auth:within:passkey:impl",
 
+    ":components:bsb:profile:main:api",
+    ":components:bsb:profile:main:impl",
+
     ":components:bsb:timer:common",
     ":components:bsb:timer:setup:api",
     ":components:bsb:timer:setup:impl",
