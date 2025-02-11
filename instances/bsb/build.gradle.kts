@@ -183,6 +183,8 @@ commonDependencies {
     implementation(projects.components.bsb.auth.within.oauth.impl)
     implementation(projects.components.bsb.auth.within.onetap.api)
     implementation(projects.components.bsb.auth.within.onetap.impl)
+    implementation(projects.components.bsb.auth.within.passkey.api)
+    implementation(projects.components.bsb.auth.within.passkey.impl)
 
     implementation(projects.components.bsb.timer.setup.api)
     implementation(projects.components.bsb.timer.setup.impl)

@@ -16,6 +16,7 @@ import com.flipperdevices.bsb.auth.within.main.model.SignWithInStateListener
 import com.flipperdevices.bsb.auth.within.oauth.api.OAuthElementDecomposeComponent
 import com.flipperdevices.bsb.auth.within.oauth.model.OAuthProvider
 import com.flipperdevices.bsb.auth.within.onetap.api.GoogleOneTapAuthDecomposeComponent
+import com.flipperdevices.bsb.auth.within.passkey.api.PasskeyAuthDecomposeComponent
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import com.flipperdevices.core.di.AppGraph
 import me.tatarka.inject.annotations.Assisted
@@ -28,7 +29,8 @@ class SignWithInMainDecomposeComponentImpl(
     @Assisted withInStateListener: SignWithInStateListener,
     @Assisted deeplink: Deeplink.Root.Auth.OAuth?,
     oneTapAuthDecomposeComponent: GoogleOneTapAuthDecomposeComponent.Factory,
-    oAuthElementDecomposeComponent: OAuthElementDecomposeComponent.Factory
+    oAuthElementDecomposeComponent: OAuthElementDecomposeComponent.Factory,
+    passkeyAuthDecomposeComponent: PasskeyAuthDecomposeComponent.Factory,
 ) : SignWithInMainDecomposeComponent(componentContext),
     ComponentContext by componentContext {
     private val googleAuth = oneTapAuthDecomposeComponent(
@@ -43,6 +45,10 @@ class SignWithInMainDecomposeComponentImpl(
     private val microsoftAuth = oAuthElementDecomposeComponent(
         componentContext = childContext("signWithIn_microsoft"),
         oAuthProvider = OAuthProvider.MICROSOFT,
+        withInStateListener = withInStateListener,
+    )
+    private val passkeyAuth = passkeyAuthDecomposeComponent(
+        componentContext = childContext("signWithIn_passkey"),
         withInStateListener = withInStateListener,
     )
 
@@ -79,6 +85,10 @@ class SignWithInMainDecomposeComponentImpl(
                     authState = authState
                 )
             }
+            passkeyAuth.Render(
+                modifier = Modifier.padding(vertical = 12.dp),
+                authState = authState
+            )
         }
     }
 

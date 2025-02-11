@@ -49,7 +49,7 @@ fun TimerOffComposableScreen(
         TimerAppBarComposable(
             statusType = StatusType.OFF,
             modifier = Modifier.align(Alignment.TopCenter),
-            workPhaseText = workPhaseText
+            workPhaseText = workPhaseText,
         )
 
         Column(

@@ -18,6 +18,8 @@ import busystatusbar.components.bsb.timer.common.generated.resources.Res
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_arrow_right
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.root.api.LocalRootNavigation
+import com.flipperdevices.bsb.root.model.RootNavigationConfig
 import com.flipperdevices.ui.button.BIconButton
 import com.flipperdevices.ui.button.rememberPragmaticaTextStyle
 import org.jetbrains.compose.resources.painterResource
@@ -66,10 +68,13 @@ fun TimerAppBarComposable(
             modifier = Modifier.align(Alignment.TopEnd),
             contentAlignment = Alignment.Center
         ) {
+            val rootNavigation = LocalRootNavigation.current
             BIconButton(
                 modifier = Modifier.size(44.dp),
                 painter = painterResource(Res.drawable.ic_arrow_right),
-                onClick = {},
+                onClick = {
+                    rootNavigation.push(RootNavigationConfig.Auth(null))
+                },
                 enabled = true,
             )
         }
