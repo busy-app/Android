@@ -22,4 +22,5 @@ androidDependencies {
 
     implementation(projects.components.bsb.auth.within.oauth.api)
     implementation(projects.components.bsb.auth.within.onetap.api)
+    implementation(projects.components.bsb.auth.within.passkey.api)
 }

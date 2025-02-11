@@ -1,6 +1,7 @@
 package com.flipperdevices.core.log
 
 import com.flipperdevices.core.buildkonfig.BuildKonfig
+import com.flipperdevices.core.buildkonfig.BuildKonfig.IS_SENSITIVE_LOG_ENABLED
 
 inline fun error(logMessage: () -> String) {
     if (BuildKonfig.IS_LOG_ENABLED) {
@@ -41,5 +42,11 @@ inline fun debug(logMessage: () -> String) {
 inline fun wtf(logMessage: () -> String) {
     if (BuildKonfig.IS_LOG_ENABLED) {
         wtf(null, logMessage)
+    }
+}
+
+inline fun sensitive(logMessage: () -> String) {
+    if (BuildKonfig.IS_LOG_ENABLED && IS_SENSITIVE_LOG_ENABLED) {
+        info(null, logMessage)
     }
 }

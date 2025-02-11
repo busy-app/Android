@@ -1,0 +1,4 @@
+<resources>
+    <string name="passkey_title">Continue with passkey</string>
+    <string name="passkey_failed">Failed to log in with passkey</string>
+</resources>

@@ -42,7 +42,7 @@ import kotlinx.datetime.Instant
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
-private val networkDispatcher = FlipperDispatchers.default
+internal val NETWORK_DISPATCHER = FlipperDispatchers.default
 
 @Inject
 @ContributesBinding(AppGraph::class, BSBAuthApi::class)
@@ -55,7 +55,7 @@ class BSBAuthApiImpl(
 
     override suspend fun isUserExist(
         email: String
-    ): Result<Boolean> = withContext(networkDispatcher) {
+    ): Result<Boolean> = withContext(NETWORK_DISPATCHER) {
         runCatching {
             httpClient.post {
                 url("${NetworkConstants.BASE_URL}/v0/auth/sign-up/check-user")
@@ -75,7 +75,7 @@ class BSBAuthApiImpl(
     override suspend fun signIn(
         email: String,
         password: String
-    ): Result<Unit> = withContext(networkDispatcher) {
+    ): Result<Unit> = withContext(NETWORK_DISPATCHER) {
         runCatching {
             httpClient.post {
                 url("${NetworkConstants.BASE_URL}/v0/auth/sign-in")
@@ -88,7 +88,7 @@ class BSBAuthApiImpl(
         authCode: String,
         codeChallenge: String,
         codeVerification: String
-    ): Result<Unit> = withContext(networkDispatcher) {
+    ): Result<Unit> = withContext(NETWORK_DISPATCHER) {
         runCatching {
             httpClient.post {
                 url("${NetworkConstants.BASE_URL}/v0/auth/exchange")
@@ -103,7 +103,7 @@ class BSBAuthApiImpl(
         }.transform { signIn(it.success.token) }
     }
 
-    private suspend fun signIn(token: String): Result<Unit> {
+    override suspend fun signIn(token: String): Result<Unit> {
         return runCatching {
             preferenceApi.setString(SettingsEnum.AUTH_TOKEN, token)
         }.transform { getUser() }
@@ -112,7 +112,7 @@ class BSBAuthApiImpl(
             }.map { }
     }
 
-    override suspend fun getUser(): Result<BSBUser> = withContext(networkDispatcher) {
+    override suspend fun getUser(): Result<BSBUser> = withContext(NETWORK_DISPATCHER) {
         return@withContext runCatching {
             httpClient.get {
                 url("${NetworkConstants.BASE_URL}/v0/auth/me")
@@ -120,7 +120,7 @@ class BSBAuthApiImpl(
         }.map { BSBUser(it.success.email) }
     }
 
-    override suspend fun jwtAuth(token: String): Result<Unit> = withContext(networkDispatcher) {
+    override suspend fun jwtAuth(token: String): Result<Unit> = withContext(NETWORK_DISPATCHER) {
         return@withContext runCatching {
             httpClient.post {
                 url("${NetworkConstants.BASE_URL}/v0/oauth2/google/one-tap")
@@ -137,7 +137,7 @@ class BSBAuthApiImpl(
     override suspend fun requestVerifyEmail(
         email: String,
         verificationType: BSBEmailVerificationType
-    ): Result<BSBEmailVerificationResponse> = withContext(networkDispatcher) {
+    ): Result<BSBEmailVerificationResponse> = withContext(NETWORK_DISPATCHER) {
         return@withContext runCatching {
             httpClient.post {
                 url("${NetworkConstants.BASE_URL}/v0/auth/verify-email")
@@ -161,7 +161,7 @@ class BSBAuthApiImpl(
         email: String,
         code: String,
         verificationType: BSBEmailVerificationType
-    ): Result<Unit> = withContext(networkDispatcher) {
+    ): Result<Unit> = withContext(NETWORK_DISPATCHER) {
         return@withContext runCatching {
             httpClient.post {
                 url("${NetworkConstants.BASE_URL}/v0/auth/check-code")
@@ -180,7 +180,7 @@ class BSBAuthApiImpl(
         email: String,
         code: String,
         password: String
-    ): Result<Unit> = withContext(networkDispatcher) {
+    ): Result<Unit> = withContext(NETWORK_DISPATCHER) {
         return@withContext runCatching {
             httpClient.post {
                 url("${NetworkConstants.BASE_URL}/v0/auth/sign-up/create-account")
@@ -193,7 +193,7 @@ class BSBAuthApiImpl(
         email: String,
         code: String,
         password: String
-    ): Result<Unit> = withContext(networkDispatcher) {
+    ): Result<Unit> = withContext(NETWORK_DISPATCHER) {
         return@withContext runCatching {
             httpClient.post {
                 url("${NetworkConstants.BASE_URL}/v0/auth/sign-in/reset-password")

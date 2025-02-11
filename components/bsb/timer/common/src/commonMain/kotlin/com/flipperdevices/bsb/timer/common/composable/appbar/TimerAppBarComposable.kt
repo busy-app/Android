@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.root.api.LocalRootNavigation
+import com.flipperdevices.bsb.root.model.RootNavigationConfig
 import com.flipperdevices.ui.button.BIconButton
 import com.flipperdevices.ui.button.rememberPragmaticaTextStyle
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -66,10 +68,13 @@ fun TimerAppBarComposable(
             modifier = Modifier.align(Alignment.TopEnd),
             contentAlignment = Alignment.Center
         ) {
+            val rootNavigation = LocalRootNavigation.current
             BIconButton(
                 modifier = Modifier.size(44.dp),
                 painter = rememberVectorPainter(Icons.Filled.Person), // todo
-                onClick = {},
+                onClick = {
+                    rootNavigation.push(RootNavigationConfig.Auth(null))
+                },
                 enabled = true,
             )
         }

@@ -20,6 +20,8 @@ interface BSBAuthApi {
         codeVerification: String
     ): Result<Unit>
 
+    suspend fun signIn(token: String): Result<Unit>
+
     suspend fun jwtAuth(token: String): Result<Unit>
 
     suspend fun getUser(): Result<BSBUser>
