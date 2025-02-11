@@ -1,9 +1,10 @@
 package com.flipperdevices.bsb.core.theme.generated
 
-import androidx.compose.ui.graphics.Color
+import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Accent
+import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Accent.Brand
+import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Accent.Device
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Black
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Bluetooth
-import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Brand
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Danger
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Neutral
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Success
@@ -22,71 +23,78 @@ import kotlin.Suppress
 @Suppress("MagicNumber", "LongMethod")
 internal fun getLightPallet(): BusyBarPallet = BusyBarPallet(
     black = Black(
-        invert = Color(0xFF000000),
-        onColor = Color(0xFF000000)
+        invert = androidx.compose.ui.graphics.Color(0xFF000000),
+        onColor = androidx.compose.ui.graphics.Color(0xFF000000)
     ),
     white = White(
-        invert = Color(0xFFFFFFFF),
-        onColor = Color(0xFFFFFFFF)
+        invert = androidx.compose.ui.graphics.Color(0xFFFFFFFF),
+        onColor = androidx.compose.ui.graphics.Color(0xFFFFFFFF)
     ),
     transparent = Transparent(
         blackInvert = BlackInvert(
-            primary = Color(0x80000000),
-            secondary = Color(0x4D000000),
-            tertiary = Color(0x1A000000),
-            quaternary = Color(0x0D000000),
-            quinary = Color(0x05000000)
+            primary = androidx.compose.ui.graphics.Color(0x80000000),
+            secondary = androidx.compose.ui.graphics.Color(0x4D000000),
+            tertiary = androidx.compose.ui.graphics.Color(0x1A000000),
+            quaternary = androidx.compose.ui.graphics.Color(0x0D000000),
+            quinary = androidx.compose.ui.graphics.Color(0x05000000)
         ),
         whiteInvert = WhiteInvert(
-            primary = Color(0x80FFFFFF),
-            secondary = Color(0x4DFFFFFF),
-            tertiary = Color(0x1AFFFFFF),
-            quaternary = Color(0x0DFFFFFF),
-            quinary = Color(0x05FFFFFF)
+            primary = androidx.compose.ui.graphics.Color(0x80FFFFFF),
+            secondary = androidx.compose.ui.graphics.Color(0x4DFFFFFF),
+            tertiary = androidx.compose.ui.graphics.Color(0x1AFFFFFF),
+            quaternary = androidx.compose.ui.graphics.Color(0x0DFFFFFF),
+            quinary = androidx.compose.ui.graphics.Color(0x05FFFFFF)
         )
     ),
     neutral = Neutral(
-        primary = Color(0xFF333333),
-        secondary = Color(0xFF666666),
-        tertiary = Color(0xFF999999),
-        quaternary = Color(0xFFCCCCCC),
-        quinary = Color(0xFFE5E5E5),
-        senary = Color(0xFFF2F2F2),
-        septenary = Color(0xFFFAFAFA)
+        primary = androidx.compose.ui.graphics.Color(0xFF333333),
+        secondary = androidx.compose.ui.graphics.Color(0xFF666666),
+        tertiary = androidx.compose.ui.graphics.Color(0xFF999999),
+        quaternary = androidx.compose.ui.graphics.Color(0xFFCCCCCC),
+        quinary = androidx.compose.ui.graphics.Color(0xFFE5E5E5),
+        senary = androidx.compose.ui.graphics.Color(0xFFF2F2F2),
+        septenary = androidx.compose.ui.graphics.Color(0xFFFAFAFA)
     ),
     surface = Surface(
-        primary = Color(0xFFFFFFFF),
-        secondary = Color(0xFFFAFAFA),
-        tertiary = Color(0xFFF2F2F2)
+        primary = androidx.compose.ui.graphics.Color(0xFFFFFFFF),
+        secondary = androidx.compose.ui.graphics.Color(0xFFFAFAFA),
+        tertiary = androidx.compose.ui.graphics.Color(0xFFF2F2F2)
     ),
-    brand = Brand(
-        primary = Color(0xFFFF5C16),
-        secondary = Color(0x4DFF5C16),
-        tertiary = Color(0x1AFF5C16)
+    accent = Accent(
+        device = Device(
+            primary = androidx.compose.ui.graphics.Color(0xFFFF5C16),
+            secondary = androidx.compose.ui.graphics.Color(0x4DFF5C16),
+            tertiary = androidx.compose.ui.graphics.Color(0x1AFF5C16)
+        ),
+        brand = Brand(
+            primary = androidx.compose.ui.graphics.Color(0xFFFF0000),
+            secondary = androidx.compose.ui.graphics.Color(0x4DFF0000),
+            tertiary = androidx.compose.ui.graphics.Color(0x1AFF0000)
+        )
     ),
     bluetooth = Bluetooth(
-        primary = Color(0xFF137FF1),
-        secondary = Color(0x4D137FF1),
-        tertiary = Color(0x1A137FF1)
+        primary = androidx.compose.ui.graphics.Color(0xFF137FF1),
+        secondary = androidx.compose.ui.graphics.Color(0x4D137FF1),
+        tertiary = androidx.compose.ui.graphics.Color(0x1A137FF1)
     ),
     wifi = Wifi(
-        primary = Color(0xFF80CC03),
-        secondary = Color(0x4D80CC03),
-        tertiary = Color(0x1A80CC03)
+        primary = androidx.compose.ui.graphics.Color(0xFF80CC03),
+        secondary = androidx.compose.ui.graphics.Color(0x4D80CC03),
+        tertiary = androidx.compose.ui.graphics.Color(0x1A80CC03)
     ),
     success = Success(
-        primary = Color(0xFF10B981),
-        secondary = Color(0x4D10B981),
-        tertiary = Color(0x1A10B981)
+        primary = androidx.compose.ui.graphics.Color(0xFF10B981),
+        secondary = androidx.compose.ui.graphics.Color(0x4D10B981),
+        tertiary = androidx.compose.ui.graphics.Color(0x1A10B981)
     ),
     danger = Danger(
-        primary = Color(0xFFEF4444),
-        secondary = Color(0x4DEF4444),
-        tertiary = Color(0x1AEF4444)
+        primary = androidx.compose.ui.graphics.Color(0xFFEF4444),
+        secondary = androidx.compose.ui.graphics.Color(0x4DEF4444),
+        tertiary = androidx.compose.ui.graphics.Color(0x1AEF4444)
     ),
     warning = Warning(
-        primary = Color(0xFFF59E0B),
-        secondary = Color(0x4DF59E0B),
-        tertiary = Color(0x1AF59E0B)
+        primary = androidx.compose.ui.graphics.Color(0xFFF59E0B),
+        secondary = androidx.compose.ui.graphics.Color(0x4DF59E0B),
+        tertiary = androidx.compose.ui.graphics.Color(0x1AF59E0B)
     )
 )

@@ -4,10 +4,11 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Accent
+import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Accent.Brand
+import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Accent.Device
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Black
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Bluetooth
-import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Brand
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Danger
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Neutral
 import com.flipperdevices.bsb.core.theme.generated.BusyBarPallet.Success
@@ -23,12 +24,13 @@ import kotlin.Suppress
 
 private const val ANIMATION_DURATION_MS: Int = 750
 
-private val animationSpec: AnimationSpec<Color> = tween(ANIMATION_DURATION_MS)
+private val animationSpec: AnimationSpec<androidx.compose.ui.graphics.Color> =
+    tween(ANIMATION_DURATION_MS)
 
 @Composable
-private fun animatedColor(targetValue: Color): Color = animateColorAsState(
-    targetValue =
-    targetValue,
+private fun animatedColor(targetValue: androidx.compose.ui.graphics.Color):
+    androidx.compose.ui.graphics.Color = animateColorAsState(
+    targetValue = targetValue,
     animationSpec = animationSpec
 ).value
 
@@ -76,10 +78,17 @@ internal fun BusyBarPallet.toAnimatePallet(): BusyBarPallet = BusyBarPallet(
         secondary = animatedColor(surface.secondary),
         tertiary = animatedColor(surface.tertiary)
     ),
-    brand = Brand(
-        primary = animatedColor(brand.primary),
-        secondary = animatedColor(brand.secondary),
-        tertiary = animatedColor(brand.tertiary)
+    accent = Accent(
+        device = Device(
+            primary = animatedColor(accent.device.primary),
+            secondary = animatedColor(accent.device.secondary),
+            tertiary = animatedColor(accent.device.tertiary)
+        ),
+        brand = Brand(
+            primary = animatedColor(accent.brand.primary),
+            secondary = animatedColor(accent.brand.secondary),
+            tertiary = animatedColor(accent.brand.tertiary)
+        )
     ),
     bluetooth = Bluetooth(
         primary = animatedColor(bluetooth.primary),

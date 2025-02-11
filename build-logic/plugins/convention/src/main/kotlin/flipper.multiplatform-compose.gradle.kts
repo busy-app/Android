@@ -22,3 +22,8 @@ kotlin {
         }
     }
 }
+
+// For Android Compose Preview on IntelliJ > 2025.1 EAP
+dependencies {
+    debugImplementation(libs.androidx.ui.tooling)
+}

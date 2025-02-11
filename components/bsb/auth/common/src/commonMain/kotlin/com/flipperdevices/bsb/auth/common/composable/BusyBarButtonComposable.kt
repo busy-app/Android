@@ -39,7 +39,7 @@ fun BusyBarButtonComposable(
                     this.alpha = ALPHA_DISABLED
                 }
             }
-            .background(LocalPallet.current.brand.primary)
+            .background(LocalPallet.current.accent.device.primary)
             .clickableRipple(onClick = {
                 if (disabled.not()) {
                     onClick()

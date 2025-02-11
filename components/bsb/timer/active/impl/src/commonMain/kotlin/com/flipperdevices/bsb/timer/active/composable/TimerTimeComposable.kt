@@ -8,11 +8,8 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,10 +29,10 @@ fun TimerTimeComposable(
         Text(
             modifier = Modifier.padding(horizontal = 8.dp),
             text = ":",
-            fontSize = 100.sp,
-            color = LocalPallet.current.black.invert,
+            fontSize = 64.sp,
+            color = LocalPallet.current.white.invert,
             fontWeight = FontWeight.W500,
-            fontFamily = LocalBusyBarFonts.current.pragmatica,
+            fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
             textAlign = TextAlign.Center
         )
         TimerNumberComposable(timerState.second)
@@ -62,17 +59,12 @@ private fun TimerNumberComposable(number: Int) {
             ) {
                 Text(
                     modifier = Modifier
-                        .padding(top = 2.dp)
-                        .width(64.dp)
-                        .wrapContentHeight(
-                            align = Alignment.CenterVertically, // aligns to the center vertically (default value)
-                            unbounded = true // Makes sense if the container size less than text's height
-                        ),
+                        .padding(top = 2.dp),
                     text = symbol.toString(),
-                    fontSize = 100.sp,
-                    color = LocalPallet.current.black.invert,
+                    fontSize = 64.sp,
+                    color = LocalPallet.current.white.invert,
                     fontWeight = FontWeight.W500,
-                    fontFamily = LocalBusyBarFonts.current.pragmatica,
+                    fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
                     textAlign = TextAlign.Center
                 )
             }

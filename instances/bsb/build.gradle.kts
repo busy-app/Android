@@ -1,7 +1,6 @@
 import com.flipperdevices.buildlogic.ApkConfig.VERSION_NAME
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
@@ -38,7 +37,7 @@ kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+//            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 
@@ -95,6 +94,8 @@ kotlin {
             implementation(libs.decompose.composeExtension)
 
             implementation(libs.kotlin.coroutines.swing)
+
+            implementation(projects.components.core.ui.timeline)
         }
         iosMain.dependencies {
             api(libs.decompose)

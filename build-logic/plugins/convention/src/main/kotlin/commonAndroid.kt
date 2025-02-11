@@ -21,7 +21,6 @@ fun BaseExtension.commonAndroid(target: Project) {
     configureDefaultConfig(target)
     configureBuildTypes()
     configureBuildFeatures()
-    configureCompileOptions()
 
     target.suppressOptIn()
 }
@@ -86,18 +85,11 @@ private fun BaseExtension.configureBuildFeatures() {
     buildFeatures.shaders = false
 }
 
-private fun BaseExtension.configureCompileOptions() {
-    compileOptions.sourceCompatibility = JavaVersion.VERSION_11
-    compileOptions.targetCompatibility = JavaVersion.VERSION_11
-}
-
 @Suppress("MaxLineLength")
 private fun Project.suppressOptIn() {
     tasks.withType<KotlinCompile>()
         .configureEach {
             compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_11)
-
                 freeCompilerArgs.add("-Xexpect-actual-classes")
 
                 optIn.addAll(

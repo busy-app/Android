@@ -34,10 +34,10 @@ private fun getThemedPallet(isLight: Boolean): BusyBarPallet {
 }
 
 internal fun BusyBarPallet.toMaterialColors(isLight: Boolean) = Colors(
-    primary = brand.primary,
-    primaryVariant = brand.primary,
-    secondary = brand.secondary,
-    secondaryVariant = brand.secondary,
+    primary = accent.device.primary,
+    primaryVariant = accent.device.primary,
+    secondary = accent.device.secondary,
+    secondaryVariant = accent.device.secondary,
     background = surface.primary,
     surface = surface.primary,
     error = danger.primary,
@@ -50,7 +50,7 @@ internal fun BusyBarPallet.toMaterialColors(isLight: Boolean) = Colors(
 )
 
 internal fun BusyBarPallet.toTextSelectionColors() = TextSelectionColors(
-    handleColor = brand.primary,
+    handleColor = accent.device.primary,
     backgroundColor = surface.primary
 )
 

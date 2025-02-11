@@ -31,8 +31,10 @@ detekt-ruleset-decompose = "1.0.1" # https://github.com/LionZXY/detekt-decompose
 buildkonfig = "5.5.1"
 atomicflu = "0.26.1" # https://github.com/Kotlin/kotlinx-atomicfu
 lifecycle = "2.8.7" # https://developer.android.com/jetpack/androidx/releases/lifecycle
-compose-placeholder = "1.0.8" # https://github.com/eygraber/compose-placeholder/releases
-
+compose-placeholder = "1.0.8"
+androidx-compose = "1.7.6" # https://github.com/eygraber/compose-placeholder/releases
+composables = "1.11.2" # https://github.com/composablehorizons/compose-unstyled
+klibs-kstorage = "3.2.6" # https://github.com/makeevrserg/klibs.kstorage
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -41,6 +43,8 @@ compose-multiplatform-gradle = { module = "org.jetbrains.compose:compose-gradle-
 detekt-gradle = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 compose-gradle = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+composables = { module = "com.composables:core", version.ref = "composables" }
+klibs-kstorage = { module = "ru.astrainteractive.klibs:kstorage", version.ref = "klibs-kstorage" }
 
 # Linters
 detekt-ruleset-compiler = { module = "com.braisgabin.detekt:kotlin-compiler-wrapper", version.ref = "detekt-ruleset-compiler" }
@@ -69,7 +73,7 @@ identity = { module = "com.google.android.libraries.identity.googleid:googleid",
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization-runtime" }
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-datetime" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
-kotlin-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlin-coroutines"}
+kotlin-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlin-coroutines" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlin-immutable" }
 
@@ -99,6 +103,7 @@ ktor-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 atomicflu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicflu" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidx-compose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -1,0 +1,12 @@
+plugins {
+    id("flipper.multiplatform.noandroidlib")
+    id("flipper.multiplatform-dependencies")
+    id("kotlinx-serialization")
+}
+
+commonDependencies {
+    implementation(libs.decompose)
+    implementation(projects.components.core.ui.decompose)
+
+    implementation(projects.components.bsb.deeplink.api)
+}

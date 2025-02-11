@@ -23,7 +23,7 @@ class TimerMainDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val mainScreenDecomposeComponent: (
         componentContext: ComponentContext,
-    ) -> TimerMainScreenDecomposeComponentImpl,
+    ) -> TimerOffScreenDecomposeComponentImpl,
     private val timerStopDecomposeComponent: ActiveTimerScreenDecomposeComponent.Factory,
     timerApi: TimerApi
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),

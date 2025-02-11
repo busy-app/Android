@@ -1,0 +1,14 @@
+plugins {
+    id("flipper.multiplatform.noandroidlib")
+    id("flipper.multiplatform-dependencies")
+    alias(libs.plugins.kotlinSerialization)
+}
+
+commonDependencies {
+    implementation(libs.decompose)
+    implementation(projects.components.core.ui.decompose)
+    implementation(libs.kotlin.serialization.json)
+    implementation(libs.kotlin.coroutines)
+
+    api(libs.klibs.kstorage)
+}
