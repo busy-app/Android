@@ -15,7 +15,6 @@ private val TextUnitToVector: TwoWayConverter<TextUnit, AnimationVector1D> = Two
     convertFromVector = { it.value.sp }
 )
 
-
 @Composable
 internal fun animateTextUnitAsState(
     targetValue: TextUnit,

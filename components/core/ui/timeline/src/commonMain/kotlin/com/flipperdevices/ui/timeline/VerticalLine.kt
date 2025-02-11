@@ -28,7 +28,6 @@ import com.flipperdevices.bsb.core.theme.LocalPallet
 import kotlin.math.sqrt
 import kotlin.time.Duration.Companion.seconds
 
-
 /**
  * A composable function that renders a single vertical line in the `WheelPicker`.
  *

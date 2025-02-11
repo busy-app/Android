@@ -33,6 +33,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 
+private const val STEP_DIVISION = 5
+
 /**
  * A customizable wheel picker component for Android Jetpack Compose.
  *
@@ -43,13 +45,11 @@ import kotlin.time.Duration.Companion.seconds
  *
  * @param modifier The modifier to be applied to the `WheelPicker` component.
  * @param wheelPickerWidth The width of the entire picker. If null, the picker will use the full screen width. Default is `null`.
- * @param totalItems The total number of items in the picker.
  * @param initialSelectedItem The index of the item that is initially selected.
  * @param onItemSelect A callback function invoked when a new item is selected, passing the selected index as a parameter.
  *
  */
 @Composable
-// todo this code is still WIP
 @Suppress("LambdaParameterInRestartableEffect", "MagicNumber", "MaxLineLength", "LongMethod")
 fun BoxWithConstraintsScope.HorizontalWheelPicker(
     progression: IntProgression,
@@ -59,11 +59,11 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     initialSelectedItem: Int = progression.first,
     lineStyle: LineStyle = LineStyle.Default
 ) {
-    check(progression.step % 5 == 0) {
-        "Progression step must be divided by 5!"
+    check(progression.step % STEP_DIVISION == 0) {
+        "Progression step must be divided by $STEP_DIVISION!"
     }
-    check(progression.step >= 5) {
-        "Progression step must be more than 5!"
+    check(progression.step >= STEP_DIVISION) {
+        "Progression step must be more than $STEP_DIVISION!"
     }
     val density = LocalDensity.current.density
     val screenWidthDp = (with(LocalDensity.current) { maxWidth.toPx() } / density).dp
@@ -125,7 +125,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                         fadeOutLinesCount = lineStyle.fadeOutLinesCount,
                         maxFadeTransparency = lineStyle.maxFadeTransparency
                     ),
-                    animationSpec = tween(300)
+                    animationSpec = tween(durationMillis = 300)
                 )
 
                 VerticalLine(
