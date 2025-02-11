@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import kotlin.math.sqrt
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -45,6 +46,7 @@ internal fun VerticalLine(
     index: Int,
     isSelected: Boolean,
     lineTransparency: Float,
+    unitConverter: (Int) -> Duration,
     style: LineStyle,
     progression: IntProgression
 ) {
@@ -103,7 +105,7 @@ internal fun VerticalLine(
     val fontFamily = LocalBusyBarFonts.current.pragmatica
     val result = remember(isSelected, textColor, fontSize, fontColor, index) {
         textMeasurer.measure(
-            text = index.seconds.toFormattedTime(),
+            text = unitConverter.invoke(index).toFormattedTime(),
             style = TextStyle(
                 fontSize = fontSize,
                 color = textColor,

@@ -16,7 +16,7 @@ internal fun Duration.toFormattedTime(): String {
     return this.toComponents { days, hours, minutes, seconds, nanoseconds ->
         when {
             days > 0 -> "${days}d ${hours}h ${minutes.toFormattedTime()}m ${seconds.toFormattedTime()}s"
-            hours > 0 -> "${hours}h ${minutes.toFormattedTime()}m ${seconds.toFormattedTime()}s"
+            hours > 0 -> "${hours}h ${minutes.toFormattedTime()}m"
             minutes > 0 -> "${minutes}m ${seconds.toFormattedTime()}s"
             seconds == 0 -> "∞"
             else -> "${seconds}s"

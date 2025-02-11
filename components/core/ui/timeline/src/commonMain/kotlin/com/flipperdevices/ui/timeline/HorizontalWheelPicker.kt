@@ -29,8 +29,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
+import kotlin.time.Duration
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 private const val STEP_DIVISION = 5
@@ -56,6 +58,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     onItemSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
     wheelPickerWidth: Dp? = null,
+    unitConverter: (Int) -> Duration = { it.seconds },
     initialSelectedItem: Int = progression.first,
     lineStyle: LineStyle = LineStyle.Default
 ) {
@@ -133,7 +136,8 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                     isSelected = index == middleIndex,
                     lineTransparency = lineTransparency,
                     style = lineStyle,
-                    progression = progression
+                    progression = progression,
+                    unitConverter = unitConverter
                 )
                 Spacer(modifier = Modifier.width(lineStyle.lineSpacing))
             }
@@ -160,8 +164,10 @@ fun HorizontalWheelPickerPreview(
                 BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                     HorizontalWheelPicker(
                         lineStyle = style ?: LineStyle.Default,
-                        progression = (30.seconds.inWholeSeconds.toInt()..1.hours.inWholeSeconds.toInt() step 5),
-                        onItemSelect = { item -> }
+                        progression = (1.hours.inWholeMinutes.toInt()..12.hours.inWholeMinutes.toInt() step 5.minutes.inWholeMinutes.toInt()),
+                        initialSelectedItem = 1.hours.plus(30.minutes).inWholeMinutes.toInt(),
+                        onItemSelect = { item -> },
+                        unitConverter = { it.minutes }
                     )
                 }
             }
