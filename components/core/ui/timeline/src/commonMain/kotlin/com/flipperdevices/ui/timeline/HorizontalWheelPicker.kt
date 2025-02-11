@@ -115,7 +115,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                     currentSelectedItem = adjustedIndex
                 }
 
-                val lineTransparency = animateFloatAsState(
+                val lineTransparency by animateFloatAsState(
                     targetValue = calculateLineTransparency(
                         lineIndex = index,
                         totalLines = progression.last - progression.first,
@@ -125,13 +125,13 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                         fadeOutLinesCount = lineStyle.fadeOutLinesCount,
                         maxFadeTransparency = lineStyle.maxFadeTransparency
                     ),
-                    animationSpec = tween(600)
+                    animationSpec = tween(300)
                 )
 
                 VerticalLine(
                     index = adjustedIndex + progression.first,
                     isSelected = index == middleIndex,
-                    lineTransparency = lineTransparency.value,
+                    lineTransparency = lineTransparency,
                     style = lineStyle,
                     progression = progression
                 )

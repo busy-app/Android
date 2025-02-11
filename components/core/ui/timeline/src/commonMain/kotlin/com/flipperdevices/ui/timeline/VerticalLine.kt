@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -47,10 +48,11 @@ internal fun VerticalLine(
     style: LineStyle,
     progression: IntProgression
 ) {
+    val isVisible = index >= progression.first && index <= progression.last
     val paddingBottom by animateDpAsState(
         targetValue = when {
-            isSelected -> sqrt(style.selectedLineHeight.value).dp
-            index % progression.step == 0 -> -style.stepLineHeight.value.dp / 4
+            isSelected -> sqrt(style.selectedLineHeight.value).dp / 2
+            index % progression.step == 0 -> -sqrt(style.stepLineHeight.value).dp * 2
             else -> -sqrt(style.normalLineHeight.value).dp
         },
         animationSpec = tween(400)
@@ -75,6 +77,8 @@ internal fun VerticalLine(
     )
     val fontColor by animateColorAsState(
         targetValue = when {
+            !isVisible -> Color.Transparent
+
             isSelected ->
                 LocalPallet.current
                     .white
@@ -116,7 +120,11 @@ internal fun VerticalLine(
         }
     )
     val color by animateColorAsState(
-        if (isSelected) style.selectedLineColor else style.unselectedLineColor,
+        when {
+            !isVisible -> Color.Transparent
+            isSelected -> style.selectedLineColor
+            else -> style.unselectedLineColor
+        },
         tween(600)
     )
     val width by animateDpAsState(
@@ -150,7 +158,8 @@ internal fun VerticalLine(
                 y = with(localDensity) { 50.sp.toPx() }
                     .plus(with(localDensity) { paddingBottom.toPx() })
             ),
-            color = color.copy(alpha = lineTransparency.coerceAtMost(color.alpha)),
+            color = color
+                .copy(alpha = lineTransparency.coerceAtMost(color.alpha)),
             size = Size(
                 width = with(localDensity) { width.toPx() },
                 height = with(localDensity) { lineHeight.toPx() }

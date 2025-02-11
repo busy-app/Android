@@ -39,8 +39,8 @@ data class LineStyle(
     val selectedLineColor: Color,
     val unselectedLineColor: Color,
     // Fade
-    val fadeOutLinesCount: Int = 4,
-    val maxFadeTransparency: Float = 0.7f,
+    val fadeOutLinesCount: Int = 0,
+    val maxFadeTransparency: Float = 0.8f,
 ) {
     companion object {
         val Default: LineStyle
