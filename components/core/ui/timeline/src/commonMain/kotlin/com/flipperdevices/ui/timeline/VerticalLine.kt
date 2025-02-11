@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import kotlin.math.sqrt
 import kotlin.time.Duration.Companion.seconds
@@ -100,13 +101,15 @@ internal fun VerticalLine(
             }.coerceAtMost(fontColor.alpha)
         )
     )
+    val fontFamily = LocalBusyBarFonts.current.pragmatica
     val result = remember(isSelected, textColor, fontSize, fontColor, index) {
         textMeasurer.measure(
             text = index.seconds.toFormattedTime(),
             style = TextStyle(
                 fontSize = fontSize,
                 color = textColor,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontFamily = fontFamily
             ),
             overflow = TextOverflow.Clip
         )
@@ -114,9 +117,9 @@ internal fun VerticalLine(
 
     val textYOffset by animateFloatAsState(
         if (isSelected) {
-            -result.size.height.div(2).toFloat()
+            -result.size.height.div(4).toFloat()
         } else {
-            result.size.height.div(2).toFloat()
+            result.size.height.times(1.3).toFloat()
         }
     )
     val color by animateColorAsState(
