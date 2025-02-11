@@ -11,6 +11,21 @@ import org.gradle.api.Project
 class SvgToXmlPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.tasks.register("convertSvgToXmlResources") {
+            target.tasks.filter { it.name.contains("generateComposeResClass") }
+                .onEach { task ->
+                    task.dependsOn(this)
+                    task.mustRunAfter(this)
+                    task.shouldRunAfter(this)
+                    this.finalizedBy(task)
+                }
+            target.tasks.filter { it.name.contains("generateResourceAccessors") }
+                .onEach { task ->
+                    task.dependsOn(this)
+                    task.mustRunAfter(this)
+                    task.shouldRunAfter(this)
+                    this.finalizedBy(task)
+                }
+
             val commonMainSourceSet = target.kotlin.sourceSets
                 .findByName("commonMain")
                 ?: throw GradleException("SvgToXmlPlugin is applied, but no commonMain source set found!")
@@ -19,7 +34,7 @@ class SvgToXmlPlugin : Plugin<Project> {
                     .project
                     .file("src")
                     .resolve("commonMain"),
-                logger = logger,
+                logger = target.logger,
             ).generateResourceFiles()
         }
     }
