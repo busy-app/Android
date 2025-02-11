@@ -1,19 +1,19 @@
-package com.flipperdevices.bsb.auth.main.api
+package com.flipperdevices.bsb.profile.main.api
 
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import com.flipperdevices.ui.decompose.CompositeDecomposeComponent
 import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
+import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 
-abstract class AuthDecomposeComponent<T : Any> : CompositeDecomposeComponent<T>() {
+abstract class ProfileDecomposeComponent<T : Any> : CompositeDecomposeComponent<T>() {
     abstract fun handleDeeplink(deeplink: Deeplink.Root.Auth)
 
     fun interface Factory {
         operator fun invoke(
             componentContext: ComponentContext,
             onBackParameter: DecomposeOnBackParameter,
-            deeplink: Deeplink.Root.Auth?,
-            onComplete: () -> Unit
-        ): AuthDecomposeComponent<*>
+            deeplink: Deeplink.Root.Auth?
+        ): ProfileDecomposeComponent<*>
     }
 }

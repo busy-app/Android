@@ -29,6 +29,7 @@ class AuthDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onBackParameter: DecomposeOnBackParameter,
     @Assisted deeplink: Deeplink.Root.Auth?,
+    @Assisted private val onComplete: () -> Unit,
     private val mainScreenDecomposeComponent: (
         ComponentContext,
         StackNavigation<AuthRootNavigationConfig>,
@@ -80,7 +81,7 @@ class AuthDecomposeComponentImpl(
         is AuthRootNavigationConfig.AuthRoot -> mainScreenDecomposeComponent(
             componentContext,
             navigation,
-            onBackParameter::invoke,
+            onComplete::invoke,
             config.deeplink,
         )
 
@@ -88,7 +89,7 @@ class AuthDecomposeComponentImpl(
             componentContext,
             onBack = navigation::pop,
             email = config.email,
-            onComplete = onBackParameter::invoke,
+            onComplete = onComplete ,
             preFilledPassword = config.preFilledPassword,
             deeplink = config.deeplink
         )
@@ -97,7 +98,7 @@ class AuthDecomposeComponentImpl(
             componentContext,
             onBack = navigation::pop,
             email = config.email,
-            onComplete = onBackParameter::invoke,
+            onComplete = onComplete,
             preFilledPassword = config.preFilledPassword,
             deeplink = config.deeplink
         )
@@ -156,13 +157,15 @@ class AuthDecomposeComponentImpl(
         private val factory: (
             componentContext: ComponentContext,
             onBackParameter: DecomposeOnBackParameter,
-            deeplink: Deeplink.Root.Auth?
+            deeplink: Deeplink.Root.Auth?,
+            onComplete: () -> Unit
         ) -> AuthDecomposeComponentImpl
     ) : AuthDecomposeComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
             onBackParameter: DecomposeOnBackParameter,
-            deeplink: Deeplink.Root.Auth?
-        ) = factory(componentContext, onBackParameter, deeplink)
+            deeplink: Deeplink.Root.Auth?,
+            onComplete: () -> Unit
+        ) = factory(componentContext, onBackParameter, deeplink, onComplete)
     }
 }

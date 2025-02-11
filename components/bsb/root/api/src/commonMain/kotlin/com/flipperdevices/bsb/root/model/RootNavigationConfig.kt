@@ -10,7 +10,7 @@ sealed interface RootNavigationConfig {
     data object Timer : RootNavigationConfig
 
     @Serializable
-    data class Auth(val deeplink: Deeplink.Root.Auth?) : RootNavigationConfig
+    data class Profile(val deeplink: Deeplink.Root.Auth?) : RootNavigationConfig
 
     @Serializable
     data object Settings : RootNavigationConfig

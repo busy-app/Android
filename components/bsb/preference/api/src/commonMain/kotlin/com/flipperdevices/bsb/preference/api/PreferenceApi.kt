@@ -57,7 +57,7 @@ inline fun <reified T : Any?> PreferenceApi.getFlow(key: SettingsEnum, default: 
         else -> getFlowSerializable(serializer<T>(), key, default)
     }
 
-inline fun <reified T : Any> PreferenceApi.set(key: SettingsEnum, value: T) =
+inline fun <reified T : Any?> PreferenceApi.set(key: SettingsEnum, value: T) =
     when (T::class) {
         Int::class,
         Long::class,

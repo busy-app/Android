@@ -32,13 +32,14 @@ class BSBPasskeyApiImpl(
         }
     }
 
-    override suspend fun passkeyAuth(request: BSBPasskeyLoginRequest): Result<Unit> =
-        withContext(NETWORK_DISPATCHER) {
-            runCatching {
-                httpClient.post {
-                    url("${NetworkConstants.BASE_URL}/v0/auth/passkey/authentication")
-                    setBody(request.toApiRequest())
-                }.body<BSBResponse<BSBApiToken>>()
-            }.transform { authApi.signIn(token = it.success.token) }
-        }
+    override suspend fun passkeyAuth(
+        request: BSBPasskeyLoginRequest
+    ): Result<Unit> = withContext(NETWORK_DISPATCHER) {
+        runCatching {
+            httpClient.post {
+                url("${NetworkConstants.BASE_URL}/v0/auth/passkey/authentication")
+                setBody(request.toApiRequest())
+            }.body<BSBResponse<BSBApiToken>>()
+        }.transform { authApi.signIn(token = it.success.token) }
+    }
 }

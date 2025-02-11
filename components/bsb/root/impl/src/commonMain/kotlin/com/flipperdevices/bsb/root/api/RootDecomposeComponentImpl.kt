@@ -17,9 +17,9 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushToFront
 import com.flipperdevices.bsb.appblockerscreen.api.AppBlockerScreenDecomposeComponent
-import com.flipperdevices.bsb.auth.main.api.AuthDecomposeComponent
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import com.flipperdevices.bsb.preferencescreen.api.PreferenceScreenDecomposeComponent
+import com.flipperdevices.bsb.profile.main.api.ProfileDecomposeComponent
 import com.flipperdevices.bsb.root.deeplink.RootDeeplinkHandlerImpl
 import com.flipperdevices.bsb.root.model.RootNavigationConfig
 import com.flipperdevices.bsb.timer.main.api.TimerMainDecomposeComponent
@@ -37,7 +37,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class RootDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted initialDeeplink: Deeplink?,
-    private val authDecomposeComponentFactory: AuthDecomposeComponent.Factory,
+    private val profileDecomposeComponentFactory: ProfileDecomposeComponent.Factory,
     private val timerMainDecomposeComponentFactory: TimerMainDecomposeComponent.Factory,
     private val preferenceScreenComponentFactory: PreferenceScreenDecomposeComponent.Factory,
     private val appLockComponentFactory: AppBlockerScreenDecomposeComponent.Factory,
@@ -71,7 +71,7 @@ class RootDecomposeComponentImpl(
         config: RootNavigationConfig,
         componentContext: ComponentContext
     ): DecomposeComponent = when (config) {
-        is RootNavigationConfig.Auth -> authDecomposeComponentFactory(
+        is RootNavigationConfig.Profile -> profileDecomposeComponentFactory(
             componentContext,
             navigation::pop,
             config.deeplink
@@ -127,10 +127,10 @@ class RootDecomposeComponentImpl(
     override fun handleDeeplink(deeplink: Deeplink) {
         when (deeplink) {
             is Deeplink.Root.Auth -> {
-                val component = stack.findComponentByConfig(RootNavigationConfig.Auth::class)
-                if (component == null || component !is AuthDecomposeComponent<*>) {
+                val component = stack.findComponentByConfig(RootNavigationConfig.Profile::class)
+                if (component == null || component !is ProfileDecomposeComponent<*>) {
                     warn { "Bottom bar component is not exist in stack, but first pair screen already passed" }
-                    navigation.bringToFront(RootNavigationConfig.Auth(deeplink))
+                    navigation.bringToFront(RootNavigationConfig.Profile(deeplink))
                 } else {
                     component.handleDeeplink(deeplink)
                 }

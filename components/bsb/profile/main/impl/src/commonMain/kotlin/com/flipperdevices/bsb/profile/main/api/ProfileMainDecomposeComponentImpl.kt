@@ -1,0 +1,37 @@
+package com.flipperdevices.bsb.profile.main.api
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.ComponentContext
+import com.flipperdevices.bsb.cloud.model.BSBUser
+import com.flipperdevices.bsb.profile.main.composable.UserRowComposable
+import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+
+@Inject
+class ProfileMainDecomposeComponentImpl(
+    @Assisted componentContext: ComponentContext,
+    @Assisted private val bsbUser: BSBUser,
+    @Assisted private val onLogout: () -> Unit
+) : ScreenDecomposeComponent(componentContext) {
+    @Composable
+    override fun Render(modifier: Modifier) {
+        Column(
+            modifier
+                .safeDrawingPadding()
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
+            UserRowComposable(
+                user = bsbUser,
+                onLogout = onLogout
+            )
+        }
+    }
+}

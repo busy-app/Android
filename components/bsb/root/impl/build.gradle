@@ -12,7 +12,7 @@ commonDependencies {
     implementation(projects.components.core.log)
     implementation(projects.components.core.ui.decompose)
 
-    implementation(projects.components.bsb.auth.main.api)
+    implementation(projects.components.bsb.profile.main.api)
     implementation(projects.components.bsb.timer.main.api)
     implementation(projects.components.bsb.preferencescreen.api)
     implementation(projects.components.bsb.appblockerscreen.api)

@@ -57,7 +57,7 @@ class PreferenceScreenViewModel(
     ) {
         when (action) {
             SettingsAction.ExpertMode -> preferenceApi.set(SettingsEnum.DEV_MODE, true)
-            SettingsAction.OpenAuth -> navigation.push(RootNavigationConfig.Auth(null))
+            SettingsAction.OpenAuth -> navigation.push(RootNavigationConfig.Profile(null))
             is SettingsAction.SwitchAppBlocking -> onAppBlock(action.newState)
             is SettingsAction.SwitchDND -> onDndSwitch(action.newState)
             is SettingsAction.SwitchMetronome -> onMetronomeSwitch(action.newState)
