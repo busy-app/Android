@@ -35,9 +35,11 @@ compose-placeholder = "1.0.8"
 androidx-compose = "1.7.6" # https://github.com/eygraber/compose-placeholder/releases
 composables = "1.11.2" # https://github.com/composablehorizons/compose-unstyled
 klibs-kstorage = "3.2.6" # https://github.com/makeevrserg/klibs.kstorage
+android-sdk-common-version = "31.1.2"
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+android-sdk-common = { module = "com.android.tools:sdk-common", version.ref = "android-sdk-common-version" }
 kotlin-ksp-gradle = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 compose-multiplatform-gradle = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose-plugin" }
 detekt-gradle = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }

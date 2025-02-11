@@ -17,7 +17,7 @@ android.namespace = "com.flipperdevices.${
         .removePrefix(":components:")
         .replace(":", ".")
         .replace("-", "")
-}"
+}".replace("..", ".")
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
 kotlin {

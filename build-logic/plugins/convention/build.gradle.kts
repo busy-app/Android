@@ -10,6 +10,8 @@ dependencies {
     implementation(libs.kotlin.ksp.gradle)
     implementation(libs.compose.multiplatform.gradle)
     implementation(libs.compose.gradle)
+    compileOnly(libs.android.gradle)
+    compileOnly(libs.android.sdk.common)
 
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
@@ -25,6 +27,11 @@ gradlePlugin {
             id = name
             implementationClass =
                 "com.flipperdevices.buildlogic.plugin.JavaVersionPlugin"
+        }
+        create("flipper.svgtoxml") {
+            id = name
+            implementationClass =
+                "com.flipperdevices.buildlogic.plugin.svgresource.SvgToXmlPlugin"
         }
     }
 }
