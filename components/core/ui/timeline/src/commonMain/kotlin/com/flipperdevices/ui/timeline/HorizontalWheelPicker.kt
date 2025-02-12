@@ -86,7 +86,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     val bufferIndices = totalVisibleItems / 2
 
     LaunchedEffect(middleIndex, currentSelectedItem, scrollState.isScrollInProgress) {
-        onItemSelect(unitConverter.invoke(currentSelectedItem + progression.first))
+        onItemSelect(unitConverter.invoke(currentSelectedItem))
         val step = progression.step
         val mod = currentSelectedItem % step
         val div = currentSelectedItem / step

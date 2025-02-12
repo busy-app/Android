@@ -19,6 +19,11 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class PreferenceApiImpl(
     private val observableSettings: ObservableSettings
 ) : PreferenceApi {
+    private val json = Json {
+        isLenient = true
+        ignoreUnknownKeys = true
+        prettyPrint = false
+    }
     private val flowSettings = observableSettings.toFlowSettings()
 
     override fun getFlowString(
@@ -41,7 +46,7 @@ class PreferenceApiImpl(
                 if (it.isNullOrBlank()) {
                     default
                 } else {
-                    Json.decodeFromString(serializer, it)
+                    json.decodeFromString(serializer, it)
                 }
             }
     }
@@ -63,7 +68,7 @@ class PreferenceApiImpl(
         if (result.isNullOrBlank()) {
             return default
         }
-        return Json.decodeFromString(serializer, result)
+        return json.decodeFromString(serializer, result)
     }
 
     override fun <T> setSerializable(
@@ -71,7 +76,7 @@ class PreferenceApiImpl(
         key: SettingsEnum,
         value: T
     ) {
-        observableSettings.putString(key.key, Json.encodeToString(serializer, value))
+        observableSettings.putString(key.key, json.encodeToString(serializer, value))
     }
 
     override fun setBoolean(key: SettingsEnum, value: Boolean) {
