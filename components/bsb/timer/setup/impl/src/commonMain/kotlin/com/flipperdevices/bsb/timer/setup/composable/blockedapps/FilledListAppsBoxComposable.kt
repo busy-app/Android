@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.setup.composable.blockedapps
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -31,11 +32,16 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-internal fun FilledListAppsBoxComposable(items: List<Painter>, modifier: Modifier = Modifier) {
+internal fun FilledListAppsBoxComposable(
+    items: List<Painter>,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val lazyListState = rememberLazyListState()
     Box(
         modifier = modifier.fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
+            .clickable(onClick = onClick)
             .background(LocalPallet.current.transparent.whiteInvert.quinary)
             .padding(14.dp),
         contentAlignment = Alignment.Center
@@ -87,7 +93,8 @@ internal fun FilledListAppsBoxComposable(items: List<Painter>, modifier: Modifie
 private fun FilledListAppsBoxComposablePreview() {
     BusyBarThemeInternal {
         FilledListAppsBoxComposable(
-            items = List(24) { painterResource(Res.drawable.ic_block) }
+            items = List(24) { painterResource(Res.drawable.ic_block) },
+            onClick = {}
         )
     }
 }

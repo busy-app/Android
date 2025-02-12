@@ -28,6 +28,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 private fun BlockedAppsBoxComposable(
     title: String,
     appIcons: List<Painter>,
+    onAddApps: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -44,9 +45,12 @@ private fun BlockedAppsBoxComposable(
             fontSize = 18.sp
         )
         if (appIcons.isEmpty()) {
-            EmptyListAppsBoxComposable()
+            EmptyListAppsBoxComposable(onClick = onAddApps)
         } else {
-            FilledListAppsBoxComposable(appIcons)
+            FilledListAppsBoxComposable(
+                items = appIcons,
+                onClick = onAddApps
+            )
         }
     }
 }
@@ -55,6 +59,8 @@ private fun BlockedAppsBoxComposable(
 fun BlockedAppsSetupModalBottomSheetContent(
     blockedAppsDuringRest: List<Painter>,
     blockedAppsDuringWork: List<Painter>,
+    onAddBlockedAppsDuringWorkClick: () -> Unit,
+    onAddBlockedAppsDuringRestClick: () -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -73,13 +79,15 @@ fun BlockedAppsSetupModalBottomSheetContent(
         BlockedAppsBoxComposable(
             modifier = Modifier.padding(horizontal = 16.dp),
             title = "Blocked apps during work interval:",
-            appIcons = blockedAppsDuringWork
+            appIcons = blockedAppsDuringWork,
+            onAddApps = onAddBlockedAppsDuringWorkClick
         )
 
         BlockedAppsBoxComposable(
             modifier = Modifier.padding(horizontal = 16.dp),
             title = "Blocked apps during rest interval:",
-            appIcons = blockedAppsDuringRest
+            appIcons = blockedAppsDuringRest,
+            onAddApps = onAddBlockedAppsDuringRestClick
         )
 
         TimerSaveButtonComposable(onClick = onSaveClick)
@@ -95,8 +103,9 @@ private fun BlockedAppsSetupModalBottomSheetContentPreview() {
         BlockedAppsSetupModalBottomSheetContent(
             onSaveClick = {},
             blockedAppsDuringRest = List(24) { painterResource(Res.drawable.ic_block) },
-            blockedAppsDuringWork = emptyList()
-
+            blockedAppsDuringWork = emptyList(),
+            onAddBlockedAppsDuringRestClick = {},
+            onAddBlockedAppsDuringWorkClick = {}
         )
     }
 }

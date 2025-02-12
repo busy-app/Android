@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.setup.composable.blockedapps
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,7 +19,10 @@ import com.flipperdevices.ui.button.dashedBorder
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-internal fun EmptyListAppsBoxComposable(modifier: Modifier = Modifier) {
+internal fun EmptyListAppsBoxComposable(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier.fillMaxWidth()
             .dashedBorder(
@@ -27,6 +31,7 @@ internal fun EmptyListAppsBoxComposable(modifier: Modifier = Modifier) {
             )
             .clip(RoundedCornerShape(12.dp))
             .background(LocalPallet.current.transparent.whiteInvert.quinary)
+            .clickable(onClick = onClick)
             .padding(vertical = 28.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -45,6 +50,8 @@ internal fun EmptyListAppsBoxComposable(modifier: Modifier = Modifier) {
 @Preview
 private fun EmptyListAppsBoxComposablePreview() {
     BusyBarThemeInternal {
-        EmptyListAppsBoxComposable()
+        EmptyListAppsBoxComposable(
+            onClick = {}
+        )
     }
 }

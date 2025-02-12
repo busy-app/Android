@@ -140,10 +140,13 @@ class IntervalsSetupSheetDecomposeComponentImpl(
 
                     PickerConfiguration.BlockedApps -> {
                         BModalBottomSheetContent(horizontalPadding = 0.dp) {
+                            // todo here will be blocked apps later
                             BlockedAppsSetupModalBottomSheetContent(
                                 onSaveClick = slot::dismiss,
                                 blockedAppsDuringWork = emptyList(),
-                                blockedAppsDuringRest = emptyList()
+                                blockedAppsDuringRest = emptyList(),
+                                onAddBlockedAppsDuringRestClick = {},
+                                onAddBlockedAppsDuringWorkClick = {}
                             )
                         }
                     }
