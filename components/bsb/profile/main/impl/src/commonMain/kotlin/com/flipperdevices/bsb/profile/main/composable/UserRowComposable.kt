@@ -27,9 +27,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun UserRowComposable(
     user: BSBUser,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {

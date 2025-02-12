@@ -18,5 +18,7 @@ commonDependencies {
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.cloud.api)
 
+    implementation(projects.components.bsb.profile.passkeyview.api)
+
     implementation(libs.decompose)
 }

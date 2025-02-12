@@ -188,6 +188,8 @@ commonDependencies {
 
     implementation(projects.components.bsb.profile.main.api)
     implementation(projects.components.bsb.profile.main.impl)
+    implementation(projects.components.bsb.profile.passkeyview.api)
+    implementation(projects.components.bsb.profile.passkeyview.impl)
 
     implementation(projects.components.bsb.timer.setup.api)
     implementation(projects.components.bsb.timer.setup.impl)

@@ -1,0 +1,5 @@
+<resources>
+    <string name="profile_passkey_title">Passkeys</string>
+    <string name="profile_passkey_desc">A passkey is a secure, device-based key for faster and safer login. You can use your device password, PIN, Face ID, or Touch ID to verify yourself.</string>
+    <string name="profile_passkey_btn">Create passkey</string>
+</resources>
