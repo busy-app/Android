@@ -25,8 +25,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.core.ui.card_frame.generated.resources.Res
-import busystatusbar.components.core.ui.card_frame.generated.resources.ic_arrow_right
-import busystatusbar.components.core.ui.card_frame.generated.resources.ic_work
+import busystatusbar.components.core.ui.card_frame.generated.resources.ic_preview_arrow_right
+import busystatusbar.components.core.ui.card_frame.generated.resources.ic_preview_work
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import org.jetbrains.compose.resources.painterResource
@@ -74,7 +74,7 @@ fun MediumCardFrameComposable(
                     modifier = Modifier.weight(1f)
                 )
                 Icon(
-                    painter = painterResource(Res.drawable.ic_arrow_right),
+                    painter = painterResource(Res.drawable.ic_preview_arrow_right),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
                     tint = LocalPallet.current
@@ -121,7 +121,7 @@ private fun MediumCardFrameComposablePreview() {
                         modifier = Modifier.weight(1f),
                         title = "Blocked Apps",
                         desc = "On",
-                        icon = painterResource(Res.drawable.ic_work),
+                        icon = painterResource(Res.drawable.ic_preview_work),
                         onClick = {},
                         iconTint = LocalPallet.current
                             .transparent
@@ -137,7 +137,7 @@ private fun MediumCardFrameComposablePreview() {
                         modifier = Modifier.weight(1f),
                         title = "Blocked Apps",
                         desc = "On",
-                        icon = painterResource(Res.drawable.ic_work),
+                        icon = painterResource(Res.drawable.ic_preview_work),
                         onClick = {},
                         enabled = false,
                         iconTint = LocalPallet.current
@@ -154,7 +154,7 @@ private fun MediumCardFrameComposablePreview() {
                         modifier = Modifier.weight(1f),
                         title = "Blocked Apps Very Very Long Text",
                         desc = "On",
-                        icon = painterResource(Res.drawable.ic_work),
+                        icon = painterResource(Res.drawable.ic_preview_work),
                         onClick = {},
                         iconTint = LocalPallet.current
                             .transparent
