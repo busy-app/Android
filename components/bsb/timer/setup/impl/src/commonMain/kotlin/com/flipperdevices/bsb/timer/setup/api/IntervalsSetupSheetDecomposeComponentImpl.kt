@@ -13,7 +13,7 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
-import com.flipperdevices.bsb.timer.setup.composable.intervals.BlockedAppsSetupModalBottomSheetContent
+import com.flipperdevices.bsb.timer.setup.composable.blockedapps.BlockedAppsSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.LongRestSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.RestSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.SoundSetupModalBottomSheetContent
@@ -143,7 +143,7 @@ class IntervalsSetupSheetDecomposeComponentImpl(
                             BlockedAppsSetupModalBottomSheetContent(
                                 onSaveClick = slot::dismiss,
                                 blockedAppsDuringWork = emptyList(),
-                                blockedAppsDuringRest = List(24) { painterResource(Res.drawable.ic_block) }
+                                blockedAppsDuringRest = emptyList()
                             )
                         }
                     }
