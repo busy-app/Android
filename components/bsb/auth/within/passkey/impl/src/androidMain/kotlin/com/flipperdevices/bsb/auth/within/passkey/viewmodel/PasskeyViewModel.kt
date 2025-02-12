@@ -10,8 +10,8 @@ import androidx.credentials.PublicKeyCredential
 import com.flipperdevices.bsb.auth.within.main.model.AuthWay
 import com.flipperdevices.bsb.auth.within.main.model.SignWithInState
 import com.flipperdevices.bsb.auth.within.main.model.SignWithInStateListener
-import com.flipperdevices.bsb.auth.within.passkey.passkey.model.GetPasskeyResponseData
-import com.flipperdevices.bsb.auth.within.passkey.passkey.model.toLoginData
+import com.flipperdevices.bsb.auth.within.passkey.model.GetPasskeyResponseData
+import com.flipperdevices.bsb.auth.within.passkey.model.toLoginData
 import com.flipperdevices.bsb.cloud.api.BSBPasskeyApi
 import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyLoginRequest
 import com.flipperdevices.core.ktx.common.transform
