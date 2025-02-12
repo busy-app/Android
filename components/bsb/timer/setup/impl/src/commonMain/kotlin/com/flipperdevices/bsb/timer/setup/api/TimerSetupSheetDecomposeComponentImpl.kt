@@ -2,7 +2,6 @@ package com.flipperdevices.bsb.timer.setup.api
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
@@ -13,7 +12,6 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
-import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.timer.setup.composable.timer.TimerSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.core.di.AppGraph
@@ -22,7 +20,6 @@ import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
 import kotlinx.serialization.builtins.serializer
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
@@ -30,7 +27,6 @@ class TimerSetupSheetDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     intervalsSetupSheetDecomposeComponentFactory: IntervalsSetupSheetDecomposeComponent.Factory,
     timerSetupViewModelFactory: () -> TimerSetupViewModel,
-    krateApi: KrateApi
 ) : TimerSetupSheetDecomposeComponent(componentContext) {
     private val timerSetupViewModel = instanceKeeper.getOrCreate {
         timerSetupViewModelFactory.invoke()
@@ -58,7 +54,6 @@ class TimerSetupSheetDecomposeComponentImpl(
     @Composable
     override fun Render(modifier: Modifier) {
         val timerSettings = timerSetupViewModel.state.collectAsState()
-        val scope = rememberCoroutineScope()
         ModalBottomSheetSlot(
             slot = childSlot,
             initialDetent = SheetDetent.FullyExpanded,
@@ -69,7 +64,7 @@ class TimerSetupSheetDecomposeComponentImpl(
                     content = {
                         TimerSetupModalBottomSheetContent(
                             timerSettings = timerSettings.value,
-                            onTotalTimeChanged = { duration ->
+                            onTotalTimeChange = { duration ->
                                 timerSetupViewModel.setTotalTime(duration)
                             },
                             onSaveClick = {

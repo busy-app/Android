@@ -20,7 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -29,8 +28,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import kotlin.time.Duration
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -86,7 +85,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     val bufferIndices = totalVisibleItems / 2
 
     LaunchedEffect(middleIndex, currentSelectedItem, scrollState.isScrollInProgress) {
-        onItemSelect(unitConverter.invoke(currentSelectedItem+progression.first))
+        onItemSelect(unitConverter.invoke(currentSelectedItem + progression.first))
         val step = progression.step
         val mod = currentSelectedItem % step
         val div = currentSelectedItem / step
@@ -164,7 +163,11 @@ fun HorizontalWheelPickerPreview(
                 BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                     HorizontalWheelPicker(
                         lineStyle = style ?: LineStyle.Default,
-                        progression = (1.hours.inWholeMinutes.toInt()..12.hours.inWholeMinutes.toInt() step 5.minutes.inWholeMinutes.toInt()),
+                        progression = IntProgression.fromClosedRange(
+                            rangeStart = 1.hours.inWholeMinutes.toInt(),
+                            rangeEnd = 12.hours.inWholeMinutes.toInt(),
+                            step = 5.minutes.inWholeMinutes.toInt()
+                        ),
                         initialSelectedItem = 1.hours.plus(30.minutes).inWholeMinutes.toInt(),
                         onItemSelect = { item -> },
                         unitConverter = { it.minutes }

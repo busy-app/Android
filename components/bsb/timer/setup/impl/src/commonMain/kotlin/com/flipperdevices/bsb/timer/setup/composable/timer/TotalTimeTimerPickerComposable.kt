@@ -35,7 +35,11 @@ fun TotalTimeTimerPickerComposable(
         contentAlignment = Alignment.Center
     ) {
         HorizontalWheelPicker(
-            progression = (1.hours.inWholeMinutes.toInt()..12.hours.inWholeMinutes.toInt() step 5.minutes.inWholeMinutes.toInt()),
+            progression = IntProgression.fromClosedRange(
+                rangeStart = 1.hours.inWholeMinutes.toInt(),
+                rangeEnd = 12.hours.inWholeMinutes.toInt(),
+                step = 5.minutes.inWholeMinutes.toInt()
+            ),
             initialSelectedItem = initialTime.inWholeMinutes.toInt(),
             onItemSelect = { duration -> onTotalTimeChange.invoke(duration) },
             unitConverter = { it.minutes }

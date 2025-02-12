@@ -54,7 +54,6 @@ class IntervalsSetupSheetDecomposeComponentImpl(
 
         @Serializable
         data object Sound : PickerConfiguration
-
     }
 
     override fun showRest() {

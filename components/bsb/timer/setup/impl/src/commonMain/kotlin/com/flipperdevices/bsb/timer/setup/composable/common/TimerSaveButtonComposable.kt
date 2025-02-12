@@ -17,7 +17,7 @@ fun TimerSaveButtonComposable(
             text = "Save",
             painter = null,
             onClick = onClick,
-            modifier = Modifier.fillMaxWidth(0.4f)
+            modifier = Modifier.fillMaxWidth(fraction = 0.4f)
         )
     }
 }

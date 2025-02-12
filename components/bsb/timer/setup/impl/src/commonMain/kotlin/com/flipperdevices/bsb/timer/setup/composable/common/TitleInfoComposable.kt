@@ -29,7 +29,6 @@ internal fun TitleInfoComposable(
     modifier: Modifier = Modifier.Companion,
     iconTint: Color = Color.Companion.Unspecified,
 ) {
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -60,7 +59,6 @@ internal fun TitleInfoComposable(
             fontSize = 16.sp
         )
     }
-
 }
 
 @Composable

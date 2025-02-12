@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,7 +20,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.core.ui.card_frame.generated.resources.Res
@@ -32,6 +30,7 @@ import com.flipperdevices.bsb.core.theme.LocalPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Suppress("LongMethod")
 @Composable
 fun SmallCardFrameComposable(
     title: String,
@@ -53,7 +52,7 @@ fun SmallCardFrameComposable(
             )
             .clickable(enabled = enabled, onClick = onClick)
             .padding(12.dp)
-            .alpha(animateFloatAsState(if (enabled) 1f else 0.3f).value)
+            .alpha(alpha = animateFloatAsState(targetValue = if (enabled) 1f else 0.3f).value)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(22.dp),
@@ -116,7 +115,7 @@ private fun SmallCardFrameComposablePreview() {
     BusyBarThemeInternal {
         Column {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                repeat(3) {
+                repeat(times = 3) {
                     SmallCardFrameComposable(
                         modifier = Modifier.weight(1f),
                         title = "Rest",
@@ -132,7 +131,7 @@ private fun SmallCardFrameComposablePreview() {
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                repeat(3) {
+                repeat(times = 3) {
                     SmallCardFrameComposable(
                         modifier = Modifier.weight(1f),
                         title = "Rest",

@@ -15,20 +15,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_rest
-import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_work
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.preference.model.TimerSettings
-import com.flipperdevices.bsb.timer.setup.composable.common.TitleInfoComposable
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
+import com.flipperdevices.bsb.timer.setup.composable.common.TitleInfoComposable
 import com.flipperdevices.ui.options.OptionSwitch
 import com.flipperdevices.ui.timeline.HorizontalWheelPicker
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
 
 @Composable
 fun RestSetupModalBottomSheetContent(
@@ -43,7 +41,6 @@ fun RestSetupModalBottomSheetContent(
         horizontalAlignment = Alignment.Start,
         modifier = modifier.fillMaxWidth().navigationBarsPadding()
     ) {
-
         TitleInfoComposable(
             modifier = Modifier.padding(horizontal = 16.dp),
             title = "Rest",
@@ -51,7 +48,7 @@ fun RestSetupModalBottomSheetContent(
             icon = painterResource(Res.drawable.ic_rest)
         )
         BoxWithConstraints(
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
                 .height(224.dp)
                 .background(
                     LocalPallet.current
@@ -64,7 +61,11 @@ fun RestSetupModalBottomSheetContent(
             contentAlignment = Alignment.Center
         ) {
             HorizontalWheelPicker(
-                progression = (5.minutes.inWholeMinutes.toInt()..1.hours.inWholeMinutes.toInt() step 5.minutes.inWholeMinutes.toInt()),
+                progression = IntProgression.fromClosedRange(
+                    rangeStart = 5.minutes.inWholeMinutes.toInt(),
+                    rangeEnd = 1.hours.inWholeMinutes.toInt(),
+                    step = 5.minutes.inWholeMinutes.toInt()
+                ),
                 initialSelectedItem = timerSettings.intervalsSettings.rest.inWholeMinutes.toInt(),
                 onItemSelect = { duration -> onTimeChange.invoke(duration) },
                 unitConverter = { it.minutes }

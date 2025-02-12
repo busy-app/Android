@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,7 +20,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.core.ui.card_frame.generated.resources.Res
@@ -33,6 +30,7 @@ import com.flipperdevices.bsb.core.theme.LocalPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Suppress("LongMethod")
 @Composable
 fun MediumCardFrameComposable(
     title: String,
@@ -54,7 +52,7 @@ fun MediumCardFrameComposable(
             )
             .clickable(enabled = true, onClick = onClick)
             .padding(12.dp)
-            .alpha(animateFloatAsState(if (enabled) 1f else 0.3f).value)
+            .alpha(animateFloatAsState(targetValue = if (enabled) 1f else 0.3f).value)
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(22.dp),
@@ -84,7 +82,6 @@ fun MediumCardFrameComposable(
                         .copy(alpha = 0.2f),
                 )
             }
-
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,

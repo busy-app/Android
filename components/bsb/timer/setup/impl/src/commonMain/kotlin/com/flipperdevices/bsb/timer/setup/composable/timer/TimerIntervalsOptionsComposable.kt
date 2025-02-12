@@ -15,8 +15,8 @@ import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_work
 import com.flipperdevices.ui.cardframe.SmallCardFrameComposable
 import com.flipperdevices.ui.options.OptionSwitch
 import com.flipperdevices.ui.timeline.toFormattedTime
-import kotlin.time.Duration
 import org.jetbrains.compose.resources.painterResource
+import kotlin.time.Duration
 
 @Composable
 fun TimerIntervalsOptionsComposable(

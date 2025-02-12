@@ -16,14 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
-import kotlin.time.Duration
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
+import kotlin.time.Duration
 
 @Composable
 fun TimerSetupModalBottomSheetContent(
     timerSettings: TimerSettings,
-    onTotalTimeChanged: (Duration) -> Unit,
+    onTotalTimeChange: (Duration) -> Unit,
     onSaveClick: () -> Unit,
     onIntervalsToggle: () -> Unit,
     onShowWorkTimer: () -> Unit,
@@ -47,7 +46,7 @@ fun TimerSetupModalBottomSheetContent(
                 .padding(16.dp)
         )
         TotalTimeTimerPickerComposable(
-            onTotalTimeChange = onTotalTimeChanged,
+            onTotalTimeChange = onTotalTimeChange,
             initialTime = timerSettings.totalTime
         )
         Spacer(Modifier.height(16.dp))
@@ -84,7 +83,7 @@ private fun TimerSetupModalBottomSheetContentPreview() {
             onShowLongRestTimer = {},
             onIntervalsToggle = {},
             onSaveClick = {},
-            onTotalTimeChanged = {},
+            onTotalTimeChange = {},
             timerSettings = TimerSettings()
         )
     }

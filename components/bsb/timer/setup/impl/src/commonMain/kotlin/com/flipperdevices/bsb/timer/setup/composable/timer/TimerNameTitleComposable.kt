@@ -28,7 +28,7 @@ internal fun TimerNameTitleComposable(
                 LocalPallet.current.transparent
                     .blackInvert
                     .secondary
-                    .copy(0.2f)
+                    .copy(alpha = 0.2f)
             )
             .padding(vertical = 8.dp)
             .padding(horizontal = 16.dp),
