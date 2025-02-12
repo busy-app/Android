@@ -4,7 +4,6 @@ import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyLoginRequest
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class BSBApiPasskeyLoginRequest(
     @SerialName("id")

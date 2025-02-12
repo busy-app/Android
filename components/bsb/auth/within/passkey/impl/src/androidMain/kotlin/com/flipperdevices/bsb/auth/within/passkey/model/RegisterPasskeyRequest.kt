@@ -70,7 +70,6 @@ data class RegisterPasskeyRequest(
     )
 }
 
-
 fun BSBPasskeyRegisterChallenge.toRegisterPasskeyRequest(): RegisterPasskeyRequest {
     return RegisterPasskeyRequest(
         challenge = challenge,

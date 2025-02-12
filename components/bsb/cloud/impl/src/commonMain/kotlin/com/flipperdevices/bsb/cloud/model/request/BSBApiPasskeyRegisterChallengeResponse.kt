@@ -70,4 +70,3 @@ fun BSBApiPasskeyRegisterChallengeResponse.toPublicApi(): BSBPasskeyRegisterChal
         attestation = attestation
     )
 }
-

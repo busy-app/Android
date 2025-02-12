@@ -10,9 +10,9 @@ import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.LocalPallet
 
 @Composable
-fun SeparatorComposable() {
+fun SeparatorComposable(modifier: Modifier = Modifier) {
     Box(
-        Modifier.fillMaxWidth()
+        modifier.fillMaxWidth()
             .height(1.dp)
             .background(LocalPallet.current.neutral.primary)
     )

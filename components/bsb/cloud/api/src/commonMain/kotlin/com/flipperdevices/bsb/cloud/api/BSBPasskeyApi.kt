@@ -1,8 +1,8 @@
 package com.flipperdevices.bsb.cloud.api
 
 import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyLoginRequest
-import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyRegisterRequest
 import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyRegisterChallenge
+import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyRegisterRequest
 import kotlinx.serialization.json.JsonElement
 
 interface BSBPasskeyApi {

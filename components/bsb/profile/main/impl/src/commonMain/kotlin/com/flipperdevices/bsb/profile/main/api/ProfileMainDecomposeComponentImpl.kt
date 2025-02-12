@@ -14,11 +14,9 @@ import com.flipperdevices.bsb.cloud.model.BSBUser
 import com.flipperdevices.bsb.profile.main.composable.SeparatorComposable
 import com.flipperdevices.bsb.profile.main.composable.UserRowComposable
 import com.flipperdevices.bsb.profile.passkeyview.api.PasskeyViewScreenDecomposeComponent
-import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
 class ProfileMainDecomposeComponentImpl(
