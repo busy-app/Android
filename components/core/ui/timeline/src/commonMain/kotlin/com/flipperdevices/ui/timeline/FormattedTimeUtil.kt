@@ -12,7 +12,7 @@ internal fun Int.toFormattedTime(): String {
     return if (this < SINGLE_CHAR_NUMBER_LIMIT) "0$this" else "$this"
 }
 
-internal fun Duration.toFormattedTime(): String {
+fun Duration.toFormattedTime(): String {
     return this.toComponents { days, hours, minutes, seconds, nanoseconds ->
         when {
             days > 0 -> "${days}d ${hours}h ${minutes.toFormattedTime()}m ${seconds.toFormattedTime()}s"

@@ -6,14 +6,14 @@ import kotlin.time.Duration.Companion.minutes
 
 @Serializable
 data class TimerSettings(
-    val timer: Duration = 25.minutes,
+    val totalTime: Duration = 25.minutes,
     val intervalsSettings: IntervalsSettings = IntervalsSettings()
 ) {
     @Serializable
     data class IntervalsSettings(
+        val work: Duration = 25.minutes,
         val rest: Duration = 5.minutes,
-        val longRest: Duration = 5.minutes,
-        val cycles: Int = 2,
+        val longRest: Duration = 15.minutes,
         val isEnabled: Boolean = false
     )
 }

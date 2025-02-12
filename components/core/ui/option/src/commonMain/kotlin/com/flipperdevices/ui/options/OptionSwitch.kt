@@ -65,10 +65,8 @@ fun OptionSwitch(
             Text(
                 text = text,
                 color = LocalPallet.current
-                    .transparent
-                    .whiteInvert
-                    .primary
-                    .copy(alpha = 0.5f),
+                    .white
+                    .invert,
                 textAlign = TextAlign.Start,
                 fontSize = 18.sp
             )

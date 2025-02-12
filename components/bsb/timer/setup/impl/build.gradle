@@ -9,13 +9,16 @@ commonDependencies {
     implementation(projects.components.bsb.timer.setup.api)
 
     implementation(projects.components.core.di)
-    implementation(projects.components.core.ui.picker)
     implementation(projects.components.core.data)
     implementation(projects.components.bsb.core.theme)
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.core.ui.lifecycle)
     implementation(projects.components.core.ui.sheet)
+    implementation(projects.components.core.ui.picker)
     implementation(projects.components.core.ui.button)
+    implementation(projects.components.core.ui.timeline)
+    implementation(projects.components.core.ui.cardFrame)
+    implementation(projects.components.core.ui.option)
 
     implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.preference.api)

@@ -2,6 +2,7 @@ package com.flipperdevices.ui.cardframe
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -70,8 +71,7 @@ fun MediumCardFrameComposable(
                         .invert,
                     fontSize = 18.sp,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).basicMarquee(iterations = Int.MAX_VALUE)
                 )
                 Icon(
                     painter = painterResource(Res.drawable.ic_preview_arrow_right),

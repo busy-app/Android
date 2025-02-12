@@ -37,7 +37,7 @@ class TimerOffScreenDecomposeComponentImpl(
             onTimeClick = { timerSetupSheetDecomposeComponent.show() },
             onStartClick = {
                 coroutineScope.launch {
-                    val timerState = TimerState(krateApi.timerSettingsKrate.flow.first().timer)
+                    val timerState = TimerState(krateApi.timerSettingsKrate.flow.first().totalTime)
                     timerApi.startTimer(timerState)
                 }
             }

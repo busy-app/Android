@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composables.core.BottomSheetScope
 import com.composables.core.DragIndication
@@ -31,6 +32,7 @@ import com.composables.core.Sheet
 @Suppress("ModifierMissing")
 fun ModalBottomSheetScope.BModalBottomSheetContent(
     background: Color = Color(color = 0xFF1E1E1E), // todo
+    horizontalPadding: Dp = 24.dp,
     content: @Composable BottomSheetScope.() -> Unit
 ) {
     Scrim()
@@ -44,7 +46,7 @@ fun ModalBottomSheetScope.BModalBottomSheetContent(
             .shadow(4.dp, RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp))
             .clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp))
             .background(background) // todo
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = horizontalPadding)
             .fillMaxWidth()
             .imePadding(),
     ) {

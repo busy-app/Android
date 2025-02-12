@@ -75,6 +75,7 @@ fun BusyBarThemeInternal(
     isLight: Boolean = true,
     content: @Composable () -> Unit,
 ) {
+    val isLight = true
     val pallet = getThemedPallet(
         isLight = isLight
     )

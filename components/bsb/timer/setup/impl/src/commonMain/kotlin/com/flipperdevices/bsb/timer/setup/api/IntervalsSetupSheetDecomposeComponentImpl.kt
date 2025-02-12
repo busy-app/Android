@@ -17,7 +17,6 @@ import com.flipperdevices.ui.picker.rememberTimerState
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
 import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -44,13 +43,17 @@ class IntervalsSetupSheetDecomposeComponentImpl(
     @Serializable
     private sealed interface PickerConfiguration {
         @Serializable
+        data object Work : PickerConfiguration
+
+        @Serializable
         data object Rest : PickerConfiguration
 
         @Serializable
         data object LongRest : PickerConfiguration
 
         @Serializable
-        data object Cycles : PickerConfiguration
+        data object Sound : PickerConfiguration
+
     }
 
     override fun showRest() {
@@ -61,8 +64,12 @@ class IntervalsSetupSheetDecomposeComponentImpl(
         slot.activate(PickerConfiguration.LongRest)
     }
 
-    override fun showCycles() {
-        slot.activate(PickerConfiguration.Cycles)
+    override fun showWork() {
+        slot.activate(PickerConfiguration.Work)
+    }
+
+    override fun showSound() {
+        slot.activate(PickerConfiguration.Sound)
     }
 
     // todo This method will be rewritten with another design
@@ -76,20 +83,9 @@ class IntervalsSetupSheetDecomposeComponentImpl(
             onDismiss = { slot.dismiss() },
             content = {
                 when (it) {
-                    PickerConfiguration.Cycles -> {
+                    PickerConfiguration.Work -> {
                         BModalBottomSheetContent {
-                            PickerContent(
-                                title = "Cycles",
-                                desc = "Pick how many focus and rest cycles you want to complete during your session",
-                                onSaveClick = { value ->
-                                    timerSetupViewModel.setCycles(value)
-                                    slot.dismiss()
-                                },
-                                numberSelectorState = rememberTimerState(
-                                    intProgression = 0..10 step 1,
-                                    initialValue = state.value.intervalsSettings.cycles
-                                )
-                            )
+
                         }
                     }
 
@@ -128,6 +124,8 @@ class IntervalsSetupSheetDecomposeComponentImpl(
                             )
                         }
                     }
+
+                    PickerConfiguration.Sound -> Unit
                 }
             }
         )

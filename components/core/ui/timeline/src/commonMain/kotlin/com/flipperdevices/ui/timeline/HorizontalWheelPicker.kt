@@ -55,7 +55,7 @@ private const val STEP_DIVISION = 5
 @Suppress("LambdaParameterInRestartableEffect", "MagicNumber", "MaxLineLength", "LongMethod")
 fun BoxWithConstraintsScope.HorizontalWheelPicker(
     progression: IntProgression,
-    onItemSelect: (Int) -> Unit,
+    onItemSelect: (Duration) -> Unit,
     modifier: Modifier = Modifier,
     wheelPickerWidth: Dp? = null,
     unitConverter: (Int) -> Duration = { it.seconds },
@@ -86,7 +86,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     val bufferIndices = totalVisibleItems / 2
 
     LaunchedEffect(middleIndex, currentSelectedItem, scrollState.isScrollInProgress) {
-        onItemSelect(currentSelectedItem + progression.first)
+        onItemSelect(unitConverter.invoke(currentSelectedItem + progression.first))
         val step = progression.step
         val mod = currentSelectedItem % step
         val div = currentSelectedItem / step

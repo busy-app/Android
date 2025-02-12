@@ -2,6 +2,7 @@ package com.flipperdevices.ui.cardframe
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.core.ui.card_frame.generated.resources.Res
@@ -82,7 +84,9 @@ fun SmallCardFrameComposable(
                         modifier = Modifier.size(24.dp)
                     )
                     Text(
+                        modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
                         text = desc,
+                        maxLines = 1,
                         color = LocalPallet.current
                             .transparent
                             .whiteInvert
