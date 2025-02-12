@@ -75,7 +75,7 @@ fun BusyBarThemeInternal(
     isLight: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    val isLight = true
+    val isLight = true // todo there's something wrong with dark theme colors at the moment
     val pallet = getThemedPallet(
         isLight = isLight
     )
