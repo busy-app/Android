@@ -62,6 +62,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     initialSelectedItem: Int = progression.first,
     lineStyle: LineStyle = LineStyle.Default
 ) {
+    val initialSelectedItem = initialSelectedItem.minus(progression.first).coerceAtLeast(progression.first)
     check(progression.step % STEP_DIVISION == 0) {
         "Progression step must be divided by $STEP_DIVISION!"
     }
@@ -73,7 +74,6 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     val effectiveWidth = wheelPickerWidth ?: screenWidthDp
 
     var currentSelectedItem by remember { mutableIntStateOf(initialSelectedItem) }
-    var isIndexUpdateBlocked by remember { mutableStateOf(false) }
 
     val scrollState: LazyListState = rememberLazyListState(initialFirstVisibleItemIndex = initialSelectedItem)
     val textScrollState = rememberLazyListState(initialFirstVisibleItemIndex = initialSelectedItem)
@@ -86,7 +86,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     val bufferIndices = totalVisibleItems / 2
 
     LaunchedEffect(middleIndex, currentSelectedItem, scrollState.isScrollInProgress) {
-        onItemSelect(unitConverter.invoke(currentSelectedItem))
+        onItemSelect(unitConverter.invoke(currentSelectedItem+progression.first))
         val step = progression.step
         val mod = currentSelectedItem % step
         val div = currentSelectedItem / step
@@ -114,7 +114,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                 val adjustedIndex = index - bufferIndices
                 val isSelected = index == middleIndex
 
-                if (isSelected && !isIndexUpdateBlocked) {
+                if (isSelected) {
                     currentSelectedItem = adjustedIndex
                 }
 

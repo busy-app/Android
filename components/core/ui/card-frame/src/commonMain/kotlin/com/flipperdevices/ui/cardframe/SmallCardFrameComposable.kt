@@ -51,7 +51,7 @@ fun SmallCardFrameComposable(
                     .quaternary
                     .copy(alpha = 0.02f)
             )
-            .clickable(enabled = true, onClick = onClick)
+            .clickable(enabled = enabled, onClick = onClick)
             .padding(12.dp)
             .alpha(animateFloatAsState(if (enabled) 1f else 0.3f).value)
     ) {

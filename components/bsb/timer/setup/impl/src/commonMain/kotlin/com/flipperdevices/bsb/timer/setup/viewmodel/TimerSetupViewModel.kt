@@ -17,6 +17,30 @@ class TimerSetupViewModel(
         sharingStarted = SharingStarted.Eagerly
     )
 
+    fun toggleWorkAutoStart() {
+        viewModelScope.launch {
+            krateApi.timerSettingsKrate.update { timerSettings ->
+                timerSettings.copy(
+                    intervalsSettings = timerSettings.intervalsSettings.copy(
+                        autoStartWork = !timerSettings.intervalsSettings.autoStartWork
+                    )
+                )
+            }
+        }
+    }
+
+    fun toggleRestAutoStart() {
+        viewModelScope.launch {
+            krateApi.timerSettingsKrate.update { timerSettings ->
+                timerSettings.copy(
+                    intervalsSettings = timerSettings.intervalsSettings.copy(
+                        autoStartRest = !timerSettings.intervalsSettings.autoStartRest
+                    )
+                )
+            }
+        }
+    }
+
     fun toggleIntervals() {
         viewModelScope.launch {
             krateApi.timerSettingsKrate.update { timerSettings ->
@@ -45,6 +69,18 @@ class TimerSetupViewModel(
                 timerSettings.copy(
                     intervalsSettings = timerSettings.intervalsSettings.copy(
                         rest = duration
+                    )
+                )
+            }
+        }
+    }
+
+    fun setWork(duration: Duration) {
+        viewModelScope.launch {
+            krateApi.timerSettingsKrate.update { timerSettings ->
+                timerSettings.copy(
+                    intervalsSettings = timerSettings.intervalsSettings.copy(
+                        work = duration
                     )
                 )
             }

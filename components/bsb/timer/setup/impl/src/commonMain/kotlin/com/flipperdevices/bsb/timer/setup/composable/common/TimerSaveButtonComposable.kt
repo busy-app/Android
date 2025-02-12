@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.setup.composable.timer
+package com.flipperdevices.bsb.timer.setup.composable.common
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

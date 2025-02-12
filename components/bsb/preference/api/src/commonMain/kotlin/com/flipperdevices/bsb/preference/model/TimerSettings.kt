@@ -14,6 +14,8 @@ data class TimerSettings(
         val work: Duration = 25.minutes,
         val rest: Duration = 5.minutes,
         val longRest: Duration = 15.minutes,
+        val autoStartWork: Boolean = true,
+        val autoStartRest: Boolean = true,
         val isEnabled: Boolean = false
     )
 }

@@ -50,7 +50,8 @@ fun TimerIntervalsOptionsComposable(
                 desc = workTime.toFormattedTime(),
                 icon = painterResource(Res.drawable.ic_work),
                 onClick = onShowWorkTimer,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = isIntervalsEnabled
             )
 
             SmallCardFrameComposable(
@@ -58,7 +59,8 @@ fun TimerIntervalsOptionsComposable(
                 desc = restTime.toFormattedTime(),
                 icon = painterResource(Res.drawable.ic_rest),
                 onClick = onShowRestTimer,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = isIntervalsEnabled
             )
 
             SmallCardFrameComposable(
@@ -66,7 +68,8 @@ fun TimerIntervalsOptionsComposable(
                 desc = longRestTime.toFormattedTime(),
                 icon = painterResource(Res.drawable.ic_long_rest),
                 onClick = onShowLongRestTimer,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                enabled = isIntervalsEnabled
             )
         }
     }
