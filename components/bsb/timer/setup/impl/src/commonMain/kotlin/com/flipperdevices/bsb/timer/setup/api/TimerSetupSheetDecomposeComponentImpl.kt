@@ -68,7 +68,7 @@ class TimerSetupSheetDecomposeComponentImpl(
                                 timerSetupViewModel.setTotalTime(duration)
                             },
                             onSaveClick = {
-                                // todo
+                                slot.dismiss()
                             },
                             onIntervalsToggle = {
                                 timerSetupViewModel.toggleIntervals()

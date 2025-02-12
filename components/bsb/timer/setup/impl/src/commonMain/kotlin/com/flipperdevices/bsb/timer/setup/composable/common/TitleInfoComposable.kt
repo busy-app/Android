@@ -25,7 +25,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 internal fun TitleInfoComposable(
     icon: Painter,
     title: String,
-    desc: String,
+    desc: String?,
     modifier: Modifier = Modifier.Companion,
     iconTint: Color = Color.Companion.Unspecified,
 ) {
@@ -51,13 +51,15 @@ internal fun TitleInfoComposable(
                 fontSize = 24.sp
             )
         }
-        Text(
-            text = desc,
-            color = LocalPallet.current
-                .neutral
-                .tertiary,
-            fontSize = 16.sp
-        )
+        desc?.let {
+            Text(
+                text = desc,
+                color = LocalPallet.current
+                    .neutral
+                    .tertiary,
+                fontSize = 16.sp
+            )
+        }
     }
 }
 

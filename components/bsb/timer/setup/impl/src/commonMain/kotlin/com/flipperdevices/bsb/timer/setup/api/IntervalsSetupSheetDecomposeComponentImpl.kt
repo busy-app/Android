@@ -13,6 +13,7 @@ import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.LongRestSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.RestSetupModalBottomSheetContent
+import com.flipperdevices.bsb.timer.setup.composable.intervals.SoundSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.WorkSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.core.di.AppGraph
@@ -80,16 +81,16 @@ class IntervalsSetupSheetDecomposeComponentImpl(
         ModalBottomSheetSlot(
             slot = childSlot,
             initialDetent = SheetDetent.FullyExpanded,
-            onDismiss = { slot.dismiss() },
+            onDismiss = slot::dismiss,
             content = {
                 when (it) {
                     PickerConfiguration.Work -> {
                         BModalBottomSheetContent(horizontalPadding = 0.dp) {
                             WorkSetupModalBottomSheetContent(
                                 timerSettings = timerSettings.value,
-                                onSaveClick = {},
-                                onTimeChange = { duration -> timerSetupViewModel.setWork(duration) },
-                                onAutoStartToggle = { timerSetupViewModel.toggleWorkAutoStart() },
+                                onSaveClick = slot::dismiss,
+                                onTimeChange = timerSetupViewModel::setWork,
+                                onAutoStartToggle = timerSetupViewModel::toggleWorkAutoStart,
                             )
                         }
                     }
@@ -98,8 +99,8 @@ class IntervalsSetupSheetDecomposeComponentImpl(
                         BModalBottomSheetContent(horizontalPadding = 0.dp) {
                             LongRestSetupModalBottomSheetContent(
                                 timerSettings = timerSettings.value,
-                                onSaveClick = {},
-                                onTimeChange = { duration -> timerSetupViewModel.setLongRest(duration) },
+                                onSaveClick = slot::dismiss,
+                                onTimeChange = timerSetupViewModel::setLongRest,
                             )
                         }
                     }
@@ -108,14 +109,23 @@ class IntervalsSetupSheetDecomposeComponentImpl(
                         BModalBottomSheetContent(horizontalPadding = 0.dp) {
                             RestSetupModalBottomSheetContent(
                                 timerSettings = timerSettings.value,
-                                onSaveClick = {},
-                                onTimeChange = { duration -> timerSetupViewModel.setRest(duration) },
-                                onAutoStartToggle = { timerSetupViewModel.toggleRestAutoStart() },
+                                onSaveClick = slot::dismiss,
+                                onTimeChange = timerSetupViewModel::setRest,
+                                onAutoStartToggle = timerSetupViewModel::toggleRestAutoStart,
                             )
                         }
                     }
 
-                    PickerConfiguration.Sound -> Unit
+                    PickerConfiguration.Sound -> {
+                        BModalBottomSheetContent(horizontalPadding = 0.dp) {
+                            SoundSetupModalBottomSheetContent(
+                                timerSettings = timerSettings.value,
+                                onSaveClick = slot::dismiss,
+                                onAlertBeforeWorkStartsToggle = timerSetupViewModel::toggleSoundBeforeWorkStarts,
+                                onAlertBeforeWorkEndsToggle = timerSetupViewModel::toggleSoundBeforeWorkEnds
+                            )
+                        }
+                    }
                 }
             }
         )

@@ -41,6 +41,30 @@ class TimerSetupViewModel(
         }
     }
 
+    fun toggleSoundBeforeWorkStarts() {
+        viewModelScope.launch {
+            krateApi.timerSettingsKrate.update { timerSettings ->
+                timerSettings.copy(
+                    soundSettings = timerSettings.soundSettings.copy(
+                        alertBeforeWorkStarts = !timerSettings.soundSettings.alertBeforeWorkStarts
+                    )
+                )
+            }
+        }
+    }
+
+    fun toggleSoundBeforeWorkEnds() {
+        viewModelScope.launch {
+            krateApi.timerSettingsKrate.update { timerSettings ->
+                timerSettings.copy(
+                    soundSettings = timerSettings.soundSettings.copy(
+                        alertBeforeWorkEnds = !timerSettings.soundSettings.alertBeforeWorkEnds
+                    )
+                )
+            }
+        }
+    }
+
     fun toggleIntervals() {
         viewModelScope.launch {
             krateApi.timerSettingsKrate.update { timerSettings ->
