@@ -80,7 +80,7 @@ class TimerSetupSheetDecomposeComponentImpl(
                                 intervalsSetupSheetDecomposeComponent.showSound()
                             },
                             onBlockedAppsClick = {
-                                // todo
+                                intervalsSetupSheetDecomposeComponent.showBlockedApps()
                             },
                             onShowWorkTimer = {
                                 intervalsSetupSheetDecomposeComponent.showWork()

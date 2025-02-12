@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_block
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
@@ -11,6 +13,7 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
+import com.flipperdevices.bsb.timer.setup.composable.intervals.BlockedAppsSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.LongRestSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.RestSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.SoundSetupModalBottomSheetContent
@@ -22,6 +25,7 @@ import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
 import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
+import org.jetbrains.compose.resources.painterResource
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
@@ -55,6 +59,9 @@ class IntervalsSetupSheetDecomposeComponentImpl(
 
         @Serializable
         data object Sound : PickerConfiguration
+
+        @Serializable
+        data object BlockedApps : PickerConfiguration
     }
 
     override fun showRest() {
@@ -71,6 +78,10 @@ class IntervalsSetupSheetDecomposeComponentImpl(
 
     override fun showSound() {
         slot.activate(PickerConfiguration.Sound)
+    }
+
+    override fun showBlockedApps() {
+        slot.activate(PickerConfiguration.BlockedApps)
     }
 
     // todo This method will be rewritten with another design
@@ -123,6 +134,16 @@ class IntervalsSetupSheetDecomposeComponentImpl(
                                 onSaveClick = slot::dismiss,
                                 onAlertBeforeWorkStartsToggle = timerSetupViewModel::toggleSoundBeforeWorkStarts,
                                 onAlertBeforeWorkEndsToggle = timerSetupViewModel::toggleSoundBeforeWorkEnds
+                            )
+                        }
+                    }
+
+                    PickerConfiguration.BlockedApps -> {
+                        BModalBottomSheetContent(horizontalPadding = 0.dp) {
+                            BlockedAppsSetupModalBottomSheetContent(
+                                onSaveClick = slot::dismiss,
+                                blockedAppsDuringWork = emptyList(),
+                                blockedAppsDuringRest = List(24) { painterResource(Res.drawable.ic_block) }
                             )
                         }
                     }

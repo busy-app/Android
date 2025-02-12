@@ -15,6 +15,8 @@ abstract class IntervalsSetupSheetDecomposeComponent(
 
     abstract fun showSound()
 
+    abstract fun showBlockedApps()
+
     fun interface Factory {
         operator fun invoke(
             componentContext: ComponentContext,
