@@ -2,7 +2,11 @@ package com.flipperdevices.bsb.cloud.api
 
 import com.flipperdevices.bsb.cloud.model.BSBResponse
 import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyLoginRequest
+import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyRegisterRequest
+import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyRegisterChallenge
+import com.flipperdevices.bsb.cloud.model.request.BSBApiPasskeyRegisterChallengeResponse
 import com.flipperdevices.bsb.cloud.model.request.toApiRequest
+import com.flipperdevices.bsb.cloud.model.request.toPublicApi
 import com.flipperdevices.bsb.cloud.model.response.BSBApiToken
 import com.flipperdevices.bsb.cloud.utils.NetworkConstants
 import com.flipperdevices.core.di.AppGraph
@@ -38,6 +42,26 @@ class BSBPasskeyApiImpl(
         runCatching {
             httpClient.post {
                 url("${NetworkConstants.BASE_URL}/v0/auth/passkey/authentication")
+                setBody(request.toApiRequest())
+            }.body<BSBResponse<BSBApiToken>>()
+        }.transform { authApi.signIn(token = it.success.token) }
+    }
+
+    override suspend fun getRegisterRequest(): Result<BSBPasskeyRegisterChallenge> =
+        withContext(NETWORK_DISPATCHER) {
+            runCatching {
+                httpClient.get {
+                    url("${NetworkConstants.BASE_URL}/v0/auth/passkey/registration/options")
+                }.body<BSBResponse<BSBApiPasskeyRegisterChallengeResponse>>().success.toPublicApi()
+            }
+        }
+
+    override suspend fun passkeyRegister(
+        request: BSBPasskeyRegisterRequest
+    ): Result<Unit> = withContext(NETWORK_DISPATCHER) {
+        runCatching {
+            httpClient.post {
+                url("${NetworkConstants.BASE_URL}/v0/auth/passkey/registration")
                 setBody(request.toApiRequest())
             }.body<BSBResponse<BSBApiToken>>()
         }.transform { authApi.signIn(token = it.success.token) }

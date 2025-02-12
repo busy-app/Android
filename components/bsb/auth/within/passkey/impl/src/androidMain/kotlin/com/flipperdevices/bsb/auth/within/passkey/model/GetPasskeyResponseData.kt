@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.auth.within.passkey.passkey.model
+package com.flipperdevices.bsb.auth.within.passkey.model
 
 import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyLoginRequest
 import kotlinx.serialization.SerialName
