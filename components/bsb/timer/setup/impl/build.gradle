@@ -27,4 +27,5 @@ commonDependencies {
     implementation(libs.decompose.composeExtension)
     implementation(libs.kotlin.datetime)
     implementation(libs.composables)
+    implementation(libs.kotlin.immutable)
 }

@@ -20,14 +20,16 @@ import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
 import com.flipperdevices.bsb.timer.setup.composable.common.TitleInfoComposable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
 
 @Composable
 private fun BlockedAppsBoxComposable(
     title: String,
-    appIcons: List<Painter>,
+    appIcons: ImmutableList<Painter>,
     onAddApps: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -57,8 +59,8 @@ private fun BlockedAppsBoxComposable(
 
 @Composable
 fun BlockedAppsSetupModalBottomSheetContent(
-    blockedAppsDuringRest: List<Painter>,
-    blockedAppsDuringWork: List<Painter>,
+    blockedAppsDuringRest: ImmutableList<Painter>,
+    blockedAppsDuringWork: ImmutableList<Painter>,
     onAddBlockedAppsDuringWorkClick: () -> Unit,
     onAddBlockedAppsDuringRestClick: () -> Unit,
     onSaveClick: () -> Unit,
@@ -102,8 +104,8 @@ private fun BlockedAppsSetupModalBottomSheetContentPreview() {
     BusyBarThemeInternal {
         BlockedAppsSetupModalBottomSheetContent(
             onSaveClick = {},
-            blockedAppsDuringRest = List(24) { painterResource(Res.drawable.ic_block) },
-            blockedAppsDuringWork = emptyList(),
+            blockedAppsDuringRest = List(24) { painterResource(Res.drawable.ic_block) }.toImmutableList(),
+            blockedAppsDuringWork = persistentListOf(),
             onAddBlockedAppsDuringRestClick = {},
             onAddBlockedAppsDuringWorkClick = {}
         )

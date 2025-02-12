@@ -28,12 +28,14 @@ import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_block
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun FilledListAppsBoxComposable(
-    items: List<Painter>,
+    items: ImmutableList<Painter>,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -84,7 +86,6 @@ internal fun FilledListAppsBoxComposable(
                 modifier = Modifier.size(24.dp)
             )
         }
-
     }
 }
 
@@ -93,7 +94,7 @@ internal fun FilledListAppsBoxComposable(
 private fun FilledListAppsBoxComposablePreview() {
     BusyBarThemeInternal {
         FilledListAppsBoxComposable(
-            items = List(24) { painterResource(Res.drawable.ic_block) },
+            items = List(size = 24) { painterResource(Res.drawable.ic_block) }.toImmutableList(),
             onClick = {}
         )
     }

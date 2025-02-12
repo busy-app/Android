@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 
 // Here's modifier with composable. It will anyway recompose because we need lazyListState
 @Composable
+@Suppress("MagicNumber")
 internal fun Modifier.fadeRightBorder(lazyListState: LazyListState): Modifier {
     val startAlpha by animateFloatAsState(
         targetValue = when {

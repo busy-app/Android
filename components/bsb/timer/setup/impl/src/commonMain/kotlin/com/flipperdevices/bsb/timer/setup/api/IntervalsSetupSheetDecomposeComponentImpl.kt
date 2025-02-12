@@ -4,8 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
-import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_block
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
@@ -22,10 +20,10 @@ import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
 import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-import org.jetbrains.compose.resources.painterResource
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
@@ -143,8 +141,8 @@ class IntervalsSetupSheetDecomposeComponentImpl(
                             // todo here will be blocked apps later
                             BlockedAppsSetupModalBottomSheetContent(
                                 onSaveClick = slot::dismiss,
-                                blockedAppsDuringWork = emptyList(),
-                                blockedAppsDuringRest = emptyList(),
+                                blockedAppsDuringWork = persistentListOf(),
+                                blockedAppsDuringRest = persistentListOf(),
                                 onAddBlockedAppsDuringRestClick = {},
                                 onAddBlockedAppsDuringWorkClick = {}
                             )
