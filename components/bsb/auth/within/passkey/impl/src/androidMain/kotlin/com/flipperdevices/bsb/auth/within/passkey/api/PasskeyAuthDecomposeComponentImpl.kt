@@ -11,7 +11,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,7 +42,6 @@ class PasskeyAuthDecomposeComponentImpl(
     private val viewModel = viewModelWithFactory(withInStateListener) {
         passkeyViewModelFactory(withInStateListener)
     }
-
 
     @Composable
     override fun Render(
@@ -91,7 +89,6 @@ class PasskeyAuthDecomposeComponentImpl(
             }
         }
     }
-
 
     @Inject
     @ContributesBinding(AppGraph::class, PasskeyAuthDecomposeComponent.Factory::class)

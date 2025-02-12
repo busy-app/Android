@@ -2,7 +2,6 @@ package com.flipperdevices.bsb.auth.within.passkey.viewmodel
 
 import android.content.Context
 import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.GetPublicKeyCredentialOption
@@ -13,13 +12,10 @@ import com.flipperdevices.bsb.auth.within.main.model.SignWithInStateListener
 import com.flipperdevices.bsb.auth.within.passkey.model.GetPasskeyResponseData
 import com.flipperdevices.bsb.auth.within.passkey.model.toLoginData
 import com.flipperdevices.bsb.cloud.api.BSBPasskeyApi
-import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyLoginRequest
 import com.flipperdevices.core.ktx.common.transform
 import com.flipperdevices.core.log.error
-import com.flipperdevices.core.log.info
 import com.flipperdevices.core.log.sensitive
 import com.flipperdevices.core.ui.lifecycle.DecomposeViewModel
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString

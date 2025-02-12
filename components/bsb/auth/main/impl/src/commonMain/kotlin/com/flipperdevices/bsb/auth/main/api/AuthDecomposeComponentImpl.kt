@@ -89,7 +89,7 @@ class AuthDecomposeComponentImpl(
             componentContext,
             onBack = navigation::pop,
             email = config.email,
-            onComplete = onComplete ,
+            onComplete = onComplete,
             preFilledPassword = config.preFilledPassword,
             deeplink = config.deeplink
         )

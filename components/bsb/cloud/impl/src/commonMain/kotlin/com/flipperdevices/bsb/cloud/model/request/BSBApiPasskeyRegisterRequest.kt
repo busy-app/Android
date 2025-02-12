@@ -1,10 +1,8 @@
 package com.flipperdevices.bsb.cloud.model.request
 
-import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyLoginRequest
 import com.flipperdevices.bsb.cloud.model.passkey.BSBPasskeyRegisterRequest
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
 
 @Serializable
 data class BSBApiPasskeyRegisterRequest(

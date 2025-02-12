@@ -28,7 +28,8 @@ class ProfileDecomposeComponentImpl(
     @Assisted private val deeplink: Deeplink.Root.Auth?,
     private val preferenceApi: PreferenceApi,
     private val authDecomposeComponentFactory: AuthDecomposeComponent.Factory,
-    private val profileScreenFactory: (ComponentContext, BSBUser, onLogout: () -> Unit) -> ProfileMainDecomposeComponentImpl
+    private val profileScreenFactory:
+    (ComponentContext, BSBUser, onLogout: () -> Unit) -> ProfileMainDecomposeComponentImpl
 ) : ProfileDecomposeComponent<ProfileNavigationConfig>(),
     ComponentContext by componentContext {
     override val stack = childStack(
@@ -36,7 +37,9 @@ class ProfileDecomposeComponentImpl(
         serializer = ProfileNavigationConfig.serializer(),
         initialConfiguration = if (deeplink != null) {
             ProfileNavigationConfig.Login(deeplink)
-        } else getCurrentConfig(),
+        } else {
+            getCurrentConfig()
+        },
         handleBackButton = true,
         childFactory = ::child,
     )

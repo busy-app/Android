@@ -14,7 +14,7 @@ class PasskeyViewScreenDecomposeComponentNoop(
 ) : PasskeyViewScreenDecomposeComponent(componentContext) {
     @Composable
     override fun Render(modifier: Modifier) {
-
+        // Empty
     }
 
     @Inject

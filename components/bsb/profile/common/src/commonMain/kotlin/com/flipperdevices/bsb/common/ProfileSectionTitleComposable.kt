@@ -14,7 +14,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun ProfileSectionTitleComposable(
     title: StringResource,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Row(modifier) {
         Text(

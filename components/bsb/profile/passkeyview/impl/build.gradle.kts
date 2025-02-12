@@ -16,7 +16,6 @@ commonDependencies {
 
     implementation(projects.components.bsb.profile.common)
 
-
     implementation(libs.decompose)
 }
 

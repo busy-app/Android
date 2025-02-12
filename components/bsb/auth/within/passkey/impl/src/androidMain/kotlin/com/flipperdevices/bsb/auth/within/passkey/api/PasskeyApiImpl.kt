@@ -1,19 +1,11 @@
 package com.flipperdevices.bsb.auth.within.passkey.api
 
 import android.content.Context
-import androidx.credentials.CreateCredentialRequest
 import androidx.credentials.CreateCredentialResponse
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.CreatePublicKeyCredentialResponse
 import androidx.credentials.CredentialManager
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.GetCredentialResponse
-import androidx.credentials.GetPublicKeyCredentialOption
-import androidx.credentials.PublicKeyCredential
-import com.flipperdevices.bsb.auth.within.main.model.SignWithInState
-import com.flipperdevices.bsb.auth.within.passkey.model.GetPasskeyResponseData
 import com.flipperdevices.bsb.auth.within.passkey.model.RegisterPasskeyResponseData
-import com.flipperdevices.bsb.auth.within.passkey.model.toLoginData
 import com.flipperdevices.bsb.auth.within.passkey.model.toRegisterData
 import com.flipperdevices.bsb.auth.within.passkey.model.toRegisterPasskeyRequest
 import com.flipperdevices.bsb.cloud.api.BSBPasskeyApi
@@ -22,7 +14,6 @@ import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.ktx.common.transform
 import com.flipperdevices.core.log.sensitive
-import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -78,5 +69,4 @@ class PasskeyApiImpl(
             }
         }
     }
-
 }
