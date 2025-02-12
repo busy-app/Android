@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,11 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
+import busystatusbar.components.core.ui.res_preview.generated.resources.ic_preview_pomodoro
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
+import busystatusbar.components.core.ui.res_preview.generated.resources.Res as PreviewRes
 @Composable
 fun ExpandableOptionComposable(
     isExpanded: Boolean,
@@ -83,7 +82,7 @@ private fun ExpandableOptionComposablePreview() {
                 Column {
                     repeat(times = 4) {
                         OptionHref(
-                            icon = rememberVectorPainter(Icons.Default.Call),
+                            icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                             text = TEXT,
                             onClick = {},
                         )

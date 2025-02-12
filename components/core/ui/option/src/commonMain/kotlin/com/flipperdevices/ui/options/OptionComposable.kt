@@ -10,20 +10,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import busystatusbar.components.core.ui.res_preview.generated.resources.ic_preview_pomodoro
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import busystatusbar.components.core.ui.res_preview.generated.resources.Res as PreviewRes
 
 @Composable
 fun OptionComposable(
@@ -100,7 +100,7 @@ private fun OptionComposablePreview() {
     BusyBarThemeInternal {
         Column {
             OptionComposable(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                 text = TEXT,
                 onClick = {},
                 modifier = modifier,
@@ -110,7 +110,7 @@ private fun OptionComposablePreview() {
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionComposable(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                 text = LONG_TEXT,
                 onClick = {},
                 modifier = modifier,
@@ -120,7 +120,7 @@ private fun OptionComposablePreview() {
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionComposable(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                 text = TEXT,
                 infoText = TEXT,
                 onClick = {},
@@ -131,7 +131,7 @@ private fun OptionComposablePreview() {
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionComposable(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                 text = LONG_TEXT,
                 infoText = TEXT,
                 onClick = {},
@@ -142,7 +142,7 @@ private fun OptionComposablePreview() {
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionComposable(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                 text = LONG_TEXT,
                 infoText = LONG_TEXT,
                 onClick = {},
@@ -153,7 +153,7 @@ private fun OptionComposablePreview() {
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionComposable(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                 text = TEXT,
                 infoText = LONG_TEXT,
                 onClick = {},

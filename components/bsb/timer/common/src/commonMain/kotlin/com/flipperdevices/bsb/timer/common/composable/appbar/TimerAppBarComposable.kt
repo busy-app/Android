@@ -8,19 +8,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import busystatusbar.components.bsb.timer.common.generated.resources.Res
+import busystatusbar.components.bsb.timer.common.generated.resources.ic_arrow_right
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.ui.button.BIconButton
 import com.flipperdevices.ui.button.rememberPragmaticaTextStyle
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -68,7 +68,7 @@ fun TimerAppBarComposable(
         ) {
             BIconButton(
                 modifier = Modifier.size(44.dp),
-                painter = rememberVectorPainter(Icons.Filled.Person), // todo
+                painter = painterResource(Res.drawable.ic_arrow_right),
                 onClick = {},
                 enabled = true,
             )

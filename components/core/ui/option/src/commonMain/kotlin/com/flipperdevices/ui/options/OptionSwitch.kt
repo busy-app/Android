@@ -11,20 +11,20 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import busystatusbar.components.core.ui.res_preview.generated.resources.ic_preview_work
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import busystatusbar.components.core.ui.res_preview.generated.resources.Res as PreviewRes
 
 @Composable
 fun OptionSwitch(
@@ -101,21 +101,21 @@ private fun OptionSwitchPreview() {
     BusyBarThemeInternal {
         Column {
             OptionSwitch(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = TEXT,
                 onCheckChange = {},
                 modifier = modifier
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionSwitch(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = LONG_TEXT,
                 onCheckChange = {},
                 modifier = modifier
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionSwitch(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = TEXT,
                 infoText = TEXT,
                 onCheckChange = {},
@@ -123,7 +123,7 @@ private fun OptionSwitchPreview() {
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionSwitch(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = LONG_TEXT,
                 infoText = TEXT,
                 onCheckChange = {},
@@ -131,7 +131,7 @@ private fun OptionSwitchPreview() {
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionSwitch(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = LONG_TEXT,
                 infoText = LONG_TEXT,
                 onCheckChange = {},
@@ -139,7 +139,7 @@ private fun OptionSwitchPreview() {
             )
             OptionSeparator(Modifier.fillMaxWidth())
             OptionSwitch(
-                icon = rememberVectorPainter(Icons.Default.Call),
+                icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = TEXT,
                 infoText = LONG_TEXT,
                 onCheckChange = {},

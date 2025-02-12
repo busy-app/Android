@@ -14,8 +14,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +23,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_arrow_right
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_block
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
@@ -77,7 +76,7 @@ internal fun FilledListAppsBoxComposable(
                 fontSize = 18.sp
             )
             Icon(
-                imageVector = Icons.Filled.KeyboardArrowRight, // todo
+                painter = painterResource(Res.drawable.ic_arrow_right), // todo
                 contentDescription = null,
                 tint = LocalPallet.current
                     .transparent
