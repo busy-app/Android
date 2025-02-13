@@ -31,6 +31,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CommonRes
 
+@Suppress("LongMethod")
 @Composable
 fun ButtonTimerComposable(
     state: ButtonTimerState,
@@ -43,25 +44,31 @@ fun ButtonTimerComposable(
 ) {
     val backgroundColor by animateColorAsState(
         targetValue = when (state) {
-            ButtonTimerState.START -> Color(color = 0xFF2DAF18)
-                .copy(alpha = 0.1f) // todo
+            ButtonTimerState.START ->
+                LocalPallet.current
+                    .white
+                    .invert
+
             ButtonTimerState.STOP ->
                 LocalPallet.current
                     .transparent
                     .whiteInvert
                     .quaternary
-                    .copy(alpha = 0.05f) // todo
+
             ButtonTimerState.PAUSE ->
                 LocalPallet.current
                     .transparent
                     .whiteInvert
                     .quaternary
-                    .copy(alpha = 0.05f) // todo
         }
     )
     val contentColor by animateColorAsState(
         targetValue = when (state) {
-            ButtonTimerState.START -> Color(color = 0xFF2DAF18) // todo
+            ButtonTimerState.START ->
+                LocalPallet.current
+                    .black
+                    .invert
+
             ButtonTimerState.STOP ->
                 LocalPallet.current
                     .transparent
@@ -73,7 +80,6 @@ fun ButtonTimerComposable(
                     .transparent
                     .whiteInvert
                     .primary
-                    .copy(alpha = 0.5f) // todo
         }
     )
     val text: String = stringResource(

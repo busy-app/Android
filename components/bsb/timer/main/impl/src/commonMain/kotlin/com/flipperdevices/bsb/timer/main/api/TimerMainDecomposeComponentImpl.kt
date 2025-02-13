@@ -7,6 +7,7 @@ import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.flipperdevices.bsb.timer.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.cards.api.CardsDecomposeComponent
 import com.flipperdevices.bsb.timer.main.model.TimerMainNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
@@ -21,10 +22,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class TimerMainDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val mainScreenDecomposeComponent: (
-        componentContext: ComponentContext,
-    ) -> TimerOffScreenDecomposeComponentImpl,
     private val timerStopDecomposeComponent: ActiveTimerScreenDecomposeComponent.Factory,
+    private val cardsDecomposeComponentFactory: CardsDecomposeComponent.Factory,
     timerApi: TimerApi
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     ComponentContext by componentContext {
@@ -50,7 +49,10 @@ class TimerMainDecomposeComponentImpl(
         config: TimerMainNavigationConfig,
         componentContext: ComponentContext
     ): DecomposeComponent = when (config) {
-        TimerMainNavigationConfig.Main -> mainScreenDecomposeComponent(componentContext)
+        TimerMainNavigationConfig.Main -> cardsDecomposeComponentFactory(
+            componentContext = componentContext,
+        )
+
         TimerMainNavigationConfig.Timer -> timerStopDecomposeComponent(componentContext)
     }
 
