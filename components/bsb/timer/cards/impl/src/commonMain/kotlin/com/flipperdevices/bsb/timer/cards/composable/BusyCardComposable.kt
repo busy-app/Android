@@ -121,7 +121,12 @@ fun BusyCardComposable(
                                 .whiteInvert
                                 .primary
                         ),
-                        modifier = Modifier.align(Alignment.CenterEnd),
+                        modifier = Modifier.align(
+                            when {
+                                settings.intervalsSettings.isEnabled -> Alignment.CenterEnd
+                                else -> Alignment.CenterStart
+                            }
+                        ),
                     )
                 }
             }
