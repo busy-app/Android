@@ -17,7 +17,7 @@ commonDependencies {
 
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.dnd.api)
-    implementation(projects.components.bsb.appblocker.api)
+    implementation(projects.components.bsb.appblocker.core.api)
     implementation(projects.components.bsb.root.api)
     implementation(projects.components.bsb.cloud.api)
     implementation(projects.components.bsb.metronome.api)

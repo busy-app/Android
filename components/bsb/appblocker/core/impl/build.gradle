@@ -5,7 +5,7 @@ plugins {
 }
 
 commonDependencies {
-    implementation(projects.components.bsb.appblocker.api)
+    implementation(projects.components.bsb.appblocker.core.api)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.core.di)
 }
