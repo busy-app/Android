@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,12 +48,13 @@ class CardsDecomposeComponentImpl(
             contentAlignment = Alignment.Center
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(92.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                @Suppress("MagicNumber")
                 BusyCardComposable(
-                    background = Color(0xFFE50000),
+                    background = Color(0xFFE50000), // todo no color in design
                     name = "BUSY",
                     settings = krateApi.timerSettingsKrate
                         .stateFlow(coroutineScope)
