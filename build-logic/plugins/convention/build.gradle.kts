@@ -26,5 +26,10 @@ gradlePlugin {
             implementationClass =
                 "com.flipperdevices.buildlogic.plugin.JavaVersionPlugin"
         }
+        create("flipper.rebuild.composeres") {
+            id = name
+            implementationClass =
+                "com.flipperdevices.buildlogic.plugin.BuildComposeResourcesPlugin"
+        }
     }
 }

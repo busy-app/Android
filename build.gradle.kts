@@ -10,8 +10,10 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.atomicflu) apply false
     id("flipper.java.version") apply false
+    id("flipper.rebuild.composeres") apply false
 }
 
 allprojects {
     apply(plugin = "flipper.java.version")
+    apply(plugin="flipper.rebuild.composeres")
 }

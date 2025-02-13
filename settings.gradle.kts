@@ -120,4 +120,6 @@ include(
     ":components:bsb:timer:background:impl",
     ":components:bsb:timer:active:api",
     ":components:bsb:timer:active:impl",
+    ":components:bsb:timer:cards:api",
+    ":components:bsb:timer:cards:impl",
 )
