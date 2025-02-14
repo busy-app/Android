@@ -1,0 +1,4 @@
+<resources>
+    <string name="appblocker_title">Block apps</string>
+    <string name="appblocker_desc">Selected apps and their notifications will be blocked while BUSY is active</string>
+</resources>

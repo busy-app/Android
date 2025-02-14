@@ -161,6 +161,8 @@ commonDependencies {
     implementation(projects.components.bsb.metronome.api)
     implementation(projects.components.bsb.metronome.impl)
 
+    implementation(projects.components.bsb.appblocker.core.api)
+    implementation(projects.components.bsb.appblocker.core.impl)
     implementation(projects.components.bsb.appblocker.card.api)
     implementation(projects.components.bsb.appblocker.card.impl)
     implementation(projects.components.bsb.appblocker.filter.api)

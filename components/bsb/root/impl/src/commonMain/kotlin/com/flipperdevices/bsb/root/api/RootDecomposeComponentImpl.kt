@@ -16,7 +16,7 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushToFront
-import com.flipperdevices.bsb.appblockerscreen.api.AppBlockerScreenDecomposeComponent
+import com.flipperdevices.bsb.appblocker.screen.api.AppBlockerScreenDecomposeComponent
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import com.flipperdevices.bsb.preferencescreen.api.PreferenceScreenDecomposeComponent
 import com.flipperdevices.bsb.profile.main.api.ProfileDecomposeComponent
