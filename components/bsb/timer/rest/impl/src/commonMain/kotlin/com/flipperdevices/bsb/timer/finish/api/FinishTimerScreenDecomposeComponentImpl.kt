@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
-import com.flipperdevices.bsb.timer.finish.composable.FinishComposableContent
+import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
+import com.flipperdevices.bsb.timer.finish.composable.RestComposableContent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
+import kotlin.time.Duration.Companion.minutes
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -21,12 +23,11 @@ class FinishTimerScreenDecomposeComponentImpl(
 
     @Composable
     override fun Render(modifier: Modifier) {
-        FinishComposableContent(
+        RestComposableContent(
             modifier = modifier,
-            breakType = breakType,
-            doneRange = 1..4,
-            onDoneClick = {},
-            onRestClick = {}
+            onSkip = {},
+            timeLeft = 2.minutes,
+            statusType = StatusType.LONG_REST,
         )
     }
 

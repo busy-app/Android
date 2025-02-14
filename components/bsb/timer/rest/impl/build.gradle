@@ -5,7 +5,7 @@ plugins {
 }
 
 commonDependencies {
-    implementation(projects.components.bsb.timer.finish.api)
+    implementation(projects.components.bsb.timer.rest.api)
 
     implementation(projects.components.core.di)
     implementation(projects.components.core.ktx)
