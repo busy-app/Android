@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +31,7 @@ import com.flipperdevices.bsb.timer.common.composable.appbar.StatusLowBarComposa
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.TimerAppBarComposable
 import com.flipperdevices.ui.button.BChipButton
+import com.flipperdevices.ui.timeline.toFormattedTime
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -40,9 +43,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun RestComposableContent(
     timeLeft: Duration,
     statusType: StatusType,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     workPhaseText: String? = null,
-    onSkip: (() -> Unit)? = null
+    onSkip: (() -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier
@@ -68,13 +72,13 @@ fun RestComposableContent(
                 )
             )
     )
-    Box(modifier = modifier) {
+    Box(modifier = modifier.fillMaxSize().navigationBarsPadding().statusBarsPadding()) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(36.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TimerAppBarComposable()
+            TimerAppBarComposable(onBackClick = onBackClick)
             StatusLowBarComposable(
                 type = statusType,
                 statusDesc = workPhaseText
@@ -93,7 +97,7 @@ fun RestComposableContent(
             ) {
                 timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
                     Text(
-                        text = "$minutes",
+                        text = "${minutes.toFormattedTime()}",
                         style = TextStyle(
                             fontSize = 64.sp,
                             fontWeight = FontWeight.W500,
@@ -111,7 +115,7 @@ fun RestComposableContent(
                         )
                     )
                     Text(
-                        text = "$seconds",
+                        text = "${seconds.toFormattedTime()}",
                         style = TextStyle(
                             fontSize = 64.sp,
                             fontWeight = FontWeight.W500,
@@ -162,7 +166,8 @@ private fun RestComposableContentPreview() {
             workPhaseText = "1/4",
             timeLeft = 13.minutes.plus(10.seconds),
             onSkip = {},
-            statusType = StatusType.LONG_REST
+            statusType = StatusType.LONG_REST,
+            onBackClick = {}
         )
     }
 }
@@ -176,7 +181,8 @@ private fun LongRestComposableContentPreview() {
             workPhaseText = "1/4",
             timeLeft = 13.minutes.plus(10.seconds),
             onSkip = {},
-            statusType = StatusType.REST
+            statusType = StatusType.REST,
+            onBackClick = {}
         )
     }
 }

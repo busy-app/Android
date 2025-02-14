@@ -28,6 +28,7 @@ class FinishTimerScreenDecomposeComponentImpl(
             onSkip = {},
             timeLeft = 2.minutes,
             statusType = StatusType.LONG_REST,
+            onBackClick = {}
         )
     }
 

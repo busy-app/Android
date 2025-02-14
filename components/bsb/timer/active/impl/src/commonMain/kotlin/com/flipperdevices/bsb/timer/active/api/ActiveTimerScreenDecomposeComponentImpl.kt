@@ -7,9 +7,10 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
-import com.flipperdevices.bsb.timer.active.composable.TimerActiveComposableScreen
+import com.flipperdevices.bsb.timer.active.composable.TimerOnComposableScreen
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.TimerAction
+import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import me.tatarka.inject.annotations.Assisted
@@ -35,16 +36,25 @@ class ActiveTimerScreenDecomposeComponentImpl(
     @Composable
     override fun Render(modifier: Modifier) {
         timerApi.getState().collectAsState().value?.let { timerState ->
-            TimerActiveComposableScreen(
+            TimerOnComposableScreen(
                 modifier = modifier,
                 workPhaseText = null,
-                timerState = timerState,
-                onStopClick = {
-                    stopSessionSheetDecomposeComponent.show()
+                timeLeft = timerState.timerState.duration,
+                onSkip = {
+
                 },
-                onPauseClick = { timerApi.onAction(TimerAction.PAUSE) },
-                onSkipClick = {},
+                onPauseClick = {
+                    timerApi.onAction(TimerAction.PAUSE)
+                },
+                onBack = {
+                    timerApi.stopTimer()
+                }
             )
+            if (timerState.isOnPause) {
+                PauseFullScreenOverlayComposable(
+                    onStartClick = { timerApi.onAction(TimerAction.PAUSE) }
+                )
+            }
         }
         stopSessionSheetDecomposeComponent.Render(Modifier)
     }

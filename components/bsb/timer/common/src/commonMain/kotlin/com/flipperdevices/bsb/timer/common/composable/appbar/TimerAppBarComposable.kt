@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import busystatusbar.components.bsb.timer.common.generated.resources.Res
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_back
@@ -23,6 +25,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TimerAppBarComposable(
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -40,7 +43,10 @@ fun TimerAppBarComposable(
                     .whiteInvert
                     .secondary,
                 contentDescription = null,
-                modifier = Modifier.size(44.dp)
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = onBackClick)
             )
         }
 
@@ -69,6 +75,6 @@ fun TimerAppBarComposable(
 @Preview
 private fun TimerAppBarComposablePreview() {
     BusyBarThemeInternal {
-        TimerAppBarComposable()
+        TimerAppBarComposable(onBackClick = {})
     }
 }
