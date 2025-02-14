@@ -27,6 +27,7 @@ import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
 import com.flipperdevices.bsb.timer.common.composable.appbar.HintBubble
+import com.flipperdevices.bsb.timer.common.composable.appbar.StatusLowBarComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.TimerAppBarComposable
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -37,7 +38,6 @@ fun TimerOffComposableScreen(
     onTimeClick: () -> Unit,
     onStartClick: () -> Unit,
     modifier: Modifier = Modifier,
-    workPhaseText: String? = null
 ) {
     Box(
         modifier = modifier
@@ -47,9 +47,7 @@ fun TimerOffComposableScreen(
             .navigationBarsPadding()
     ) {
         TimerAppBarComposable(
-            statusType = StatusType.OFF,
             modifier = Modifier.align(Alignment.TopCenter),
-            workPhaseText = workPhaseText,
         )
 
         Column(
@@ -98,7 +96,6 @@ private fun MainScreenComposableScreenPreview() {
     BusyBarThemeInternal {
         TimerOffComposableScreen(
             modifier = Modifier.fillMaxSize(),
-            workPhaseText = "1/4\nwork phase",
             onTimeClick = {},
             onStartClick = {}
         )

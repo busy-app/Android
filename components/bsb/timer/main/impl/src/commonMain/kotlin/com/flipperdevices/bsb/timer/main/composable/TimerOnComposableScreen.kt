@@ -26,6 +26,7 @@ import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
+import com.flipperdevices.bsb.timer.common.composable.appbar.StatusLowBarComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.TimerAppBarComposable
 import com.flipperdevices.ui.button.BChipButton
@@ -37,12 +38,10 @@ import kotlin.time.Duration.Companion.seconds
 @Composable
 @Suppress("LongMethod")
 fun TimerOnComposableScreen(
-    tagName: String,
     timeLeft: Duration,
     modifier: Modifier = Modifier,
     workPhaseText: String? = null,
-    onSkip: (() -> Unit)? = null,
-    roadmapHint: String? = null
+    onSkip: (() -> Unit)? = null
 ) {
     Box(
         modifier = Modifier
@@ -50,19 +49,24 @@ fun TimerOnComposableScreen(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(color = 0xFFEF2828).copy(alpha = 0.1f), // todo
-                        Color.Transparent,
-                        Color.Transparent
+                        Color(color = 0xFF900606), // todo
+                        Color(color = 0xFF430303),
                     )
                 )
             )
     )
     Box(modifier = modifier) {
-        TimerAppBarComposable(
-            statusType = StatusType.BUSY,
-            modifier = Modifier.align(Alignment.TopCenter),
-            workPhaseText = workPhaseText
-        )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(36.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            TimerAppBarComposable()
+            StatusLowBarComposable(
+                type = StatusType.BUSY,
+                statusDesc = workPhaseText
+            )
+        }
 
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -104,32 +108,18 @@ fun TimerOnComposableScreen(
                     )
                 }
             }
-            BChipButton(
-                text = tagName,
-                painter = null,
-                contentColor = LocalPallet.current.transparent
-                    .whiteInvert
-                    .primary
-                    .copy(alpha = 0.5f),
-                background = LocalPallet.current.transparent
-                    .whiteInvert
-                    .quaternary
-                    .copy(alpha = 0.05f),
-                fontSize = 14.sp,
-                contentPadding = PaddingValues(
-                    vertical = 8.dp,
-                    horizontal = 12.dp
-                ),
-                onClick = {},
-            )
-            roadmapHint?.let {
-                Text(
-                    text = roadmapHint,
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.W500,
-                        color = LocalPallet.current.white.invert
-                    )
+            onSkip?.let {
+                BChipButton(
+                    onClick = onSkip,
+                    background = Color.Transparent,
+                    text = "Skip",
+                    painter = null,
+                    fontSize = 17.sp,
+                    contentColor = LocalPallet.current
+                        .transparent
+                        .whiteInvert
+                        .secondary,
+                    modifier = Modifier.fillMaxWidth(0.4f)
                 )
             }
         }
@@ -140,31 +130,11 @@ fun TimerOnComposableScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ButtonTimerComposable(
-                    modifier = Modifier.weight(1f),
-                    state = ButtonTimerState.PAUSE,
-                    onClick = {}
-                )
-                ButtonTimerComposable(
-                    modifier = Modifier.weight(1f),
-                    state = ButtonTimerState.STOP,
-                    onClick = {}
-                )
-            }
-            onSkip?.let {
-                BChipButton(
-                    onClick = onSkip,
-                    background = Color.Transparent,
-                    text = "Skip",
-                    painter = null,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+            ButtonTimerComposable(
+                modifier = Modifier.fillMaxWidth(0.6f),
+                state = ButtonTimerState.PAUSE,
+                onClick = {}
+            )
             Spacer(Modifier.height(8.dp))
         }
     }
@@ -176,9 +146,7 @@ private fun MainScreenComposableScreenPreview() {
     BusyBarThemeInternal {
         TimerOnComposableScreen(
             modifier = Modifier.fillMaxSize(),
-            workPhaseText = "1/4\nwork phase",
-            tagName = "work",
-            roadmapHint = "Finish the roadmap for mobile app",
+            workPhaseText = "1/4",
             timeLeft = 13.minutes.plus(10.seconds),
             onSkip = {}
         )
