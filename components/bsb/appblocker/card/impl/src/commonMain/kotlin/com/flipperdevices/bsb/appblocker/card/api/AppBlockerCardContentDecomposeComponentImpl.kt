@@ -27,7 +27,6 @@ class AppBlockerCardContentDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onBackParameter: DecomposeOnBackParameter,
     appBlockerPermissionBlockFactory: AppBlockerPermissionBlockDecomposeComponent.Factory,
-    private val appBlockerPermissionApi: AppBlockerPermissionApi
 ) : AppBlockerCardContentDecomposeComponent(componentContext) {
     private val appBlockerCardContent = appBlockerPermissionBlockFactory(
         componentContext = childContext("appBlockerCardContentDecomposeComponent_permission")
@@ -44,7 +43,7 @@ class AppBlockerCardContentDecomposeComponentImpl(
                 enabled = false,
                 onSwitch = {}
             )
-            val isPermissionGranted by appBlockerPermissionApi.isAllPermissionGranted()
+            val isPermissionGranted by appBlockerCardContent.isAllPermissionGranted()
                 .collectAsState()
 
             if (isPermissionGranted) {

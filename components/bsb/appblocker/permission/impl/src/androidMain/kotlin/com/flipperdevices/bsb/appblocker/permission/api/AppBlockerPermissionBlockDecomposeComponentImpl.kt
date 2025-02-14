@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
@@ -16,11 +18,21 @@ import busystatusbar.components.bsb.appblocker.permission.impl.generated.resourc
 import busystatusbar.components.bsb.appblocker.permission.impl.generated.resources.appblocker_permission_overlay_btn
 import busystatusbar.components.bsb.appblocker.permission.impl.generated.resources.appblocker_permission_usage_btn
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.flipperdevices.bsb.appblocker.permission.composable.PermissionCardButtonComposable
 import com.flipperdevices.bsb.appblocker.permission.composable.PermissionHeaderComposable
+import com.flipperdevices.bsb.appblocker.permission.utils.PermissionStateHolder
+import com.flipperdevices.bsb.appblocker.permission.viewmodel.AppBlockerPermissionViewModel
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.ktx.common.FlipperDispatchers
+import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import org.jetbrains.compose.resources.stringResource
@@ -29,7 +41,25 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class AppBlockerPermissionBlockDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
+    private val stateHolder: PermissionStateHolder,
+    private val appBlockerViewModelFactory: () -> AppBlockerPermissionViewModel
 ) : AppBlockerPermissionBlockDecomposeComponent(componentContext) {
+    private val scope = coroutineScope(FlipperDispatchers.default)
+
+    private val viewModel = viewModelWithFactory(null) {
+        appBlockerViewModelFactory()
+    }
+
+    init {
+        lifecycle.doOnResume { stateHolder.invalidate() }
+    }
+
+    override fun isAllPermissionGranted(): StateFlow<Boolean> {
+        return stateHolder.getState().map {
+            it.isAllPermissionGranted
+        }.stateIn(scope, SharingStarted.Eagerly, stateHolder.getStateSync().isAllPermissionGranted)
+    }
+
     @Composable
     override fun Render(modifier: Modifier) {
         Column(
@@ -49,22 +79,31 @@ class AppBlockerPermissionBlockDecomposeComponentImpl(
                 fontFamily = LocalBusyBarFonts.current.pragmatica
             )
 
-            PermissionCardButtonComposable(
-                modifier = Modifier,
-                title = Res.string.appblocker_permission_usage_btn,
-                onClick = {}
-            )
+            val permissionState by stateHolder.getState().collectAsState()
 
-            PermissionCardButtonComposable(
-                modifier = Modifier.padding(top = 8.dp),
-                title = Res.string.appblocker_permission_overlay_btn,
-                onClick = {}
-            )
+            if (permissionState.hasUsageStatsPermission.not()) {
+                PermissionCardButtonComposable(
+                    modifier = Modifier,
+                    title = Res.string.appblocker_permission_usage_btn,
+                    onClick = viewModel::requestUsageStatsPermission
+                )
+            }
+
+            if (permissionState.hasDrawOverlayPermission.not()) {
+                PermissionCardButtonComposable(
+                    modifier = Modifier.padding(top = 8.dp),
+                    title = Res.string.appblocker_permission_overlay_btn,
+                    onClick = viewModel::requestDrawOverlayPermission
+                )
+            }
         }
     }
 
     @Inject
-    @ContributesBinding(AppGraph::class, AppBlockerPermissionBlockDecomposeComponent.Factory::class)
+    @ContributesBinding(
+        AppGraph::class,
+        AppBlockerPermissionBlockDecomposeComponent.Factory::class
+    )
     class Factory(
         private val factory: (
             componentContext: ComponentContext
