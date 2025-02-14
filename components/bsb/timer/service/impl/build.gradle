@@ -1,0 +1,19 @@
+plugins {
+    id("flipper.multiplatform")
+    id("flipper.anvil-multiplatform")
+    id("kotlinx-serialization")
+    id("flipper.multiplatform-dependencies")
+}
+
+commonDependencies {
+    implementation(projects.components.core.di)
+    implementation(projects.components.core.log)
+    implementation(projects.components.core.ktx)
+    implementation(projects.components.core.data)
+
+    implementation(projects.components.bsb.preference.api)
+    implementation(projects.components.bsb.timer.service.api)
+    implementation(projects.components.bsb.timer.background.api)
+
+    implementation(libs.kotlin.coroutines)
+}

@@ -25,6 +25,7 @@ commonDependencies {
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.setup.api)
     implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.timer.service.api)
 
     implementation(libs.decompose)
     implementation(libs.decompose.composeExtension)

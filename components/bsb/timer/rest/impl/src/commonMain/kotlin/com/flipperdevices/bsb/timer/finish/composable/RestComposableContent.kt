@@ -44,6 +44,7 @@ fun RestComposableContent(
     timeLeft: Duration,
     statusType: StatusType,
     onBackClick: () -> Unit,
+    onPauseClick: () -> Unit,
     modifier: Modifier = Modifier,
     workPhaseText: String? = null,
     onSkip: (() -> Unit)? = null,
@@ -150,7 +151,7 @@ fun RestComposableContent(
             ButtonTimerComposable(
                 modifier = Modifier.fillMaxWidth(0.6f),
                 state = ButtonTimerState.PAUSE,
-                onClick = {}
+                onClick = onPauseClick
             )
             Spacer(Modifier.height(8.dp))
         }
@@ -167,7 +168,8 @@ private fun RestComposableContentPreview() {
             timeLeft = 13.minutes.plus(10.seconds),
             onSkip = {},
             statusType = StatusType.LONG_REST,
-            onBackClick = {}
+            onBackClick = {},
+            onPauseClick = {}
         )
     }
 }
@@ -182,7 +184,8 @@ private fun LongRestComposableContentPreview() {
             timeLeft = 13.minutes.plus(10.seconds),
             onSkip = {},
             statusType = StatusType.REST,
-            onBackClick = {}
+            onBackClick = {},
+            onPauseClick = {}
         )
     }
 }

@@ -8,8 +8,8 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.composable.TimerOnComposableScreen
-import com.flipperdevices.bsb.timer.background.api.TimerApi
-import com.flipperdevices.bsb.timer.background.model.TimerAction
+import com.flipperdevices.bsb.timer.background.api.TimerService
+import com.flipperdevices.bsb.timer.background.model.TimerServiceState
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -21,7 +21,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
-    private val timerApi: TimerApi,
+    private val timerService: TimerService,
     private val stopSessionSheetDecomposeComponentFactory: StopSessionSheetDecomposeComponent.Factory
 ) : ActiveTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
@@ -29,33 +29,45 @@ class ActiveTimerScreenDecomposeComponentImpl(
     private val stopSessionSheetDecomposeComponent = stopSessionSheetDecomposeComponentFactory.invoke(
         childContext("stopSessionSheetDecomposeComponent"),
         onConfirm = {
-            timerApi.stopTimer()
+            timerService.stop()
         }
     )
 
     @Composable
     override fun Render(modifier: Modifier) {
-        timerApi.getState().collectAsState().value?.let { timerState ->
-            TimerOnComposableScreen(
-                modifier = modifier,
-                workPhaseText = null,
-                timeLeft = timerState.timerState.duration,
-                onSkip = {
-
-                },
-                onPauseClick = {
-                    timerApi.onAction(TimerAction.PAUSE)
-                },
-                onBack = {
-                    timerApi.stopTimer()
-                }
-            )
-            if (timerState.isOnPause) {
-                PauseFullScreenOverlayComposable(
-                    onStartClick = { timerApi.onAction(TimerAction.PAUSE) }
+        val state by timerService.state.collectAsState()
+        when (val state = state) {
+            TimerServiceState.Finished -> Unit
+            TimerServiceState.Pending -> Unit
+            is TimerServiceState.Started -> {
+                val timerState = state.timerState
+                TimerOnComposableScreen(
+                    modifier = modifier,
+                    workPhaseText = when {
+                        !state.timerSettings.intervalsSettings.isEnabled -> null
+                        else -> {
+                            "${state.currentIteration}/${state.maxIteration}"
+                        }
+                    },
+                    timeLeft = timerState.timerState.duration,
+                    onSkip = {
+                        timerService.skip()
+                    },
+                    onPauseClick = {
+                        timerService.togglePause()
+                    },
+                    onBack = {
+                        stopSessionSheetDecomposeComponent.show()
+                    }
                 )
+                if (timerState.isOnPause) {
+                    PauseFullScreenOverlayComposable(
+                        onStartClick = { timerService.togglePause() }
+                    )
+                }
             }
         }
+
         stopSessionSheetDecomposeComponent.Render(Modifier)
     }
 

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
+import com.flipperdevices.bsb.timer.done.composable.DoneComposableContent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import me.tatarka.inject.annotations.Assisted
@@ -18,7 +19,9 @@ class DoneTimerScreenDecomposeComponentImpl(
     StatusBarIconStyleProvider by iconStyleProvider {
 
     @Composable
-    override fun Render(modifier: Modifier) = Unit
+    override fun Render(modifier: Modifier) {
+        DoneComposableContent(onOkClick = {})
+    }
 
     @Inject
     @ContributesBinding(AppGraph::class, DoneTimerScreenDecomposeComponent.Factory::class)

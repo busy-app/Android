@@ -3,7 +3,7 @@ package com.flipperdevices.bsb.timer.finish.api
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 
-abstract class FinishTimerScreenDecomposeComponent(
+abstract class RestTimerScreenDecomposeComponent(
     componentContext: ComponentContext
 ) : ScreenDecomposeComponent(componentContext) {
 
@@ -14,6 +14,7 @@ abstract class FinishTimerScreenDecomposeComponent(
     fun interface Factory {
         operator fun invoke(
             componentContext: ComponentContext,
-        ): FinishTimerScreenDecomposeComponent
+            breakType: BreakType
+        ): RestTimerScreenDecomposeComponent
     }
 }

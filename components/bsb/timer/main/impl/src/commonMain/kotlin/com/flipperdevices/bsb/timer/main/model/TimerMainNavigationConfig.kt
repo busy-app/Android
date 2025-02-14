@@ -8,5 +8,14 @@ sealed interface TimerMainNavigationConfig {
     data object Main : TimerMainNavigationConfig
 
     @Serializable
-    data object Timer : TimerMainNavigationConfig
+    data object Work : TimerMainNavigationConfig
+
+    @Serializable
+    data object Rest : TimerMainNavigationConfig
+
+    @Serializable
+    data object LongRest : TimerMainNavigationConfig
+
+    @Serializable
+    data object Finished : TimerMainNavigationConfig
 }

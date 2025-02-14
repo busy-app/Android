@@ -118,6 +118,8 @@ include(
     ":components:bsb:timer:done:impl",
     ":components:bsb:timer:background:api",
     ":components:bsb:timer:background:impl",
+    ":components:bsb:timer:service:api",
+    ":components:bsb:timer:service:impl",
     ":components:bsb:timer:active:api",
     ":components:bsb:timer:active:impl",
     ":components:bsb:timer:cards:api",
