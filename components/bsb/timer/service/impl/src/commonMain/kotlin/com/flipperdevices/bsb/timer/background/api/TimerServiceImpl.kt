@@ -114,11 +114,11 @@ class TimerServiceImpl(
 
         if (tryStartRest(currentState)) {
             Unit
-        } else if (tryStartFinish(currentState)) {
-            Unit
         } else if (tryStartLongRest(currentState)) {
             Unit
         } else if (tryStartWork(currentState)) {
+            Unit
+        } else if (tryStartFinish(currentState)) {
             Unit
         }
     }

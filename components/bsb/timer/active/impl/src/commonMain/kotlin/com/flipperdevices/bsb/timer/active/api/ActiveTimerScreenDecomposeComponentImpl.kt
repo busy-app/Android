@@ -46,7 +46,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
                     workPhaseText = when {
                         !state.timerSettings.intervalsSettings.isEnabled -> null
                         else -> {
-                            "${state.currentIteration}/${state.maxIteration}"
+                            "${state.currentUiIteration}/${state.maxUiIteration}"
                         }
                     },
                     timeLeft = timerState.timerState.duration,

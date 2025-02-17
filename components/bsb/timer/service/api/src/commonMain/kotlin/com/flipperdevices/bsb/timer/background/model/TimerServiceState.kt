@@ -15,7 +15,10 @@ sealed interface TimerServiceState {
         val timerState: ControlledTimerState,
         val timerSettings: TimerSettings,
         val status: Status
-    ) : TimerServiceState
+    ) : TimerServiceState {
+        val currentUiIteration: Int = currentIteration + 1
+        val maxUiIteration: Int = maxIteration + 1
+    }
 
     data object Finished : TimerServiceState
 }
