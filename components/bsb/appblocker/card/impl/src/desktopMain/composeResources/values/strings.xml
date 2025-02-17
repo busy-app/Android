@@ -1,0 +1,3 @@
+<resources>
+    <string name="appblocker_wrong_platform">App blocking is not supported on this platform</string>
+</resources>
