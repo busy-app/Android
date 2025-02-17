@@ -9,6 +9,7 @@ import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -110,12 +111,6 @@ class TimerServiceImpl(
 
     private suspend fun skipUnsafe() {
         val currentState = state.first() as? TimerServiceState.Started ?: return
-//        if (!timerApi.getState().first().isAlmostFinished) return
-
-//        if (timerApi.getState().first() != null) {
-//            timerApi.stopTimer()
-//            timerApi.getState().filter { it == null }.first()
-//        }
 
         if (tryStartRest(currentState)) {
             Unit
@@ -130,12 +125,7 @@ class TimerServiceImpl(
 
     override fun skip() {
         scope.launch {
-//            if (!timerApi.getState().first().isAlmostFinished) {
             skipUnsafe()
-//            timerApi.startTimer(TimerState(0, 1))
-//                timerApi.stopTimer()
-//                timerApi.getState().filter { it == null }.first()
-//            }
         }
     }
 
@@ -163,7 +153,14 @@ class TimerServiceImpl(
     private fun collectTimerState() {
         timerApi.getState()
             .onEach { timerState ->
-                if (timerState == null || timerState.isAlmostFinished) {
+                if (timerState.isAlmostFinished) {
+                    scope.launch {
+                        // wait for timer almost finish
+                        delay(900L)
+                        skipUnsafe()
+                    }
+                }
+                if (timerState == null) {
                     skipUnsafe()
                 } else {
                     _state.update { state ->
