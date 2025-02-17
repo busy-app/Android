@@ -81,8 +81,8 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     val firstVisibleItemIndex = visibleItemsInfo.firstOrNull()?.index ?: -1
     val lastVisibleItemIndex = visibleItemsInfo.lastOrNull()?.index ?: -1
     val totalVisibleItems = lastVisibleItemIndex - firstVisibleItemIndex + 1
-    val middleIndex = firstVisibleItemIndex + totalVisibleItems / 2
-    val bufferIndices = totalVisibleItems / 2
+    val middleIndex = firstVisibleItemIndex + totalVisibleItems / 2 + totalVisibleItems % 2
+    val bufferIndices = totalVisibleItems / 2 + totalVisibleItems % 2
 
     LaunchedEffect(middleIndex, currentSelectedItem, scrollState.isScrollInProgress) {
         onItemSelect(unitConverter.invoke(currentSelectedItem + progression.first))
