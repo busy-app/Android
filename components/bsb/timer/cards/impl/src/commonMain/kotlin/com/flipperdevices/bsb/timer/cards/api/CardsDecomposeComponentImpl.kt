@@ -16,12 +16,11 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.api.KrateApi
-import com.flipperdevices.bsb.timer.background.api.TimerApi
+import com.flipperdevices.bsb.timer.background.api.TimerService
 import com.flipperdevices.bsb.timer.cards.composable.BusyCardComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
 import com.flipperdevices.bsb.timer.setup.api.TimerSetupSheetDecomposeComponent
-import com.flipperdevices.core.data.timer.TimerState
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -32,7 +31,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class CardsDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val timerApi: TimerApi,
+    private val timerService: TimerService,
     private val krateApi: KrateApi,
     timerSetupSheetDecomposeComponentFactory: TimerSetupSheetDecomposeComponent.Factory
 ) : CardsDecomposeComponent(componentContext) {
@@ -55,7 +54,7 @@ class CardsDecomposeComponentImpl(
                 @Suppress("MagicNumber")
                 BusyCardComposable(
                     background = Color(0xFFE50000), // todo no color in design
-                    name = "BUSY",
+                    name = "BUSY", // todo raw string
                     settings = krateApi.timerSettingsKrate
                         .stateFlow(coroutineScope)
                         .collectAsState()
@@ -68,8 +67,7 @@ class CardsDecomposeComponentImpl(
                     state = ButtonTimerState.START,
                     onClick = {
                         coroutineScope.launch {
-                            val totalTime = krateApi.timerSettingsKrate.flow.first().totalTime
-                            timerApi.startTimer(TimerState(totalTime))
+                            timerService.startWith(krateApi.timerSettingsKrate.flow.first())
                         }
                     }
                 )

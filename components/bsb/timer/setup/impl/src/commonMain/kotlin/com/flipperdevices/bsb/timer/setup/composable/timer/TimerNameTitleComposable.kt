@@ -13,7 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_timer_name_title
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun TimerNameTitleComposable(
@@ -36,7 +39,7 @@ internal fun TimerNameTitleComposable(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = "Name",
+            text = stringResource(Res.string.ts_bs_timer_name_title),
             fontSize = 14.sp,
             color = LocalPallet.current
                 .transparent

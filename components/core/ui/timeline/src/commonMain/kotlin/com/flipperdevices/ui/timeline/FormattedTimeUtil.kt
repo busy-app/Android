@@ -8,7 +8,7 @@ private const val SINGLE_CHAR_NUMBER_LIMIT = 10
  * Format seconds 0 -> 00
  * Need when 9:2:3 -> 0:02:03
  */
-internal fun Int.toFormattedTime(): String {
+fun Int.toFormattedTime(): String {
     return if (this < SINGLE_CHAR_NUMBER_LIMIT) "0$this" else "$this"
 }
 

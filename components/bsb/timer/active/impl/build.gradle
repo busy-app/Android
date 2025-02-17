@@ -14,10 +14,12 @@ commonDependencies {
     implementation(projects.components.bsb.core.theme)
     implementation(projects.components.core.ui.sheet)
     implementation(projects.components.core.ui.button)
+    implementation(projects.components.core.ui.timeline)
 
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.timer.service.api)
 
     implementation(libs.decompose)
     implementation(libs.constraintlayout)

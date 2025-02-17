@@ -61,7 +61,9 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     initialSelectedItem: Int = progression.first,
     lineStyle: LineStyle = LineStyle.Default
 ) {
-    val initialSelectedItem = initialSelectedItem.minus(progression.first).coerceAtLeast(progression.first)
+    val initialSelectedItem = initialSelectedItem
+        .minus(progression.first)
+        .coerceIn(progression.first, progression.last)
     check(progression.step % STEP_DIVISION == 0) {
         "Progression step must be divided by $STEP_DIVISION!"
     }
@@ -81,8 +83,8 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     val firstVisibleItemIndex = visibleItemsInfo.firstOrNull()?.index ?: -1
     val lastVisibleItemIndex = visibleItemsInfo.lastOrNull()?.index ?: -1
     val totalVisibleItems = lastVisibleItemIndex - firstVisibleItemIndex + 1
-    val middleIndex = firstVisibleItemIndex + totalVisibleItems / 2
-    val bufferIndices = totalVisibleItems / 2
+    val middleIndex = firstVisibleItemIndex + totalVisibleItems / 2 + totalVisibleItems % 2
+    val bufferIndices = totalVisibleItems / 2 + totalVisibleItems % 2
 
     LaunchedEffect(middleIndex, currentSelectedItem, scrollState.isScrollInProgress) {
         onItemSelect(unitConverter.invoke(currentSelectedItem + progression.first))

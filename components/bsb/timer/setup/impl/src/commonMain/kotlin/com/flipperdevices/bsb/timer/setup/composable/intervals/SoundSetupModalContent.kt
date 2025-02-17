@@ -13,12 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_sound_on
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_sound_alert_end_desc
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_sound_alert_end_title
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_sound_alert_start_desc
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_sound_alert_start_title
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_sound_title
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
 import com.flipperdevices.bsb.timer.setup.composable.common.TitleInfoComposable
 import com.flipperdevices.ui.options.OptionSwitch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -36,21 +42,21 @@ fun SoundSetupModalBottomSheetContent(
     ) {
         TitleInfoComposable(
             modifier = Modifier.padding(horizontal = 16.dp),
-            title = "Sound",
+            title = stringResource(Res.string.ts_bs_sound_title),
             desc = null,
             icon = painterResource(Res.drawable.ic_sound_on)
         )
         OptionSwitch(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = "Alert before work starts",
-            infoText = "Get notified 5 seconds before your next work interval begins",
+            text = stringResource(Res.string.ts_bs_sound_alert_start_title),
+            infoText = stringResource(Res.string.ts_bs_sound_alert_start_desc),
             checked = timerSettings.soundSettings.alertBeforeWorkStarts,
             onCheckChange = { onAlertBeforeWorkStartsToggle.invoke() }
         )
         OptionSwitch(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = "Alert before work ends",
-            infoText = "Get notified 5 seconds before your current work interval ends",
+            text = stringResource(Res.string.ts_bs_sound_alert_end_title),
+            infoText = stringResource(Res.string.ts_bs_sound_alert_end_desc),
             checked = timerSettings.soundSettings.alertBeforeWorkEnds,
             onCheckChange = { onAlertBeforeWorkEndsToggle.invoke() }
         )

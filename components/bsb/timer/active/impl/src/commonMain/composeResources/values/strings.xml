@@ -1,4 +1,9 @@
 <resources>
     <string name="timer_active_stop">STOP</string>
     <string name="timer_active_stop_active">BUSY is active</string>
+    <string name="ta_ask_stop_session">Stop your focus session?</string>
+    <string name="ta_stop_session_desc">This could interrupt your workflow and make it harder to get back on track.</string>
+    <string name="ta_keep_focusing">Keep focusing</string>
+    <string name="ta_stop">Stop</string>
+    <string name="ta_skip">Stop</string>
 </resources>

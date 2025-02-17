@@ -6,5 +6,7 @@ plugins {
 commonDependencies {
     implementation(projects.components.bsb.core.theme)
     implementation(projects.components.core.ui.resPreview)
+
+    implementation(kotlin.compose.material3)
 }
 

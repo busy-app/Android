@@ -12,9 +12,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import busystatusbar.components.bsb.timer.active.impl.generated.resources.Res
+import busystatusbar.components.bsb.timer.active.impl.generated.resources.ta_ask_stop_session
+import busystatusbar.components.bsb.timer.active.impl.generated.resources.ta_keep_focusing
+import busystatusbar.components.bsb.timer.active.impl.generated.resources.ta_stop
+import busystatusbar.components.bsb.timer.active.impl.generated.resources.ta_stop_session_desc
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.ui.button.BChipButton
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -29,7 +35,7 @@ fun StopSessionComposableContent(
         modifier = modifier.fillMaxWidth().navigationBarsPadding()
     ) {
         Text(
-            text = "Stop your focus session?",
+            text = stringResource(Res.string.ta_ask_stop_session),
             fontSize = 32.sp,
             color = LocalPallet.current
                 .white
@@ -38,7 +44,7 @@ fun StopSessionComposableContent(
             lineHeight = 32.sp,
         )
         Text(
-            text = "This could interrupt your workflow and make it harder to get back on track.",
+            text = stringResource(Res.string.ta_stop_session_desc),
             fontSize = 16.sp,
             color = LocalPallet.current
                 .neutral
@@ -50,7 +56,7 @@ fun StopSessionComposableContent(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onDismiss,
                 painter = null,
-                text = "Keep focusing",
+                text = stringResource(Res.string.ta_keep_focusing),
                 contentColor = LocalPallet.current
                     .white
                     .invert,
@@ -64,7 +70,7 @@ fun StopSessionComposableContent(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onConfirm,
                 painter = null,
-                text = "Stop",
+                text = stringResource(Res.string.ta_stop),
                 contentColor = LocalPallet.current
                     .transparent
                     .whiteInvert

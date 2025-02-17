@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -83,7 +82,7 @@ fun OptionSwitch(
                 )
             }
         }
-        Switch(
+        M3Switch(
             checked = checked,
             onCheckedChange = onCheckChange,
             enabled = isEnabled,
@@ -93,6 +92,7 @@ fun OptionSwitch(
 
 @Composable
 @Preview
+@Suppress("LongMethod")
 private fun OptionSwitchPreview() {
     val modifier = Modifier.padding(
         horizontal = 8.dp,
@@ -110,6 +110,7 @@ private fun OptionSwitchPreview() {
             OptionSwitch(
                 icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = LONG_TEXT,
+                checked = false,
                 onCheckChange = {},
                 modifier = modifier
             )
@@ -118,6 +119,8 @@ private fun OptionSwitchPreview() {
                 icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = TEXT,
                 infoText = TEXT,
+                checked = true,
+                isEnabled = false,
                 onCheckChange = {},
                 modifier = modifier
             )
@@ -126,6 +129,8 @@ private fun OptionSwitchPreview() {
                 icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = LONG_TEXT,
                 infoText = TEXT,
+                checked = false,
+                isEnabled = true,
                 onCheckChange = {},
                 modifier = modifier
             )

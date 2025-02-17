@@ -4,20 +4,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -25,54 +30,89 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.ic_pomodoro
-import busystatusbar.components.bsb.timer.done.impl.generated.resources.ic_star
+import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_finish
+import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_restart
+import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_well_done
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.ui.button.BChipButton
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.DurationUnit
 
+private data class ObjectiveModel(
+    val title: String,
+    val innerDesc: String
+)
+
+@Suppress("LongMethod")
 @Composable
-private fun RoadmapComposableItem(
-    text: String,
-    duration: Duration,
+private fun ObjectiveCard(
+    objectives: ImmutableList<ObjectiveModel>,
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
+            .clip(RoundedCornerShape(24.dp))
+            .background(LocalPallet.current.transparent.whiteInvert.quaternary)
+            .height(IntrinsicSize.Max)
+            .padding(16.dp)
     ) {
-        Icon(
-            painter = painterResource(Res.drawable.ic_pomodoro),
-            tint = Color.Unspecified,
-            modifier = Modifier.size(18.dp),
-            contentDescription = null
-        )
-        Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                text = text,
-                color = LocalPallet.current
-                    .white
-                    .invert,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.W500
-            )
-            Text(
-                text = duration.toString(DurationUnit.MINUTES),
-                color = LocalPallet.current
-                    .white
-                    .invert,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.W400
-            )
+        objectives.forEachIndexed { i, objective ->
+            val isLast = i == objectives.lastIndex
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            ) {
+                Icon(
+                    painter = painterResource(Res.drawable.ic_pomodoro),
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(40.dp),
+                    contentDescription = null
+                )
+                Text(
+                    text = objective.title,
+                    color = LocalPallet.current
+                        .white
+                        .invert,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.W500
+                )
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(48.dp))
+                        .background(LocalPallet.current.transparent.whiteInvert.tertiary)
+                        .padding(horizontal = 8.dp)
+                        .padding(vertical = 4.dp)
+                        .fillMaxWidth(fraction = 0.4f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = objective.innerDesc,
+                        color = LocalPallet.current
+                            .transparent
+                            .whiteInvert
+                            .secondary,
+                        fontSize = 16.sp,
+                    )
+                }
+            }
+            if (!isLast) {
+                Box(
+                    Modifier
+                        .padding(horizontal = 5.dp)
+                        .width(1.dp)
+                        .fillMaxHeight()
+                        .background(Color(color = 0xFFFFFF).copy(alpha = 0.2f)) // todo
+                )
+            }
         }
     }
 }
@@ -81,8 +121,9 @@ private fun RoadmapComposableItem(
 @Suppress("LongMethod")
 @Composable
 fun DoneComposableContent(
-    modifier: Modifier = Modifier,
-    onOkClick: () -> Unit
+    onFinishClick: () -> Unit,
+    onRestartClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Box(
@@ -91,133 +132,98 @@ fun DoneComposableContent(
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            Color(color = 0xFF27486C), // todo
-                            Color(color = 0xFF0E1E48), // todo
+                            Color(color = 0xFF000000), // todo
+                            Color(color = 0xFF0E1448), // todo
                         )
                     )
                 )
         )
         Column(
-            modifier = Modifier.padding(horizontal = 24.dp)
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(horizontal = 24.dp)
+                .padding(vertical = 54.dp)
+                .statusBarsPadding()
+                .navigationBarsPadding(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_star),
-                    tint = Color.Unspecified,
-                    modifier = Modifier.size(64.dp),
-                    contentDescription = null
-                )
                 Text(
-                    text = "Well done!",
+                    text = stringResource(Res.string.td_well_done),
                     fontWeight = FontWeight.W500,
                     color = LocalPallet.current
                         .white
                         .invert,
-                    fontSize = 32.sp
+                    fontSize = 40.sp
+                )
+                Text(
+                    text = stringResource(Res.string.td_finish),
+                    fontWeight = FontWeight.W500,
+                    color = LocalPallet.current
+                        .white
+                        .invert,
+                    fontSize = 18.sp
                 )
             }
-
-            Spacer(Modifier.height(24.dp))
-
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = LocalPallet.current
-                            .transparent
-                            .whiteInvert
-                            .quaternary
-                            .copy(alpha = 0.1f)
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ObjectiveCard(
+                    objectives = persistentListOf(
+                        ObjectiveModel(
+                            "You’re total BUSY amount:", // todo raw string
+                            "x5" // todo raw string
+                        ),
+                        ObjectiveModel(
+                            "You tried to open blocked apps today:", // todo raw string
+                            "x3" // todo raw string
+                        )
                     )
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "1h 15min",
-                    color = LocalPallet.current
-                        .white
-                        .invert,
-                    fontSize = 18.sp
                 )
-                Text(
-                    text = "Total today’s focus time",
-                    color = LocalPallet.current
+                BChipButton(
+                    onClick = onRestartClick,
+                    text = stringResource(Res.string.td_restart),
+                    fontSize = 18.sp,
+                    painter = null,
+                    background = Color.Transparent,
+                    contentPadding = PaddingValues(
+                        horizontal = 64.dp,
+                        vertical = 16.dp
+                    ),
+                    contentColor = LocalPallet.current
                         .transparent
                         .whiteInvert
-                        .secondary
-                        .copy(alpha = 0.3f),
-                    fontSize = 16.sp
-                )
-                Spacer(Modifier.height(26.dp))
-                Text(
-                    text = "3x",
-                    color = LocalPallet.current
-                        .white
-                        .invert,
-                    fontSize = 18.sp
-                )
-                Text(
-                    text = "Times saved from distractions",
-                    color = LocalPallet.current
-                        .transparent
-                        .whiteInvert
-                        .secondary
-                        .copy(alpha = 0.3f),
-                    fontSize = 16.sp
+                        .primary
                 )
             }
-            Spacer(Modifier.height(48.dp))
-            Column(
-                verticalArrangement = Arrangement.spacedBy(24.dp)
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "Time you spend:",
-                    color = LocalPallet.current
+                BChipButton(
+                    onClick = onFinishClick,
+                    text = stringResource(Res.string.td_finish),
+                    fontSize = 18.sp,
+                    painter = null,
+                    background = LocalPallet.current
                         .transparent
                         .whiteInvert
-                        .secondary
-                        .copy(alpha = 0.3f),
-                    fontSize = 16.sp
-                )
-                RoadmapComposableItem(
-                    text = "Finish the roadmap for mobile app",
-                    duration = 45.minutes
-                )
-                RoadmapComposableItem(
-                    text = "Finish the roadmap for mobile app",
-                    duration = 45.minutes.plus(1.hours)
+                        .tertiary,
+                    contentPadding = PaddingValues(
+                        horizontal = 64.dp,
+                        vertical = 16.dp
+                    ),
+                    contentColor = LocalPallet.current
+                        .white
+                        .invert
                 )
             }
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .align(Alignment.BottomCenter),
-            contentAlignment = Alignment.Center
-        ) {
-            BChipButton(
-                onClick = onOkClick,
-                text = "Ok",
-                fontSize = 18.sp,
-                painter = null,
-                background = LocalPallet.current
-                    .transparent
-                    .whiteInvert
-                    .tertiary
-                    .copy(alpha = 0.1f),
-                contentPadding = PaddingValues(
-                    horizontal = 64.dp,
-                    vertical = 16.dp
-                ),
-                contentColor = LocalPallet.current
-                    .transparent
-                    .whiteInvert
-                    .primary
-                    .copy(alpha = 0.5f)
-            )
         }
     }
 }
@@ -227,7 +233,8 @@ fun DoneComposableContent(
 private fun DoneComposableContentPreview() {
     BusyBarThemeInternal {
         DoneComposableContent(
-            onOkClick = {}
+            onFinishClick = {},
+            onRestartClick = {}
         )
     }
 }

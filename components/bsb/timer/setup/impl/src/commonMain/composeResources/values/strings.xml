@@ -1,0 +1,31 @@
+<resources>
+    <string name="ts_bs_timer_name_title">Name</string>
+
+    <string name="ts_bs_save">Save</string>
+    <string name="ts_bs_blocked_apps">Blocked apps</string>
+
+    <string name="ts_bs_on">On</string>
+    <string name="ts_bs_off">Off</string>
+
+    <string name="ts_bs_rest_title">Rest</string>
+    <string name="ts_bs_rest_desc">Pick how long you want to work during each interval</string>
+    <string name="ts_bs_rest_autostart_title">Autostart rest</string>
+    <string name="ts_bs_rest_autostart_desc">Rest interval will start automatically, without manual confirmation</string>
+
+    <string name="ts_bs_work_title">Work</string>
+    <string name="ts_bs_work_desc">Pick how long you want to work during each interval</string>
+    <string name="ts_bs_work_autostart_title">Autostart work</string>
+    <string name="ts_bs_work_autostart_desc">Work interval will start automatically, without manual confirmation</string>
+
+    <string name="ts_bs_intervals_title">Intervals</string>
+    <string name="ts_bs_intervals_desc">Split total time into work and rest intervals</string>
+    <string name="ts_bs_intervals_work">Work</string>
+    <string name="ts_bs_intervals_rest">Rest</string>
+    <string name="ts_bs_intervals_long_rest">Long rest</string>
+
+    <string name="ts_bs_sound_title">Sound</string>
+    <string name="ts_bs_sound_alert_start_title">Alert before work starts</string>
+    <string name="ts_bs_sound_alert_start_desc">Get notified 5 seconds before your next work interval begins</string>
+    <string name="ts_bs_sound_alert_end_title">Alert before work ends</string>
+    <string name="ts_bs_sound_alert_end_desc">Get notified 5 seconds before your current work interval ends</string>
+</resources>

@@ -24,7 +24,6 @@ import com.flipperdevices.ui.timeline.HorizontalWheelPicker
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 @Composable
@@ -60,8 +59,8 @@ fun LongRestSetupModalBottomSheetContent(
         ) {
             HorizontalWheelPicker(
                 progression = IntProgression.fromClosedRange(
-                    rangeStart = 0.minutes.inWholeMinutes.toInt(),
-                    rangeEnd = 2.hours.inWholeMinutes.toInt(),
+                    rangeStart = 15.minutes.inWholeMinutes.toInt(),
+                    rangeEnd = 30.minutes.inWholeMinutes.toInt(),
                     step = 5.minutes.inWholeMinutes.toInt()
                 ),
                 initialSelectedItem = timerSettings.intervalsSettings.longRest.inWholeMinutes.toInt(),

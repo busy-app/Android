@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,10 +49,12 @@ fun BusyCardComposable(
             .background(background)
             .clickable(onClick = onClick)
             .padding(16.dp)
+            .height(232.dp)
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(64.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxHeight()
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -74,22 +78,21 @@ fun BusyCardComposable(
                     modifier = Modifier.size(48.dp)
                 )
             }
-            Column(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.Start
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
             ) {
-                Text(
-                    text = settings.totalTime.toFormattedTime(),
-                    fontSize = 40.sp,
-                    color = LocalPallet.current
-                        .white
-                        .onColor
-                )
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
                 ) {
+                    Text(
+                        text = settings.totalTime.toFormattedTime(),
+                        fontSize = 40.sp,
+                        color = LocalPallet.current
+                            .white
+                            .onColor
+                    )
                     if (settings.intervalsSettings.isEnabled) {
                         MiniFrameSection(
                             MiniFrameData(
@@ -108,27 +111,19 @@ fun BusyCardComposable(
                                     .whiteInvert
                                     .primary
                             ),
-                            modifier = Modifier.align(Alignment.CenterStart),
                         )
                     }
-
-                    MiniFrameSection(
-                        MiniFrameData(
-                            text = "14", // todo
-                            painter = painterResource(CommonTimerRes.drawable.ic_block),
-                            tint = LocalPallet.current
-                                .transparent
-                                .whiteInvert
-                                .primary
-                        ),
-                        modifier = Modifier.align(
-                            when {
-                                settings.intervalsSettings.isEnabled -> Alignment.CenterEnd
-                                else -> Alignment.CenterStart
-                            }
-                        ),
-                    )
                 }
+                MiniFrameSection(
+                    MiniFrameData(
+                        text = "14", // todo
+                        painter = painterResource(CommonTimerRes.drawable.ic_block),
+                        tint = LocalPallet.current
+                            .transparent
+                            .whiteInvert
+                            .primary
+                    ),
+                )
             }
         }
     }

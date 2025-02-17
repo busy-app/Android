@@ -41,7 +41,7 @@ fun TimerSetupModalBottomSheetContent(
             .verticalScroll(rememberScrollState())
     ) {
         TimerNameTitleComposable(
-            name = "BUSY",
+            name = "BUSY", // todo raw string
             modifier = Modifier
                 .padding(16.dp)
         )

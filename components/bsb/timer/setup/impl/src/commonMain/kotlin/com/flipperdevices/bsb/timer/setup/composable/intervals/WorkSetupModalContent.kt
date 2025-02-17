@@ -15,6 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_work
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_work_autostart_desc
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_work_autostart_title
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_work_desc
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_work_title
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.preference.model.TimerSettings
@@ -23,6 +27,7 @@ import com.flipperdevices.bsb.timer.setup.composable.common.TitleInfoComposable
 import com.flipperdevices.ui.options.OptionSwitch
 import com.flipperdevices.ui.timeline.HorizontalWheelPicker
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
@@ -43,8 +48,8 @@ fun WorkSetupModalBottomSheetContent(
     ) {
         TitleInfoComposable(
             modifier = Modifier.padding(horizontal = 16.dp),
-            title = "Work",
-            desc = "Pick how long you want to work during each interval",
+            title = stringResource(Res.string.ts_bs_work_title),
+            desc = stringResource(Res.string.ts_bs_work_desc),
             icon = painterResource(Res.drawable.ic_work)
         )
         BoxWithConstraints(
@@ -62,7 +67,7 @@ fun WorkSetupModalBottomSheetContent(
         ) {
             HorizontalWheelPicker(
                 progression = IntProgression.fromClosedRange(
-                    rangeStart = 10.minutes.inWholeMinutes.toInt(),
+                    rangeStart = 15.minutes.inWholeMinutes.toInt(),
                     rangeEnd = 1.hours.inWholeMinutes.toInt(),
                     step = 5.minutes.inWholeMinutes.toInt()
                 ),
@@ -73,8 +78,8 @@ fun WorkSetupModalBottomSheetContent(
         }
         OptionSwitch(
             modifier = Modifier.padding(horizontal = 16.dp),
-            text = "Autostart work",
-            infoText = "Work interval will start automatically, without manual confirmation",
+            text = stringResource(Res.string.ts_bs_work_autostart_title),
+            infoText = stringResource(Res.string.ts_bs_work_autostart_desc),
             onCheckChange = { onAutoStartToggle.invoke() },
             checked = timerSettings.intervalsSettings.autoStartWork
         )
