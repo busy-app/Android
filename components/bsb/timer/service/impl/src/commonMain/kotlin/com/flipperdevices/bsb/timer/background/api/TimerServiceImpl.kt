@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.background.api
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerAction
 import com.flipperdevices.bsb.timer.background.model.TimerServiceState
 import com.flipperdevices.core.data.timer.TimerState
@@ -14,10 +15,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -33,14 +37,17 @@ class TimerServiceImpl(
 
     override val state: StateFlow<TimerServiceState> = _state.asStateFlow()
 
-    override fun startWith(timerSettings: TimerSettings) {
-        scope.launch {
-            initWork(timerSettings)
+    private suspend fun initWork(timerSettings: TimerSettings) {
+        timerApi.startTimer(TimerState(timerSettings.intervalsSettings.work))
+        _state.update {
+            TimerServiceState.Started(
+                currentIteration = 0,
+                maxIteration = timerSettings.totalIterations,
+                timerState = timerApi.getState().filterNotNull().first(),
+                timerSettings = timerSettings,
+                status = TimerServiceState.Status.WORK
+            )
         }
-    }
-
-    override fun togglePause() {
-        timerApi.onAction(TimerAction.PAUSE)
     }
 
     private suspend fun tryStartRest(state: TimerServiceState.Started): Boolean {
@@ -72,19 +79,6 @@ class TimerServiceImpl(
         return true
     }
 
-    private suspend fun initWork(timerSettings: TimerSettings) {
-        timerApi.startTimer(TimerState(timerSettings.intervalsSettings.work))
-        _state.update {
-            TimerServiceState.Started(
-                currentIteration = 0,
-                maxIteration = timerSettings.totalIterations,
-                timerState = timerApi.getState().filterNotNull().first(),
-                timerSettings = timerSettings,
-                status = TimerServiceState.Status.WORK
-            )
-        }
-    }
-
     private suspend fun tryStartWork(state: TimerServiceState.Started): Boolean {
         if (state.status == TimerServiceState.Status.WORK) return false
         if (state.status == TimerServiceState.Status.LONG_REST) return false
@@ -114,23 +108,45 @@ class TimerServiceImpl(
         return true
     }
 
+    private suspend fun skipUnsafe() {
+        val currentState = state.first() as? TimerServiceState.Started ?: return
+//        if (!timerApi.getState().first().isAlmostFinished) return
+
+//        if (timerApi.getState().first() != null) {
+//            timerApi.stopTimer()
+//            timerApi.getState().filter { it == null }.first()
+//        }
+
+        if (tryStartRest(currentState)) {
+            Unit
+        } else if (tryStartFinish(currentState)) {
+            Unit
+        } else if (tryStartLongRest(currentState)) {
+            Unit
+        } else if (tryStartWork(currentState)) {
+            Unit
+        }
+    }
+
     override fun skip() {
         scope.launch {
-            val currentState = state.first() as? TimerServiceState.Started ?: return@launch
-
-            timerApi.stopTimer()
-            timerApi.getState().filter { it == null }.first()
-
-            if (tryStartRest(currentState)) {
-                Unit
-            } else if (tryStartFinish(currentState)) {
-                Unit
-            } else if (tryStartLongRest(currentState)) {
-                Unit
-            } else if (tryStartWork(currentState)) {
-                Unit
-            }
+//            if (!timerApi.getState().first().isAlmostFinished) {
+            skipUnsafe()
+//            timerApi.startTimer(TimerState(0, 1))
+//                timerApi.stopTimer()
+//                timerApi.getState().filter { it == null }.first()
+//            }
         }
+    }
+
+    override fun startWith(timerSettings: TimerSettings) {
+        scope.launch {
+            initWork(timerSettings)
+        }
+    }
+
+    override fun togglePause() {
+        timerApi.onAction(TimerAction.PAUSE)
     }
 
     override fun stop() {
@@ -141,14 +157,20 @@ class TimerServiceImpl(
         }
     }
 
+    private val ControlledTimerState?.isAlmostFinished: Boolean
+        get() = (this?.timerState?.duration?.inWholeSeconds ?: 0L) <= 1
+
     private fun collectTimerState() {
         timerApi.getState()
-            .filterNotNull()
             .onEach { timerState ->
-                _state.update { state ->
-                    (state as? TimerServiceState.Started)
-                        ?.copy(timerState = timerState)
-                        ?: state
+                if (timerState == null || timerState.isAlmostFinished) {
+                    skipUnsafe()
+                } else {
+                    _state.update { state ->
+                        (state as? TimerServiceState.Started)
+                            ?.copy(timerState = timerState)
+                            ?: state
+                    }
                 }
             }.launchIn(scope)
     }
