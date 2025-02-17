@@ -36,8 +36,8 @@ fun TotalTimeTimerPickerComposable(
     ) {
         HorizontalWheelPicker(
             progression = IntProgression.fromClosedRange(
-                rangeStart = 1.hours.inWholeMinutes.toInt(),
-                rangeEnd = 12.hours.inWholeMinutes.toInt(),
+                rangeStart = 15.minutes.inWholeMinutes.toInt(),
+                rangeEnd = 9.hours.inWholeMinutes.toInt(),
                 step = 5.minutes.inWholeMinutes.toInt()
             ),
             initialSelectedItem = initialTime.inWholeMinutes.toInt(),

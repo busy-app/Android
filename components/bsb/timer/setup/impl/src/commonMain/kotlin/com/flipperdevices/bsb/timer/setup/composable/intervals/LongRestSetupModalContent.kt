@@ -60,8 +60,8 @@ fun LongRestSetupModalBottomSheetContent(
         ) {
             HorizontalWheelPicker(
                 progression = IntProgression.fromClosedRange(
-                    rangeStart = 0.minutes.inWholeMinutes.toInt(),
-                    rangeEnd = 2.hours.inWholeMinutes.toInt(),
+                    rangeStart = 15.minutes.inWholeMinutes.toInt(),
+                    rangeEnd = 30.minutes.inWholeMinutes.toInt(),
                     step = 5.minutes.inWholeMinutes.toInt()
                 ),
                 initialSelectedItem = timerSettings.intervalsSettings.longRest.inWholeMinutes.toInt(),

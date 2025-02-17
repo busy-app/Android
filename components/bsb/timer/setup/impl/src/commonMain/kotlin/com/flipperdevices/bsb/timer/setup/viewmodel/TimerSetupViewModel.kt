@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.setup.viewmodel
 
 import com.flipperdevices.bsb.preference.api.KrateApi
+import com.flipperdevices.bsb.timer.setup.store.TimerSettingsReducer
 import com.flipperdevices.core.ui.lifecycle.DecomposeViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.launch
@@ -77,60 +78,38 @@ class TimerSetupViewModel(
         }
     }
 
-    fun setTotalTime(duration: Duration) {
+    fun setTotalTime(duration: Duration) = with(TimerSettingsReducer) {
         viewModelScope.launch {
             krateApi.timerSettingsKrate.update { timerSettings ->
-                timerSettings.copy(
-                    totalTime = duration
-                )
+                timerSettings
+                    .reduce(TimerSettingsReducer.Message.TotalTimeChanged(duration))
             }
         }
     }
 
-    fun setRest(duration: Duration) {
+    fun setRest(duration: Duration) = with(TimerSettingsReducer) {
         viewModelScope.launch {
             krateApi.timerSettingsKrate.update { timerSettings ->
-                timerSettings.copy(
-                    intervalsSettings = timerSettings.intervalsSettings.copy(
-                        rest = duration
-                    )
-                )
+                timerSettings
+                    .reduce(TimerSettingsReducer.Message.Interval.RestChanged(duration))
             }
         }
     }
 
-    fun setWork(duration: Duration) {
+    fun setWork(duration: Duration) = with(TimerSettingsReducer) {
         viewModelScope.launch {
             krateApi.timerSettingsKrate.update { timerSettings ->
-                timerSettings.copy(
-                    intervalsSettings = timerSettings.intervalsSettings.copy(
-                        work = duration
-                    )
-                )
+                timerSettings
+                    .reduce(TimerSettingsReducer.Message.Interval.WorkChanged(duration))
             }
         }
     }
 
-    fun setLongRest(duration: Duration) {
+    fun setLongRest(duration: Duration) = with(TimerSettingsReducer) {
         viewModelScope.launch {
             krateApi.timerSettingsKrate.update { timerSettings ->
-                timerSettings.copy(
-                    intervalsSettings = timerSettings.intervalsSettings.copy(
-                        longRest = duration
-                    )
-                )
-            }
-        }
-    }
-
-    fun setIntervalsEnabled(isEnabled: Boolean) {
-        viewModelScope.launch {
-            krateApi.timerSettingsKrate.update { timerSettings ->
-                timerSettings.copy(
-                    intervalsSettings = timerSettings.intervalsSettings.copy(
-                        isEnabled = isEnabled
-                    )
-                )
+                timerSettings
+                    .reduce(TimerSettingsReducer.Message.Interval.LongRestChanged(duration))
             }
         }
     }
