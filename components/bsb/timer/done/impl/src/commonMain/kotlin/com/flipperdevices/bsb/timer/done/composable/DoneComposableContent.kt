@@ -30,12 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.ic_pomodoro
+import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_finish
+import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_restart
+import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_well_done
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.ui.button.BChipButton
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private data class ObjectiveModel(
@@ -149,7 +153,7 @@ fun DoneComposableContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Well done!",
+                    text = stringResource(Res.string.td_well_done),
                     fontWeight = FontWeight.W500,
                     color = LocalPallet.current
                         .white
@@ -157,7 +161,7 @@ fun DoneComposableContent(
                     fontSize = 40.sp
                 )
                 Text(
-                    text = "You’ve finished this BUSY",
+                    text = stringResource(Res.string.td_finish),
                     fontWeight = FontWeight.W500,
                     color = LocalPallet.current
                         .white
@@ -173,18 +177,18 @@ fun DoneComposableContent(
                 ObjectiveCard(
                     objectives = persistentListOf(
                         ObjectiveModel(
-                            "You’re total BUSY amount:",
-                            "x5"
+                            "You’re total BUSY amount:", // todo raw string
+                            "x5" // todo raw string
                         ),
                         ObjectiveModel(
-                            "You tried to open blocked apps today:",
-                            "x3"
+                            "You tried to open blocked apps today:", // todo raw string
+                            "x3" // todo raw string
                         )
                     )
                 )
                 BChipButton(
                     onClick = onRestartClick,
-                    text = "Restart BUSY",
+                    text = stringResource(Res.string.td_restart),
                     fontSize = 18.sp,
                     painter = null,
                     background = Color.Transparent,
@@ -204,7 +208,7 @@ fun DoneComposableContent(
             ) {
                 BChipButton(
                     onClick = onFinishClick,
-                    text = "Finish",
+                    text = stringResource(Res.string.td_finish),
                     fontSize = 18.sp,
                     painter = null,
                     background = LocalPallet.current

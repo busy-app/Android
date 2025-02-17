@@ -28,7 +28,7 @@ fun TimerTimeComposable(
         TimerNumberComposable(timerState.minute)
         Text(
             modifier = Modifier.padding(horizontal = 8.dp),
-            text = ":",
+            text = ":", // todo raw string
             fontSize = 64.sp,
             color = LocalPallet.current.white.invert,
             fontWeight = FontWeight.W500,

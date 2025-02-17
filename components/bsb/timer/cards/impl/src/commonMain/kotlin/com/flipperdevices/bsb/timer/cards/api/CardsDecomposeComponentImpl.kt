@@ -54,7 +54,7 @@ class CardsDecomposeComponentImpl(
                 @Suppress("MagicNumber")
                 BusyCardComposable(
                     background = Color(0xFFE50000), // todo no color in design
-                    name = "BUSY",
+                    name = "BUSY", // todo raw string
                     settings = krateApi.timerSettingsKrate
                         .stateFlow(coroutineScope)
                         .collectAsState()

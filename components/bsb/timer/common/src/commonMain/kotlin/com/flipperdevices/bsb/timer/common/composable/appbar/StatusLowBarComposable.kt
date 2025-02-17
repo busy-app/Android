@@ -9,8 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import busystatusbar.components.bsb.timer.common.generated.resources.Res
+import busystatusbar.components.bsb.timer.common.generated.resources.tc_status_busy
+import busystatusbar.components.bsb.timer.common.generated.resources.tc_status_long_rest
+import busystatusbar.components.bsb.timer.common.generated.resources.tc_status_rest
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -26,9 +31,9 @@ fun StatusLowBarComposable(
     ) {
         Text(
             text = when (type) {
-                StatusType.BUSY -> "BUSY"
-                StatusType.REST -> "REST"
-                StatusType.LONG_REST -> "LONG REST"
+                StatusType.BUSY -> stringResource(Res.string.tc_status_busy)
+                StatusType.REST -> stringResource(Res.string.tc_status_rest)
+                StatusType.LONG_REST -> stringResource(Res.string.tc_status_long_rest)
             },
             color = LocalPallet.current
                 .white

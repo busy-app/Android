@@ -22,6 +22,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import busystatusbar.components.bsb.timer.rest.impl.generated.resources.Res
+import busystatusbar.components.bsb.timer.rest.impl.generated.resources.tr_skip
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
@@ -32,6 +34,7 @@ import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.TimerAppBarComposable
 import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.timeline.toFormattedTime
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -97,7 +100,7 @@ fun RestComposableContent(
             ) {
                 timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
                     Text(
-                        text = "${minutes.toFormattedTime()}",
+                        text = minutes.toFormattedTime(),
                         style = TextStyle(
                             fontSize = 64.sp,
                             fontWeight = FontWeight.W500,
@@ -106,7 +109,7 @@ fun RestComposableContent(
                         )
                     )
                     Text(
-                        text = ":",
+                        text = ":", // todo raw string
                         style = TextStyle(
                             fontSize = 64.sp,
                             fontWeight = FontWeight.W500,
@@ -115,7 +118,7 @@ fun RestComposableContent(
                         )
                     )
                     Text(
-                        text = "${seconds.toFormattedTime()}",
+                        text = seconds.toFormattedTime(),
                         style = TextStyle(
                             fontSize = 64.sp,
                             fontWeight = FontWeight.W500,
@@ -129,7 +132,7 @@ fun RestComposableContent(
                 BChipButton(
                     onClick = onSkip,
                     background = Color.Transparent,
-                    text = "Skip",
+                    text = stringResource(Res.string.tr_skip),
                     painter = null,
                     fontSize = 17.sp,
                     contentColor = LocalPallet.current

@@ -2,4 +2,7 @@
     <string name="timer_button_start">Start</string>
     <string name="timer_button_stop">Stop</string>
     <string name="timer_button_pause">Pause</string>
+    <string name="tc_status_busy">BUSY</string>
+    <string name="tc_status_rest">REST</string>
+    <string name="tc_status_long_rest">LONG REST</string>
 </resources>

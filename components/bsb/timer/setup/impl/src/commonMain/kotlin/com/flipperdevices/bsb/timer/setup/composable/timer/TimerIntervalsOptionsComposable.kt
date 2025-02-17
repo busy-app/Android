@@ -12,10 +12,16 @@ import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_long_rest
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_rest
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_work
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_intervals_desc
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_intervals_long_rest
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_intervals_rest
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_intervals_title
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_intervals_work
 import com.flipperdevices.ui.cardframe.SmallCardFrameComposable
 import com.flipperdevices.ui.options.OptionSwitch
 import com.flipperdevices.ui.timeline.toFormattedTime
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration
 
 @Composable
@@ -36,17 +42,17 @@ fun TimerIntervalsOptionsComposable(
         modifier = modifier.padding(horizontal = 16.dp)
     ) {
         OptionSwitch(
-            text = "Intervals",
+            text = stringResource(Res.string.ts_bs_intervals_title),
             onCheckChange = { onIntervalsToggle.invoke() },
             checked = isIntervalsEnabled,
-            infoText = "Split total time into work and rest intervals"
+            infoText = stringResource(Res.string.ts_bs_intervals_desc),
         )
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             SmallCardFrameComposable(
-                title = "Work",
+                title = stringResource(Res.string.ts_bs_intervals_work),
                 desc = workTime.toFormattedTime(),
                 icon = painterResource(Res.drawable.ic_work),
                 onClick = onShowWorkTimer,
@@ -55,7 +61,7 @@ fun TimerIntervalsOptionsComposable(
             )
 
             SmallCardFrameComposable(
-                title = "Rest",
+                title = stringResource(Res.string.ts_bs_intervals_rest),
                 desc = restTime.toFormattedTime(),
                 icon = painterResource(Res.drawable.ic_rest),
                 onClick = onShowRestTimer,
@@ -64,7 +70,7 @@ fun TimerIntervalsOptionsComposable(
             )
 
             SmallCardFrameComposable(
-                title = "Long rest",
+                title = stringResource(Res.string.ts_bs_intervals_long_rest),
                 desc = longRestTime.toFormattedTime(),
                 icon = painterResource(Res.drawable.ic_long_rest),
                 onClick = onShowLongRestTimer,
