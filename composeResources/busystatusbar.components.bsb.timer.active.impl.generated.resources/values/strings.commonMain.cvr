@@ -1,3 +1,8 @@
 version:0
+string|ta_ask_stop_session|U3RvcCB5b3VyIGZvY3VzIHNlc3Npb24/
+string|ta_keep_focusing|S2VlcCBmb2N1c2luZw==
+string|ta_skip|U3RvcA==
+string|ta_stop_session_desc|VGhpcyBjb3VsZCBpbnRlcnJ1cHQgeW91ciB3b3JrZmxvdyBhbmQgbWFrZSBpdCBoYXJkZXIgdG8gZ2V0IGJhY2sgb24gdHJhY2su
+string|ta_stop|U3RvcA==
 string|timer_active_stop_active|QlVTWSBpcyBhY3RpdmU=
 string|timer_active_stop|U1RPUA==
