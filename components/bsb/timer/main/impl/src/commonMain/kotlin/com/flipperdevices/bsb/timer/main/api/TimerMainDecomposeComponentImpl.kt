@@ -84,7 +84,13 @@ class TimerMainDecomposeComponentImpl(
         )
 
         TimerMainNavigationConfig.Work -> activeTimerScreenDecomposeComponentFactory(componentContext)
-        TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(componentContext)
+        TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(
+            componentContext = componentContext,
+            onFinishCallback = {
+                navigation.replaceAll(TimerMainNavigationConfig.Main)
+            }
+        )
+
         TimerMainNavigationConfig.LongRest -> restTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             breakType = RestTimerScreenDecomposeComponent.BreakType.LONG

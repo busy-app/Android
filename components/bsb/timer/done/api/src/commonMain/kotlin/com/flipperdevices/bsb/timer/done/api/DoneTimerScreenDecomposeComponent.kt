@@ -10,6 +10,11 @@ abstract class DoneTimerScreenDecomposeComponent(
     fun interface Factory {
         operator fun invoke(
             componentContext: ComponentContext,
+            onFinishCallback: OnFinishCallback,
         ): DoneTimerScreenDecomposeComponent
+    }
+
+    fun interface OnFinishCallback {
+        operator fun invoke()
     }
 }
