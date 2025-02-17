@@ -9,8 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Switch
+import androidx.compose.material3.Switch
 import androidx.compose.material.Text
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,6 +88,10 @@ fun OptionSwitch(
             checked = checked,
             onCheckedChange = onCheckChange,
             enabled = isEnabled,
+            colors = SwitchDefaults.colors(
+                uncheckedBorderColor = Color.Transparent,
+                uncheckedThumbColor = LocalPallet.current.white.onColor,
+            )
         )
     }
 }
@@ -110,6 +115,7 @@ private fun OptionSwitchPreview() {
             OptionSwitch(
                 icon = painterResource(PreviewRes.drawable.ic_preview_work),
                 text = LONG_TEXT,
+                checked = false,
                 onCheckChange = {},
                 modifier = modifier
             )

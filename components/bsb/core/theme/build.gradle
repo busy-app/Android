@@ -6,4 +6,6 @@ plugins {
 commonDependencies {
     implementation(libs.decompose)
     implementation(libs.decompose.composeExtension)
+
+    implementation(kotlin.compose.material3)
 }
