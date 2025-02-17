@@ -19,7 +19,6 @@ import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.root.api.LocalRootNavigation
 import com.flipperdevices.bsb.root.model.RootNavigationConfig
-import com.flipperdevices.ui.button.BIconButton
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

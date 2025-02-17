@@ -1,8 +1,6 @@
 package com.flipperdevices.bsb.timer.common.composable.appbar
 
-
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
@@ -18,8 +16,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun StatusLowBarComposable(
     type: StatusType,
-    statusDesc: String? = null,
     modifier: Modifier = Modifier,
+    statusDesc: String? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),

@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.timer.active.composable
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,20 +32,20 @@ import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.TimerAppBarComposable
 import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.timeline.toFormattedTime
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Suppress("LongMethod")
 fun TimerOnComposableScreen(
     timeLeft: Duration,
+    onPauseClick: () -> Unit,
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
     workPhaseText: String? = null,
     onSkip: (() -> Unit)? = null,
-    onPauseClick: () -> Unit,
-    onBack: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -124,7 +123,7 @@ fun TimerOnComposableScreen(
                         .transparent
                         .whiteInvert
                         .secondary,
-                    modifier = Modifier.fillMaxWidth(0.4f)
+                    modifier = Modifier.fillMaxWidth(fraction = 0.4f)
                 )
             }
         }
@@ -136,7 +135,7 @@ fun TimerOnComposableScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ButtonTimerComposable(
-                modifier = Modifier.fillMaxWidth(0.6f),
+                modifier = Modifier.fillMaxWidth(fraction = 0.6f),
                 state = ButtonTimerState.PAUSE,
                 onClick = onPauseClick
             )

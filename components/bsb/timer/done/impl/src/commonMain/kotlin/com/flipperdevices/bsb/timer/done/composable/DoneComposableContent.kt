@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,25 +30,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.ic_pomodoro
-import busystatusbar.components.bsb.timer.done.impl.generated.resources.ic_star
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.ui.button.BChipButton
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.DurationUnit
 
 private data class ObjectiveModel(
     val title: String,
     val innerDesc: String
 )
 
+@Suppress("LongMethod")
 @Composable
 private fun ObjectiveCard(
-    objectives: List<ObjectiveModel>,
+    objectives: ImmutableList<ObjectiveModel>,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -90,7 +87,7 @@ private fun ObjectiveCard(
                         .background(LocalPallet.current.transparent.whiteInvert.tertiary)
                         .padding(horizontal = 8.dp)
                         .padding(vertical = 4.dp)
-                        .fillMaxWidth(0.4f),
+                        .fillMaxWidth(fraction = 0.4f),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -105,10 +102,11 @@ private fun ObjectiveCard(
             }
             if (!isLast) {
                 Box(
-                    Modifier.padding(horizontal = 5.dp)
+                    Modifier
+                        .padding(horizontal = 5.dp)
                         .width(1.dp)
                         .fillMaxHeight()
-                        .background(Color(0xFFFFFF).copy(0.2f))
+                        .background(Color(color = 0xFFFFFF).copy(alpha = 0.2f)) // todo
                 )
             }
         }
@@ -119,9 +117,9 @@ private fun ObjectiveCard(
 @Suppress("LongMethod")
 @Composable
 fun DoneComposableContent(
-    modifier: Modifier = Modifier,
     onFinishClick: () -> Unit,
-    onRestartClick: () -> Unit
+    onRestartClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Box(
@@ -173,7 +171,7 @@ fun DoneComposableContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 ObjectiveCard(
-                    objectives = listOf(
+                    objectives = persistentListOf(
                         ObjectiveModel(
                             "You’re total BUSY amount:",
                             "x5"
@@ -223,7 +221,6 @@ fun DoneComposableContent(
                 )
             }
         }
-
     }
 }
 

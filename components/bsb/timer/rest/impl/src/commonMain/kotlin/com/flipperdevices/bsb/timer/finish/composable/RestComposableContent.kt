@@ -32,11 +32,10 @@ import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.TimerAppBarComposable
 import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.timeline.toFormattedTime
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
 
 @Suppress("LongMethod")
 @Composable
@@ -137,7 +136,7 @@ fun RestComposableContent(
                         .transparent
                         .whiteInvert
                         .secondary,
-                    modifier = Modifier.fillMaxWidth(0.4f)
+                    modifier = Modifier.fillMaxWidth(fraction = 0.4f)
                 )
             }
         }
@@ -149,7 +148,7 @@ fun RestComposableContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ButtonTimerComposable(
-                modifier = Modifier.fillMaxWidth(0.6f),
+                modifier = Modifier.fillMaxWidth(fraction = 0.6f),
                 state = ButtonTimerState.PAUSE,
                 onClick = onPauseClick
             )

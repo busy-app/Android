@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.timer.common.composable.appbar
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +39,6 @@ fun PauseFullScreenOverlayComposable(
                     .padding(vertical = 64.dp),
                 contentAlignment = Alignment.Center
             ) {
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),

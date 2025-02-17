@@ -5,9 +5,7 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.flipperdevices.bsb.timer.active.api.ActiveTimerScreenDecomposeComponent
-import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerService
-import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerServiceState
 import com.flipperdevices.bsb.timer.cards.api.CardsDecomposeComponent
 import com.flipperdevices.bsb.timer.done.api.DoneTimerScreenDecomposeComponent
@@ -15,11 +13,9 @@ import com.flipperdevices.bsb.timer.finish.api.RestTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.main.model.TimerMainNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -31,8 +27,7 @@ class TimerMainDecomposeComponentImpl(
     private val cardsDecomposeComponentFactory: CardsDecomposeComponent.Factory,
     private val restTimerScreenDecomposeComponentFactory: RestTimerScreenDecomposeComponent.Factory,
     private val doneTimerScreenDecomposeComponentFactory: DoneTimerScreenDecomposeComponent.Factory,
-    timerApi: TimerApi,
-    private val timerService: TimerService,
+    timerService: TimerService,
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     ComponentContext by componentContext {
 

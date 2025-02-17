@@ -16,13 +16,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -30,6 +27,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, TimerService::class)
+@Suppress("TooManyFunctions")
 class TimerServiceImpl(
     private val timerApi: TimerApi
 ) : TimerService {
@@ -156,7 +154,7 @@ class TimerServiceImpl(
                 if (timerState.isAlmostFinished) {
                     scope.launch {
                         // wait for timer almost finish
-                        delay(900L)
+                        delay(timeMillis = 900L)
                         skipUnsafe()
                     }
                 }

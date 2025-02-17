@@ -30,7 +30,9 @@ object TimerSettingsReducer {
                                 rest = newState.totalTime.minus(newState.intervalsSettings.work)
                             )
                         )
-                    } else newState
+                    } else {
+                        newState
+                    }
                 }
             }
 
@@ -49,7 +51,9 @@ object TimerSettingsReducer {
                                 .intervalsSettings
                                 .copy(isEnabled = false)
                         )
-                    } else newState
+                    } else {
+                        newState
+                    }
                 }
             }
         }

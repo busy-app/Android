@@ -63,7 +63,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
 ) {
     val initialSelectedItem = initialSelectedItem
         .minus(progression.first)
-        .coerceIn(progression.first,progression.last)
+        .coerceIn(progression.first, progression.last)
     check(progression.step % STEP_DIVISION == 0) {
         "Progression step must be divided by $STEP_DIVISION!"
     }
