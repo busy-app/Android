@@ -36,6 +36,21 @@ class TimerMainDecomposeComponentImpl(
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     ComponentContext by componentContext {
 
+    private fun TimerServiceState.getScreen(): TimerMainNavigationConfig {
+        val screen = when (this) {
+            TimerServiceState.Finished -> TimerMainNavigationConfig.Finished
+            TimerServiceState.Pending -> TimerMainNavigationConfig.Main
+            is TimerServiceState.Started -> {
+                when (this.status) {
+                    TimerServiceState.Status.WORK -> TimerMainNavigationConfig.Work
+                    TimerServiceState.Status.REST -> TimerMainNavigationConfig.Rest
+                    TimerServiceState.Status.LONG_REST -> TimerMainNavigationConfig.LongRest
+                }
+            }
+        }
+        return screen
+    }
+
     init {
         timerService.state
             .distinctUntilChangedBy { state ->
@@ -43,31 +58,19 @@ class TimerMainDecomposeComponentImpl(
                     TimerServiceState.Finished -> state::class
                     TimerServiceState.Pending -> state::class
                     is TimerServiceState.Started -> {
-                        state.status
+                        state::class.toString() + state.status
                     }
                 }
             }
             .onEach { state ->
-                val screen = when (state) {
-                    TimerServiceState.Finished -> TimerMainNavigationConfig.Finished
-                    TimerServiceState.Pending -> TimerMainNavigationConfig.Main
-                    is TimerServiceState.Started -> {
-                        when (state.status) {
-                            TimerServiceState.Status.WORK -> TimerMainNavigationConfig.Work
-                            TimerServiceState.Status.REST -> TimerMainNavigationConfig.Rest
-                            TimerServiceState.Status.LONG_REST -> TimerMainNavigationConfig.LongRest
-                        }
-                    }
-                }
-                navigation.replaceAll(screen)
-            }
-            .launchIn(coroutineScope())
+                navigation.replaceAll(state.getScreen())
+            }.launchIn(coroutineScope())
     }
 
     override val stack = childStack(
         source = navigation,
         serializer = TimerMainNavigationConfig.serializer(),
-        initialConfiguration = timerApi.getState().value.getScreen(),
+        initialConfiguration = timerService.state.value.getScreen(),
         handleBackButton = true,
         childFactory = ::child,
     )
@@ -103,13 +106,5 @@ class TimerMainDecomposeComponentImpl(
         override fun invoke(
             componentContext: ComponentContext
         ) = factory(componentContext)
-    }
-}
-
-private fun ControlledTimerState?.getScreen(): TimerMainNavigationConfig {
-    return if (this == null) {
-        TimerMainNavigationConfig.Main
-    } else {
-        TimerMainNavigationConfig.Work
     }
 }
