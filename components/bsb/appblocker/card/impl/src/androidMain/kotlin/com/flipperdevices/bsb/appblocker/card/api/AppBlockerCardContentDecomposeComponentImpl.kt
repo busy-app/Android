@@ -15,6 +15,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.appblocker.card.composable.AppBlockerHeaderComposable
 import com.flipperdevices.bsb.appblocker.card.composable.list.EmptyListAppsBoxComposable
+import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterElementDecomposeComponent
 import com.flipperdevices.bsb.appblocker.permission.api.AppBlockerPermissionApi
 import com.flipperdevices.bsb.appblocker.permission.api.AppBlockerPermissionBlockDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
@@ -28,9 +29,13 @@ class AppBlockerCardContentDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onBackParameter: DecomposeOnBackParameter,
     appBlockerPermissionBlockFactory: AppBlockerPermissionBlockDecomposeComponent.Factory,
+    appBlockerFilterBlockFactory: AppBlockerFilterElementDecomposeComponent.Factory
 ) : AppBlockerCardContentDecomposeComponent(componentContext) {
-    private val appBlockerCardContent = appBlockerPermissionBlockFactory(
+    private val appBlockerPermissionCardContent = appBlockerPermissionBlockFactory(
         componentContext = childContext("appBlockerCardContentDecomposeComponent_permission")
+    )
+    private val appBlockerFilterCardContent = appBlockerFilterBlockFactory(
+        componentContext = childContext("appBlockerCardContentDecomposeComponent_filter")
     )
 
     @Composable
@@ -44,15 +49,13 @@ class AppBlockerCardContentDecomposeComponentImpl(
                 enabled = false,
                 onSwitch = {}
             )
-            val isPermissionGranted by appBlockerCardContent.isAllPermissionGranted()
+            val isPermissionGranted by appBlockerPermissionCardContent.isAllPermissionGranted()
                 .collectAsState()
 
             if (isPermissionGranted) {
-                EmptyListAppsBoxComposable(
-                    onClick = {}
-                )
+                appBlockerFilterCardContent.Render(Modifier.padding(top = 32.dp))
             } else {
-                appBlockerCardContent.Render(Modifier.padding(top = 32.dp))
+                appBlockerPermissionCardContent.Render(Modifier.padding(top = 32.dp))
             }
 
             Spacer(Modifier.height(16.dp))

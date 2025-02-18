@@ -13,10 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.Res
+import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_card_add
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.core.ktx.common.clickableRipple
 import com.flipperdevices.ui.button.dashedBorder
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -25,7 +28,8 @@ internal fun EmptyListAppsBoxComposable(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .dashedBorder(
                 color = LocalPallet.current.transparent.whiteInvert.quaternary,
                 radius = 12.dp
@@ -37,7 +41,7 @@ internal fun EmptyListAppsBoxComposable(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = Res.strings.appblocker_card_add,
+            text = stringResource(Res.string.appblocker_card_add),
             color = LocalPallet.current
                 .transparent
                 .whiteInvert

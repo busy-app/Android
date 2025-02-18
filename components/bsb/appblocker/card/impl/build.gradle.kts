@@ -14,6 +14,7 @@ commonDependencies {
     implementation(projects.components.bsb.core.theme)
 
     implementation(projects.components.bsb.appblocker.permission.api)
+    implementation(projects.components.bsb.appblocker.filter.api)
 
     implementation(libs.kotlin.immutable)
     implementation(libs.decompose)
