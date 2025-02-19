@@ -2,9 +2,11 @@ package com.flipperdevices.bsb.appblocker.api
 
 import com.flipperdevices.bsb.preference.api.PreferenceApi
 import com.flipperdevices.bsb.preference.api.get
+import com.flipperdevices.bsb.preference.api.getFlow
 import com.flipperdevices.bsb.preference.api.set
 import com.flipperdevices.bsb.preference.model.SettingsEnum
 import com.flipperdevices.core.di.AppGraph
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -19,8 +21,8 @@ class AppBlockerImpl(
     private val familyControlApi: FamilyControlApi
 ) : AppBlockerApi {
 
-    override fun isAppBlockerSupportActive(): Boolean {
-        return preferenceApi.get(SettingsEnum.APP_BLOCKING, false)
+    override fun isAppBlockerSupportActive(): Flow<Boolean> {
+        return preferenceApi.getFlow(SettingsEnum.APP_BLOCKING, false)
     }
 
     override fun enableSupport(): Result<Unit> {

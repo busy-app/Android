@@ -18,8 +18,10 @@ import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity(), LogTagProvider {
     override val TAG = "MainActivity"
@@ -67,7 +69,9 @@ class MainActivity : ComponentActivity(), LogTagProvider {
         lifecycleScope.launch(FlipperDispatchers.default) {
             val appComponent = ComponentHolder.component<AndroidAppComponent>()
             appComponent.deeplinkParser.parseOrLog(this@MainActivity, intent)?.let {
-                rootDecomposeComponent?.handleDeeplink(it)
+                withContext(Dispatchers.Main) {
+                    rootDecomposeComponent?.handleDeeplink(it)
+                }
             }
         }
     }

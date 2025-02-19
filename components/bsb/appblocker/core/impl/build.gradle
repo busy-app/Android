@@ -8,6 +8,7 @@ commonDependencies {
     implementation(projects.components.bsb.appblocker.core.api)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.core.di)
+    implementation(libs.kotlin.coroutines)
 }
 
 androidDependencies {
@@ -17,8 +18,9 @@ androidDependencies {
 
     implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.deeplink.api)
+    implementation(projects.components.bsb.appblocker.permission.api)
+    implementation(projects.components.bsb.appblocker.filter.api)
 
-    implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.datetime)
 }
 

@@ -16,10 +16,12 @@ import busystatusbar.components.bsb.appblocker.card.impl.generated.resources.app
 import busystatusbar.components.bsb.appblocker.card.impl.generated.resources.appblocker_title
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.ui.options.M3Switch
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AppBlockerHeaderComposable(
+    checked: Boolean,
     enabled: Boolean,
     onSwitch: (Boolean) -> Unit,
     modifier: Modifier = Modifier
@@ -36,14 +38,10 @@ fun AppBlockerHeaderComposable(
                 color = LocalPallet.current.white.invert,
                 fontFamily = LocalBusyBarFonts.current.pragmatica
             )
-            Switch(
-                checked = enabled,
+            M3Switch(
+                checked = checked,
                 onCheckedChange = onSwitch,
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = LocalPallet.current.accent.device.primary,
-                    uncheckedThumbColor = LocalPallet.current.neutral.quaternary,
-                    uncheckedTrackColor = LocalPallet.current.white.onColor
-                )
+                enabled =  enabled
             )
         }
         Text(

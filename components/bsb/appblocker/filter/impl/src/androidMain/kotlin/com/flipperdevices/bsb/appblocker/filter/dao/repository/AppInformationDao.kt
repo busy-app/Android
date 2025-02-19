@@ -14,6 +14,9 @@ interface AppInformationDao {
     @Query("SELECT * FROM blocked_apps")
     fun getCheckedAppsFlow(): Flow<List<DBBlockedApp>>
 
+    @Query("SELECT * FROM blocked_apps WHERE app_package == :packageName")
+    suspend fun find(packageName: String): List<DBBlockedApp>
+
     @Insert
     suspend fun insert(appInformation: DBBlockedApp)
 

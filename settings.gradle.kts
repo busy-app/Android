@@ -58,8 +58,6 @@ include(
     ":components:bsb:root:impl",
     ":components:bsb:preference:api",
     ":components:bsb:preference:impl",
-    ":components:bsb:preferencescreen:api",
-    ":components:bsb:preferencescreen:impl",
     ":components:bsb:cloud:api",
     ":components:bsb:cloud:impl",
     ":components:bsb:dnd:api",

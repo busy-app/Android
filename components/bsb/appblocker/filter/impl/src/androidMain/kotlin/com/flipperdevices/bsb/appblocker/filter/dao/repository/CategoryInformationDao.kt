@@ -14,6 +14,9 @@ interface CategoryInformationDao {
     @Query("SELECT * FROM blocked_category")
     fun getCheckedCategoryFlow(): Flow<List<DBBlockedCategory>>
 
+    @Query("SELECT * FROM blocked_category WHERE id == :categoryId")
+    suspend fun find(categoryId: Int): List<DBBlockedCategory>
+
     @Insert
     suspend fun insert(category: DBBlockedCategory)
 

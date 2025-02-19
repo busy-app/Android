@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
+import com.flipperdevices.bsb.appblocker.api.AppBlockerApi
 import com.flipperdevices.bsb.appblocker.card.composable.AppBlockerHeaderComposable
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterElementDecomposeComponent
 import com.flipperdevices.bsb.appblocker.permission.api.AppBlockerPermissionBlockDecomposeComponent
@@ -27,6 +28,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class AppBlockerCardContentDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onBackParameter: DecomposeOnBackParameter,
+    private val appBlockerApi: AppBlockerApi,
     appBlockerPermissionBlockFactory: AppBlockerPermissionBlockDecomposeComponent.Factory,
     appBlockerFilterBlockFactory: AppBlockerFilterElementDecomposeComponent.Factory
 ) : AppBlockerCardContentDecomposeComponent(componentContext) {
@@ -45,12 +47,23 @@ class AppBlockerCardContentDecomposeComponentImpl(
                 .navigationBarsPadding()
                 .padding(horizontal = 16.dp)
         ) {
-            AppBlockerHeaderComposable(
-                enabled = false,
-                onSwitch = {}
-            )
             val isPermissionGranted by appBlockerPermissionCardContent.isAllPermissionGranted()
                 .collectAsState()
+            val isAppBlockingEnabled by appBlockerApi
+                .isAppBlockerSupportActive()
+                .collectAsState(false)
+
+            AppBlockerHeaderComposable(
+                checked = isAppBlockingEnabled,
+                onSwitch = {
+                    if (isAppBlockingEnabled) {
+                        appBlockerApi.disableSupport()
+                    } else {
+                        appBlockerApi.enableSupport()
+                    }
+                },
+                enabled = isPermissionGranted
+            )
 
             if (isPermissionGranted) {
                 appBlockerFilterCardContent.Render(

@@ -1,9 +1,0 @@
-plugins {
-    id("flipper.multiplatform.noandroidlib")
-    id("flipper.multiplatform-dependencies")
-}
-
-commonDependencies {
-    implementation(libs.decompose)
-    implementation(projects.components.core.ui.decompose)
-}
