@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.appblocker.filter.model
+package com.flipperdevices.bsb.appblocker.filter.model.list
 
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList

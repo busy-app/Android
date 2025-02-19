@@ -15,7 +15,7 @@ import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.R
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_select_all
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_select_none
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_title
-import com.flipperdevices.bsb.appblocker.filter.model.AppBlockerFilterScreenState
+import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.core.ktx.common.clickableRipple

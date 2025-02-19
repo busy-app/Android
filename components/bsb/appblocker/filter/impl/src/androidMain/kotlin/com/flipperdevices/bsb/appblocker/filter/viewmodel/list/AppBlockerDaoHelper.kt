@@ -1,18 +1,16 @@
-package com.flipperdevices.bsb.appblocker.filter.viewmodel
+package com.flipperdevices.bsb.appblocker.filter.viewmodel.list
 
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.room.withTransaction
 import com.flipperdevices.bsb.appblocker.filter.dao.AppFilterDatabase
 import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedApp
 import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedCategory
-import com.flipperdevices.bsb.appblocker.filter.model.AppBlockerFilterScreenState
-import com.flipperdevices.bsb.appblocker.filter.model.AppCategory
-import com.flipperdevices.bsb.appblocker.filter.model.UIAppCategory
-import com.flipperdevices.bsb.appblocker.filter.model.UIAppInformation
+import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
+import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.log.info
 import com.flipperdevices.core.log.verbose
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList

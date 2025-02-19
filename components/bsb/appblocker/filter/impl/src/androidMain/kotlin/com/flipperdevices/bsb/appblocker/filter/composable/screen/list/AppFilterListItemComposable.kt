@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.Res
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_other
-import com.flipperdevices.bsb.appblocker.filter.model.UIAppInformation
+import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.core.ktx.common.clickableRipple
@@ -35,8 +35,8 @@ fun AppFilterListItemComposable(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickableRipple { onClick(!appInfo.isBlocked) }
-            .padding(vertical = 12.dp, horizontal = 16.dp),
+            .padding(vertical = 12.dp, horizontal = 16.dp)
+            .clickableRipple { onClick(!appInfo.isBlocked) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(

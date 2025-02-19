@@ -1,7 +1,7 @@
-package com.flipperdevices.bsb.appblocker.filter.viewmodel
+package com.flipperdevices.bsb.appblocker.filter.viewmodel.list
 
-import com.flipperdevices.bsb.appblocker.filter.model.UIAppCategory
-import com.flipperdevices.bsb.appblocker.filter.model.UIAppInformation
+import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import kotlinx.collections.immutable.toPersistentList
 
 object SearchHelper {

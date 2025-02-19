@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.Res
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_arrow
-import com.flipperdevices.bsb.appblocker.filter.model.UIAppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppCategory
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.core.ktx.common.clickableRipple

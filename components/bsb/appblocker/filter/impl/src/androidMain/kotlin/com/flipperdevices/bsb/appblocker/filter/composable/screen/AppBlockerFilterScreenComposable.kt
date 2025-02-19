@@ -16,9 +16,9 @@ import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.R
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_empty
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_loading
 import com.flipperdevices.bsb.appblocker.filter.composable.screen.list.AppBlockerFilterListComposable
-import com.flipperdevices.bsb.appblocker.filter.model.AppBlockerFilterScreenState
-import com.flipperdevices.bsb.appblocker.filter.model.AppCategory
-import com.flipperdevices.bsb.appblocker.filter.model.UIAppInformation
+import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
+import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import org.jetbrains.compose.resources.StringResource

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -14,9 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.appblocker.card.composable.AppBlockerHeaderComposable
-import com.flipperdevices.bsb.appblocker.card.composable.list.EmptyListAppsBoxComposable
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterElementDecomposeComponent
-import com.flipperdevices.bsb.appblocker.permission.api.AppBlockerPermissionApi
 import com.flipperdevices.bsb.appblocker.permission.api.AppBlockerPermissionBlockDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
@@ -41,7 +40,8 @@ class AppBlockerCardContentDecomposeComponentImpl(
     @Composable
     override fun Render(modifier: Modifier) {
         Column(
-            modifier.fillMaxWidth()
+            modifier
+                .fillMaxWidth()
                 .navigationBarsPadding()
                 .padding(horizontal = 16.dp)
         ) {
@@ -53,7 +53,11 @@ class AppBlockerCardContentDecomposeComponentImpl(
                 .collectAsState()
 
             if (isPermissionGranted) {
-                appBlockerFilterCardContent.Render(Modifier.padding(top = 32.dp))
+                appBlockerFilterCardContent.Render(
+                    Modifier
+                        .padding(vertical = 32.dp)
+                        .systemBarsPadding()
+                )
             } else {
                 appBlockerPermissionCardContent.Render(Modifier.padding(top = 32.dp))
             }

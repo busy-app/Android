@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.appblocker.filter.model
+package com.flipperdevices.bsb.appblocker.filter.model.list
 
 import android.content.pm.ApplicationInfo
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.Res

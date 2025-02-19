@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.appblocker.filter.api
 
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -12,8 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.appblocker.filter.composable.screen.AppBlockerFilterScreenComposable
-import com.flipperdevices.bsb.appblocker.filter.viewmodel.AppBlockerStateBuilder
-import com.flipperdevices.bsb.appblocker.filter.viewmodel.AppBlockerViewModelWithSearch
+import com.flipperdevices.bsb.appblocker.filter.viewmodel.list.AppBlockerViewModelWithSearch
 import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
 import com.flipperdevices.ui.decompose.ElementDecomposeComponent
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent

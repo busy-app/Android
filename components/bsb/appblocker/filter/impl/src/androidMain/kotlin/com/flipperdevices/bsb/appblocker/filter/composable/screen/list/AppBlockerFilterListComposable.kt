@@ -3,14 +3,13 @@ package com.flipperdevices.bsb.appblocker.filter.composable.screen.list
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.flipperdevices.bsb.appblocker.filter.model.AppBlockerFilterScreenState
-import com.flipperdevices.bsb.appblocker.filter.model.AppCategory
-import com.flipperdevices.bsb.appblocker.filter.model.UIAppInformation
+import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
+import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 
 @Composable
 fun AppBlockerFilterListComposable(

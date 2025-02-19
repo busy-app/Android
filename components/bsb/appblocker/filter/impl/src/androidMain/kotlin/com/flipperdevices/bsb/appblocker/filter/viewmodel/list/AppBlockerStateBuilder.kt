@@ -1,10 +1,9 @@
-package com.flipperdevices.bsb.appblocker.filter.viewmodel
+package com.flipperdevices.bsb.appblocker.filter.viewmodel.list
 
-import com.flipperdevices.bsb.appblocker.filter.model.AppBlockerFilterScreenState
-import com.flipperdevices.bsb.appblocker.filter.model.AppCategory
-import com.flipperdevices.bsb.appblocker.filter.model.UIAppInformation
+import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
+import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.ui.lifecycle.DecomposeViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

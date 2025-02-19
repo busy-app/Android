@@ -1,5 +1,6 @@
 <resources>
     <string name="appblocker_card_add">+ Add apps</string>
+    <string name="appblocker_card_all">All</string>
 
     <string name="appblocker_filter_loading">Loading</string>
     <string name="appblocker_filter_empty">No applications found</string>

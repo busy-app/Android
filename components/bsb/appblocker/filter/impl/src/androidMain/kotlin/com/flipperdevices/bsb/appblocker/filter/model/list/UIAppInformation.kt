@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.appblocker.filter.model
+package com.flipperdevices.bsb.appblocker.filter.model.list
 
 data class UIAppInformation(
     val packageName: String,
