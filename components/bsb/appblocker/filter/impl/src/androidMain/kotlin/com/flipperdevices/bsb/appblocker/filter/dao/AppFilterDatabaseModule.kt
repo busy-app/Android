@@ -21,7 +21,9 @@ interface AppFilterDatabaseModule {
                 context,
                 AppFilterDatabase::class.java,
                 DATABASE_NAME
-            ).fallbackToDestructiveMigration(dropAllTables = true)
+            )
+            .createFromAsset("all_selected_categories.db")
+            .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
     }
 }

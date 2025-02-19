@@ -32,8 +32,7 @@ class AppBlockerDaoHelper(
                 PackageManager.GET_META_DATA
             ).mapNotNull { it.applicationInfo }
         }
-        val phoneApps = apps.toPersistentList()
-        if (phoneApps.isEmpty()) {
+        if (apps.isEmpty()) {
             return AppBlockerFilterScreenState.Loaded(
                 categories = persistentListOf()
             )
@@ -52,10 +51,9 @@ class AppBlockerDaoHelper(
 
         val categories = apps
             .filter { it.name != null }
-            .groupBy { it.category }
-            .mapNotNull { (categoryId, applicationInfos) ->
-                val category = AppCategory.fromCategoryId(categoryId)
-                val isCategoryBlocked = checkedCategory.contains(categoryId)
+            .groupBy { AppCategory.fromCategoryId(it.category) }
+            .mapNotNull { (category, applicationInfos) ->
+                val isCategoryBlocked = checkedCategory.contains(category.id)
 
                 val apps = applicationInfos.map { applicationInfo ->
                     val label = packageManager.getApplicationLabel(applicationInfo)
