@@ -8,6 +8,7 @@
     <string name="appblocker_filter_select_all">Select all</string>
     <string name="appblocker_filter_select_none">Deselect all</string>
     <string name="appblocker_filter_search_hint">Search</string>
+    <string name="appblocker_filter_btn_save">Save</string>
 
     <string name="appblocker_filter_category_undefined">Others</string>
     <string name="appblocker_filter_category_game">Game</string>

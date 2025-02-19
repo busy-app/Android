@@ -54,6 +54,11 @@ class AppBlockerViewModelWithSearch(
         query.value = text
     }
 
+    fun save(
+        currentState: AppBlockerFilterScreenState.Loaded,
+        onHide: () -> Unit
+    ) = appBlockerStateBuilder.save(currentState, onHide)
+
     fun selectAll() = appBlockerStateBuilder.selectAll()
 
     fun deselectAll() = appBlockerStateBuilder.deselectAll()

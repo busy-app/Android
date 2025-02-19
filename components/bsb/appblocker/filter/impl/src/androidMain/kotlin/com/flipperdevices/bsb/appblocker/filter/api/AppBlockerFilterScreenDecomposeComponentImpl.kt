@@ -1,5 +1,7 @@
 package com.flipperdevices.bsb.appblocker.filter.api
 
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,12 +50,20 @@ class AppBlockerFilterScreenDecomposeComponent(
                 val state by viewModel.getState().collectAsState()
                 val query by viewModel.getQuery().collectAsState()
                 AppBlockerFilterScreenComposable(
+                    modifier = Modifier.systemBarsPadding(),
                     screenState = state,
                     query = query,
                     onQuery = viewModel::onQuery,
                     onSelectAll = viewModel::selectAll,
                     onDeselectAll = viewModel::deselectAll,
-                    onSave = {},
+                    onSave = {
+                        viewModel.save(
+                            currentState = it,
+                            onHide = {
+                                isVisible = false
+                            }
+                        )
+                    },
                     switchApp = viewModel::switchApp,
                     switchCategory = viewModel::switchCategory,
                     categoryHideChange = viewModel::categoryHideChanged

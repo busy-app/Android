@@ -3,7 +3,10 @@ package com.flipperdevices.bsb.appblocker.filter.viewmodel
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import androidx.room.withTransaction
 import com.flipperdevices.bsb.appblocker.filter.dao.AppFilterDatabase
+import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedApp
+import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedCategory
 import com.flipperdevices.bsb.appblocker.filter.model.AppBlockerFilterScreenState
 import com.flipperdevices.bsb.appblocker.filter.model.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.UIAppCategory
@@ -85,19 +88,24 @@ class AppBlockerDaoHelper(
         )
     }
 
-    /*
-    fun save(currentState: AppBlockerFilterScreenState.Loaded) {
-        viewModelScope.launch {
-            saveInternal(currentState)
-        }
-    }
-
-    private suspend fun saveInternal(currentState: AppBlockerFilterScreenState.Loaded) {
+    suspend fun save(currentState: AppBlockerFilterScreenState.Loaded) {
         database.withTransaction {
-            appInformationDAO.dropTable()
-            for (app in currentState.apps) {
-                appInformationDAO.insert(DBBlockedApp(appPackage = app.packageName))
+            database.appDao().dropTable()
+            database.categoryDao().dropTable()
+
+            val blockedCategories = currentState.categories.filter { it.isBlocked }
+
+            blockedCategories.forEach {
+                database.categoryDao().insert(DBBlockedCategory(it.categoryEnum.id))
+            }
+
+            val nonBlockedCategories = currentState.categories.filter { !it.isBlocked }
+
+            nonBlockedCategories.forEach { category ->
+                category.apps.filter { it.isBlocked }.forEach { app ->
+                    database.appDao().insert(DBBlockedApp(app.packageName))
+                }
             }
         }
-    }*/
+    }
 }

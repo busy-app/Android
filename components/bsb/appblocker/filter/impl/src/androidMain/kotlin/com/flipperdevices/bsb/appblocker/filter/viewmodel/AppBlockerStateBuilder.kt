@@ -7,16 +7,18 @@ import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.ui.lifecycle.DecomposeViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 @Inject
 class AppBlockerStateBuilder(
-    @Assisted scope: CoroutineScope,
+    @Assisted private val scope: CoroutineScope,
     private val daoHelper: AppBlockerDaoHelper,
 ) : LogTagProvider {
     override val TAG = "AppBlockerViewModel"
@@ -31,6 +33,19 @@ class AppBlockerStateBuilder(
     }
 
     fun getState() = appBlockerFilterScreenState.asStateFlow()
+
+
+    fun save(
+        currentState: AppBlockerFilterScreenState.Loaded,
+        onHide: () -> Unit
+    ) {
+        scope.launch {
+            daoHelper.save(currentState)
+            withContext(Dispatchers.Main) {
+                onHide()
+            }
+        }
+    }
 
     fun selectAll() {
         appBlockerFilterScreenState.update { state ->

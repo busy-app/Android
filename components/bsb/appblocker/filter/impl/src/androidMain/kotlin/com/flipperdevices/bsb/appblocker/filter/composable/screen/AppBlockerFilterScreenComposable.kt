@@ -53,35 +53,45 @@ fun AppBlockerFilterScreenComposable(
         )
 
         is AppBlockerFilterScreenState.Loaded -> {
-            Column(modifier) {
-                AppBlockerFilterHeaderComposable(
-                    screenState = screenState,
-                    onSelectAll = onSelectAll,
-                    onDeselectAll = onDeselectAll,
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                )
-                AppBlockerSearchBarComposable(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 32.dp, start = 16.dp, end = 16.dp),
-                    query = query,
-                    onQueryChange = onQuery
-                )
-                if (screenState.categories.isEmpty()) {
-                    SimpleTextInformationComposable(
-                        text = Res.string.appblocker_filter_empty,
-                        modifier = modifier
-                    )
-                } else {
-                    AppBlockerFilterListComposable(
+            Box(
+                modifier,
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Column {
+                    AppBlockerFilterHeaderComposable(
                         screenState = screenState,
-                        switchApp = switchApp,
-                        switchCategory = switchCategory,
-                        categoryHideChange = categoryHideChange,
-                        modifier = Modifier.padding(vertical = 32.dp)
+                        onSelectAll = onSelectAll,
+                        onDeselectAll = onDeselectAll,
+                        modifier = Modifier
+                            .padding(horizontal = 24.dp)
                     )
+                    AppBlockerSearchBarComposable(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 32.dp, start = 16.dp, end = 16.dp),
+                        query = query,
+                        onQueryChange = onQuery
+                    )
+                    if (screenState.categories.isEmpty()) {
+                        SimpleTextInformationComposable(
+                            text = Res.string.appblocker_filter_empty,
+                            modifier = modifier
+                        )
+                    } else {
+                        AppBlockerFilterListComposable(
+                            screenState = screenState,
+                            switchApp = switchApp,
+                            switchCategory = switchCategory,
+                            categoryHideChange = categoryHideChange,
+                            modifier = Modifier.padding(vertical = 32.dp)
+                        )
+                    }
                 }
+                AppBlockerSaveButtonComposable(
+                    onClick = {
+                        onSave(screenState)
+                    }
+                )
             }
         }
     }
