@@ -37,12 +37,12 @@ fun CategoryFilterListItemComposable(
             .fillMaxWidth()
             .clickableRipple { onClick(!category.isHidden) }
             .padding(vertical = 12.dp)
-            .padding(top = 12.dp, bottom = 12.dp, end = 24.dp),
+            .padding(top = 12.dp, bottom = 12.dp, end = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
             modifier = Modifier
-                .padding(start = 24.dp)
+                .padding(start = 16.dp)
                 .size(24.dp),
             selected = category.isBlocked,
             onClick = { onSwitch(!category.isBlocked) },

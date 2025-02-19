@@ -36,7 +36,7 @@ fun AppFilterListItemComposable(
         modifier = modifier
             .fillMaxWidth()
             .clickableRipple { onClick(!appInfo.isBlocked) }
-            .padding(vertical = 12.dp, horizontal = 24.dp),
+            .padding(vertical = 12.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(

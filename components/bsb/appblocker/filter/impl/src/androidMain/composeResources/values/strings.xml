@@ -2,11 +2,12 @@
     <string name="appblocker_card_add">+ Add apps</string>
 
     <string name="appblocker_filter_loading">Loading</string>
-    <string name="appblocker_filter_empty">No access to application list, check application permissions</string>
+    <string name="appblocker_filter_empty">No applications found</string>
 
     <string name="appblocker_filter_title">Select apps</string>
     <string name="appblocker_filter_select_all">Select all</string>
     <string name="appblocker_filter_select_none">Deselect all</string>
+    <string name="appblocker_filter_search_hint">Search</string>
 
     <string name="appblocker_filter_category_undefined">Others</string>
     <string name="appblocker_filter_category_game">Game</string>

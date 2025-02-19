@@ -23,6 +23,7 @@ commonDependencies {
     implementation(libs.kotlin.immutable)
     implementation(libs.decompose)
     implementation(libs.composables)
+    implementation(kotlin.compose.material3)
 
 }
 

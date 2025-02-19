@@ -8,8 +8,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
+import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.appblocker.filter.composable.screen.AppBlockerFilterScreenComposable
-import com.flipperdevices.bsb.appblocker.filter.viewmodel.AppBlockerViewModel
+import com.flipperdevices.bsb.appblocker.filter.viewmodel.AppBlockerStateBuilder
+import com.flipperdevices.bsb.appblocker.filter.viewmodel.AppBlockerViewModelWithSearch
 import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
 import com.flipperdevices.ui.decompose.ElementDecomposeComponent
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
@@ -20,11 +22,13 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class AppBlockerFilterScreenDecomposeComponent(
     @Assisted componentContext: ComponentContext,
-    private val appBlockerViewModelFactory: () -> AppBlockerViewModel
+    private val appBlockerStateBuilderFactory: () -> AppBlockerViewModelWithSearch
 ) : ElementDecomposeComponent(componentContext) {
     private var isVisible by mutableStateOf(false)
-    private val viewModel = viewModelWithFactory(null) {
-        appBlockerViewModelFactory()
+    private val viewModel by lazy {
+        viewModelWithFactory(null) {
+            appBlockerStateBuilderFactory()
+        }
     }
 
     fun show() {
@@ -36,13 +40,17 @@ class AppBlockerFilterScreenDecomposeComponent(
         ModalBottomSheetSlot(
             instance = if (isVisible) Unit else null,
             onDismiss = { isVisible = false },
+            initialDetent = SheetDetent.FullyExpanded
         ) {
             BModalBottomSheetContent(
-                horizontalPadding = 0.dp
+                horizontalPadding = 0.dp,
             ) {
                 val state by viewModel.getState().collectAsState()
+                val query by viewModel.getQuery().collectAsState()
                 AppBlockerFilterScreenComposable(
                     screenState = state,
+                    query = query,
+                    onQuery = viewModel::onQuery,
                     onSelectAll = viewModel::selectAll,
                     onDeselectAll = viewModel::deselectAll,
                     onSave = {},

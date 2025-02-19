@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.appblocker.filter.composable.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -12,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.Res
-import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_category_game
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_empty
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_loading
 import com.flipperdevices.bsb.appblocker.filter.composable.screen.list.AppBlockerFilterListComposable
@@ -27,6 +27,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun AppBlockerFilterScreenComposable(
     screenState: AppBlockerFilterScreenState,
+    query: String,
+    onQuery: (String) -> Unit,
     onSelectAll: () -> Unit,
     onDeselectAll: () -> Unit,
     switchApp: (
@@ -51,20 +53,27 @@ fun AppBlockerFilterScreenComposable(
         )
 
         is AppBlockerFilterScreenState.Loaded -> {
-            if (screenState.categories.isEmpty()) {
-                SimpleTextInformationComposable(
-                    text = Res.string.appblocker_filter_loading,
-                    modifier = modifier
+            Column(modifier) {
+                AppBlockerFilterHeaderComposable(
+                    screenState = screenState,
+                    onSelectAll = onSelectAll,
+                    onDeselectAll = onDeselectAll,
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
                 )
-            } else {
-                Column(modifier) {
-                    AppBlockerFilterHeaderComposable(
-                        screenState = screenState,
-                        onSelectAll = onSelectAll,
-                        onDeselectAll = onDeselectAll,
-                        modifier = Modifier
-                            .padding(horizontal = 24.dp)
+                AppBlockerSearchBarComposable(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 32.dp, start = 16.dp, end = 16.dp),
+                    query = query,
+                    onQueryChange = onQuery
+                )
+                if (screenState.categories.isEmpty()) {
+                    SimpleTextInformationComposable(
+                        text = Res.string.appblocker_filter_empty,
+                        modifier = modifier
                     )
+                } else {
                     AppBlockerFilterListComposable(
                         screenState = screenState,
                         switchApp = switchApp,
@@ -85,7 +94,7 @@ private fun SimpleTextInformationComposable(
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(horizontal = 24.dp),
         contentAlignment = Alignment.Center
     ) {
