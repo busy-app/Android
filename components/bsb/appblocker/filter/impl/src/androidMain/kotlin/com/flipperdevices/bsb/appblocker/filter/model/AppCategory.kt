@@ -83,8 +83,8 @@ enum class AppCategory(
     );
 
     companion object {
-        fun fromApplicationInfo(applicationInfo: ApplicationInfo): AppCategory {
-            return entries.find { it.id == applicationInfo.category }
+        fun fromCategoryId(categoryId: Int): AppCategory {
+            return entries.find { it.id == categoryId }
                 ?: CATEGORY_UNDEFINED
         }
     }

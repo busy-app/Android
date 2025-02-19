@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.appblocker.filter.composable.screen.AppBlockerFilterScreenComposable
 import com.flipperdevices.bsb.appblocker.filter.viewmodel.AppBlockerViewModel
@@ -26,7 +27,6 @@ class AppBlockerFilterScreenDecomposeComponent(
         appBlockerViewModelFactory()
     }
 
-
     fun show() {
         isVisible = true
     }
@@ -37,7 +37,9 @@ class AppBlockerFilterScreenDecomposeComponent(
             instance = if (isVisible) Unit else null,
             onDismiss = { isVisible = false },
         ) {
-            BModalBottomSheetContent() {
+            BModalBottomSheetContent(
+                horizontalPadding = 0.dp
+            ) {
                 val state by viewModel.getState().collectAsState()
                 AppBlockerFilterScreenComposable(
                     screenState = state,
@@ -46,6 +48,7 @@ class AppBlockerFilterScreenDecomposeComponent(
                     onSave = {},
                     switchApp = viewModel::switchApp,
                     switchCategory = viewModel::switchCategory,
+                    categoryHideChange = viewModel::categoryHideChanged
                 )
             }
         }

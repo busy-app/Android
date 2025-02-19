@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.appblocker.filter.composable.screen.list
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.RadioButton
@@ -24,18 +25,18 @@ import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.core.ktx.common.clickableRipple
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AppFilterListItemComposable(
     appInfo: UIAppInformation,
     onClick: (Boolean) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
-            .padding(vertical = 12.dp)
-            .clickableRipple { onClick(!appInfo.isBlocked) },
+            .fillMaxWidth()
+            .clickableRipple { onClick(!appInfo.isBlocked) }
+            .padding(vertical = 12.dp, horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
@@ -57,12 +58,12 @@ fun AppFilterListItemComposable(
 
         Image(
             modifier = Modifier
-                .size(32.dp)
-                .padding(start = 12.dp, end = 8.dp),
+                .padding(start = 12.dp, end = 8.dp)
+                .size(32.dp),
             painter = if (drawable == null) {
-                rememberDrawablePainter(drawable)
-            } else {
                 painterResource(Res.drawable.ic_app_type_other)
+            } else {
+                rememberDrawablePainter(drawable)
             },
             contentDescription = appInfo.appName
         )

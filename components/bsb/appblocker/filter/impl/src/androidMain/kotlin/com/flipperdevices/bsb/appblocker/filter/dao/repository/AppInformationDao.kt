@@ -6,7 +6,7 @@ import androidx.room.Query
 import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedApp
 
 @Dao
-interface AppInformationDAO {
+interface AppInformationDao {
     @Query("SELECT * FROM blocked_apps")
     fun getCheckedApps(): List<DBBlockedApp>
 

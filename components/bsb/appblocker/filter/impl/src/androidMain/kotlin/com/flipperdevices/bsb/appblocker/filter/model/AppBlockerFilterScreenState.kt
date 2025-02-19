@@ -13,14 +13,14 @@ sealed interface AppBlockerFilterScreenState {
             appCategory: AppCategory,
             block: (UIAppCategory) -> UIAppCategory
         ): Loaded {
-            val category = categories.find { it.categoryEnum == appCategory } ?: return this
-            val newCategory = block(category)
+            val oldCategory = categories.find { it.categoryEnum == appCategory } ?: return this
+            val newCategory = block(oldCategory)
             val newCategories = categories.toMutableList()
             newCategories.removeIf { it.categoryEnum == appCategory }
             newCategories.add(newCategory)
-            newCategories.sortBy { it.categoryEnum.id }
+            newCategories.sortByDescending { it.categoryEnum.id }
 
-            return AppBlockerFilterScreenState.Loaded(
+            return Loaded(
                 categories = newCategories.toPersistentList()
             )
         }

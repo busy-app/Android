@@ -37,6 +37,10 @@ fun AppBlockerFilterScreenComposable(
         appCategory: AppCategory,
         checked: Boolean
     ) -> Unit,
+    categoryHideChange: (
+        appCategory: AppCategory,
+        checked: Boolean
+    ) -> Unit,
     onSave: (currentState: AppBlockerFilterScreenState.Loaded) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -57,12 +61,15 @@ fun AppBlockerFilterScreenComposable(
                     AppBlockerFilterHeaderComposable(
                         screenState = screenState,
                         onSelectAll = onSelectAll,
-                        onDeselectAll = onDeselectAll
+                        onDeselectAll = onDeselectAll,
+                        modifier = Modifier
+                            .padding(horizontal = 24.dp)
                     )
                     AppBlockerFilterListComposable(
                         screenState = screenState,
                         switchApp = switchApp,
                         switchCategory = switchCategory,
+                        categoryHideChange = categoryHideChange,
                         modifier = Modifier.padding(vertical = 32.dp)
                     )
                 }
@@ -77,7 +84,9 @@ private fun SimpleTextInformationComposable(
     text: StringResource
 ) {
     Box(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(

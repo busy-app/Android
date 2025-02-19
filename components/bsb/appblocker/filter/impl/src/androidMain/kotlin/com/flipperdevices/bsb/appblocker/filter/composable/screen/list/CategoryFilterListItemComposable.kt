@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.appblocker.filter.composable.screen.list
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
@@ -10,10 +11,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.Res
+import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_arrow
 import com.flipperdevices.bsb.appblocker.filter.model.UIAppCategory
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
@@ -24,19 +28,24 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun CategoryFilterListItemComposable(
     category: UIAppCategory,
+    onSwitch: (Boolean) -> Unit,
     onClick: (Boolean) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
+            .fillMaxWidth()
+            .clickableRipple { onClick(!category.isHidden) }
             .padding(vertical = 12.dp)
-            .clickableRipple { onClick(!category.isBlocked) },
+            .padding(top = 12.dp, bottom = 12.dp, end = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .padding(start = 24.dp)
+                .size(24.dp),
             selected = category.isBlocked,
-            onClick = { onClick(!category.isBlocked) },
+            onClick = { onSwitch(!category.isBlocked) },
             colors = RadioButtonDefaults.colors(
                 selectedColor = LocalPallet.current.accent.device.primary,
                 unselectedColor = LocalPallet.current.transparent.whiteInvert.quaternary
@@ -47,19 +56,43 @@ fun CategoryFilterListItemComposable(
 
         Icon(
             modifier = Modifier
-                .size(32.dp)
-                .padding(start = 12.dp, end = 8.dp),
-            painter =
-            painterResource(category.categoryEnum.icon),
-            contentDescription = title
+                .padding(start = 12.dp, end = 8.dp)
+                .size(32.dp),
+            painter = painterResource(category.categoryEnum.icon),
+            contentDescription = title,
+            tint = Color(0xFFFFFFFF)
         )
 
         Text(
+            modifier = Modifier.weight(1f),
             text = title,
             fontSize = 18.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontWeight = FontWeight.W500,
             color = Color(0xFFFFFFFF),
+        )
+
+        Text(
+            modifier = Modifier.padding(start = 12.dp),
+            text = category.apps.size.toString(),
+            fontSize = 14.sp,
+            lineHeight = 14.sp,
+            fontFamily = LocalBusyBarFonts.current.pragmatica,
+            fontWeight = FontWeight.W500,
+            color = LocalPallet.current.transparent.whiteInvert.secondary,
+        )
+        val rotateAngel = if (category.isHidden) {
+            180f
+        } else {
+            0f
+        }
+        Icon(
+            modifier = Modifier
+                .size(24.dp)
+                .rotate(rotateAngel),
+            painter = painterResource(Res.drawable.ic_arrow),
+            contentDescription = null,
+            tint = LocalPallet.current.transparent.whiteInvert.secondary
         )
     }
 }
