@@ -14,6 +14,7 @@ import com.flipperdevices.ui.timeline.HorizontalWheelPicker
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.DurationUnit
 
 @Composable
 fun TotalTimeTimerPickerComposable(
@@ -40,9 +41,9 @@ fun TotalTimeTimerPickerComposable(
                 rangeEnd = 9.hours.inWholeMinutes.toInt(),
                 step = 5.minutes.inWholeMinutes.toInt()
             ),
-            initialSelectedItem = initialTime.inWholeMinutes.toInt(),
+            initialSelectedItem = initialTime,
             onItemSelect = { duration -> onTotalTimeChange.invoke(duration) },
-            unitConverter = { it.minutes }
+            durationUnit = DurationUnit.MINUTES
         )
     }
 }
