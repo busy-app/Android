@@ -2,6 +2,7 @@
 <resources>
     <string name="timer_notification_title">Busy Timer</string>
     <string name="timer_notification_desc_empty">Starting the timer…</string>
+    <string name="timer_notification_finished">Finished</string>
     <string name="timer_notification_stop_btn">Stop</string>
     <string name="timer_notification_channel_title">Busy Timer</string>
     <string name="timer_notification_channel_desc">Timer status notification</string>

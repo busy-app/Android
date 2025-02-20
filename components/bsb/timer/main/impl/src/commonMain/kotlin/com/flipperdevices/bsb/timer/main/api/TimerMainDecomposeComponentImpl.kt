@@ -5,8 +5,8 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.flipperdevices.bsb.timer.active.api.ActiveTimerScreenDecomposeComponent
-import com.flipperdevices.bsb.timer.background.api.TimerService
-import com.flipperdevices.bsb.timer.background.model.TimerServiceState
+import com.flipperdevices.bsb.timer.background.api.TimerApi
+import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.cards.api.CardsDecomposeComponent
 import com.flipperdevices.bsb.timer.done.api.DoneTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.finish.api.RestTimerScreenDecomposeComponent
@@ -27,45 +27,40 @@ class TimerMainDecomposeComponentImpl(
     private val cardsDecomposeComponentFactory: CardsDecomposeComponent.Factory,
     private val restTimerScreenDecomposeComponentFactory: RestTimerScreenDecomposeComponent.Factory,
     private val doneTimerScreenDecomposeComponentFactory: DoneTimerScreenDecomposeComponent.Factory,
-    timerService: TimerService,
+    timerApi: TimerApi,
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     ComponentContext by componentContext {
 
-    private fun TimerServiceState.getScreen(): TimerMainNavigationConfig {
+    private fun ControlledTimerState.getScreen(): TimerMainNavigationConfig {
         val screen = when (this) {
-            TimerServiceState.Finished -> TimerMainNavigationConfig.Finished
-            TimerServiceState.Pending -> TimerMainNavigationConfig.Main
-            is TimerServiceState.Started -> {
-                when (this.status) {
-                    TimerServiceState.Status.WORK -> TimerMainNavigationConfig.Work
-                    TimerServiceState.Status.REST -> TimerMainNavigationConfig.Rest
-                    TimerServiceState.Status.LONG_REST -> TimerMainNavigationConfig.LongRest
-                }
-            }
+            ControlledTimerState.Finished -> TimerMainNavigationConfig.Finished
+            ControlledTimerState.NotStarted -> TimerMainNavigationConfig.Main
+            is ControlledTimerState.Running.LongRest -> TimerMainNavigationConfig.LongRest
+            is ControlledTimerState.Running.Rest -> TimerMainNavigationConfig.Rest
+            is ControlledTimerState.Running.Work -> TimerMainNavigationConfig.Work
         }
         return screen
     }
 
     init {
-        timerService.state
+        timerApi.getState()
             .distinctUntilChangedBy { state ->
                 when (state) {
-                    TimerServiceState.Finished -> state::class
-                    TimerServiceState.Pending -> state::class
-                    is TimerServiceState.Started -> {
-                        state::class.toString() + state.status
-                    }
+                    ControlledTimerState.Finished -> 0
+                    ControlledTimerState.NotStarted -> 1
+                    is ControlledTimerState.Running.LongRest -> 2
+                    is ControlledTimerState.Running.Rest -> 3
+                    is ControlledTimerState.Running.Work -> 4
                 }
             }
-            .onEach { state ->
-                navigation.replaceAll(state.getScreen())
-            }.launchIn(coroutineScope())
+            .onEach { state -> navigation.replaceAll(state.getScreen()) }
+            .launchIn(coroutineScope())
     }
 
     override val stack = childStack(
         source = navigation,
         serializer = TimerMainNavigationConfig.serializer(),
-        initialConfiguration = timerService.state.value.getScreen(),
+        initialConfiguration = timerApi.getState().value.getScreen(),
         handleBackButton = true,
         childFactory = ::child,
     )
