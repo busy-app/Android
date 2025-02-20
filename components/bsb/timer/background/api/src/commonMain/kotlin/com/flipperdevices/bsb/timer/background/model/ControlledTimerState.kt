@@ -2,7 +2,6 @@ package com.flipperdevices.bsb.timer.background.model
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState.Running
-import kotlin.math.max
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 

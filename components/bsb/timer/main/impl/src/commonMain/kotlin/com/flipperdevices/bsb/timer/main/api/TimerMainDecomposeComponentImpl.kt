@@ -43,6 +43,7 @@ class TimerMainDecomposeComponentImpl(
     }
 
     init {
+        @Suppress("MagicNumber")
         timerApi.getState()
             .distinctUntilChangedBy { state ->
                 when (state) {

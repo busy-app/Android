@@ -39,6 +39,7 @@ object ControlledTimerStateReducer {
         )
     }
 
+    @Suppress("MagicNumber")
     private fun tryStartLongRest(state: ControlledTimerState.Running): ControlledTimerState? {
         if (state !is ControlledTimerState.Running.Work) return null
         if (!state.timerSettings.intervalsSettings.isEnabled) return null
@@ -77,6 +78,7 @@ object ControlledTimerStateReducer {
         return ControlledTimerState.Finished
     }
 
+    @Suppress("UnusedParameter")
     private fun ControlledTimerState.onNoTimeLeft(msg: Message.NoTimeLeft): ControlledTimerState {
         return when (this) {
             ControlledTimerState.Finished, ControlledTimerState.NotStarted -> this

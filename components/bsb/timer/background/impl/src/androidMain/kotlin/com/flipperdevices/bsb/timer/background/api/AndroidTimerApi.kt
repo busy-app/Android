@@ -65,12 +65,6 @@ class AndroidTimerApi(
 
     override fun getState() = timerStateFlow.asStateFlow()
 
-    private fun stopTimer() {
-        val intent = Intent(context, TimerForegroundService::class.java)
-        intent.setAction(TimerServiceActionEnum.STOP.actionId)
-        context.startService(intent)
-    }
-
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         val timerBinder = service as? TimerServiceBinder
         if (timerBinder == null) {

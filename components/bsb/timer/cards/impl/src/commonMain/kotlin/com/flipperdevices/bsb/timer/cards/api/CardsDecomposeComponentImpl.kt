@@ -17,7 +17,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.timer.background.api.TimerApi
-import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.util.startWith
 import com.flipperdevices.bsb.timer.cards.composable.BusyCardComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable

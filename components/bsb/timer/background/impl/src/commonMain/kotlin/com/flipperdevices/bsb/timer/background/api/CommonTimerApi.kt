@@ -56,15 +56,14 @@ class CommonTimerApi(
                     .onEach { internalState ->
                         timerStateFlow.emit(internalState)
                         when (internalState) {
-                            ControlledTimerState.NotStarted,
-                            ControlledTimerState.Finished -> {
+                            ControlledTimerState.NotStarted -> {
                                 stopSelf()
                             }
 
+                            ControlledTimerState.Finished -> Unit
+
                             is ControlledTimerState.Running -> {
-                                if (internalState.timeLeft.inWholeSeconds <= 0) {
-//                                    stopSelf()
-                                } else {
+                                if (!internalState.isOnPause) {
                                     metronomeApi.play()
                                 }
                             }
