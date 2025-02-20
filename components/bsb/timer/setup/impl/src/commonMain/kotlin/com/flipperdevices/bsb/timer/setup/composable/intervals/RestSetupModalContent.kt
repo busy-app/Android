@@ -30,7 +30,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.minutes
 
 @Composable
 fun RestSetupModalBottomSheetContent(
@@ -66,13 +66,13 @@ fun RestSetupModalBottomSheetContent(
         ) {
             HorizontalWheelPicker(
                 progression = IntProgression.fromClosedRange(
-                    rangeStart = 15.seconds.inWholeSeconds.toInt(),
-                    rangeEnd = 30.seconds.inWholeSeconds.toInt(),
-                    step = 5.seconds.inWholeSeconds.toInt()
+                    rangeStart = 5.minutes.inWholeMinutes.toInt(),
+                    rangeEnd = 15.minutes.inWholeMinutes.toInt(),
+                    step = 5.minutes.inWholeMinutes.toInt()
                 ),
-                initialSelectedItem = timerSettings.intervalsSettings.longRest.inWholeSeconds.toInt(),
+                initialSelectedItem = timerSettings.intervalsSettings.rest.inWholeMinutes.toInt(),
                 onItemSelect = { duration -> onTimeChange.invoke(duration) },
-                unitConverter = { it.seconds }
+                unitConverter = { it.minutes }
             )
         }
         OptionSwitch(
