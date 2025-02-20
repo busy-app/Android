@@ -58,7 +58,7 @@ kotlin {
             export(libs.decompose)
             export(libs.essenty.lifecycle)
             export(libs.settings)
-            //TODO revert back export(projects.components.bsb.appblocker.api)
+            // TODO revert back export(projects.components.bsb.appblocker.api)
         }
     }
 
@@ -102,7 +102,7 @@ kotlin {
             api(libs.essenty.lifecycle)
             api(libs.settings)
 
-            //TODO revert back api(projects.components.bsb.appblocker.api)
+            // TODO revert back api(projects.components.bsb.appblocker.api)
             implementation(libs.settings.observable)
         }
         wasmJsMain.dependencies {

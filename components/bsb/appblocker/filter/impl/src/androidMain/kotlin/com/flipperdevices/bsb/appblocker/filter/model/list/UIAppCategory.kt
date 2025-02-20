@@ -22,7 +22,9 @@ data class UIAppCategory(
         newList.replaceAll {
             if (it.packageName == packageName) {
                 it.copy(isBlocked = isBlocked)
-            } else it
+            } else {
+                it
+            }
         }
         newList.sortBy { it.appName }
         var isCategoryBlocked = true

@@ -5,12 +5,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.SearchBarDefaults.inputFieldColors
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,7 +43,7 @@ fun AppBlockerSearchBarComposable(
                 SearchBarDefaults.InputField(
                     query = query,
                     onQueryChange = onQueryChange,
-                    onSearch = {  },
+                    onSearch = { },
                     expanded = false,
                     onExpandedChange = { },
                     placeholder = {
@@ -55,14 +52,14 @@ fun AppBlockerSearchBarComposable(
                             fontSize = 16.sp,
                             fontFamily = LocalBusyBarFonts.current.pragmatica,
                             fontWeight = FontWeight.W400,
-                            color = Color(0xFFCAC4D0),
+                            color = Color(color = 0xFFCAC4D0),
                         )
                     },
                     trailingIcon = {
                         Icon(
                             painter = painterResource(Res.drawable.material_ic_search),
                             contentDescription = null,
-                            tint = Color(0xFFCAC4D0)
+                            tint = Color(color = 0xFFCAC4D0)
                         )
                     },
                 )

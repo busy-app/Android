@@ -27,7 +27,10 @@ import com.flipperdevices.core.ktx.common.clickableRipple
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+private const val FULLY_ROTATED_ANGEL = 180f
+
 @Composable
+@Suppress("LongMethod")
 fun CategoryFilterListItemComposable(
     category: UIAppCategory,
     onSwitch: (Boolean) -> Unit,
@@ -62,7 +65,7 @@ fun CategoryFilterListItemComposable(
                 .size(32.dp),
             painter = painterResource(category.categoryEnum.icon),
             contentDescription = title,
-            tint = Color(0xFFFFFFFF)
+            tint = Color(color = 0xFFFFFFFF)
         )
 
         Text(
@@ -71,7 +74,7 @@ fun CategoryFilterListItemComposable(
             fontSize = 18.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontWeight = FontWeight.W500,
-            color = Color(0xFFFFFFFF),
+            color = Color(color = 0xFFFFFFFF),
         )
 
         val blockedAppsText = if (category.isBlocked) {
@@ -101,7 +104,7 @@ fun CategoryFilterListItemComposable(
 
         if (category.apps.isNotEmpty()) {
             val rotateAngel = if (category.isHidden) {
-                180f
+                FULLY_ROTATED_ANGEL
             } else {
                 0f
             }

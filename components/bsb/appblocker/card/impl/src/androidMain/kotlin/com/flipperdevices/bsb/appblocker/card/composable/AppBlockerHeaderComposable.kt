@@ -2,13 +2,10 @@ package com.flipperdevices.bsb.appblocker.card.composable
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Switch
-import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.appblocker.card.impl.generated.resources.Res
@@ -41,7 +38,7 @@ fun AppBlockerHeaderComposable(
             M3Switch(
                 checked = checked,
                 onCheckedChange = onSwitch,
-                enabled =  enabled
+                enabled = enabled
             )
         }
         Text(

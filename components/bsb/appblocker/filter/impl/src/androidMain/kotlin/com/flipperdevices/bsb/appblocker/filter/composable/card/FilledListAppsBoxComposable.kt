@@ -2,7 +2,6 @@ package com.flipperdevices.bsb.appblocker.filter.composable.card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,9 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +46,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
+@Suppress("LongMethod")
 internal fun FilledListAppsBoxComposable(
     isAllBlocked: Boolean,
     items: ImmutableList<AppIcon>,
@@ -83,7 +80,7 @@ internal fun FilledListAppsBoxComposable(
                             .size(24.dp),
                         painter = painterResource(Res.drawable.ic_more),
                         contentDescription = null,
-                        tint = Color(0xFF888888)
+                        tint = Color(color = 0xFF888888)
                     )
                 }
                 PlaceableDetectableRow(
@@ -164,7 +161,7 @@ private fun AppIconComposable(
             modifier = modifier,
             painter = painterResource(appIcon.icon),
             contentDescription = null,
-            tint = Color(0xFFFFFFFF)
+            tint = Color(color = 0xFFFFFFFF)
         )
 
         is AppIcon.App -> {
@@ -184,7 +181,6 @@ private fun AppIconComposable(
             )
         }
     }
-
 }
 
 @Composable
@@ -195,7 +191,7 @@ private fun FilledListAppsBoxComposablePreview() {
             modifier = Modifier
                 .safeDrawingPadding()
                 .background(
-                    Color(0xFF212121)
+                    Color(color = 0xFF212121)
                 )
         ) {
             FilledListAppsBoxComposable(

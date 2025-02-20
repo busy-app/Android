@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.appblocker.model.ApplicationInfo
-import com.flipperdevices.bsb.appblocker.screen.api.AppBlockerScreenDecomposeComponent
 import com.flipperdevices.bsb.appblocker.screen.composable.AppBlockerScreenComposable
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider

@@ -61,4 +61,3 @@ fun AppBlockerFilterListComposable(
         }
     }
 }
-

@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.appblocker.filter.dao
 
-
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedApp

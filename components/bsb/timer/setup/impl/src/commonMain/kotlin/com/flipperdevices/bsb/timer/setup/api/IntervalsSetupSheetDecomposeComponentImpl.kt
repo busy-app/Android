@@ -21,7 +21,6 @@ import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
 import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject

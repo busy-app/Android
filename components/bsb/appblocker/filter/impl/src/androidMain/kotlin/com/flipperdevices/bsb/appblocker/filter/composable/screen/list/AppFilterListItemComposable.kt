@@ -73,7 +73,7 @@ fun AppFilterListItemComposable(
             fontSize = 18.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontWeight = FontWeight.W500,
-            color = Color(0xFFFFFFFF),
+            color = Color(color = 0xFFFFFFFF),
         )
     }
 }

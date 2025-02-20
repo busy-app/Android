@@ -8,4 +8,3 @@ interface AppBlockerFilterApi {
 
     fun getBlockedAppCount(): Flow<BlockedAppCount>
 }
-

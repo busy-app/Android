@@ -66,10 +66,11 @@ fun TimerSoundAppsOptionComposable(
         val tint = when (appBlockerState) {
             BlockedAppCount.All,
             is BlockedAppCount.Count,
-            BlockedAppCount.TurnOff -> LocalPallet.current
-                .transparent
-                .whiteInvert
-                .primary
+            BlockedAppCount.TurnOff ->
+                LocalPallet.current
+                    .transparent
+                    .whiteInvert
+                    .primary
 
             BlockedAppCount.NoPermission -> LocalPallet.current.danger.primary
         }

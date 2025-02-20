@@ -75,5 +75,4 @@ class AppBlockerViewModelWithSearch(
         appCategory: AppCategory,
         checked: Boolean
     ) = appBlockerStateBuilder.categoryHideChanged(appCategory, checked)
-
 }

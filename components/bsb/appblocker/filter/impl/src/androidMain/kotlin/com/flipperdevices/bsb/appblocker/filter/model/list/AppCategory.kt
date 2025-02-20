@@ -12,6 +12,7 @@ import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.a
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_category_social
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_category_undefined
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_category_video
+import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_accessibility
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_games
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_image
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_music
@@ -21,7 +22,6 @@ import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.i
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_social
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_travel
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_video
-import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_accessibility
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
@@ -93,6 +93,5 @@ enum class AppCategory(
             val notContainsCategory = entries.find { categoriesSet.contains(it.id).not() }
             return notContainsCategory == null
         }
-
     }
 }

@@ -2,7 +2,6 @@ package com.flipperdevices.bsb.appblocker.permission.api
 
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.ui.decompose.ElementDecomposeComponent
-import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class AppBlockerPermissionBlockDecomposeComponent(

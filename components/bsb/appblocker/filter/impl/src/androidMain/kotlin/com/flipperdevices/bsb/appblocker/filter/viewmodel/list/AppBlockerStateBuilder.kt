@@ -33,7 +33,6 @@ class AppBlockerStateBuilder(
 
     fun getState() = appBlockerFilterScreenState.asStateFlow()
 
-
     fun save(
         currentState: AppBlockerFilterScreenState.Loaded,
         onHide: () -> Unit
@@ -104,7 +103,6 @@ class AppBlockerStateBuilder(
         }
     }
 
-
     fun categoryHideChanged(
         appCategory: AppCategory,
         checked: Boolean
@@ -118,5 +116,4 @@ class AppBlockerStateBuilder(
             }
         }
     }
-
 }

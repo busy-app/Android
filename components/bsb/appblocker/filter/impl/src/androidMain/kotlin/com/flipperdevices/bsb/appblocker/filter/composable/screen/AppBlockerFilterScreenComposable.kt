@@ -75,7 +75,7 @@ fun AppBlockerFilterScreenComposable(
                     if (screenState.categories.isEmpty()) {
                         SimpleTextInformationComposable(
                             text = Res.string.appblocker_filter_empty,
-                            modifier = modifier
+                            modifier = Modifier
                         )
                     } else {
                         AppBlockerFilterListComposable(
@@ -99,8 +99,8 @@ fun AppBlockerFilterScreenComposable(
 
 @Composable
 private fun SimpleTextInformationComposable(
+    text: StringResource,
     modifier: Modifier = Modifier,
-    text: StringResource
 ) {
     Box(
         modifier = modifier

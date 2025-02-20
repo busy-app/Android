@@ -27,7 +27,6 @@ commonDependencies {
     implementation(libs.decompose)
     implementation(libs.composables)
     implementation(kotlin.compose.material3)
-
 }
 
 androidDependencies {

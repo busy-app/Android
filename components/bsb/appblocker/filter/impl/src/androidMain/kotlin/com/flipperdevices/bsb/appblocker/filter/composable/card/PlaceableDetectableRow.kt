@@ -4,16 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
-import kotlin.math.max
-
 
 private data class Item(val placeable: Placeable, val xPosition: Int)
 
 @Composable
 fun PlaceableDetectableRow(
-    modifier: Modifier = Modifier,
     onPlacementComplete: (Int) -> Unit,
-    content: @Composable () -> Unit
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
     Layout(
         modifier = modifier,
