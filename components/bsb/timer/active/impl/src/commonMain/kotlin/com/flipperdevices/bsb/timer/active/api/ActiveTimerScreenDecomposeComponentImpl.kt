@@ -12,6 +12,7 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.bsb.timer.background.model.maxUiIterations
+import com.flipperdevices.bsb.timer.background.util.skip
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.background.util.togglePause
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
@@ -52,7 +53,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
                     },
                     timeLeft = state.timeLeft,
                     onSkip = {
-                        // todo
+                        timerApi.skip()
                     },
                     onPauseClick = {
                         timerApi.togglePause()

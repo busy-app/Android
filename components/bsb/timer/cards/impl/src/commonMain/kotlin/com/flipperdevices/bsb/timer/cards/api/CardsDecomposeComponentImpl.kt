@@ -18,6 +18,7 @@ import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.util.startWith
 import com.flipperdevices.bsb.timer.cards.composable.BusyCardComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
@@ -69,16 +70,7 @@ class CardsDecomposeComponentImpl(
                     onClick = {
                         coroutineScope.launch {
                             val settings = krateApi.timerSettingsKrate.flow.first()
-                            // todo
-                            timerApi.setState(
-                                ControlledTimerState.Running.Work(
-                                    timeLeft = settings.intervalsSettings.work,
-                                    isOnPause = false,
-                                    timerSettings = settings,
-                                    currentIteration = 0,
-                                    maxIterations = 4
-                                )
-                            )
+                            timerApi.startWith(settings)
                         }
                     }
                 )

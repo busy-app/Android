@@ -8,6 +8,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.util.skip
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.background.util.togglePause
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
@@ -36,7 +37,7 @@ class RestTimerScreenDecomposeComponentImpl(
                 RestComposableContent(
                     modifier = modifier,
                     onSkip = {
-                        // todo
+                        timerApi.skip()
                     },
                     timeLeft = state.timeLeft,
                     statusType = when (breakType) {

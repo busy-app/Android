@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.background.api.store
 
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.isLastIteration
 import kotlin.time.Duration
 
 object ControlledTimerStateReducer {
@@ -24,18 +25,9 @@ object ControlledTimerStateReducer {
         }
     }
 
-    val ControlledTimerState.isWork: Boolean
-        get() = (this is ControlledTimerState.Running.Work)
-
-    val ControlledTimerState.isRest: Boolean
-        get() = (this is ControlledTimerState.Running.Rest)
-
-    val ControlledTimerState.isLongRest: Boolean
-        get() = (this is ControlledTimerState.Running.LongRest)
-
     private fun tryStartRest(state: ControlledTimerState.Running): ControlledTimerState? {
-        if (!state.timerSettings.intervalsSettings.isEnabled) return null
         if (state !is ControlledTimerState.Running.Work) return null
+        if (!state.timerSettings.intervalsSettings.isEnabled) return null
         if (state.currentIteration >= state.maxIterations) return null
 
         return ControlledTimerState.Running.Rest(
@@ -48,9 +40,9 @@ object ControlledTimerStateReducer {
     }
 
     private fun tryStartLongRest(state: ControlledTimerState.Running): ControlledTimerState? {
-        if (!state.timerSettings.intervalsSettings.isEnabled) return null
         if (state !is ControlledTimerState.Running.Work) return null
-        if (state.currentIteration < state.maxIterations) return null
+        if (!state.timerSettings.intervalsSettings.isEnabled) return null
+        if (state.currentIteration.plus(1) % 3 != 0 && !state.isLastIteration) return null
 
         return ControlledTimerState.Running.LongRest(
             timeLeft = state.timerSettings.intervalsSettings.longRest,
@@ -62,11 +54,10 @@ object ControlledTimerStateReducer {
     }
 
     private fun tryStartWork(state: ControlledTimerState.Running): ControlledTimerState? {
-        if (state.isWork) return null
-        if (state.isLongRest) return null
+        if (state is ControlledTimerState.Running.Work) return null
         if (state.currentIteration >= state.maxIterations) return null
 
-        return ControlledTimerState.Running.LongRest(
+        return ControlledTimerState.Running.Work(
             timeLeft = state.timerSettings.intervalsSettings.work,
             isOnPause = false,
             timerSettings = state.timerSettings,
@@ -76,12 +67,12 @@ object ControlledTimerStateReducer {
     }
 
     private fun tryStartFinish(state: ControlledTimerState.Running): ControlledTimerState? {
+        if (!state.isLastIteration) return null
+
         if (!state.timerSettings.intervalsSettings.isEnabled) {
-            if (!state.isWork) return null
-            if (state.currentIteration < state.maxIterations) return null
+            if (state !is ControlledTimerState.Running.Work) return null
         } else {
-            if (!state.isLongRest) return null
-            if (state.currentIteration < state.maxIterations) return null
+            if (state !is ControlledTimerState.Running.LongRest) return null
         }
         return ControlledTimerState.Finished
     }
@@ -91,10 +82,10 @@ object ControlledTimerStateReducer {
             ControlledTimerState.Finished, ControlledTimerState.NotStarted -> this
             is ControlledTimerState.Running -> {
                 tryStartWork(this)
-                    ?: tryStartRest(this)
-                    ?: tryStartLongRest(this)
                     ?: tryStartFinish(this)
-                    ?: this
+                    ?: tryStartLongRest(this)
+                    ?: tryStartRest(this)
+                    ?: error("Could not create next state for $this")
             }
         }
     }

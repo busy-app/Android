@@ -5,5 +5,5 @@
     <string name="ta_stop_session_desc">This could interrupt your workflow and make it harder to get back on track.</string>
     <string name="ta_keep_focusing">Keep focusing</string>
     <string name="ta_stop">Stop</string>
-    <string name="ta_skip">Stop</string>
+    <string name="ta_skip">Skip</string>
 </resources>

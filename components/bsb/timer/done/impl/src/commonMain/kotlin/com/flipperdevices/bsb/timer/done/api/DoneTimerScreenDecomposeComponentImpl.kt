@@ -8,6 +8,7 @@ import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.util.startWith
 import com.flipperdevices.bsb.timer.done.composable.DoneComposableContent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -37,16 +38,7 @@ class DoneTimerScreenDecomposeComponentImpl(
             onRestartClick = {
                 coroutineScope.launch {
                     val settings = krateApi.timerSettingsKrate.flow.first()
-                    // todo
-                    timerApi.setState(
-                        ControlledTimerState.Running.Work(
-                            timeLeft = settings.intervalsSettings.work,
-                            isOnPause = false,
-                            timerSettings = settings,
-                            currentIteration = 0,
-                            maxIterations = 4
-                        )
-                    )
+                    timerApi.startWith(settings)
                 }
             }
         )

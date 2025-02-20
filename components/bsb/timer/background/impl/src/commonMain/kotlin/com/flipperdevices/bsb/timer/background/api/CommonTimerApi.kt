@@ -63,7 +63,7 @@ class CommonTimerApi(
 
                             is ControlledTimerState.Running -> {
                                 if (internalState.timeLeft.inWholeSeconds <= 0) {
-                                    stopSelf()
+//                                    stopSelf()
                                 } else {
                                     metronomeApi.play()
                                 }
