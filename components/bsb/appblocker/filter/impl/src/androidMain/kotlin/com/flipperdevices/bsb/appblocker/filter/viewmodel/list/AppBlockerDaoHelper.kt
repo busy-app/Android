@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.appblocker.filter.viewmodel.list
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.room.withTransaction
 import com.flipperdevices.bsb.appblocker.filter.dao.AppFilterDatabase
@@ -49,35 +50,29 @@ class AppBlockerDaoHelper(
             .map { it.categoryId }
             .toSet()
 
-        val categories = apps
+        val appInfosByCategories = apps
             .filter { it.name != null }
-            .groupBy { AppCategory.fromCategoryId(it.category) }
-            .mapNotNull { (category, applicationInfos) ->
-                val isCategoryBlocked = checkedCategory.contains(category.id)
+            .groupBy { it.category }
 
-                val apps = applicationInfos.map { applicationInfo ->
-                    val label = packageManager.getApplicationLabel(applicationInfo)
-                    if (label == applicationInfo.name) {
-                        verbose {
-                            "Skip $applicationInfo because label ($label) is name (${applicationInfo.name})"
-                        }
-                        return@mapNotNull null
-                    }
-                    UIAppInformation(
-                        packageName = applicationInfo.packageName,
-                        appName = label.toString(),
-                        category = category,
+        val categories = AppCategory.entries.map { category ->
+            val isCategoryBlocked = checkedCategory.contains(category.id)
+            val uiApps = appInfosByCategories.getOrDefault(category.id, emptyList())
+                .mapNotNull {
+                    it.toUIApp(
                         isBlocked = isCategoryBlocked ||
-                                checkedAppsSet.contains(applicationInfo.packageName)
+                                checkedAppsSet.contains(it.packageName)
                     )
-                }.sortedBy { it.appName }
-                UIAppCategory(
-                    categoryEnum = category,
-                    isBlocked = isCategoryBlocked,
-                    apps = apps.toPersistentList(),
-                    isHidden = true
-                )
-            }.sortedByDescending { it.categoryEnum.id }
+                }
+                .sortedBy { it.appName }
+                .toPersistentList()
+
+            UIAppCategory(
+                categoryEnum = category,
+                isBlocked = isCategoryBlocked,
+                apps = uiApps,
+                isHidden = true
+            )
+        }.sortedByDescending { it.categoryEnum.id }
 
         return AppBlockerFilterScreenState.Loaded(
             categories = categories.toPersistentList()
@@ -95,13 +90,30 @@ class AppBlockerDaoHelper(
                 database.categoryDao().insert(DBBlockedCategory(it.categoryEnum.id))
             }
 
-            val nonBlockedCategories = currentState.categories.filter { !it.isBlocked }
-
-            nonBlockedCategories.forEach { category ->
+            currentState.categories.forEach { category ->
                 category.apps.filter { it.isBlocked }.forEach { app ->
                     database.appDao().insert(DBBlockedApp(app.packageName))
                 }
             }
         }
+    }
+
+
+    private fun ApplicationInfo.toUIApp(
+        isBlocked: Boolean
+    ): UIAppInformation? {
+        val label = context.packageManager.getApplicationLabel(this)
+        if (label == this.name) {
+            verbose {
+                "Skip $this because label ($label) is name (${this.name})"
+            }
+            return null
+        }
+        return UIAppInformation(
+            packageName = this.packageName,
+            appName = label.toString(),
+            category = AppCategory.fromCategoryId(category),
+            isBlocked = isBlocked
+        )
     }
 }

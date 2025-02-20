@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
-import kotlinx.coroutines.runBlocking
 import me.tatarka.inject.annotations.Inject
 
 @Inject

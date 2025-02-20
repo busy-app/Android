@@ -1,8 +1,6 @@
 package com.flipperdevices.bsb.appblocker.filter.viewmodel.card
 
 import com.flipperdevices.bsb.appblocker.filter.dao.AppFilterDatabase
-import com.flipperdevices.bsb.appblocker.filter.dao.repository.AppInformationDao
-import com.flipperdevices.bsb.appblocker.filter.dao.repository.CategoryInformationDao
 import com.flipperdevices.bsb.appblocker.filter.model.card.AppBlockerCardListState
 import com.flipperdevices.bsb.appblocker.filter.model.card.AppIcon
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
@@ -27,20 +25,26 @@ class AppBlockerCardListViewModel(
             database.categoryDao().getCheckedCategoryFlow()
                 .map { categories ->
                     categories.map {
-                        AppIcon.Category(AppCategory.fromCategoryId(it.categoryId).icon)
+                        it.categoryId
                     }
                 },
             database.appDao().getCheckedAppsFlow()
                 .map { apps ->
                     apps.map { AppIcon.App(it.appPackage) }
                 }
-        ) { categories, apps ->
-            categories + apps
-        }.onEach { icons ->
+        ) { categoryIds, apps ->
+            val categoryIcons = categoryIds.map {
+                AppIcon.Category(AppCategory.fromCategoryId(it).icon)
+            }
+            AppCategory.isAllCategoryContains(categoryIds) to apps + categoryIcons
+        }.onEach { (isAllBlocked, icons) ->
             val state = if (icons.isEmpty()) {
                 AppBlockerCardListState.Empty
             } else {
-                AppBlockerCardListState.Loaded(icons.toPersistentList())
+                AppBlockerCardListState.Loaded(
+                    isAllBlocked = isAllBlocked,
+                    icons = icons.toPersistentList()
+                )
             }
             listState.emit(state)
         }.launchIn(viewModelScope)

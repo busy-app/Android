@@ -44,6 +44,7 @@ class AppBlockerFilterElementDecomposeComponentImpl(
             is AppBlockerCardListState.Loaded -> {
                 FilledListAppsBoxComposable(
                     modifier = modifier,
+                    isAllBlocked = localState.isAllBlocked,
                     items = localState.icons,
                     onClick = filterScreenDecomposeComponent::show
                 )

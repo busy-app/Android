@@ -87,5 +87,12 @@ enum class AppCategory(
             return entries.find { it.id == categoryId }
                 ?: CATEGORY_UNDEFINED
         }
+
+        fun isAllCategoryContains(categories: List<Int>): Boolean {
+            val categoriesSet = categories.toSet()
+            val notContainsCategory = entries.find { categoriesSet.contains(it.id).not() }
+            return notContainsCategory == null
+        }
+
     }
 }

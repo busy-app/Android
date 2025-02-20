@@ -9,6 +9,7 @@ import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.Res
+import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_card_all
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_arrow
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppCategory
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
@@ -72,27 +74,45 @@ fun CategoryFilterListItemComposable(
             color = Color(0xFFFFFFFF),
         )
 
-        Text(
-            modifier = Modifier.padding(start = 12.dp),
-            text = category.apps.size.toString(),
-            fontSize = 14.sp,
-            lineHeight = 14.sp,
-            fontFamily = LocalBusyBarFonts.current.pragmatica,
-            fontWeight = FontWeight.W500,
-            color = LocalPallet.current.transparent.whiteInvert.secondary,
-        )
-        val rotateAngel = if (category.isHidden) {
-            180f
+        val blockedAppsText = if (category.isBlocked) {
+            stringResource(Res.string.appblocker_card_all)
         } else {
-            0f
+            val blockedAppsCount = remember(category.apps) {
+                category.apps.count { it.isBlocked }
+            }
+            if (blockedAppsCount > 0) {
+                blockedAppsCount.toString()
+            } else {
+                null
+            }
         }
-        Icon(
-            modifier = Modifier
-                .size(24.dp)
-                .rotate(rotateAngel),
-            painter = painterResource(Res.drawable.ic_arrow),
-            contentDescription = null,
-            tint = LocalPallet.current.transparent.whiteInvert.secondary
-        )
+
+        if (blockedAppsText != null) {
+            Text(
+                modifier = Modifier.padding(start = 12.dp),
+                text = blockedAppsText,
+                fontSize = 14.sp,
+                lineHeight = 14.sp,
+                fontFamily = LocalBusyBarFonts.current.pragmatica,
+                fontWeight = FontWeight.W500,
+                color = LocalPallet.current.transparent.whiteInvert.secondary,
+            )
+        }
+
+        if (category.apps.isNotEmpty()) {
+            val rotateAngel = if (category.isHidden) {
+                180f
+            } else {
+                0f
+            }
+            Icon(
+                modifier = Modifier
+                    .size(24.dp)
+                    .rotate(rotateAngel),
+                painter = painterResource(Res.drawable.ic_arrow),
+                contentDescription = null,
+                tint = LocalPallet.current.transparent.whiteInvert.secondary
+            )
+        }
     }
 }

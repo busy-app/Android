@@ -14,6 +14,9 @@ interface AppInformationDao {
     @Query("SELECT * FROM blocked_apps")
     fun getCheckedAppsFlow(): Flow<List<DBBlockedApp>>
 
+    @Query("SELECT count(*) FROM blocked_apps")
+    fun getCheckedAppsCountFlow(): Flow<Int>
+
     @Query("SELECT * FROM blocked_apps WHERE app_package == :packageName")
     suspend fun find(packageName: String): List<DBBlockedApp>
 

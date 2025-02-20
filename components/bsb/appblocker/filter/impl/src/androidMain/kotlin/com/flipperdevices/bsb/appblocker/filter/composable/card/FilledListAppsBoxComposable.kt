@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -54,6 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun FilledListAppsBoxComposable(
+    isAllBlocked: Boolean,
     items: ImmutableList<AppIcon>,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -105,18 +103,24 @@ internal fun FilledListAppsBoxComposable(
                 }
             }
 
-            Text(
-                text = if (isAllIconShown) {
-                    stringResource(Res.string.appblocker_card_all)
-                } else {
-                    "${items.size}"
-                },
-                color = LocalPallet.current
-                    .transparent
-                    .whiteInvert
-                    .primary,
-                fontSize = 18.sp
-            )
+            val blockedAppsCount = if (isAllBlocked) {
+                stringResource(Res.string.appblocker_card_all)
+            } else if (isAllIconShown) {
+                null
+            } else {
+                "${items.size}"
+            }
+
+            if (blockedAppsCount != null) {
+                Text(
+                    text = blockedAppsCount,
+                    color = LocalPallet.current
+                        .transparent
+                        .whiteInvert
+                        .primary,
+                    fontSize = 18.sp
+                )
+            }
             Icon(
                 painter = painterResource(Res.drawable.ic_arrow_right),
                 contentDescription = null,
@@ -196,11 +200,13 @@ private fun FilledListAppsBoxComposablePreview() {
         ) {
             FilledListAppsBoxComposable(
                 items = List(size = 24) { AppIcon.Category(Res.drawable.ic_app_type_other) }.toImmutableList(),
-                onClick = {}
+                onClick = {},
+                isAllBlocked = false
             )
             FilledListAppsBoxComposable(
                 items = List(size = 2) { AppIcon.Category(Res.drawable.ic_app_type_other) }.toImmutableList(),
-                onClick = {}
+                onClick = {},
+                isAllBlocked = true
             )
         }
     }

@@ -20,6 +20,9 @@ commonDependencies {
     implementation(projects.components.core.ui.sheet)
     implementation(projects.components.bsb.core.theme)
 
+    implementation(projects.components.bsb.appblocker.core.api)
+    implementation(projects.components.bsb.appblocker.permission.api)
+
     implementation(libs.kotlin.immutable)
     implementation(libs.decompose)
     implementation(libs.composables)
