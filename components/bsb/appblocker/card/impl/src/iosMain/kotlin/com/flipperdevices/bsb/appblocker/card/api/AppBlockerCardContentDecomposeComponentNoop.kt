@@ -34,7 +34,7 @@ class AppBlockerCardContentDecomposeComponentNoop(
         Column(
             modifier.fillMaxWidth()
                 .navigationBarsPadding()
-                .padding(horizontal = 16.sp)
+                .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = stringResource(Res.string.appblocker_wrong_platform),
