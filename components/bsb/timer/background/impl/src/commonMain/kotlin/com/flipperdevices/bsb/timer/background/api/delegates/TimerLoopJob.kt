@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.timer.background.api.delegates
 
+import com.flipperdevices.bsb.timer.background.api.store.ControlledTimerStateReducer
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.isOnPause
 import com.flipperdevices.core.ktx.common.withLock
@@ -37,16 +38,21 @@ class TimerLoopJob(
                         ControlledTimerState.Finished -> original
                         ControlledTimerState.NotStarted -> original
                         is ControlledTimerState.Running -> {
-                            when (original) {
-                                is ControlledTimerState.Running.LongRest -> original.copy(
-                                    timeLeft = original.timeLeft.minus(1.seconds)
-                                )
-                                is ControlledTimerState.Running.Rest -> original.copy(
-                                    timeLeft = original.timeLeft.minus(1.seconds)
-                                )
-                                is ControlledTimerState.Running.Work -> original.copy(
-                                    timeLeft = original.timeLeft.minus(1.seconds)
-                                )
+                            when {
+                                original.timeLeft.inWholeSeconds <= 0 -> {
+                                    with(ControlledTimerStateReducer) {
+                                        val message = ControlledTimerStateReducer.Message.NoTimeLeft
+                                        original.reduce(message)
+                                    }
+                                }
+
+                                else -> {
+                                    with(ControlledTimerStateReducer) {
+                                        val newTime = original.timeLeft.minus(1.seconds)
+                                        val message = ControlledTimerStateReducer.Message.TimeUpdated(newTime)
+                                        original.reduce(message)
+                                    }
+                                }
                             }
                         }
                     }
