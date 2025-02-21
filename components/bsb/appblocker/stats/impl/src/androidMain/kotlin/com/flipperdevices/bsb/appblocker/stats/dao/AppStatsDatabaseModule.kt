@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.appblocker.filter.dao
+package com.flipperdevices.bsb.appblocker.stats.dao
 
 import android.content.Context
 import androidx.room.Room
@@ -8,21 +8,18 @@ import me.tatarka.inject.annotations.Provides
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
-private val DATABASE_NAME = Databases.APPBLOCKER_FILTER.filename
-
 @ContributesTo(AppGraph::class)
-interface AppFilterDatabaseModule {
+interface AppStatsDatabaseModule {
     @Provides
     @SingleIn(AppGraph::class)
     fun provideRoom(
         context: Context,
-    ): AppFilterDatabase {
+    ): AppStatsDatabase {
         return Room.databaseBuilder(
             context,
-            AppFilterDatabase::class.java,
-            DATABASE_NAME
+            AppStatsDatabase::class.java,
+            Databases.APPBLOCKER_STATS.filename
         )
-            .createFromAsset("all_selected_categories.db")
             .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
     }

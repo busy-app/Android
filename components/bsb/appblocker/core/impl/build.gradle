@@ -20,6 +20,7 @@ androidDependencies {
     implementation(projects.components.bsb.deeplink.api)
     implementation(projects.components.bsb.appblocker.permission.api)
     implementation(projects.components.bsb.appblocker.filter.api)
+    implementation(projects.components.bsb.appblocker.stats.api)
 
     implementation(libs.kotlin.datetime)
 }

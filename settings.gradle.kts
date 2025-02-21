@@ -53,6 +53,7 @@ include(
     ":components:bsb:core:theme",
     ":components:bsb:core:res",
     ":components:bsb:core:markdown",
+    ":components:bsb:core:files",
 
     ":components:bsb:root:api",
     ":components:bsb:root:impl",
@@ -80,6 +81,8 @@ include(
     ":components:bsb:appblocker:permission:impl",
     ":components:bsb:appblocker:screen:api",
     ":components:bsb:appblocker:screen:impl",
+    ":components:bsb:appblocker:stats:api",
+    ":components:bsb:appblocker:stats:impl",
 
     ":components:bsb:auth:common",
     ":components:bsb:auth:main:impl",

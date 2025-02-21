@@ -4,6 +4,8 @@ import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import com.flipperdevices.bsb.appblocker.deeplink.AppBlockDeeplinkParser
+import com.flipperdevices.bsb.appblocker.stats.api.AppBlockerStatsApi
+import com.flipperdevices.bsb.appblocker.stats.model.AppLaunchRecordEvent
 import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
@@ -26,7 +28,8 @@ class UsageStatsLooper(
     private val context: Context,
     private val scope: CoroutineScope,
     private val androidPlatformDependencies: AndroidPlatformDependencies,
-    private val packageFilter: PackageFilter
+    private val packageFilter: PackageFilter,
+    private val appBlockerStatsApi: AppBlockerStatsApi
 ) : LogTagProvider {
     override val TAG = "UsageStatsLooper"
 
@@ -75,6 +78,13 @@ class UsageStatsLooper(
         }
 
         info { "Detect forbidden app" }
+
+        appBlockerStatsApi.recordBlockAppAsync(
+            event = AppLaunchRecordEvent(
+                appPackage = event.packageName,
+                timestamp = event.timeStamp
+            )
+        )
 
         val intent = AppBlockDeeplinkParser.getIntent(
             context,
