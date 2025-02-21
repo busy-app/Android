@@ -1,4 +1,4 @@
-package com.flipperdevices.ui.timeline
+package com.flipperdevices.ui.timeline.util
 
 import kotlin.time.Duration
 

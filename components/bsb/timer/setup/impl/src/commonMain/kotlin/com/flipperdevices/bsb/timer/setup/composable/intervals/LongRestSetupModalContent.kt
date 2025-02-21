@@ -25,6 +25,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.DurationUnit
 
 @Composable
 fun LongRestSetupModalBottomSheetContent(
@@ -63,9 +64,9 @@ fun LongRestSetupModalBottomSheetContent(
                     rangeEnd = 30.minutes.inWholeMinutes.toInt(),
                     step = 5.minutes.inWholeMinutes.toInt()
                 ),
-                initialSelectedItem = timerSettings.intervalsSettings.longRest.inWholeMinutes.toInt(),
+                initialSelectedItem = timerSettings.intervalsSettings.longRest,
                 onItemSelect = { duration -> onTimeChange.invoke(duration) },
-                unitConverter = { it.minutes }
+                durationUnit = DurationUnit.MINUTES
             )
         }
         TimerSaveButtonComposable(onClick = onSaveClick)

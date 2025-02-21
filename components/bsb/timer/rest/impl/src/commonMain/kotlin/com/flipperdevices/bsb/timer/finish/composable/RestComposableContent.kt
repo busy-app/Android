@@ -33,7 +33,7 @@ import com.flipperdevices.bsb.timer.common.composable.appbar.StatusLowBarComposa
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.TimerAppBarComposable
 import com.flipperdevices.ui.button.BChipButton
-import com.flipperdevices.ui.timeline.toFormattedTime
+import com.flipperdevices.ui.timeline.util.toFormattedTime
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration

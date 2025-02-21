@@ -1,18 +1,8 @@
 package com.flipperdevices.ui.timeline
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -24,17 +14,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import com.flipperdevices.ui.timeline.model.PickerLineStyle
+import com.flipperdevices.ui.timeline.model.VisibleLinesState
+import com.flipperdevices.ui.timeline.util.toDuration
+import com.flipperdevices.ui.timeline.util.toFormattedTime
+import com.flipperdevices.ui.timeline.util.toLong
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
-
-private const val STEP_DIVISION = 5
+import kotlin.time.DurationUnit
 
 /**
  * A customizable wheel picker component for Android Jetpack Compose.
@@ -46,136 +33,117 @@ private const val STEP_DIVISION = 5
  *
  * @param modifier The modifier to be applied to the `WheelPicker` component.
  * @param wheelPickerWidth The width of the entire picker. If null, the picker will use the full screen width. Default is `null`.
+ * @param totalItems The total number of items in the picker.
  * @param initialSelectedItem The index of the item that is initially selected.
  * @param onItemSelect A callback function invoked when a new item is selected, passing the selected index as a parameter.
  *
  */
+@Suppress("MaxLineLength", "LongMethod", "LambdaParameterInRestartableEffect")
 @Composable
-@Suppress("LambdaParameterInRestartableEffect", "MagicNumber", "MaxLineLength", "LongMethod")
 fun BoxWithConstraintsScope.HorizontalWheelPicker(
-    progression: IntProgression,
-    onItemSelect: (Duration) -> Unit,
+    totalItems: Int,
+    initialSelectedItem: Int,
+    transform: (Int) -> String,
+    onItemSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
     wheelPickerWidth: Dp? = null,
-    unitConverter: (Int) -> Duration = { it.seconds },
-    initialSelectedItem: Int = progression.first,
-    lineStyle: LineStyle = LineStyle.Default
+    lineStyle: PickerLineStyle = PickerLineStyle.Default
 ) {
-    val initialSelectedItem = initialSelectedItem
-        .minus(progression.first)
-        .coerceIn(progression.first, progression.last)
-    check(progression.step % STEP_DIVISION == 0) {
-        "Progression step must be divided by $STEP_DIVISION!"
-    }
-    check(progression.step >= STEP_DIVISION) {
-        "Progression step must be more than $STEP_DIVISION!"
-    }
-    val density = LocalDensity.current.density
-    val screenWidthDp = (with(LocalDensity.current) { maxWidth.toPx() } / density).dp
-    val effectiveWidth = wheelPickerWidth ?: screenWidthDp
+    val effectiveWidth = wheelPickerWidth ?: maxWidth
 
     var currentSelectedItem by remember { mutableIntStateOf(initialSelectedItem) }
+    val scrollState = rememberLazyListState(initialFirstVisibleItemIndex = initialSelectedItem)
 
-    val scrollState: LazyListState = rememberLazyListState(initialFirstVisibleItemIndex = initialSelectedItem)
-    val textScrollState = rememberLazyListState(initialFirstVisibleItemIndex = initialSelectedItem)
-
-    val visibleItemsInfo by remember { derivedStateOf { scrollState.layoutInfo.visibleItemsInfo } }
-    val firstVisibleItemIndex = visibleItemsInfo.firstOrNull()?.index ?: -1
-    val lastVisibleItemIndex = visibleItemsInfo.lastOrNull()?.index ?: -1
-    val totalVisibleItems = lastVisibleItemIndex - firstVisibleItemIndex + 1
-    val middleIndex = firstVisibleItemIndex + totalVisibleItems / 2 + totalVisibleItems % 2
-    val bufferIndices = totalVisibleItems / 2 + totalVisibleItems % 2
-
-    LaunchedEffect(middleIndex, currentSelectedItem, scrollState.isScrollInProgress) {
-        onItemSelect(unitConverter.invoke(currentSelectedItem + progression.first))
-        val step = progression.step
+    val visibleItemsInfo by remember {
+        derivedStateOf {
+            val visibleItemsInfo = scrollState.layoutInfo.visibleItemsInfo
+            VisibleLinesState(
+                firstVisibleItemIndex = visibleItemsInfo.firstOrNull()?.index ?: -1,
+                lastVisibleItemIndex = visibleItemsInfo.lastOrNull()?.index ?: -1
+            )
+        }
+    }
+    LaunchedEffect(visibleItemsInfo, currentSelectedItem, scrollState.isScrollInProgress) {
+        onItemSelect(currentSelectedItem)
+        val step = lineStyle.step
         val mod = currentSelectedItem % step
         val div = currentSelectedItem / step
         val result = if (mod < (step / 2)) div.times(step) else div.times(step) + step
+        if (result == currentSelectedItem) return@LaunchedEffect
         if (!scrollState.isScrollInProgress) {
             scrollState.animateScrollToItem(result)
         }
     }
-    LaunchedEffect(currentSelectedItem, scrollState) {
-        val nonAdjustedIndex = currentSelectedItem + bufferIndices
-        textScrollState.animateScrollToItem(nonAdjustedIndex)
+
+    LaunchedEffect(Unit) {
+        scrollState.animateScrollToItem(initialSelectedItem)
     }
 
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    LazyRow(
+        modifier = modifier.width(effectiveWidth),
+        state = scrollState,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        LazyRow(
-            modifier = Modifier.width(effectiveWidth),
-            state = scrollState,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            items(((progression.last - progression.first)) + totalVisibleItems) { index ->
-                val adjustedIndex = index - bufferIndices
-                val isSelected = index == middleIndex
+        items(
+            count = totalItems + visibleItemsInfo.totalVisibleItems,
+            key = { index -> index - visibleItemsInfo.bufferIndices },
+            itemContent = { index ->
+                val adjustedIndex = index - visibleItemsInfo.bufferIndices
 
-                if (isSelected) {
+                if (index == visibleItemsInfo.middleIndex) {
                     currentSelectedItem = adjustedIndex
                 }
 
-                val lineTransparency by animateFloatAsState(
-                    targetValue = calculateLineTransparency(
-                        lineIndex = index,
-                        totalLines = progression.last - progression.first,
-                        bufferIndices = bufferIndices,
-                        firstVisibleItemIndex = firstVisibleItemIndex,
-                        lastVisibleItemIndex = lastVisibleItemIndex,
-                        fadeOutLinesCount = lineStyle.fadeOutLinesCount,
-                        maxFadeTransparency = lineStyle.maxFadeTransparency
-                    ),
-                    animationSpec = tween(durationMillis = 300)
+                val lineTransparency = calculateLineTransparency(
+                    lineIndex = index,
+                    totalLines = totalItems,
+                    bufferIndices = visibleItemsInfo.bufferIndices,
+                    firstVisibleItemIndex = visibleItemsInfo.firstVisibleItemIndex,
+                    lastVisibleItemIndex = visibleItemsInfo.lastVisibleItemIndex,
+                    fadeOutLinesCount = lineStyle.fadeOutLinesCount,
+                    maxFadeTransparency = lineStyle.maxFadeTransparency
                 )
 
+                val isGone =
+                    index < visibleItemsInfo.bufferIndices || index > (totalItems + visibleItemsInfo.bufferIndices)
                 VerticalLine(
-                    index = adjustedIndex + progression.first,
-                    isSelected = index == middleIndex,
+                    adjustedIndex = adjustedIndex,
+                    lineStyle = lineStyle,
+                    indexAtCenter = index == visibleItemsInfo.middleIndex,
                     lineTransparency = lineTransparency,
-                    style = lineStyle,
-                    progression = progression,
-                    unitConverter = unitConverter
+                    transform = transform,
+                    isVisible = !isGone,
                 )
+
                 Spacer(modifier = Modifier.width(lineStyle.lineSpacing))
             }
-        }
+        )
     }
 }
 
-// todo this code is still WIP
-@Suppress("PreviewPublic")
-@Preview
 @Composable
-fun HorizontalWheelPickerPreview(
-    style: LineStyle? = null
+fun BoxWithConstraintsScope.HorizontalWheelPicker(
+    durationUnit: DurationUnit,
+    initialSelectedItem: Duration,
+    progression: IntProgression,
+    onItemSelect: (Duration) -> Unit,
+    modifier: Modifier = Modifier,
+    lineStyle: PickerLineStyle = PickerLineStyle.Default
 ) {
-    BusyBarThemeInternal {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(8.dp))
-                BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-                    HorizontalWheelPicker(
-                        lineStyle = style ?: LineStyle.Default,
-                        progression = IntProgression.fromClosedRange(
-                            rangeStart = 1.hours.inWholeMinutes.toInt(),
-                            rangeEnd = 12.hours.inWholeMinutes.toInt(),
-                            step = 5.minutes.inWholeMinutes.toInt()
-                        ),
-                        initialSelectedItem = 1.hours.plus(30.minutes).inWholeMinutes.toInt(),
-                        onItemSelect = { item -> },
-                        unitConverter = { it.minutes }
-                    )
-                }
-            }
-        }
-    }
+    val firstDuration = durationUnit.toDuration(progression.first)
+
+    HorizontalWheelPicker(
+        modifier = modifier,
+        wheelPickerWidth = null,
+        totalItems = progression.last - progression.first,
+        initialSelectedItem = durationUnit
+            .toLong(initialSelectedItem.minus(firstDuration))
+            .coerceAtLeast(0L)
+            .toInt(),
+        transform = { value -> durationUnit.toDuration(value).plus(firstDuration).toFormattedTime() },
+        lineStyle = lineStyle,
+        onItemSelect = { value ->
+            onItemSelect.invoke(durationUnit.toDuration(value).plus(firstDuration))
+        },
+    )
 }

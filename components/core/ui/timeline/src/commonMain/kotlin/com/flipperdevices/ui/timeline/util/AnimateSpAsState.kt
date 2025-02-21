@@ -1,4 +1,4 @@
-package com.flipperdevices.ui.timeline
+package com.flipperdevices.ui.timeline.util
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.AnimationVector1D
@@ -18,7 +18,7 @@ private val TextUnitToVector: TwoWayConverter<TextUnit, AnimationVector1D> = Two
 @Composable
 internal fun animateTextUnitAsState(
     targetValue: TextUnit,
-    animationSpec: AnimationSpec<TextUnit> = spring<TextUnit>(visibilityThreshold = 0.1f.sp),
+    animationSpec: AnimationSpec<TextUnit> = spring(visibilityThreshold = 0.1f.sp),
     label: String = "DpAnimation",
     finishedListener: ((TextUnit) -> Unit)? = null
 ): State<TextUnit> {

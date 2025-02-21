@@ -27,7 +27,6 @@ internal fun calculateLineTransparency(
     fadeOutLinesCount: Int,
     maxFadeTransparency: Float
 ): Float {
-    if (fadeOutLinesCount <= 0) return 1f
     val actualCount = fadeOutLinesCount + 1
     val transparencyStep = maxFadeTransparency / actualCount
 
