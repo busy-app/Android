@@ -1,4 +1,7 @@
 version:0
+string|ts_bs_apps_card_all|QWxs
+string|ts_bs_apps_card_off|T2Zm
+string|ts_bs_apps_card_permission|UGVybWlzc2lvbg==
 string|ts_bs_blocked_apps|QmxvY2tlZCBhcHBz
 string|ts_bs_intervals_desc|U3BsaXQgdG90YWwgdGltZSBpbnRvIHdvcmsgYW5kIHJlc3QgaW50ZXJ2YWxz
 string|ts_bs_intervals_long_rest|TG9uZyByZXN0
