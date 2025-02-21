@@ -6,6 +6,7 @@ plugins {
 
 commonDependencies {
     implementation(projects.components.core.data)
+    implementation(projects.components.bsb.preference.api)
 
     implementation(libs.kotlin.serialization.json)
 

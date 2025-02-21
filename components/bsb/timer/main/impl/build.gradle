@@ -26,7 +26,6 @@ commonDependencies {
     implementation(projects.components.bsb.timer.active.api)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.background.api)
-    implementation(projects.components.bsb.timer.service.api)
     implementation(projects.components.bsb.timer.cards.api)
     implementation(projects.components.bsb.timer.done.api)
 

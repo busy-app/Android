@@ -9,8 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
-import com.flipperdevices.bsb.timer.background.model.TimerAction
-import com.flipperdevices.core.data.timer.TimerState
+import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.android.toFullString
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
@@ -39,17 +38,14 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
     init {
         delegate.getState()
             .onEach { state ->
-                if (state != null) {
-                    notificationManager.notify(
-                        NOTIFICATION_ID,
-                        NotificationTimerBuilder.buildNotification(
-                            this@TimerForegroundService,
-                            state
-                        )
+                notificationManager.notify(
+                    NOTIFICATION_ID,
+                    NotificationTimerBuilder.buildNotification(
+                        this@TimerForegroundService,
+                        state
                     )
-                }
-            }
-            .launchIn(lifecycleScope + FlipperDispatchers.default)
+                )
+            }.launchIn(lifecycleScope + FlipperDispatchers.default)
     }
 
     override fun onCreate() {
@@ -74,26 +70,17 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                 TimerServiceActionEnum.START.actionId -> {
                     val timerStateString = intent.getStringExtra(EXTRA_KEY_TIMER_STATE)
                     if (timerStateString != null) {
-                        val timerState = Json.decodeFromString<TimerState>(timerStateString)
-                        delegate.startTimer(timerState)
+                        val timerState = Json.decodeFromString<ControlledTimerState>(timerStateString)
+                        delegate.setState(timerState)
                     } else {
                         error { "Not found timer start" }
+                        delegate.setState(ControlledTimerState.Finished)
                     }
                 }
 
                 TimerServiceActionEnum.STOP.actionId -> {
-                    delegate.stopTimer()
+                    delegate.setState(ControlledTimerState.Finished)
                     stopServiceInternal()
-                }
-
-                TimerServiceActionEnum.ACTION.actionId -> {
-                    if (intent.hasExtra(EXTRA_KEY_TIMER_ACTION)) {
-                        val timerActionNumber = intent.getIntExtra(EXTRA_KEY_TIMER_ACTION, 0)
-                        val timerAction = TimerAction.entries[timerActionNumber]
-                        delegate.onAction(timerAction)
-                    } else {
-                        error { "Not found timer action" }
-                    }
                 }
             }
         } else {

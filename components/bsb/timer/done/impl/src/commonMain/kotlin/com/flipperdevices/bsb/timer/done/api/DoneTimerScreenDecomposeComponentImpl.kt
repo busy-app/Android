@@ -6,7 +6,8 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
-import com.flipperdevices.bsb.timer.background.api.TimerService
+import com.flipperdevices.bsb.timer.background.api.TimerApi
+import com.flipperdevices.bsb.timer.background.util.startWith
 import com.flipperdevices.bsb.timer.done.composable.DoneComposableContent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -21,7 +22,7 @@ class DoneTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onFinishCallback: OnFinishCallback,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
-    private val timerService: TimerService,
+    private val timerApi: TimerApi,
     private val krateApi: KrateApi,
 ) : DoneTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
@@ -35,7 +36,8 @@ class DoneTimerScreenDecomposeComponentImpl(
             },
             onRestartClick = {
                 coroutineScope.launch {
-                    timerService.startWith(krateApi.timerSettingsKrate.flow.first())
+                    val settings = krateApi.timerSettingsKrate.flow.first()
+                    timerApi.startWith(settings)
                 }
             }
         )

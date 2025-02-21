@@ -1,16 +1,10 @@
 package com.flipperdevices.bsb.timer.background.api
 
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.model.TimerAction
-import com.flipperdevices.core.data.timer.TimerState
 import kotlinx.coroutines.flow.StateFlow
 
 interface TimerApi {
-    fun startTimer(initialTimerState: TimerState)
+    fun setState(state: ControlledTimerState)
 
-    fun getState(): StateFlow<ControlledTimerState?>
-
-    fun onAction(action: TimerAction)
-
-    fun stopTimer()
+    fun getState(): StateFlow<ControlledTimerState>
 }
