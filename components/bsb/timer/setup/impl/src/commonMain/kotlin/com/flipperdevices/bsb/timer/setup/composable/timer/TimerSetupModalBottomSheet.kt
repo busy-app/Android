@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
@@ -29,6 +30,7 @@ fun TimerSetupModalBottomSheetContent(
     onShowRestTimer: () -> Unit,
     onShowLongRestTimer: () -> Unit,
     onSoundClick: () -> Unit,
+    appBlockerState: BlockedAppCount,
     onBlockedAppsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -63,6 +65,7 @@ fun TimerSetupModalBottomSheetContent(
         Spacer(Modifier.height(32.dp))
         TimerSoundAppsOptionComposable(
             onSoundClick = onSoundClick,
+            appBlockerState = appBlockerState,
             onBlockedAppsClick = onBlockedAppsClick
         )
         Spacer(Modifier.height(16.dp))
@@ -84,7 +87,8 @@ private fun TimerSetupModalBottomSheetContentPreview() {
             onIntervalsToggle = {},
             onSaveClick = {},
             onTotalTimeChange = {},
-            timerSettings = TimerSettings()
+            timerSettings = TimerSettings(),
+            appBlockerState = BlockedAppCount.TurnOff
         )
     }
 }

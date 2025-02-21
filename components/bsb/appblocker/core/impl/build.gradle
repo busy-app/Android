@@ -1,0 +1,34 @@
+plugins {
+    id("flipper.multiplatform")
+    id("flipper.multiplatform-dependencies")
+    id("flipper.anvil-multiplatform")
+}
+
+commonDependencies {
+    implementation(projects.components.bsb.appblocker.core.api)
+    implementation(projects.components.bsb.preference.api)
+    implementation(projects.components.core.di)
+    implementation(libs.kotlin.coroutines)
+}
+
+androidDependencies {
+    implementation(projects.components.core.ktx)
+    implementation(projects.components.core.log)
+    implementation(projects.components.core.activityholder)
+
+    implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.deeplink.api)
+    implementation(projects.components.bsb.appblocker.permission.api)
+    implementation(projects.components.bsb.appblocker.filter.api)
+
+    implementation(libs.kotlin.datetime)
+}
+
+iosDependencies {
+    implementation(projects.components.bsb.timer.background.api)
+
+    implementation(projects.components.core.log)
+
+    implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlin.datetime)
+}

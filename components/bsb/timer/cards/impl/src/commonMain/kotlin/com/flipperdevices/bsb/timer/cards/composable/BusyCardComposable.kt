@@ -22,15 +22,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.Res
+import busystatusbar.components.bsb.timer.cards.impl.generated.resources.busycard_appblocker_all
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.ic_three_dots
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_block
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_long_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
+import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.ui.timeline.toFormattedTime
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CommonTimerRes
 
@@ -39,6 +42,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.Res as Comm
 fun BusyCardComposable(
     background: Color,
     name: String,
+    blockerState: BlockedAppCount,
     settings: TimerSettings,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -114,16 +118,30 @@ fun BusyCardComposable(
                         )
                     }
                 }
-                MiniFrameSection(
-                    MiniFrameData(
-                        text = "14", // todo
-                        painter = painterResource(CommonTimerRes.drawable.ic_block),
-                        tint = LocalPallet.current
-                            .transparent
-                            .whiteInvert
-                            .primary
-                    ),
-                )
+                val text = when (blockerState) {
+                    BlockedAppCount.All -> stringResource(Res.string.busycard_appblocker_all)
+                    is BlockedAppCount.Count -> if (blockerState.count > 0) {
+                        blockerState.count.toString()
+                    } else {
+                        null
+                    }
+
+                    BlockedAppCount.NoPermission,
+                    BlockedAppCount.TurnOff -> null
+                }
+
+                if (text != null) {
+                    MiniFrameSection(
+                        MiniFrameData(
+                            text = text,
+                            painter = painterResource(CommonTimerRes.drawable.ic_block),
+                            tint = LocalPallet.current
+                                .transparent
+                                .whiteInvert
+                                .primary
+                        ),
+                    )
+                }
             }
         }
     }
@@ -138,13 +156,15 @@ private fun PreviewBusyCardComposable() {
                 background = Color.Red,
                 name = "BUSY",
                 settings = TimerSettings(),
-                onClick = {}
+                onClick = {},
+                blockerState = BlockedAppCount.TurnOff
             )
 
             BusyCardComposable(
                 background = Color.Blue,
                 name = "Not so Busy!",
                 onClick = {},
+                blockerState = BlockedAppCount.All,
                 settings = TimerSettings(
                     intervalsSettings = TimerSettings.IntervalsSettings(isEnabled = true)
                 )

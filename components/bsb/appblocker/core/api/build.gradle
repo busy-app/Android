@@ -1,0 +1,11 @@
+plugins {
+    id("flipper.multiplatform.noandroidlib")
+    id("flipper.multiplatform-dependencies")
+    id("kotlinx-serialization")
+}
+
+commonDependencies {
+    implementation(libs.kotlin.serialization.json)
+
+    implementation(libs.kotlin.coroutines)
+}

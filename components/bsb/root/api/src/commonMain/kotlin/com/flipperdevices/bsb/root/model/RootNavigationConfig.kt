@@ -13,8 +13,5 @@ sealed interface RootNavigationConfig {
     data class Profile(val deeplink: Deeplink.Root.Auth?) : RootNavigationConfig
 
     @Serializable
-    data object Settings : RootNavigationConfig
-
-    @Serializable
     data class AppLockScreen(val applicationInfo: ApplicationInfo) : RootNavigationConfig
 }

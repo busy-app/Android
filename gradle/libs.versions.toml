@@ -35,6 +35,8 @@ compose-placeholder = "1.0.8"
 androidx-compose = "1.7.6" # https://github.com/eygraber/compose-placeholder/releases
 composables = "1.11.2" # https://github.com/composablehorizons/compose-unstyled
 klibs-kstorage = "3.2.6" # https://github.com/makeevrserg/klibs.kstorage
+room = "2.7.0-beta01" # https://developer.android.com/jetpack/androidx/releases/room
+accompanist = "0.37.0" # https://github.com/google/accompanist/releases
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -89,7 +91,10 @@ androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-service", version.
 settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
 settings-observable = { module = "com.russhwolf:multiplatform-settings-make-observable", version.ref = "settings" }
 settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "settings" }
-moko-permissions = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko-permissions" }
+
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
 # Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -98,12 +103,13 @@ ktor-client-js = { module = "io.ktor:ktor-client-js-wasm-js", version.ref = "kto
 ktor-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
-ktor-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 
 atomicflu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicflu" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidx-compose" }
+
+accompanist-drawable = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanist" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

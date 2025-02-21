@@ -28,4 +28,8 @@
     <string name="ts_bs_sound_alert_start_desc">Get notified 5 seconds before your next work interval begins</string>
     <string name="ts_bs_sound_alert_end_title">Alert before work ends</string>
     <string name="ts_bs_sound_alert_end_desc">Get notified 5 seconds before your current work interval ends</string>
+
+    <string name="ts_bs_apps_card_all">All</string>
+    <string name="ts_bs_apps_card_off">Off</string>
+    <string name="ts_bs_apps_card_permission">Permission</string>
 </resources>

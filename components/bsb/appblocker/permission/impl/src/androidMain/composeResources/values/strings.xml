@@ -1,0 +1,7 @@
+<resources>
+    <string name="appblocker_permission_title">Permission required</string>
+    <string name="appblocker_permission_desc">We need this to block distracting apps and notifications during your BUSY time. Your data remains private and secure.</string>
+    <string name="appblocker_permission_usage_btn">Usage access</string>
+    <string name="appblocker_permission_overlay_btn">Appear on top</string>
+
+</resources>

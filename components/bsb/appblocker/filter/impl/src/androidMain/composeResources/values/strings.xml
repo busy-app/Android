@@ -1,0 +1,24 @@
+<resources>
+    <string name="appblocker_card_add">+ Add apps</string>
+    <string name="appblocker_card_all">All</string>
+
+    <string name="appblocker_filter_loading">Loading</string>
+    <string name="appblocker_filter_empty">No applications found</string>
+
+    <string name="appblocker_filter_title">Select apps</string>
+    <string name="appblocker_filter_select_all">Select all</string>
+    <string name="appblocker_filter_select_none">Deselect all</string>
+    <string name="appblocker_filter_search_hint">Search</string>
+    <string name="appblocker_filter_btn_save">Save</string>
+
+    <string name="appblocker_filter_category_undefined">Others</string>
+    <string name="appblocker_filter_category_game">Game</string>
+    <string name="appblocker_filter_category_audio">Audio</string>
+    <string name="appblocker_filter_category_video">Video</string>
+    <string name="appblocker_filter_category_image">Image</string>
+    <string name="appblocker_filter_category_social">Social</string>
+    <string name="appblocker_filter_category_news">News</string>
+    <string name="appblocker_filter_category_maps">Maps</string>
+    <string name="appblocker_filter_category_productivity">Productivity</string>
+    <string name="appblocker_filter_category_accessibility">Accessibility</string>
+</resources>

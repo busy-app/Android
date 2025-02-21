@@ -58,7 +58,7 @@ kotlin {
             export(libs.decompose)
             export(libs.essenty.lifecycle)
             export(libs.settings)
-            export(projects.components.bsb.appblocker.api)
+            // TODO revert back export(projects.components.bsb.appblocker.api)
         }
     }
 
@@ -102,7 +102,7 @@ kotlin {
             api(libs.essenty.lifecycle)
             api(libs.settings)
 
-            api(projects.components.bsb.appblocker.api)
+            // TODO revert back api(projects.components.bsb.appblocker.api)
             implementation(libs.settings.observable)
         }
         wasmJsMain.dependencies {
@@ -148,22 +148,27 @@ commonDependencies {
     implementation(projects.components.bsb.root.impl)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.preference.impl)
-    implementation(projects.components.bsb.preferencescreen.api)
-    implementation(projects.components.bsb.preferencescreen.impl)
     implementation(projects.components.bsb.cloud.api)
     implementation(projects.components.bsb.cloud.impl)
     implementation(projects.components.bsb.dnd.api)
     implementation(projects.components.bsb.dnd.impl)
-    implementation(projects.components.bsb.appblocker.api)
-    implementation(projects.components.bsb.appblocker.impl)
-    implementation(projects.components.bsb.appblockerscreen.api)
-    implementation(projects.components.bsb.appblockerscreen.impl)
     implementation(projects.components.bsb.deeplink.api)
     implementation(projects.components.bsb.deeplink.impl)
     implementation(projects.components.bsb.inappnotification.api)
     implementation(projects.components.bsb.inappnotification.impl)
     implementation(projects.components.bsb.metronome.api)
     implementation(projects.components.bsb.metronome.impl)
+
+    implementation(projects.components.bsb.appblocker.core.api)
+    implementation(projects.components.bsb.appblocker.core.impl)
+    implementation(projects.components.bsb.appblocker.card.api)
+    implementation(projects.components.bsb.appblocker.card.impl)
+    implementation(projects.components.bsb.appblocker.filter.api)
+    implementation(projects.components.bsb.appblocker.filter.impl)
+    implementation(projects.components.bsb.appblocker.permission.api)
+    implementation(projects.components.bsb.appblocker.permission.impl)
+    implementation(projects.components.bsb.appblocker.screen.api)
+    implementation(projects.components.bsb.appblocker.screen.impl)
 
     implementation(projects.components.bsb.auth.main.api)
     implementation(projects.components.bsb.auth.main.impl)

@@ -5,13 +5,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
-import com.flipperdevices.bsb.timer.setup.composable.blockedapps.BlockedAppsSetupModalBottomSheetContent
+import com.flipperdevices.bsb.appblocker.card.api.AppBlockerCardContentDecomposeComponent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.LongRestSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.RestSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.SoundSetupModalBottomSheetContent
@@ -20,7 +21,6 @@ import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
 import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
@@ -29,6 +29,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class IntervalsSetupSheetDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
+    appBlockerCardContentFactory: AppBlockerCardContentDecomposeComponent.Factory,
     timerSetupViewModelFactory: () -> TimerSetupViewModel
 ) : IntervalsSetupSheetDecomposeComponent(componentContext) {
     private val timerSetupViewModel = instanceKeeper.getOrCreate {
@@ -42,6 +43,11 @@ class IntervalsSetupSheetDecomposeComponentImpl(
         childFactory = { configuration, context ->
             configuration
         }
+    )
+
+    private val appBlockerCardContent = appBlockerCardContentFactory(
+        componentContext = childContext("intervalsSetupSheetDecomposeComponent_appBlockerCardContent"),
+        onBackParameter = slot::dismiss
     )
 
     @Serializable
@@ -138,13 +144,8 @@ class IntervalsSetupSheetDecomposeComponentImpl(
 
                     PickerConfiguration.BlockedApps -> {
                         BModalBottomSheetContent(horizontalPadding = 0.dp) {
-                            // todo here will be blocked apps later
-                            BlockedAppsSetupModalBottomSheetContent(
-                                onSaveClick = slot::dismiss,
-                                blockedAppsDuringWork = persistentListOf(),
-                                blockedAppsDuringRest = persistentListOf(),
-                                onAddBlockedAppsDuringRestClick = {},
-                                onAddBlockedAppsDuringWorkClick = {}
+                            appBlockerCardContent.Render(
+                                modifier = Modifier
                             )
                         }
                     }
