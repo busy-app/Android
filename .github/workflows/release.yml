@@ -31,7 +31,7 @@ jobs:
         with:
           submodules: 'recursive'
       - name: Set up JDK 1.17
-        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -70,7 +70,7 @@ jobs:
           cp instances/bsb/build/outputs/mapping/release/mapping.txt artifacts/mapping.txt
           echo "path=artifacts/" >> $GITHUB_OUTPUT
       - name: Upload Artifacts
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
         with:
           name: artifacts
           path: ${{ steps.artifacts_copy.outputs.path }}
@@ -132,7 +132,7 @@ jobs:
           mv ${{ steps.artifacts_copy.outputs.path }}/busystatusbar.apk ${{ steps.artifacts_copy.outputs.path }}/busystatusbar-${{ steps.vars.outputs.major_version }}.${{ steps.vars.outputs.minor_version }}.apk
       - name: Create internal Release
         id: create_internal_release
-        uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
