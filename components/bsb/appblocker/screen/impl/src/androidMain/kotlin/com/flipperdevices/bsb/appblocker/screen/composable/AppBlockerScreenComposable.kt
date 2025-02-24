@@ -49,7 +49,7 @@ fun AppBlockerScreenComposable(
                     horizontal = 32.dp
                 ),
             text = stringResource(Res.string.appblocker_screen_btn),
-            color = LocalPallet.current.black.invert ,
+            color = LocalPallet.current.black.invert,
             fontSize = 16.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             textAlign = TextAlign.Center

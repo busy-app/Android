@@ -62,9 +62,9 @@ class AppBlockDeeplinkParser : DeepLinkParserDelegate, LogTagProvider {
             val intent = Intent(context, activity.java)
             intent.addFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK or
-                        Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP or
-                        Intent.FLAG_ACTIVITY_NO_HISTORY or
-                        Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                    Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP or
+                    Intent.FLAG_ACTIVITY_NO_HISTORY or
+                    Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
             )
             intent.setAction(ACTION)
             intent.putExtra(EXTRA_PACKAGE_NAME, packageName)

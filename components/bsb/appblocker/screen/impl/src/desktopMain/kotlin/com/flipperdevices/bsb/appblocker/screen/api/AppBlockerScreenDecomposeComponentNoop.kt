@@ -15,7 +15,7 @@ class AppBlockerScreenDecomposeComponentNoop(
     @Assisted componentContext: ComponentContext,
     @Assisted applicationInfo: ApplicationInfo,
     @Assisted onBackParameter: DecomposeOnBackParameter,
-) : AppBlockerScreenDecomposeComponent(componentContext){
+) : AppBlockerScreenDecomposeComponent(componentContext) {
     @Composable
     override fun Render(modifier: Modifier) {
         // Empty

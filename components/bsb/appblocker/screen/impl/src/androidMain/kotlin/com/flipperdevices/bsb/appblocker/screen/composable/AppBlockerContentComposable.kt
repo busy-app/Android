@@ -3,7 +3,6 @@ package com.flipperdevices.bsb.appblocker.screen.composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +18,6 @@ import busystatusbar.components.bsb.appblocker.screen.impl.generated.resources.R
 import busystatusbar.components.bsb.appblocker.screen.impl.generated.resources.appblocker_screen_desc
 import busystatusbar.components.bsb.appblocker.screen.impl.generated.resources.appblocker_screen_title
 import busystatusbar.components.bsb.appblocker.screen.impl.generated.resources.pic_blocked
-import com.flipperdevices.bsb.appblocker.model.ApplicationInfo
 import com.flipperdevices.bsb.appblocker.screen.model.InternalApplicationInfo
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
@@ -37,7 +35,6 @@ fun AppBlockerContentComposable(
         verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         val context = LocalContext.current
         val drawable = remember(applicationInfo.packageName, context) {
             runCatching {
