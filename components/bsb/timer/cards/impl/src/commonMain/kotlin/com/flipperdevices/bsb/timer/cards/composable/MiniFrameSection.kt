@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.common.generated.resources.Res
@@ -27,6 +28,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_work
 import com.composables.core.Icon
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
+import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -55,7 +57,9 @@ private fun FrameSectionInnerContent(
                 .transparent
                 .whiteInvert
                 .primary,
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W500,
+            fontFamily = LocalBusyBarFonts.current.pragmatica
         )
     }
 }

@@ -100,7 +100,7 @@ fun BusyCardComposable(
                     if (settings.intervalsSettings.isEnabled) {
                         MiniFrameSection(
                             MiniFrameData(
-                                text = settings.intervalsSettings.rest.toFormattedTime(),
+                                text = settings.intervalsSettings.rest.toFormattedTime(slim = false),
                                 painter = painterResource(CommonTimerRes.drawable.ic_rest),
                                 tint = LocalPallet.current
                                     .transparent
@@ -108,7 +108,7 @@ fun BusyCardComposable(
                                     .primary
                             ),
                             MiniFrameData(
-                                text = settings.intervalsSettings.longRest.toFormattedTime(),
+                                text = settings.intervalsSettings.longRest.toFormattedTime(slim = false),
                                 painter = painterResource(CommonTimerRes.drawable.ic_long_rest),
                                 tint = LocalPallet.current
                                     .transparent
