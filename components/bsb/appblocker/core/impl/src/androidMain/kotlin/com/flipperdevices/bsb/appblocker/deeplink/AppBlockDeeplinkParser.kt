@@ -18,6 +18,7 @@ import kotlin.reflect.KClass
 
 private const val ACTION = "com.flipperdevices.bsb.appblocker.deeplink.AppBlockDeeplinkParser"
 private const val EXTRA_PACKAGE_NAME = "package_name"
+private const val EXTRA_OPEN_COUNT = "open_count"
 
 @Inject
 @ContributesBinding(AppGraph::class, DeepLinkParserDelegate::class, multibinding = true)
@@ -41,12 +42,12 @@ class AppBlockDeeplinkParser : DeepLinkParserDelegate, LogTagProvider {
             error { "Failed parse intent, because package name not found" }
             return null
         }
-
-        val applicationInfo = context.packageManager.getApplicationInfo(packageName, 0)
+        val openCount = intent.getIntExtra(EXTRA_OPEN_COUNT, 0)
 
         return Deeplink.Root.AppLockScreen(
             ApplicationInfo(
-                name = applicationInfo.loadLabel(context.packageManager).toString()
+                packageName = packageName,
+                openCount = openCount
             )
         )
     }
@@ -55,17 +56,19 @@ class AppBlockDeeplinkParser : DeepLinkParserDelegate, LogTagProvider {
         fun getIntent(
             context: Context,
             packageName: String,
+            openCount: Int,
             activity: KClass<out Activity>
         ): Intent {
             val intent = Intent(context, activity.java)
             intent.addFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK or
-                    Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP or
-                    Intent.FLAG_ACTIVITY_NO_HISTORY or
-                    Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                        Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP or
+                        Intent.FLAG_ACTIVITY_NO_HISTORY or
+                        Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
             )
             intent.setAction(ACTION)
             intent.putExtra(EXTRA_PACKAGE_NAME, packageName)
+            intent.putExtra(EXTRA_OPEN_COUNT, openCount)
             return intent
         }
     }

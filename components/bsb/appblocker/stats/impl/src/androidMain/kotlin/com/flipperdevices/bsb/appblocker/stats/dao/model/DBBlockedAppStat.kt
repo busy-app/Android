@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
     tableName = "blocked_stats",
     indices = [
         Index(
-            value = ["app_package", "timestamp"],
+            value = ["app_package", "timestamp_seconds"],
             unique = true
         )
     ]
@@ -20,6 +20,6 @@ data class DBBlockedAppStat(
     val id: Long = 0,
     @ColumnInfo(name = "app_package")
     val appPackage: String,
-    @ColumnInfo(name = "timestamp")
-    val timestamp: Long
+    @ColumnInfo(name = "timestamp_seconds")
+    val timestampSeconds: Long
 )

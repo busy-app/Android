@@ -16,43 +16,46 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @Inject
 @ContributesBinding(AppGraph::class, AppBlockerStatsApi::class)
 class AppBlockerStatsApiImpl(
-    private val scope: CoroutineScope,
     private val appStatsDatabase: AppStatsDatabase
 ) : AppBlockerStatsApi, LogTagProvider {
     override val TAG = "AppBlockerStatsApi"
 
-    override fun recordBlockAppAsync(event: AppLaunchRecordEvent) {
+    override suspend fun recordBlockApp(
+        event: AppLaunchRecordEvent
+    ) {
         info { "Receive $event" }
-        scope.launch {
-            runCatching {
-                appStatsDatabase.statsDao().insert(
-                    DBBlockedAppStat(
-                        appPackage = event.appPackage,
-                        timestamp = event.timestamp
-                    )
+        runCatching {
+            appStatsDatabase.statsDao().insert(
+                DBBlockedAppStat(
+                    appPackage = event.appPackage,
+                    timestampSeconds = event.timestamp.milliseconds.inWholeSeconds
                 )
-            }.onSuccess {
-                info { "Successfully recorded $event" }
-            }.onFailure {
-                error(it) { "Failed to add $event" }
-            }
+            )
+        }.onSuccess {
+            info { "Successfully recorded $event" }
+        }.onFailure {
+            error(it) { "Failed to add $event" }
         }
     }
 
     override suspend fun getBlockAppCount(packageName: String): Int {
-        val countFromTimestampMs = Clock.System
+        val countFromTimestampSeconds = Clock.System
             .todayIn(TimeZone.currentSystemDefault())
             .atStartOfDayIn(TimeZone.currentSystemDefault())
-            .toEpochMilliseconds()
+            .epochSeconds
         val count = appStatsDatabase.statsDao().getLaunchCount(
             appPackage = packageName,
-            fromAt = countFromTimestampMs
+            fromAtSeconds = countFromTimestampSeconds
         )
-        appStatsDatabase.statsDao().clearRecordsBefore(countFromTimestampMs)
+        appStatsDatabase.statsDao().clearRecordsBefore(
+            countFromTimestampSeconds
+        )
         return count
     }
 }

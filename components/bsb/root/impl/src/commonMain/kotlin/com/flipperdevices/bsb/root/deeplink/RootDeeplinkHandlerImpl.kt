@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.root.deeplink
 
 import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.pushToFront
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import com.flipperdevices.bsb.root.api.RootDeeplinkHandler
@@ -13,7 +14,7 @@ class RootDeeplinkHandlerImpl(
     override val TAG = "RootDeeplinkHandler"
 
     override fun handleDeeplink(deeplink: Deeplink) {
-        navigation.pushToFront(getConfigFromDeeplink(deeplink))
+        navigation.bringToFront(getConfigFromDeeplink(deeplink))
     }
 
     companion object {

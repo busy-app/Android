@@ -77,19 +77,24 @@ class UsageStatsLooper(
             return
         }
 
-        info { "Detect forbidden app" }
+        info { "Detect forbidden app in event with type ${event.eventType}: $event" }
 
-        appBlockerStatsApi.recordBlockAppAsync(
+        appBlockerStatsApi.recordBlockApp(
             event = AppLaunchRecordEvent(
                 appPackage = event.packageName,
                 timestamp = event.timeStamp
             )
         )
 
+        val openCount = appBlockerStatsApi.getBlockAppCount(
+            event.packageName
+        )
+
         val intent = AppBlockDeeplinkParser.getIntent(
-            context,
-            event.packageName,
-            androidPlatformDependencies.splashScreenActivity,
+            context = context,
+            packageName = event.packageName,
+            openCount = openCount,
+            activity = androidPlatformDependencies.splashScreenActivity,
         )
         context.startActivity(intent)
     }

@@ -12,7 +12,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 interface AppStatsDatabaseModule {
     @Provides
     @SingleIn(AppGraph::class)
-    fun provideRoom(
+    fun provideAppBlockerStatsRoom(
         context: Context,
     ): AppStatsDatabase {
         return Room.databaseBuilder(
