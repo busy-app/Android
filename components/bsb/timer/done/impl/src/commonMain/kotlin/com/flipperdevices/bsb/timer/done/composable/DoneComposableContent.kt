@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.ic_pomodoro
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_finish
+import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_finished_card
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_restart
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_well_done
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
@@ -161,7 +162,7 @@ fun DoneComposableContent(
                     fontSize = 40.sp
                 )
                 Text(
-                    text = stringResource(Res.string.td_finish),
+                    text = stringResource(Res.string.td_finished_card),
                     fontWeight = FontWeight.W500,
                     color = LocalPallet.current
                         .white
@@ -171,9 +172,10 @@ fun DoneComposableContent(
             }
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                <<<<<<< Updated upstream
                 ObjectiveCard(
                     objectives = persistentListOf(
                         ObjectiveModel(
@@ -206,6 +208,8 @@ fun DoneComposableContent(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
+                === === =
+                >>>>>>> Stashed changes
                 BChipButton(
                     onClick = onFinishClick,
                     text = stringResource(Res.string.td_finish),
@@ -222,6 +226,22 @@ fun DoneComposableContent(
                     contentColor = LocalPallet.current
                         .white
                         .invert
+                )
+
+                BChipButton(
+                    onClick = onRestartClick,
+                    text = stringResource(Res.string.td_restart),
+                    fontSize = 18.sp,
+                    painter = null,
+                    background = Color.Transparent,
+                    contentPadding = PaddingValues(
+                        horizontal = 64.dp,
+                        vertical = 16.dp
+                    ),
+                    contentColor = LocalCorruptedPallet.current
+                        .transparent
+                        .whiteInvert
+                        .primary
                 )
             }
         }
