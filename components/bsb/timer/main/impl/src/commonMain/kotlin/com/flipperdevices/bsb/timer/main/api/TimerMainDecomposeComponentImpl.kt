@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.background.api.TimerService
 import com.flipperdevices.bsb.timer.background.model.TimerServiceState
@@ -13,6 +14,7 @@ import com.flipperdevices.bsb.timer.finish.api.RestTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.main.model.TimerMainNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
+import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -21,6 +23,7 @@ import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
+@Suppress("LongParameterList")
 class TimerMainDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val activeTimerScreenDecomposeComponentFactory: ActiveTimerScreenDecomposeComponent.Factory,
@@ -28,7 +31,9 @@ class TimerMainDecomposeComponentImpl(
     private val restTimerScreenDecomposeComponentFactory: RestTimerScreenDecomposeComponent.Factory,
     private val doneTimerScreenDecomposeComponentFactory: DoneTimerScreenDecomposeComponent.Factory,
     timerService: TimerService,
+    iconStyleProvider: ThemeStatusBarIconStyleProvider,
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
+    StatusBarIconStyleProvider by iconStyleProvider,
     ComponentContext by componentContext {
 
     private fun TimerServiceState.getScreen(): TimerMainNavigationConfig {

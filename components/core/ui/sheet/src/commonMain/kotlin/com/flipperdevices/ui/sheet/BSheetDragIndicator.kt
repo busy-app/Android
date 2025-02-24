@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 
 @Composable
 fun BSheetDragIndicator(modifier: Modifier = Modifier) {
@@ -18,6 +18,6 @@ fun BSheetDragIndicator(modifier: Modifier = Modifier) {
             .height(5.dp)
             .fillMaxWidth(fraction = 0.3f)
             .clip(RoundedCornerShape(100.dp))
-            .background(LocalPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f))
+            .background(LocalCorruptedPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f))
     )
 }

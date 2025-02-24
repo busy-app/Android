@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_work
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -45,7 +45,7 @@ internal fun TitleInfoComposable(
             )
             Text(
                 text = title,
-                color = LocalPallet.current
+                color = LocalCorruptedPallet.current
                     .white
                     .invert,
                 fontSize = 24.sp
@@ -54,7 +54,7 @@ internal fun TitleInfoComposable(
         desc?.let {
             Text(
                 text = desc,
-                color = LocalPallet.current
+                color = LocalCorruptedPallet.current
                     .neutral
                     .tertiary,
                 fontSize = 16.sp

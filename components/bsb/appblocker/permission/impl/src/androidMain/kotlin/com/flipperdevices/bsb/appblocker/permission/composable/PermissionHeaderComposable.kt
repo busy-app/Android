@@ -16,7 +16,7 @@ import busystatusbar.components.bsb.appblocker.permission.impl.generated.resourc
 import busystatusbar.components.bsb.appblocker.permission.impl.generated.resources.appblocker_permission_title
 import busystatusbar.components.bsb.appblocker.permission.impl.generated.resources.ic_failed_status
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -33,14 +33,14 @@ fun PermissionHeaderComposable(
             modifier = Modifier.size(24.dp),
             painter = painterResource(Res.drawable.ic_failed_status),
             contentDescription = null,
-            tint = LocalPallet.current.danger.primary
+            tint = LocalCorruptedPallet.current.danger.primary
         )
         Text(
             modifier = Modifier.padding(vertical = 12.dp),
             text = stringResource(Res.string.appblocker_permission_title),
             fontSize = 18.sp,
             fontWeight = FontWeight.W500,
-            color = LocalPallet.current.danger.primary,
+            color = LocalCorruptedPallet.current.danger.primary,
             fontFamily = LocalBusyBarFonts.current.pragmatica
         )
     }

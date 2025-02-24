@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import busystatusbar.components.core.ui.res_preview.generated.resources.Res
 import busystatusbar.components.core.ui.res_preview.generated.resources.ic_preview_pomodoro
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -29,8 +29,8 @@ fun BIconButton(
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     enabled: Boolean = true,
-    background: Color = LocalPallet.current.transparent.whiteInvert.quaternary,
-    tint: Color = LocalPallet.current.transparent.whiteInvert.primary,
+    background: Color = LocalCorruptedPallet.current.transparent.whiteInvert.quaternary,
+    tint: Color = LocalCorruptedPallet.current.transparent.whiteInvert.primary,
 ) {
     Box(
         modifier = modifier

@@ -24,7 +24,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.timer_butto
 import busystatusbar.components.bsb.timer.common.generated.resources.timer_button_start
 import busystatusbar.components.bsb.timer.common.generated.resources.timer_button_stop
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.button.BChipButton
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -45,18 +45,18 @@ fun ButtonTimerComposable(
     val backgroundColor by animateColorAsState(
         targetValue = when (state) {
             ButtonTimerState.START ->
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .white
                     .invert
 
             ButtonTimerState.STOP ->
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .quaternary
 
             ButtonTimerState.PAUSE ->
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .quaternary
@@ -65,18 +65,18 @@ fun ButtonTimerComposable(
     val contentColor by animateColorAsState(
         targetValue = when (state) {
             ButtonTimerState.START ->
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .black
                     .invert
 
             ButtonTimerState.STOP ->
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .primary
 
             ButtonTimerState.PAUSE ->
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .primary

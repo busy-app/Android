@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_long_rest
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
 import com.flipperdevices.bsb.timer.setup.composable.common.TitleInfoComposable
@@ -49,7 +49,7 @@ fun LongRestSetupModalBottomSheetContent(
             modifier = Modifier.fillMaxWidth()
                 .height(224.dp)
                 .background(
-                    LocalPallet.current
+                    LocalCorruptedPallet.current
                         .transparent
                         .blackInvert
                         .secondary

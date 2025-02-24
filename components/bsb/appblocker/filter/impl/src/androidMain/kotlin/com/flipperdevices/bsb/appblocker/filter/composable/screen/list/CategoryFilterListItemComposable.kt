@@ -22,7 +22,7 @@ import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.a
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_arrow
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppCategory
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.core.ktx.common.clickableRipple
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -52,8 +52,8 @@ fun CategoryFilterListItemComposable(
             selected = category.isBlocked,
             onClick = { onSwitch(!category.isBlocked) },
             colors = RadioButtonDefaults.colors(
-                selectedColor = LocalPallet.current.accent.device.primary,
-                unselectedColor = LocalPallet.current.transparent.whiteInvert.quaternary
+                selectedColor = LocalCorruptedPallet.current.accent.device.primary,
+                unselectedColor = LocalCorruptedPallet.current.transparent.whiteInvert.quaternary
             )
         )
 
@@ -98,7 +98,7 @@ fun CategoryFilterListItemComposable(
                 lineHeight = 14.sp,
                 fontFamily = LocalBusyBarFonts.current.pragmatica,
                 fontWeight = FontWeight.W500,
-                color = LocalPallet.current.transparent.whiteInvert.secondary,
+                color = LocalCorruptedPallet.current.transparent.whiteInvert.secondary,
             )
         }
 
@@ -114,7 +114,7 @@ fun CategoryFilterListItemComposable(
                     .rotate(rotateAngel),
                 painter = painterResource(Res.drawable.ic_arrow),
                 contentDescription = null,
-                tint = LocalPallet.current.transparent.whiteInvert.secondary
+                tint = LocalCorruptedPallet.current.transparent.whiteInvert.secondary
             )
         }
     }

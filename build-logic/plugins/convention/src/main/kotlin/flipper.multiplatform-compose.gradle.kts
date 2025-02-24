@@ -7,6 +7,7 @@ plugins {
 kotlin {
     sourceSets {
         androidMain.dependencies {
+            implementation(libs.androidx.ui.tooling)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -14,7 +15,6 @@ kotlin {
             implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
-            implementation(libs.androidx.ui.tooling)
             // For Android Compose Preview on IntelliJ > 2025.1 EAP
             implementation(compose.components.uiToolingPreview)
         }

@@ -16,7 +16,7 @@ import busystatusbar.components.bsb.appblocker.card.impl.generated.resources.Res
 import busystatusbar.components.bsb.appblocker.card.impl.generated.resources.appblocker_wrong_platform
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
 import me.tatarka.inject.annotations.Assisted
@@ -41,7 +41,7 @@ class AppBlockerCardContentDecomposeComponentNoop(
                 fontSize = 16.sp,
                 fontFamily = LocalBusyBarFonts.current.pragmatica,
                 fontWeight = FontWeight.W500,
-                color = LocalPallet.current.neutral.tertiary
+                color = LocalCorruptedPallet.current.neutral.tertiary
             )
 
             Spacer(Modifier.height(16.dp))
