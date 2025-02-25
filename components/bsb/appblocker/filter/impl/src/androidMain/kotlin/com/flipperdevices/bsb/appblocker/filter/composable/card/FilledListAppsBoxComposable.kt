@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -83,19 +84,30 @@ internal fun FilledListAppsBoxComposable(
                         tint = Color(color = 0xFF888888)
                     )
                 }
-                PlaceableDetectableRow(
-                    modifier = Modifier,
-                    onPlacementComplete = { count ->
-                        isAllIconShown = count >= items.size
+                BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                    // Calculated amount of items which will be fitted
+                    // Considering every item ~40.dp size
+                    val slicedItems = remember(maxWidth, items) {
+                        val maxItems = (maxWidth / 40.dp).toInt() + 1
+                        when {
+                            items.isEmpty() -> items
+                            else -> items.subList(0, maxItems.coerceAtMost(items.size))
+                        }
                     }
-                ) {
-                    items.forEach { icon ->
-                        AppIconComposable(
-                            modifier = Modifier
-                                .padding(start = 4.dp)
-                                .size(40.dp),
-                            appIcon = icon
-                        )
+                    PlaceableDetectableRow(
+                        modifier = Modifier,
+                        onPlacementComplete = { count ->
+                            isAllIconShown = count >= items.size
+                        }
+                    ) {
+                        slicedItems.forEach { icon ->
+                            AppIconComposable(
+                                modifier = Modifier
+                                    .padding(start = 4.dp)
+                                    .size(40.dp),
+                                appIcon = icon
+                            )
+                        }
                     }
                 }
             }
