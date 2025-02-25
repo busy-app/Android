@@ -46,7 +46,6 @@ class CommonTimerApi(
         compositeListeners.removeListener(listener)
     }
 
-
     override fun setTimestampState(state: TimerTimestamp?) {
         scope.launch {
             if (state == null) {
