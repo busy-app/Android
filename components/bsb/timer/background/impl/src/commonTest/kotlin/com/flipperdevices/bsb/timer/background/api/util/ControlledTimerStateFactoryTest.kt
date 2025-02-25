@@ -82,6 +82,34 @@ class ControlledTimerStateFactoryTest {
     }
 
     @Test
+    fun `GIVEN_too_short_long_rest_WHEN_long_rest_is_last_THEN_add_diff_time_to_long_rest`() {
+        TimerSettings(
+            totalTime = 105.minutes,
+            intervalsSettings = TimerSettings.IntervalsSettings(
+                isEnabled = true,
+                work = 25.minutes,
+                rest = 5.minutes,
+                longRest = 15.minutes
+            )
+        ).let { settings ->
+            val list = settings.buildIterationList()
+                .also { println(it) }
+                .map(IterationData::iterationType)
+            assertContentEquals(
+                expected = listOf(
+                    IterationType.WORK,
+                    IterationType.REST,
+                    IterationType.WORK,
+                    IterationType.REST,
+                    IterationType.WORK,
+                    IterationType.LONG_REST,
+                ),
+                actual = list
+            )
+        }
+    }
+
+    @Test
     fun `GIVEN_same_rests_WHEN_no_time_left_THEN_last_long_rest`() {
         TimerSettings(
             totalTime = 60.minutes,

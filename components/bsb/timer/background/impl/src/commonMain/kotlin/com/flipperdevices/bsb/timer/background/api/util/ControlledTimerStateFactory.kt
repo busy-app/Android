@@ -6,6 +6,7 @@ import com.flipperdevices.bsb.timer.background.api.isOnPause
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
+import com.flipperdevices.core.log.info
 import com.flipperdevices.core.log.wtf
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -82,6 +83,19 @@ internal fun TimerSettings.buildIterationList(): List<IterationData> {
                     timeLeft -= intervalsSettings.work
                 }
 
+                timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) && type == IterationType.LONG_REST -> {
+                    add(
+                        IterationData(
+                            startOffset = totalTime - timeLeft,
+                            iterationType = IterationType.LONG_REST,
+                            duration = iterationTypeDuration
+                                .plus(intervalsSettings.longRest)
+                                .coerceAtMost(timeLeft)
+                        )
+                    )
+                    timeLeft -= intervalsSettings.longRest
+                }
+
                 else -> {
                     add(
                         IterationData(
@@ -96,6 +110,7 @@ internal fun TimerSettings.buildIterationList(): List<IterationData> {
             i += 1
         }
     }.toMutableList()
+    logger.info { "#buildIterationList $list" }
     if (list.isEmpty()) {
         logger.wtf { "#buildIterationList was empty for $this" }
         return list
