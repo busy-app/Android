@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.core.data.timer.TimerState
 
 @Composable
@@ -30,7 +30,7 @@ fun TimerTimeComposable(
             modifier = Modifier.padding(horizontal = 8.dp),
             text = ":", // todo raw string
             fontSize = 64.sp,
-            color = LocalPallet.current.white.invert,
+            color = LocalCorruptedPallet.current.white.invert,
             fontWeight = FontWeight.W500,
             fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
             textAlign = TextAlign.Center
@@ -62,7 +62,7 @@ private fun TimerNumberComposable(number: Int) {
                         .padding(top = 2.dp),
                     text = symbol.toString(),
                     fontSize = 64.sp,
-                    color = LocalPallet.current.white.invert,
+                    color = LocalCorruptedPallet.current.white.invert,
                     fontWeight = FontWeight.W500,
                     fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
                     textAlign = TextAlign.Center

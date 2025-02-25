@@ -25,7 +25,7 @@ import com.flipperdevices.bsb.appblocker.permission.composable.PermissionHeaderC
 import com.flipperdevices.bsb.appblocker.permission.utils.PermissionStateHolder
 import com.flipperdevices.bsb.appblocker.permission.viewmodel.AppBlockerPermissionViewModel
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
@@ -65,7 +65,7 @@ class AppBlockerPermissionBlockDecomposeComponentImpl(
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(LocalPallet.current.transparent.whiteInvert.quinary)
+                .background(LocalCorruptedPallet.current.transparent.whiteInvert.quinary)
                 .padding(16.dp),
         ) {
             PermissionHeaderComposable()
@@ -75,7 +75,7 @@ class AppBlockerPermissionBlockDecomposeComponentImpl(
                 text = stringResource(Res.string.appblocker_permission_desc),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W500,
-                color = LocalPallet.current.transparent.whiteInvert.primary,
+                color = LocalCorruptedPallet.current.transparent.whiteInvert.primary,
                 fontFamily = LocalBusyBarFonts.current.pragmatica
             )
 

@@ -27,7 +27,7 @@ import busystatusbar.components.bsb.timer.active.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.active.impl.generated.resources.ic_pause
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_play
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.timer.background.model.TimerAction
 import com.flipperdevices.core.ktx.common.clickableRipple
 import org.jetbrains.compose.resources.painterResource
@@ -51,7 +51,7 @@ fun TimerControlPanelComposable(
         Icon(
             modifier = Modifier
                 .clip(CircleShape)
-                .border(2.dp, LocalPallet.current.black.invert, CircleShape)
+                .border(2.dp, LocalCorruptedPallet.current.black.invert, CircleShape)
                 .clickableRipple { onAction(TimerAction.PAUSE) }
                 .padding(33.dp)
                 .size(34.dp),
@@ -63,7 +63,7 @@ fun TimerControlPanelComposable(
                 }
             ),
             contentDescription = null,
-            tint = LocalPallet.current.black.invert
+            tint = LocalCorruptedPallet.current.black.invert
         )
         ControlElementComposable(
             text = "+5",
@@ -86,7 +86,7 @@ private fun ControlElementComposable(
     Box(
         modifier
             .clip(CircleShape)
-            .border(2.dp, LocalPallet.current.black.invert, CircleShape)
+            .border(2.dp, LocalCorruptedPallet.current.black.invert, CircleShape)
             .onGloballyPositioned {
                 width = with(localDensity) { it.size.width.toDp() }
             }
@@ -99,7 +99,7 @@ private fun ControlElementComposable(
             text = text,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontWeight = FontWeight.W400,
-            color = LocalPallet.current.black.invert,
+            color = LocalCorruptedPallet.current.black.invert,
             fontSize = 24.sp
         )
     }

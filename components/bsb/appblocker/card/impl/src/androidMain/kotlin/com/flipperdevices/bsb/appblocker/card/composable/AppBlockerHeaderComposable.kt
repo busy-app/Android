@@ -12,7 +12,7 @@ import busystatusbar.components.bsb.appblocker.card.impl.generated.resources.Res
 import busystatusbar.components.bsb.appblocker.card.impl.generated.resources.appblocker_desc
 import busystatusbar.components.bsb.appblocker.card.impl.generated.resources.appblocker_title
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.options.M3Switch
 import org.jetbrains.compose.resources.stringResource
 
@@ -32,7 +32,7 @@ fun AppBlockerHeaderComposable(
                 text = stringResource(Res.string.appblocker_title),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.W600,
-                color = LocalPallet.current.white.invert,
+                color = LocalCorruptedPallet.current.white.invert,
                 fontFamily = LocalBusyBarFonts.current.pragmatica
             )
             M3Switch(
@@ -46,7 +46,7 @@ fun AppBlockerHeaderComposable(
             fontSize = 16.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontWeight = FontWeight.W500,
-            color = LocalPallet.current.neutral.tertiary
+            color = LocalCorruptedPallet.current.neutral.tertiary
         )
     }
 }

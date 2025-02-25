@@ -29,7 +29,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.ic_long_res
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 import org.jetbrains.compose.resources.painterResource
@@ -68,14 +68,14 @@ fun BusyCardComposable(
                 Text(
                     text = name,
                     fontSize = 24.sp,
-                    color = LocalPallet.current
+                    color = LocalCorruptedPallet.current
                         .white
                         .invert
                 )
                 Icon(
                     painter = painterResource(Res.drawable.ic_three_dots),
                     contentDescription = null,
-                    tint = LocalPallet.current
+                    tint = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .secondary,
@@ -93,7 +93,7 @@ fun BusyCardComposable(
                     Text(
                         text = settings.totalTime.toFormattedTime(),
                         fontSize = 40.sp,
-                        color = LocalPallet.current
+                        color = LocalCorruptedPallet.current
                             .white
                             .onColor
                     )
@@ -102,7 +102,7 @@ fun BusyCardComposable(
                             MiniFrameData(
                                 text = settings.intervalsSettings.rest.toFormattedTime(),
                                 painter = painterResource(CommonTimerRes.drawable.ic_rest),
-                                tint = LocalPallet.current
+                                tint = LocalCorruptedPallet.current
                                     .transparent
                                     .whiteInvert
                                     .primary
@@ -110,7 +110,7 @@ fun BusyCardComposable(
                             MiniFrameData(
                                 text = settings.intervalsSettings.longRest.toFormattedTime(),
                                 painter = painterResource(CommonTimerRes.drawable.ic_long_rest),
-                                tint = LocalPallet.current
+                                tint = LocalCorruptedPallet.current
                                     .transparent
                                     .whiteInvert
                                     .primary
@@ -135,7 +135,7 @@ fun BusyCardComposable(
                         MiniFrameData(
                             text = text,
                             painter = painterResource(CommonTimerRes.drawable.ic_block),
-                            tint = LocalPallet.current
+                            tint = LocalCorruptedPallet.current
                                 .transparent
                                 .whiteInvert
                                 .primary

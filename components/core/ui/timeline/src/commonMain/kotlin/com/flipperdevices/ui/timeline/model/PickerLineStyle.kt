@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 
 /**
  * @param lineWidth The width of each vertical line in the picker. Default is `2.sdp`.
@@ -54,8 +54,8 @@ data class PickerLineStyle(
                 normalLineHeight = 16.dp,
                 lineSpacing = 12.dp,
                 lineRoundedCorners = 0.dp,
-                selectedLineColor = LocalPallet.current.white.invert,
-                unselectedLineColor = LocalPallet.current.white.invert.copy(0.2f),
+                selectedLineColor = LocalCorruptedPallet.current.white.invert,
+                unselectedLineColor = LocalCorruptedPallet.current.white.invert.copy(0.2f),
                 fadeOutLinesCount = 12,
                 maxFadeTransparency = 0.95f,
                 step = 5,

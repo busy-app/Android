@@ -18,7 +18,7 @@ import busystatusbar.components.bsb.timer.active.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.active.impl.generated.resources.timer_active_stop_active
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_play
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerAction
 import org.jetbrains.compose.resources.painterResource
@@ -77,12 +77,12 @@ private fun TimerActiveTextComposable(modifier: Modifier = Modifier) {
                 .size(24.dp),
             painter = painterResource(CommonRes.drawable.ic_play),
             contentDescription = null,
-            tint = LocalPallet.current.black.invert
+            tint = LocalCorruptedPallet.current.black.invert
         )
         Text(
             text = stringResource(Res.string.timer_active_stop_active),
             fontSize = 32.sp,
-            color = LocalPallet.current.black.invert,
+            color = LocalCorruptedPallet.current.black.invert,
             fontWeight = FontWeight.W500,
             fontFamily = LocalBusyBarFonts.current.pragmatica
         )

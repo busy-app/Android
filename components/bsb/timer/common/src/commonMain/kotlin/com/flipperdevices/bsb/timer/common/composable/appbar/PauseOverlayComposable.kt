@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -49,7 +49,7 @@ fun PauseFullScreenOverlayComposable(
                             modifier = Modifier
                                 .height(62.dp)
                                 .width(20.dp)
-                                .background(LocalPallet.current.neutral.quaternary)
+                                .background(LocalCorruptedPallet.current.neutral.quaternary)
                         )
                     }
                 }
