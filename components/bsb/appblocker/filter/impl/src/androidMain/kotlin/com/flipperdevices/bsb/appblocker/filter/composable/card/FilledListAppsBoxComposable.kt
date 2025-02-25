@@ -87,7 +87,7 @@ internal fun FilledListAppsBoxComposable(
                 BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                     // Calculated amount of items which will be fitted
                     // Considering every item ~40.dp size
-                    val slicedItems = remember(maxWidth) {
+                    val slicedItems = remember(maxWidth, items) {
                         val maxItems = (maxWidth / 40.dp).toInt() + 1
                         when {
                             items.isEmpty() -> items
