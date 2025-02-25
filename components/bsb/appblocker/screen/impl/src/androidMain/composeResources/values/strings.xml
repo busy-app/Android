@@ -1,0 +1,5 @@
+<resources>
+    <string name="appblocker_screen_title">%1$s 🔒 blocked</string>
+    <string name="appblocker_screen_desc">%1$dx today</string>
+    <string name="appblocker_screen_btn">Keep BUSY</string>
+</resources>

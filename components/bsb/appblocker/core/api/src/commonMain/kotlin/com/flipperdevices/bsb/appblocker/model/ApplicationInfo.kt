@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApplicationInfo(
-    val name: String
+    val packageName: String,
+    val openCount: Int
 )

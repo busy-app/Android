@@ -32,6 +32,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.DurationUnit
 
 @Composable
 fun WorkSetupModalBottomSheetContent(
@@ -71,9 +72,9 @@ fun WorkSetupModalBottomSheetContent(
                     rangeEnd = 1.hours.inWholeMinutes.toInt(),
                     step = 5.minutes.inWholeMinutes.toInt()
                 ),
-                initialSelectedItem = timerSettings.intervalsSettings.work.inWholeMinutes.toInt(),
+                initialSelectedItem = timerSettings.intervalsSettings.work,
                 onItemSelect = { duration -> onTimeChange.invoke(duration) },
-                unitConverter = { it.minutes }
+                durationUnit = DurationUnit.MINUTES
             )
         }
         OptionSwitch(

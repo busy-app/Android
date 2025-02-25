@@ -1,5 +1,0 @@
-<resources>
-    <string name="appblocker_screen_title">Blocked by BUSY</string>
-    <string name="appblocker_screen_desc">You can’t use %1$s while BUSY is active. To unblock: open BUSY app ➔ press ‘STOP’.</string>
-    <string name="appblocker_screen_btn">OK</string>
-</resources>

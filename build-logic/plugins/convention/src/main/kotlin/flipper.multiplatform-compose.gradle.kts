@@ -14,6 +14,8 @@ kotlin {
             implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
+            implementation(libs.androidx.ui.tooling)
+            // For Android Compose Preview on IntelliJ > 2025.1 EAP
             implementation(compose.components.uiToolingPreview)
         }
         val desktopMain by getting
@@ -21,9 +23,4 @@ kotlin {
             implementation(compose.desktop.currentOs)
         }
     }
-}
-
-// For Android Compose Preview on IntelliJ > 2025.1 EAP
-dependencies {
-    debugImplementation(libs.androidx.ui.tooling)
 }

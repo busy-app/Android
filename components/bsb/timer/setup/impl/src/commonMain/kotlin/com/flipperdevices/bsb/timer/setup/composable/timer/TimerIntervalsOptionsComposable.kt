@@ -19,7 +19,7 @@ import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_i
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_intervals_work
 import com.flipperdevices.ui.cardframe.SmallCardFrameComposable
 import com.flipperdevices.ui.options.OptionSwitch
-import com.flipperdevices.ui.timeline.toFormattedTime
+import com.flipperdevices.ui.timeline.util.toFormattedTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration

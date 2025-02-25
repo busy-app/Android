@@ -2,12 +2,13 @@ package com.flipperdevices.bsb.appblocker.filter.dao
 
 import android.content.Context
 import androidx.room.Room
+import com.flipperdevices.bsb.core.files.Databases
 import com.flipperdevices.core.di.AppGraph
 import me.tatarka.inject.annotations.Provides
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
-private const val DATABASE_NAME = "appblocker_filter.db"
+private val DATABASE_NAME = Databases.APPBLOCKER_FILTER.filename
 
 @ContributesTo(AppGraph::class)
 interface AppFilterDatabaseModule {

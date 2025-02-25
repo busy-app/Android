@@ -17,3 +17,7 @@ commonDependencies {
 
     implementation(libs.decompose)
 }
+
+androidDependencies {
+    implementation(libs.accompanist.drawable)
+}

@@ -1,0 +1,55 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "8e9d58d6d109da7d20d52c34291435f8",
+    "entities": [
+      {
+        "tableName": "blocked_stats",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_package` TEXT NOT NULL, `timestamp_seconds` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appPackage",
+            "columnName": "app_package",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestampSeconds",
+            "columnName": "timestamp_seconds",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_blocked_stats_app_package_timestamp_seconds",
+            "unique": true,
+            "columnNames": [
+              "app_package",
+              "timestamp_seconds"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_blocked_stats_app_package_timestamp_seconds` ON `${TABLE_NAME}` (`app_package`, `timestamp_seconds`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8e9d58d6d109da7d20d52c34291435f8')"
+    ]
+  }
+}
