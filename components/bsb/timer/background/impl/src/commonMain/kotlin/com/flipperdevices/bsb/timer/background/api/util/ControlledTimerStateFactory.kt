@@ -38,7 +38,7 @@ private fun getIterationTypeByIndex(i: Int): IterationType {
 }
 
 internal fun TimerSettings.buildIterationList(): List<IterationData> {
-    if (!intervalsSettings.isEnabled) return listOf(IterationData(0.seconds, Duration.INFINITE, IterationType.WORK))
+    if (!intervalsSettings.isEnabled) return listOf(IterationData(0.seconds, totalTime, IterationType.WORK))
     val list = buildList {
         var timeLeft = totalTime
         var i = 0
