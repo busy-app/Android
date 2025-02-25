@@ -37,8 +37,17 @@ private fun getIterationTypeByIndex(i: Int): IterationType {
     }
 }
 
+@Suppress("LongMethod")
 internal fun TimerSettings.buildIterationList(): List<IterationData> {
-    if (!intervalsSettings.isEnabled) return listOf(IterationData(0.seconds, totalTime, IterationType.WORK))
+    if (!intervalsSettings.isEnabled) {
+        return listOf(
+            IterationData(
+                startOffset = 0.seconds,
+                duration = totalTime,
+                iterationType = IterationType.WORK
+            )
+        )
+    }
     val list = buildList {
         var timeLeft = totalTime
         var i = 0
@@ -125,6 +134,7 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
         return ControlledTimerState.NotStarted
     }
     val iterationList = settings.buildIterationList()
+    println("[LOGGER] iterationList: $iterationList")
 
     // Filter only data which is not yet started
     val iterationsDataLeft = iterationList

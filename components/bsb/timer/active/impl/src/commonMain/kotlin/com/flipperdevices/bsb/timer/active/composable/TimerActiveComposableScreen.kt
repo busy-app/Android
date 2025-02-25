@@ -86,26 +86,17 @@ fun TimerOnComposableScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
-                    Text(
-                        text = "${minutes.toFormattedTime()}", // todo raw string
-                        style = TextStyle(
-                            fontSize = 64.sp,
-                            fontWeight = FontWeight.W500,
-                            fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
-                            color = LocalCorruptedPallet.current.white.invert
-                        )
+                    val timeComponentList = listOfNotNull(
+                        hours.takeIf { h -> h > 0 },
+                        minutes,
+                        seconds
                     )
                     Text(
-                        text = ":", // todo raw string
-                        style = TextStyle(
-                            fontSize = 64.sp,
-                            fontWeight = FontWeight.W500,
-                            fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
-                            color = LocalCorruptedPallet.current.white.invert
-                        )
-                    )
-                    Text(
-                        text = "${seconds.toFormattedTime()}", // todo raw string
+                        text = timeComponentList.joinToString(
+                            separator = ":",
+                            prefix = "",
+                            transform = { timeComponent -> timeComponent.toFormattedTime() }
+                        ),
                         style = TextStyle(
                             fontSize = 64.sp,
                             fontWeight = FontWeight.W500,
