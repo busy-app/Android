@@ -124,7 +124,7 @@ fun TimerOnComposableScreen(
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(24.dp),
+                .padding(vertical = 64.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -133,7 +133,6 @@ fun TimerOnComposableScreen(
                 state = ButtonTimerState.PAUSE,
                 onClick = onPauseClick
             )
-            Spacer(Modifier.height(8.dp))
         }
     }
 }

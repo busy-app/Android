@@ -10,7 +10,6 @@ import com.flipperdevices.bsb.timer.background.service.TimerForegroundService
 import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
 import com.flipperdevices.core.ktx.android.toFullString
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
 
 class TimerBroadcastReceiver : BroadcastReceiver(), LogTagProvider {

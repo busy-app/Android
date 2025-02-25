@@ -11,12 +11,13 @@ fun TimerApi.updateState(block: (TimerTimestamp?) -> TimerTimestamp?) {
     setTimestampState(newState)
 }
 
-
 fun TimerApi.pause() {
     updateState { state ->
         if (state?.pause == null) {
             state?.copy(pause = Clock.System.now())
-        } else state
+        } else {
+            state
+        }
     }
 }
 
@@ -28,7 +29,9 @@ fun TimerApi.resume() {
                 pause = null,
                 start = state.start.plus(diff)
             )
-        } else state
+        } else {
+            state
+        }
     }
 }
 

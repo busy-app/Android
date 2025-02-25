@@ -1,15 +1,19 @@
 package com.flipperdevices.bsb.timer.common.composable.appbar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,19 +33,20 @@ fun PauseFullScreenOverlayComposable(
         onDismissRequest = {},
         properties = DialogProperties(
             dismissOnBackPress = false,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false
+            dismissOnClickOutside = false
         ),
         content = {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 64.dp),
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        12.dp,
+                        Alignment.CenterHorizontally
+                    ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     repeat(2) {
@@ -54,9 +59,10 @@ fun PauseFullScreenOverlayComposable(
                     }
                 }
                 ButtonTimerComposable(
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                        .padding(bottom = 64.dp),
                     state = ButtonTimerState.START,
                     onClick = onStartClick,
-                    modifier = Modifier.align(Alignment.BottomCenter)
                 )
             }
         }

@@ -138,10 +138,12 @@ private fun ControlledTimerState.Running.getStatusImageId(): Int {
 
             is ControlledTimerState.Running.Work -> R.drawable.pic_status_busy_paused
         }
-    } else when (this) {
-        is ControlledTimerState.Running.Rest,
-        is ControlledTimerState.Running.LongRest -> R.drawable.pic_status_rest
+    } else {
+        when (this) {
+            is ControlledTimerState.Running.Rest,
+            is ControlledTimerState.Running.LongRest -> R.drawable.pic_status_rest
 
-        is ControlledTimerState.Running.Work -> R.drawable.pic_status_busy
+            is ControlledTimerState.Running.Work -> R.drawable.pic_status_busy
+        }
     }
 }

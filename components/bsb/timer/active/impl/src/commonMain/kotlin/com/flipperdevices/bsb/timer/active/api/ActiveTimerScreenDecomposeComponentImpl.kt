@@ -13,9 +13,9 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.bsb.timer.background.model.maxUiIterations
 import com.flipperdevices.bsb.timer.background.util.pause
+import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.background.util.skip
 import com.flipperdevices.bsb.timer.background.util.stop
-import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
