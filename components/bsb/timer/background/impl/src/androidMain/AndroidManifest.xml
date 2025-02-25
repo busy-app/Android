@@ -16,7 +16,7 @@
                 android:value="Foreground service needed to keep the timer active" />
         </service>
         <receiver
-            android:name="com.flipperdevices.bsb.timer.background.service.TimerStopBroadcastReceiver"
+            android:name="com.flipperdevices.bsb.timer.background.notification.TimerBroadcastReceiver"
             android:exported="false" />
     </application>
 

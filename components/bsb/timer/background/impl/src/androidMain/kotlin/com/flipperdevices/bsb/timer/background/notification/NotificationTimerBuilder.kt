@@ -10,10 +10,14 @@ import androidx.core.app.NotificationManagerCompat
 import com.flipperdevices.bsb.timer.background.impl.R
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.toHumanReadableString
+import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
+import com.flipperdevices.core.log.LogTagProvider
 
 private const val TIMER_NOTIFICATION_CHANNEL = "timer_notification_channel"
 
-object NotificationTimerBuilder {
+object NotificationTimerBuilder : LogTagProvider {
+    override val TAG = "NotificationTimerBuilder"
+
     fun buildStartUpNotification(
         context: Context
     ): Notification {
@@ -44,19 +48,8 @@ object NotificationTimerBuilder {
             .setColor(context.getColor(R.color.brand_color))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        val notificationLayout = RemoteViews(
-            context.packageName,
-            R.layout.notification_base_layout
-        )
-        notificationLayout.setTextViewText(
-            R.id.timer,
-            timer.toHumanReadableString()
-        )
-        notificationLayout.setImageViewResource(
-            R.id.status_pic,
-            timer.getStatusImageId()
-        )
-        notificationBuilder.setCustomContentView(notificationLayout)
+        notificationBuilder.setCustomContentView(getCompactLayout(context, timer))
+        notificationBuilder.setCustomBigContentView(getExpandedLayout(context, timer))
 
         return notificationBuilder.build()
     }
@@ -72,6 +65,67 @@ object NotificationTimerBuilder {
             .build()
 
         notificationManager.createNotificationChannel(flipperChannel)
+    }
+
+    private fun getCompactLayout(
+        context: Context,
+        timer: ControlledTimerState.Running
+    ): RemoteViews {
+        val notificationLayout = RemoteViews(
+            context.packageName,
+            R.layout.notification_base_layout
+        )
+        notificationLayout.setTextViewText(
+            R.id.timer,
+            timer.toHumanReadableString()
+        )
+        notificationLayout.setImageViewResource(
+            R.id.status_pic,
+            timer.getStatusImageId()
+        )
+        return notificationLayout
+    }
+
+    private fun getExpandedLayout(
+        context: Context,
+        timer: ControlledTimerState.Running
+    ): RemoteViews {
+        val notificationLayout = RemoteViews(
+            context.packageName,
+            R.layout.notification_expanded
+        )
+        notificationLayout.setTextViewText(
+            R.id.timer,
+            timer.toHumanReadableString()
+        )
+        notificationLayout.setImageViewResource(
+            R.id.status_pic,
+            timer.getStatusImageId()
+        )
+
+        val iconId = when (timer.isOnPause) {
+            true -> R.drawable.ic_play
+            false -> R.drawable.ic_pause
+        }
+        notificationLayout.setImageViewResource(R.id.btn_icon, iconId)
+
+        val textId = when (timer.isOnPause) {
+            true -> R.string.timer_notification_btn_play
+            false -> R.string.timer_notification_btn_pause
+        }
+        notificationLayout.setTextViewText(R.id.btn_text, context.getString(textId))
+
+        val action = when (timer.isOnPause) {
+            true -> TimerServiceActionEnum.RESUME
+            false -> TimerServiceActionEnum.PAUSE
+        }
+
+        notificationLayout.setOnClickPendingIntent(
+            R.id.btn,
+            TimerBroadcastReceiver.getTimerIntent(context, action)
+        )
+
+        return notificationLayout
     }
 }
 
