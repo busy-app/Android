@@ -736,7 +736,7 @@ Compose:
     active: true
     # You can optionally define a list of CompositionLocals that are allowed here
     # allowedCompositionLocals: LocalSomething,LocalSomethingElse
-    allowedCompositionLocals: LocalRootNavigation,LocalPallet,LocalBusyBarFonts,LocalFamilyControlApi
+    allowedCompositionLocals: LocalRootNavigation,LocalPallet,LocalCorruptedPallet,LocalBusyBarFonts,LocalFamilyControlApi
   ContentEmitterReturningValues:
     active: true
     # You can optionally add your own composables here

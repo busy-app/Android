@@ -27,7 +27,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_work
 import com.composables.core.Icon
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -51,7 +51,7 @@ private fun FrameSectionInnerContent(
         )
         Text(
             text = text,
-            color = LocalPallet.current
+            color = LocalCorruptedPallet.current
                 .transparent
                 .whiteInvert
                 .primary,
@@ -66,7 +66,7 @@ data class MiniFrameData(
     val tint: Color
 )
 
-@Suppress("MagicNumber") // todo this color is not present in LocalPallet
+@Suppress("MagicNumber") // todo this color is not present in LocalCorruptedPallet
 @Composable
 fun MiniFrameSection(
     vararg miniFrameData: MiniFrameData,
@@ -109,7 +109,7 @@ private fun PreviewMiniFrameSection() {
                 MiniFrameData(
                     text = "25m",
                     painter = painterResource(Res.drawable.ic_rest),
-                    tint = LocalPallet.current
+                    tint = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .primary
@@ -119,7 +119,7 @@ private fun PreviewMiniFrameSection() {
                 MiniFrameData(
                     text = "25m",
                     painter = painterResource(Res.drawable.ic_rest),
-                    tint = LocalPallet.current
+                    tint = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .primary
@@ -127,7 +127,7 @@ private fun PreviewMiniFrameSection() {
                 MiniFrameData(
                     text = "5m",
                     painter = painterResource(Res.drawable.ic_long_rest),
-                    tint = LocalPallet.current
+                    tint = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .primary
@@ -135,7 +135,7 @@ private fun PreviewMiniFrameSection() {
                 MiniFrameData(
                     text = "20m",
                     painter = painterResource(Res.drawable.ic_work),
-                    tint = LocalPallet.current
+                    tint = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .primary

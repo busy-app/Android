@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import busystatusbar.components.core.ui.res_preview.generated.resources.Res
 import busystatusbar.components.core.ui.res_preview.generated.resources.ic_preview_pomodoro
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -66,7 +66,7 @@ fun Modifier.dashedBorder(
 fun BChipButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    background: Color = LocalPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f),
+    background: Color = LocalCorruptedPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f),
     contentPadding: PaddingValues = PaddingValues(
         horizontal = 46.dp,
         vertical = 24.dp
@@ -99,8 +99,8 @@ fun BChipButton(
     text: String?,
     painter: Painter?,
     modifier: Modifier = Modifier,
-    contentColor: Color = LocalPallet.current.white.invert,
-    background: Color = LocalPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f),
+    contentColor: Color = LocalCorruptedPallet.current.white.invert,
+    background: Color = LocalCorruptedPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f),
     dashedBorderColor: Color? = null,
     enabled: Boolean = true,
     fontSize: TextUnit = 24.sp,
@@ -200,8 +200,10 @@ private fun BChipButtonPreview() {
                         painter = painterResource(Res.drawable.ic_preview_pomodoro),
                         onClick = {},
                         background = Color.Transparent,
-                        contentColor = LocalPallet.current.transparent.whiteInvert.primary.copy(alpha = 0.5f),
-                        dashedBorderColor = LocalPallet.current.transparent.whiteInvert.tertiary.copy(alpha = 0.1f),
+                        contentColor = LocalCorruptedPallet.current.transparent.whiteInvert.primary.copy(alpha = 0.5f),
+                        dashedBorderColor = LocalCorruptedPallet.current.transparent.whiteInvert.tertiary.copy(
+                            alpha = 0.1f
+                        ),
                     )
                     listOf(Alignment.BottomStart, Alignment.TopEnd).forEach { alignment ->
                         BChipNotificationBox(

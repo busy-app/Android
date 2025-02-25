@@ -21,7 +21,7 @@ import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.R
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_app_type_other
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.core.ktx.common.clickableRipple
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import org.jetbrains.compose.resources.painterResource
@@ -44,8 +44,8 @@ fun AppFilterListItemComposable(
             selected = appInfo.isBlocked,
             onClick = { onClick(!appInfo.isBlocked) },
             colors = RadioButtonDefaults.colors(
-                selectedColor = LocalPallet.current.accent.device.primary,
-                unselectedColor = LocalPallet.current.transparent.whiteInvert.quaternary
+                selectedColor = LocalCorruptedPallet.current.accent.device.primary,
+                unselectedColor = LocalCorruptedPallet.current.transparent.whiteInvert.quaternary
             )
         )
 

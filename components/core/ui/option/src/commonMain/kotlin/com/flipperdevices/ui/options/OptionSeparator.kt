@@ -7,12 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 
 @Composable
 fun OptionSeparator(
     modifier: Modifier = Modifier,
-    color: Color = LocalPallet.current
+    color: Color = LocalCorruptedPallet.current
         .transparent
         .whiteInvert
         .quaternary

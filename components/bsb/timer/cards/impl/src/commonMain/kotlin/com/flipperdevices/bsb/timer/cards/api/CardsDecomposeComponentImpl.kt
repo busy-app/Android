@@ -22,11 +22,14 @@ import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.util.startWith
+import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
+import com.flipperdevices.bsb.timer.background.api.TimerService
 import com.flipperdevices.bsb.timer.cards.composable.BusyCardComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
 import com.flipperdevices.bsb.timer.setup.api.TimerSetupSheetDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
@@ -39,8 +42,10 @@ class CardsDecomposeComponentImpl(
     private val timerApi: TimerApi,
     private val krateApi: KrateApi,
     private val appBlockerFilterApi: AppBlockerFilterApi,
-    timerSetupSheetDecomposeComponentFactory: TimerSetupSheetDecomposeComponent.Factory
-) : CardsDecomposeComponent(componentContext) {
+    timerSetupSheetDecomposeComponentFactory: TimerSetupSheetDecomposeComponent.Factory,
+    iconStyleProvider: ThemeStatusBarIconStyleProvider,
+) : CardsDecomposeComponent(componentContext),
+    StatusBarIconStyleProvider by iconStyleProvider {
     private val timerSetupSheetDecomposeComponent = timerSetupSheetDecomposeComponentFactory(
         componentContext = childContext("timerSetupSheetDecomposeComponent_CardsDecomposeComponentImpl")
     )

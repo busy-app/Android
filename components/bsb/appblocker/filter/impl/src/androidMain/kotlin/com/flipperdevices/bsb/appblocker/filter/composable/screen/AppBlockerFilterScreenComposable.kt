@@ -20,7 +20,7 @@ import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScree
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -113,7 +113,7 @@ private fun SimpleTextInformationComposable(
             fontSize = 16.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontWeight = FontWeight.W500,
-            color = LocalPallet.current.neutral.tertiary,
+            color = LocalCorruptedPallet.current.neutral.tertiary,
         )
     }
 }

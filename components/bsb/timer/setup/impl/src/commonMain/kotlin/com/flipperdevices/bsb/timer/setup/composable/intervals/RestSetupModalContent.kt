@@ -20,7 +20,7 @@ import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_r
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_rest_desc
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_rest_title
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
 import com.flipperdevices.bsb.timer.setup.composable.common.TitleInfoComposable
@@ -57,7 +57,7 @@ fun RestSetupModalBottomSheetContent(
             modifier = Modifier.fillMaxWidth()
                 .height(224.dp)
                 .background(
-                    LocalPallet.current
+                    LocalCorruptedPallet.current
                         .transparent
                         .blackInvert
                         .secondary

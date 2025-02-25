@@ -34,7 +34,7 @@ import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_finis
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_restart
 import busystatusbar.components.bsb.timer.done.impl.generated.resources.td_well_done
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.button.BChipButton
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -58,7 +58,7 @@ private fun ObjectiveCard(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
-            .background(LocalPallet.current.transparent.whiteInvert.quaternary)
+            .background(LocalCorruptedPallet.current.transparent.whiteInvert.quaternary)
             .height(IntrinsicSize.Max)
             .padding(16.dp)
     ) {
@@ -79,7 +79,7 @@ private fun ObjectiveCard(
                 )
                 Text(
                     text = objective.title,
-                    color = LocalPallet.current
+                    color = LocalCorruptedPallet.current
                         .white
                         .invert,
                     fontSize = 18.sp,
@@ -88,7 +88,7 @@ private fun ObjectiveCard(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(48.dp))
-                        .background(LocalPallet.current.transparent.whiteInvert.tertiary)
+                        .background(LocalCorruptedPallet.current.transparent.whiteInvert.tertiary)
                         .padding(horizontal = 8.dp)
                         .padding(vertical = 4.dp)
                         .fillMaxWidth(fraction = 0.4f),
@@ -96,7 +96,7 @@ private fun ObjectiveCard(
                 ) {
                     Text(
                         text = objective.innerDesc,
-                        color = LocalPallet.current
+                        color = LocalCorruptedPallet.current
                             .transparent
                             .whiteInvert
                             .secondary,
@@ -155,7 +155,7 @@ fun DoneComposableContent(
                 Text(
                     text = stringResource(Res.string.td_well_done),
                     fontWeight = FontWeight.W500,
-                    color = LocalPallet.current
+                    color = LocalCorruptedPallet.current
                         .white
                         .invert,
                     fontSize = 40.sp
@@ -163,7 +163,7 @@ fun DoneComposableContent(
                 Text(
                     text = stringResource(Res.string.td_finish),
                     fontWeight = FontWeight.W500,
-                    color = LocalPallet.current
+                    color = LocalCorruptedPallet.current
                         .white
                         .invert,
                     fontSize = 18.sp
@@ -196,7 +196,7 @@ fun DoneComposableContent(
                         horizontal = 64.dp,
                         vertical = 16.dp
                     ),
-                    contentColor = LocalPallet.current
+                    contentColor = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .primary
@@ -211,7 +211,7 @@ fun DoneComposableContent(
                     text = stringResource(Res.string.td_finish),
                     fontSize = 18.sp,
                     painter = null,
-                    background = LocalPallet.current
+                    background = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .tertiary,
@@ -219,7 +219,7 @@ fun DoneComposableContent(
                         horizontal = 64.dp,
                         vertical = 16.dp
                     ),
-                    contentColor = LocalPallet.current
+                    contentColor = LocalCorruptedPallet.current
                         .white
                         .invert
                 )

@@ -19,7 +19,7 @@ import busystatusbar.components.bsb.appblocker.permission.impl.generated.resourc
 import busystatusbar.components.bsb.appblocker.permission.impl.generated.resources.ic_next
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.core.ktx.common.clickableRipple
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
@@ -34,7 +34,7 @@ fun PermissionCardButtonComposable(
     Row(
         modifier
             .clip(RoundedCornerShape(12.dp))
-            .background(LocalPallet.current.transparent.whiteInvert.quinary)
+            .background(LocalCorruptedPallet.current.transparent.whiteInvert.quinary)
             .clickableRipple(onClick = onClick)
             .padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -47,11 +47,11 @@ fun PermissionCardButtonComposable(
             text = stringResource(title),
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontSize = 18.sp,
-            color = LocalPallet.current.white.invert
+            color = LocalCorruptedPallet.current.white.invert
         )
         Icon(
             painter = painterResource(Res.drawable.ic_next),
-            tint = LocalPallet.current.white.invert,
+            tint = LocalCorruptedPallet.current.white.invert,
             contentDescription = null
         )
     }

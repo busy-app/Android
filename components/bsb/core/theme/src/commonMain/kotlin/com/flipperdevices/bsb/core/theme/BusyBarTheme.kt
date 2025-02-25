@@ -22,6 +22,12 @@ import com.flipperdevices.bsb.core.theme.generated.toAnimatePallet
 
 val LocalPallet = compositionLocalOf<BusyBarPallet> { error("No local pallet") }
 
+/**
+ * This is a temporary fix for a broken palette
+ */
+
+val LocalCorruptedPallet = compositionLocalOf<BusyBarPallet> { error("No local pallet") }
+
 @Composable
 private fun getThemedPallet(isLight: Boolean): BusyBarPallet {
     return remember(isLight) {
@@ -75,7 +81,6 @@ fun BusyBarThemeInternal(
     isLight: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    val isLight = true
     val pallet = getThemedPallet(
         isLight = isLight
     )
@@ -89,6 +94,7 @@ fun BusyBarThemeInternal(
     ) {
         CompositionLocalProvider(
             LocalPallet provides pallet,
+            LocalCorruptedPallet provides getLightPallet(),
             LocalBusyBarFonts provides fonts,
             LocalContentColor provides colors.contentColorFor(backgroundColor = colors.background),
             LocalTextSelectionColors provides pallet.toTextSelectionColors(),

@@ -14,7 +14,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.tc_status_b
 import busystatusbar.components.bsb.timer.common.generated.resources.tc_status_long_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.tc_status_rest
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -35,7 +35,7 @@ fun StatusLowBarComposable(
                 StatusType.REST -> stringResource(Res.string.tc_status_rest)
                 StatusType.LONG_REST -> stringResource(Res.string.tc_status_long_rest)
             },
-            color = LocalPallet.current
+            color = LocalCorruptedPallet.current
                 .white
                 .invert,
             fontSize = 40.sp
@@ -44,7 +44,7 @@ fun StatusLowBarComposable(
         statusDesc?.let {
             Text(
                 text = statusDesc,
-                color = LocalPallet.current
+                color = LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .secondary,

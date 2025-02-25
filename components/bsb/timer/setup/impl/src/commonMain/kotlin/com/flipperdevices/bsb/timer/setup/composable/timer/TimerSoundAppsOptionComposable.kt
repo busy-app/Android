@@ -18,7 +18,7 @@ import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_b
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_on
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_sound_title
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.cardframe.MediumCardFrameComposable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -41,7 +41,7 @@ fun TimerSoundAppsOptionComposable(
             icon = painterResource(Res.drawable.ic_sound_on),
             modifier = Modifier.weight(1f),
             onClick = onSoundClick,
-            iconTint = LocalPallet.current
+            iconTint = LocalCorruptedPallet.current
                 .transparent
                 .whiteInvert
                 .primary
@@ -67,12 +67,12 @@ fun TimerSoundAppsOptionComposable(
             BlockedAppCount.All,
             is BlockedAppCount.Count,
             BlockedAppCount.TurnOff ->
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .primary
 
-            BlockedAppCount.NoPermission -> LocalPallet.current.danger.primary
+            BlockedAppCount.NoPermission -> LocalCorruptedPallet.current.danger.primary
         }
 
         MediumCardFrameComposable(
