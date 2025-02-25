@@ -49,7 +49,7 @@ private fun FrameSectionInnerContent(
             painter = painter,
             tint = tint,
             contentDescription = null,
-            modifier = Modifier.size(18.dp)
+            modifier = Modifier.size(24.dp)
         )
         Text(
             text = text,
@@ -93,7 +93,7 @@ fun MiniFrameSection(
                 )
                 if (!isLast) {
                     Box(
-                        Modifier.padding(horizontal = 5.dp)
+                        Modifier.padding(horizontal = 8.dp)
                             .width(1.dp)
                             .fillMaxHeight()
                             .background(Color(0xFFFFFF).copy(0.2f))
