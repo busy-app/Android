@@ -6,6 +6,7 @@ import com.flipperdevices.bsb.timer.background.api.isOnPause
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
+import com.flipperdevices.core.log.wtf
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.time.Duration
@@ -13,48 +14,84 @@ import kotlin.time.Duration.Companion.seconds
 
 private val logger = TaggedLogger("ControlledTimerStateFactory")
 
-private enum class IterationType {
+internal enum class IterationType {
     WORK, REST, LONG_REST
 }
 
-private data class IterationData(
+internal data class IterationData(
     val startOffset: Duration,
     val duration: Duration,
     val iterationType: IterationType
 )
 
 @Suppress("MagicNumber")
-private fun TimerSettings.buildIterationList(): List<IterationData> {
+private fun getIterationTypeByIndex(i: Int): IterationType {
+    return when {
+        i % 2 == 0 -> IterationType.WORK
+        i % 3 == 2 -> IterationType.LONG_REST
+        i % 2 == 1 -> IterationType.REST
+        else -> {
+            logger.error { "#buildIterationList could not calculate next IterationType for index $i" }
+            IterationType.WORK
+        }
+    }
+}
+
+internal fun TimerSettings.buildIterationList(): List<IterationData> {
     if (!intervalsSettings.isEnabled) return listOf(IterationData(0.seconds, Duration.INFINITE, IterationType.WORK))
-    return buildList {
+    val list = buildList {
         var timeLeft = totalTime
         var i = 0
         while (timeLeft > 0.seconds) {
-            val type = when {
-                i % 2 == 0 -> IterationType.WORK
-                i % 3 == 2 -> IterationType.LONG_REST
-                i % 2 == 1 -> IterationType.REST
-                else -> {
-                    logger.error { "#buildIterationList could not calculate next IterationType for index $i" }
-                    IterationType.WORK
-                }
-            }
+            val type = getIterationTypeByIndex(i)
             val iterationTypeDuration = when (type) {
                 IterationType.WORK -> intervalsSettings.work
                 IterationType.REST -> intervalsSettings.rest
                 IterationType.LONG_REST -> intervalsSettings.longRest
+            }.coerceAtMost(timeLeft)
+            when {
+                timeLeft <= iterationTypeDuration && type == IterationType.WORK -> {
+                    add(
+                        IterationData(
+                            startOffset = totalTime - timeLeft,
+                            iterationType = IterationType.LONG_REST,
+                            duration = iterationTypeDuration
+                        )
+                    )
+                }
+
+                timeLeft <= (iterationTypeDuration + intervalsSettings.work) && type == IterationType.REST -> {
+                    add(
+                        IterationData(
+                            startOffset = totalTime - timeLeft,
+                            iterationType = IterationType.LONG_REST,
+                            duration = iterationTypeDuration
+                                .plus(intervalsSettings.work)
+                                .coerceAtMost(timeLeft)
+                        )
+                    )
+                    timeLeft -= intervalsSettings.work
+                }
+
+                else -> {
+                    add(
+                        IterationData(
+                            startOffset = totalTime - timeLeft,
+                            iterationType = type,
+                            duration = iterationTypeDuration
+                        )
+                    )
+                }
             }
-            add(
-                IterationData(
-                    startOffset = totalTime - timeLeft,
-                    iterationType = type,
-                    duration = iterationTypeDuration
-                )
-            )
             timeLeft -= iterationTypeDuration
             i += 1
         }
+    }.toMutableList()
+    if (list.isEmpty()) {
+        logger.wtf { "#buildIterationList was empty for $this" }
+        return list
     }
+    return list
 }
 
 private val TimerSettings.maxIterationCount: Int

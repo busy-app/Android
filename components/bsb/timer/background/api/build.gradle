@@ -13,7 +13,3 @@ commonDependencies {
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.datetime)
 }
-
-commonTestDependencies {
-    implementation(libs.kotlin.test)
-}
