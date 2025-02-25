@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
@@ -97,8 +97,8 @@ fun NumberSelectorComposable(
             flingBehavior = fling,
             horizontalAlignment = Alignment.End
         ) { page ->
-            val activeColor = LocalPallet.current.white.invert
-            val inactiveColor = LocalPallet.current.white.invert
+            val activeColor = LocalCorruptedPallet.current.white.invert
+            val inactiveColor = LocalCorruptedPallet.current.white.invert
             val textColor = remember(
                 activeColor,
                 inactiveColor,
@@ -136,7 +136,7 @@ fun NumberSelectorComposable(
                         .padding(horizontal = contentWidthDp / 2),
                     text = postfix,
                     fontSize = 24.sp,
-                    color = LocalPallet.current
+                    color = LocalCorruptedPallet.current
                         .white
                         .invert,
                     fontWeight = FontWeight.W500,

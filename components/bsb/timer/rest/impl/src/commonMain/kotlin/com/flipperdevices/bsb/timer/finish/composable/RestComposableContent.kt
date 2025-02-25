@@ -26,7 +26,7 @@ import busystatusbar.components.bsb.timer.rest.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.rest.impl.generated.resources.tr_skip
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusLowBarComposable
@@ -105,7 +105,7 @@ fun RestComposableContent(
                             fontSize = 64.sp,
                             fontWeight = FontWeight.W500,
                             fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
-                            color = LocalPallet.current.white.invert
+                            color = LocalCorruptedPallet.current.white.invert
                         )
                     )
                     Text(
@@ -114,7 +114,7 @@ fun RestComposableContent(
                             fontSize = 64.sp,
                             fontWeight = FontWeight.W500,
                             fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
-                            color = LocalPallet.current.white.invert
+                            color = LocalCorruptedPallet.current.white.invert
                         )
                     )
                     Text(
@@ -123,7 +123,7 @@ fun RestComposableContent(
                             fontSize = 64.sp,
                             fontWeight = FontWeight.W500,
                             fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
-                            color = LocalPallet.current.white.invert
+                            color = LocalCorruptedPallet.current.white.invert
                         )
                     )
                 }
@@ -135,7 +135,7 @@ fun RestComposableContent(
                     text = stringResource(Res.string.tr_skip),
                     painter = null,
                     fontSize = 17.sp,
-                    contentColor = LocalPallet.current
+                    contentColor = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .secondary,

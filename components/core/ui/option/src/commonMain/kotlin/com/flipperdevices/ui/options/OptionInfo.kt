@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.core.ui.res_preview.generated.resources.ic_preview_pomodoro
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.core.ui.res_preview.generated.resources.Res as PreviewRes
@@ -56,7 +56,7 @@ fun OptionInfo(
         ) {
             Text(
                 text = text,
-                color = LocalPallet.current
+                color = LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .primary
@@ -67,7 +67,7 @@ fun OptionInfo(
             infoText?.let {
                 Text(
                     text = infoText,
-                    color = LocalPallet.current
+                    color = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .secondary
@@ -79,7 +79,7 @@ fun OptionInfo(
         }
         Text(
             text = endText,
-            color = LocalPallet.current
+            color = LocalCorruptedPallet.current
                 .transparent
                 .whiteInvert
                 .primary

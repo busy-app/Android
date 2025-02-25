@@ -16,7 +16,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.Res
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_back
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_three_dots
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.root.api.LocalRootNavigation
 import com.flipperdevices.bsb.root.model.RootNavigationConfig
 import org.jetbrains.compose.resources.painterResource
@@ -37,7 +37,7 @@ fun TimerAppBarComposable(
         ) {
             Icon(
                 painter = painterResource(Res.drawable.ic_back),
-                tint = LocalPallet.current
+                tint = LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .secondary,
@@ -56,7 +56,7 @@ fun TimerAppBarComposable(
             val rootNavigation = LocalRootNavigation.current
             Icon(
                 painter = painterResource(Res.drawable.ic_three_dots),
-                tint = LocalPallet.current
+                tint = LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .secondary,

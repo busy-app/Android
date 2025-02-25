@@ -18,7 +18,7 @@ import busystatusbar.components.bsb.timer.active.impl.generated.resources.ta_kee
 import busystatusbar.components.bsb.timer.active.impl.generated.resources.ta_stop
 import busystatusbar.components.bsb.timer.active.impl.generated.resources.ta_stop_session_desc
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.button.BChipButton
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -37,7 +37,7 @@ fun StopSessionComposableContent(
         Text(
             text = stringResource(Res.string.ta_ask_stop_session),
             fontSize = 32.sp,
-            color = LocalPallet.current
+            color = LocalCorruptedPallet.current
                 .white
                 .invert,
             fontWeight = FontWeight.W500,
@@ -46,7 +46,7 @@ fun StopSessionComposableContent(
         Text(
             text = stringResource(Res.string.ta_stop_session_desc),
             fontSize = 16.sp,
-            color = LocalPallet.current
+            color = LocalCorruptedPallet.current
                 .neutral
                 .tertiary,
             fontWeight = FontWeight.W500
@@ -57,10 +57,10 @@ fun StopSessionComposableContent(
                 onClick = onDismiss,
                 painter = null,
                 text = stringResource(Res.string.ta_keep_focusing),
-                contentColor = LocalPallet.current
+                contentColor = LocalCorruptedPallet.current
                     .white
                     .invert,
-                background = LocalPallet.current
+                background = LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .tertiary
@@ -71,7 +71,7 @@ fun StopSessionComposableContent(
                 onClick = onConfirm,
                 painter = null,
                 text = stringResource(Res.string.ta_stop),
-                contentColor = LocalPallet.current
+                contentColor = LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .primary

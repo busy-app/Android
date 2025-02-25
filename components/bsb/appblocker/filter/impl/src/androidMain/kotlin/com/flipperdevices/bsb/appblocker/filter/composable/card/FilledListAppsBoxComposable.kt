@@ -38,7 +38,7 @@ import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.i
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_more
 import com.flipperdevices.bsb.appblocker.filter.model.card.AppIcon
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -58,7 +58,7 @@ internal fun FilledListAppsBoxComposable(
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
-            .background(LocalPallet.current.transparent.whiteInvert.quinary)
+            .background(LocalCorruptedPallet.current.transparent.whiteInvert.quinary)
             .padding(14.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -111,7 +111,7 @@ internal fun FilledListAppsBoxComposable(
             if (blockedAppsCount != null) {
                 Text(
                     text = blockedAppsCount,
-                    color = LocalPallet.current
+                    color = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .primary,
@@ -121,7 +121,7 @@ internal fun FilledListAppsBoxComposable(
             Icon(
                 painter = painterResource(Res.drawable.ic_arrow_right),
                 contentDescription = null,
-                tint = LocalPallet.current
+                tint = LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .secondary,

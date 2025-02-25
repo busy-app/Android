@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.Res
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_btn_save
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.button.BChipButton
 import org.jetbrains.compose.resources.stringResource
 
@@ -22,10 +22,10 @@ fun AppBlockerSaveButtonComposable(
         onClick = onClick,
         text = stringResource(Res.string.appblocker_filter_btn_save),
         painter = null,
-        contentColor = LocalPallet.current
+        contentColor = LocalCorruptedPallet.current
             .white
             .invert,
-        background = LocalPallet.current
+        background = LocalCorruptedPallet.current
             .neutral
             .primary,
         contentPadding = PaddingValues(

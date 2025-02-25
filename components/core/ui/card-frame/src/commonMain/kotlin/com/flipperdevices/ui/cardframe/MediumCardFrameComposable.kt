@@ -26,7 +26,7 @@ import busystatusbar.components.core.ui.card_frame.generated.resources.Res
 import busystatusbar.components.core.ui.card_frame.generated.resources.ic_arrow_right
 import busystatusbar.components.core.ui.res_preview.generated.resources.ic_preview_pomodoro
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.core.ui.res_preview.generated.resources.Res as PreviewRes
@@ -45,7 +45,7 @@ fun MediumCardFrameComposable(
     Box(
         modifier = modifier.clip(RoundedCornerShape(12.dp))
             .background(
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .quaternary
@@ -65,7 +65,7 @@ fun MediumCardFrameComposable(
             ) {
                 Text(
                     text = title,
-                    color = LocalPallet.current
+                    color = LocalCorruptedPallet.current
                         .white
                         .invert,
                     fontSize = 18.sp,
@@ -76,7 +76,7 @@ fun MediumCardFrameComposable(
                     painter = painterResource(Res.drawable.ic_arrow_right),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = LocalPallet.current
+                    tint = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .secondary
@@ -96,7 +96,7 @@ fun MediumCardFrameComposable(
                 )
                 Text(
                     text = desc,
-                    color = LocalPallet.current
+                    color = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .primary
@@ -121,7 +121,7 @@ private fun MediumCardFrameComposablePreview() {
                         desc = "On",
                         icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                         onClick = {},
-                        iconTint = LocalPallet.current
+                        iconTint = LocalCorruptedPallet.current
                             .transparent
                             .whiteInvert
                             .primary
@@ -138,7 +138,7 @@ private fun MediumCardFrameComposablePreview() {
                         icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                         onClick = {},
                         enabled = false,
-                        iconTint = LocalPallet.current
+                        iconTint = LocalCorruptedPallet.current
                             .transparent
                             .whiteInvert
                             .primary
@@ -154,7 +154,7 @@ private fun MediumCardFrameComposablePreview() {
                         desc = "On",
                         icon = painterResource(PreviewRes.drawable.ic_preview_pomodoro),
                         onClick = {},
-                        iconTint = LocalPallet.current
+                        iconTint = LocalCorruptedPallet.current
                             .transparent
                             .whiteInvert
                             .primary

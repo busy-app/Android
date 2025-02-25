@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.timeline.HorizontalWheelPicker
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
@@ -26,7 +26,7 @@ fun TotalTimeTimerPickerComposable(
         modifier = modifier.fillMaxWidth()
             .height(224.dp)
             .background(
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .transparent
                     .blackInvert
                     .secondary

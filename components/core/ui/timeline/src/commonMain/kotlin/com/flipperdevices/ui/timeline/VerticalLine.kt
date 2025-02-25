@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.timeline.model.PickerLineStyle
 import com.flipperdevices.ui.timeline.util.animateTextUnitAsState
 import kotlin.math.sqrt
@@ -49,12 +49,12 @@ internal fun calculateTlr(
         targetValue = when {
             !isVisible -> Color.Transparent
             isSelected ->
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .white
                     .invert
 
             else ->
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .white
                     .invert
                     .copy(alpha = 0.2f)

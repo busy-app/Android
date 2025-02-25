@@ -17,7 +17,7 @@ import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.a
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_title
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.core.ktx.common.clickableRipple
 import org.jetbrains.compose.resources.stringResource
 
@@ -39,7 +39,7 @@ fun AppBlockerFilterHeaderComposable(
             fontSize = 24.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontWeight = FontWeight.W600,
-            color = LocalPallet.current.white.invert,
+            color = LocalCorruptedPallet.current.white.invert,
         )
         val isAllSelected = remember(screenState.categories) {
             screenState.categories.find { it.isBlocked.not() } == null
@@ -64,7 +64,7 @@ fun AppBlockerFilterHeaderComposable(
             fontSize = 18.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontWeight = FontWeight.W500,
-            color = LocalPallet.current.transparent.whiteInvert.primary,
+            color = LocalCorruptedPallet.current.transparent.whiteInvert.primary,
         )
     }
 }

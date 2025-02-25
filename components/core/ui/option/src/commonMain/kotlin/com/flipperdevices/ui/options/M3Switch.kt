@@ -5,7 +5,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 
 @Composable
 fun M3Switch(
@@ -21,11 +21,11 @@ fun M3Switch(
         enabled = enabled,
         colors = SwitchDefaults.colors(
             uncheckedBorderColor = Color.Transparent,
-            uncheckedThumbColor = LocalPallet.current.white.onColor,
-            checkedThumbColor = LocalPallet.current.white.onColor,
+            uncheckedThumbColor = LocalCorruptedPallet.current.white.onColor,
+            checkedThumbColor = LocalCorruptedPallet.current.white.onColor,
             checkedBorderColor = Color.Transparent,
-            checkedTrackColor = LocalPallet.current.accent.device.primary,
-            uncheckedTrackColor = LocalPallet.current.transparent.whiteInvert.tertiary,
+            checkedTrackColor = LocalCorruptedPallet.current.accent.device.primary,
+            uncheckedTrackColor = LocalCorruptedPallet.current.transparent.whiteInvert.tertiary,
             // todo no color for disabled in design system yet
 //            checkedIconColor = TODO(),
 //            disabledCheckedBorderColor = TODO(),

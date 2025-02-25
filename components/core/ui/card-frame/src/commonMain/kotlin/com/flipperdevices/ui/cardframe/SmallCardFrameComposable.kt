@@ -26,7 +26,7 @@ import busystatusbar.components.core.ui.card_frame.generated.resources.Res
 import busystatusbar.components.core.ui.card_frame.generated.resources.ic_arrow_right
 import busystatusbar.components.core.ui.res_preview.generated.resources.ic_preview_work
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalPallet
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.core.ui.res_preview.generated.resources.Res as PreviewRes
@@ -45,7 +45,7 @@ fun SmallCardFrameComposable(
     Box(
         modifier = modifier.clip(RoundedCornerShape(12.dp))
             .background(
-                LocalPallet.current
+                LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .quaternary
@@ -61,7 +61,7 @@ fun SmallCardFrameComposable(
         ) {
             Text(
                 text = title,
-                color = LocalPallet.current
+                color = LocalCorruptedPallet.current
                     .transparent
                     .whiteInvert
                     .primary
@@ -87,7 +87,7 @@ fun SmallCardFrameComposable(
                         modifier = Modifier.basicMarquee(iterations = Int.MAX_VALUE),
                         text = desc,
                         maxLines = 1,
-                        color = LocalPallet.current
+                        color = LocalCorruptedPallet.current
                             .transparent
                             .whiteInvert
                             .secondary
@@ -99,7 +99,7 @@ fun SmallCardFrameComposable(
                     painter = painterResource(Res.drawable.ic_arrow_right),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = LocalPallet.current
+                    tint = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
                         .secondary
@@ -123,7 +123,7 @@ private fun SmallCardFrameComposablePreview() {
                         desc = "25 m",
                         icon = painterResource(PreviewRes.drawable.ic_preview_work),
                         onClick = {},
-                        iconTint = LocalPallet.current
+                        iconTint = LocalCorruptedPallet.current
                             .transparent
                             .whiteInvert
                             .secondary
@@ -140,7 +140,7 @@ private fun SmallCardFrameComposablePreview() {
                         icon = painterResource(PreviewRes.drawable.ic_preview_work),
                         onClick = {},
                         enabled = false,
-                        iconTint = LocalPallet.current
+                        iconTint = LocalCorruptedPallet.current
                             .transparent
                             .whiteInvert
                             .secondary
