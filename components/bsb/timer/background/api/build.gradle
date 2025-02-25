@@ -11,4 +11,9 @@ commonDependencies {
     implementation(libs.kotlin.serialization.json)
 
     implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlin.datetime)
+}
+
+commonTestDependencies {
+    implementation(libs.kotlin.test)
 }

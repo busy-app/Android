@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -40,13 +41,20 @@ class AndroidTimerApi(
     override val TAG = "AndroidTimerApi"
 
     private val timerStateFlow = MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
+    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp?>(null)
+
     private val mutex = Mutex()
     private var binderListenerJob: Job? = null
 
-    override fun setState(state: ControlledTimerState) {
+    override fun setTimestampState(state: TimerTimestamp?) {
         info { "Request start timer via android service timer api" }
+        if (state == null) {
+            stopTimer()
+            return
+        }
         val intent = Intent(context, TimerForegroundService::class.java)
         intent.setAction(TimerServiceActionEnum.START.actionId)
+        runBlocking { timerTimestampFlow.emit(state) }
         intent.putExtra(EXTRA_KEY_TIMER_STATE, Json.encodeToString(state))
         context.startService(intent)
         runBlocking {
@@ -61,6 +69,17 @@ class AndroidTimerApi(
                 }
             }
         }
+    }
+
+    private fun stopTimer() {
+        timerTimestampFlow.value = null
+        val intent = Intent(context, TimerForegroundService::class.java)
+        intent.setAction(TimerServiceActionEnum.STOP.actionId)
+        context.startService(intent)
+    }
+
+    override fun getTimestampState(): StateFlow<TimerTimestamp?> {
+        return timerTimestampFlow.asStateFlow()
     }
 
     override fun getState() = timerStateFlow.asStateFlow()

@@ -12,6 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -32,6 +33,7 @@ class CommonTimerApi(
 
     private val mutex = Mutex()
     private val timerStateFlow = MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
+    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp?>(null)
 
     private var timerJob: TimerLoopJob? = null
     private var stateInvalidateJob: Job? = null
@@ -44,11 +46,17 @@ class CommonTimerApi(
         compositeListeners.removeListener(listener)
     }
 
-    override fun setState(state: ControlledTimerState) {
+
+    override fun setTimestampState(state: TimerTimestamp?) {
         scope.launch {
+            if (state == null) {
+                stopSelf()
+                return@launch
+            }
             withLock(mutex, "start") {
                 stateInvalidateJob?.cancelAndJoin()
                 timerJob?.cancelAndJoin()
+                timerTimestampFlow.emit(state)
                 val timer = TimerLoopJob(scope, state)
                 timerJob = timer
                 compositeListeners.onTimerStart()
@@ -73,11 +81,16 @@ class CommonTimerApi(
         }
     }
 
+    override fun getTimestampState(): StateFlow<TimerTimestamp?> {
+        return timerTimestampFlow.asStateFlow()
+    }
+
     override fun getState() = timerStateFlow.asStateFlow()
 
     private suspend fun stopSelf() {
         withLock(mutex, "stop") {
             withContext(NonCancellable) {
+                timerTimestampFlow.value = null
                 stateInvalidateJob?.cancel()
                 timerJob?.cancelAndJoin()
                 timerJob = null

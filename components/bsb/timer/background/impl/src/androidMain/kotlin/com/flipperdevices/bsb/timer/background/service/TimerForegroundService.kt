@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
+import com.flipperdevices.bsb.timer.background.api.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.core.di.ComponentHolder
@@ -70,16 +71,16 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                 TimerServiceActionEnum.START.actionId -> {
                     val timerStateString = intent.getStringExtra(EXTRA_KEY_TIMER_STATE)
                     if (timerStateString != null) {
-                        val timerState = Json.decodeFromString<ControlledTimerState>(timerStateString)
-                        delegate.setState(timerState)
+                        val timerState = Json.decodeFromString<TimerTimestamp>(timerStateString)
+                        delegate.setTimestampState(timerState)
                     } else {
                         error { "Not found timer start" }
-                        delegate.setState(ControlledTimerState.Finished)
+                        delegate.setTimestampState(null)
                     }
                 }
 
                 TimerServiceActionEnum.STOP.actionId -> {
-                    delegate.setState(ControlledTimerState.Finished)
+                    delegate.setTimestampState(null)
                     stopServiceInternal()
                 }
             }
