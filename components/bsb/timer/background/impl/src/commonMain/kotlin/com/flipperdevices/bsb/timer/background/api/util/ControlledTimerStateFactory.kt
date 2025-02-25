@@ -149,7 +149,6 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
         return ControlledTimerState.NotStarted
     }
     val iterationList = settings.buildIterationList()
-    println("[LOGGER] iterationList: $iterationList")
 
     // Filter only data which is not yet started
     val iterationsDataLeft = iterationList

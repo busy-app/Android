@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.notification.NotificationPermissionHelper
 import com.flipperdevices.bsb.timer.background.service.EXTRA_KEY_TIMER_STATE
 import com.flipperdevices.bsb.timer.background.service.TimerForegroundService
 import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
@@ -52,6 +53,8 @@ class AndroidTimerApi(
             stopTimer()
             return
         }
+        NotificationPermissionHelper.requestPermission()
+
         val intent = Intent(context, TimerForegroundService::class.java)
         intent.setAction(TimerServiceActionEnum.START.actionId)
         runBlocking { timerTimestampFlow.emit(state) }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Busy Status Bar</string>
+    <string name="app_name">Busy App</string>
     <string name="asset_statements" translatable="false">
 [{
   \"include\": \"https://cloud.dev.busy.bar/.well-known/assetlinks.json\"

@@ -1,4 +1,4 @@
-# Busy Status Bar Android App
+# Busy App Android App
 
 ![](docs/busystatusbar.png)
 
