@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.core.markdown
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -49,7 +50,9 @@ fun markdownColor(
     linkText = LocalPallet.current.bluetooth.primary,
     codeBackground = defaultColor,
     inlineCodeBackground = defaultColor,
-    dividerColor = defaultColor
+    dividerColor = defaultColor,
+    tableText = Color.Unspecified,
+    tableBackground = defaultColor.copy(alpha = 0.5f),
 )
 
 @Composable
@@ -76,5 +79,10 @@ fun markdownTypography(
     list = defaultTypography,
     link = defaultTypography.copy(
         textDecoration = TextDecoration.Underline,
+    ),
+    textLink = TextLinkStyles(
+        style = defaultTypography.copy(
+            textDecoration = TextDecoration.Underline,
+        ).toSpanStyle()
     )
 )
