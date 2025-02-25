@@ -25,7 +25,6 @@ import busystatusbar.components.bsb.timer.cards.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.busycard_appblocker_all
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.ic_three_dots
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_block
-import busystatusbar.components.bsb.timer.common.generated.resources.ic_long_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_work
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
