@@ -25,8 +25,8 @@ import busystatusbar.components.bsb.timer.cards.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.busycard_appblocker_all
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.ic_three_dots
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_block
-import busystatusbar.components.bsb.timer.common.generated.resources.ic_long_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
+import busystatusbar.components.bsb.timer.common.generated.resources.ic_work
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
@@ -100,16 +100,16 @@ fun BusyCardComposable(
                     if (settings.intervalsSettings.isEnabled) {
                         MiniFrameSection(
                             MiniFrameData(
-                                text = settings.intervalsSettings.rest.toFormattedTime(),
-                                painter = painterResource(CommonTimerRes.drawable.ic_rest),
+                                text = settings.intervalsSettings.work.toFormattedTime(slim = false),
+                                painter = painterResource(CommonTimerRes.drawable.ic_work),
                                 tint = LocalCorruptedPallet.current
                                     .transparent
                                     .whiteInvert
                                     .primary
                             ),
                             MiniFrameData(
-                                text = settings.intervalsSettings.longRest.toFormattedTime(),
-                                painter = painterResource(CommonTimerRes.drawable.ic_long_rest),
+                                text = settings.intervalsSettings.rest.toFormattedTime(slim = false),
+                                painter = painterResource(CommonTimerRes.drawable.ic_rest),
                                 tint = LocalCorruptedPallet.current
                                     .transparent
                                     .whiteInvert
