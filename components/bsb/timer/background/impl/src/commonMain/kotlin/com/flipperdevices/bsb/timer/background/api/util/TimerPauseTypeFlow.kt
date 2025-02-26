@@ -10,10 +10,6 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 
-private enum class EventType {
-    NONE, PAUSE_AFTER_WORK, PAUSE_AFTER_REST
-}
-
 class TimerPauseTypeFlow(
     timerApi: TimerApi
 ) : Flow<PauseType> by timerApi
@@ -23,39 +19,31 @@ class TimerPauseTypeFlow(
     .map(
         transform = { state ->
             if (state.timeLeft.inWholeSeconds != 0L) {
-                EventType.NONE
                 null
             } else {
                 when (state) {
                     is ControlledTimerState.Running.LongRest -> {
                         if (state.timerSettings.intervalsSettings.autoStartWork) {
-                            EventType.NONE
                             null
                         } else if (state.isLastIteration) {
-                            EventType.NONE
                             null
                         } else {
-                            EventType.PAUSE_AFTER_REST
                             PauseType.AFTER_REST
                         }
                     }
 
                     is ControlledTimerState.Running.Rest -> {
                         if (state.timerSettings.intervalsSettings.autoStartWork) {
-                            EventType.NONE
                             null
                         } else {
-                            EventType.PAUSE_AFTER_REST
                             PauseType.AFTER_REST
                         }
                     }
 
                     is ControlledTimerState.Running.Work -> {
                         if (state.timerSettings.intervalsSettings.autoStartRest) {
-                            EventType.NONE
                             null
                         } else {
-                            EventType.PAUSE_AFTER_WORK
                             PauseType.AFTER_WORK
                         }
                     }
