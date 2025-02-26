@@ -2,12 +2,12 @@ package com.flipperdevices.bsb.timer.background.util
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
-import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.PauseData
 import com.flipperdevices.bsb.timer.background.model.PauseType
-import kotlin.time.Duration.Companion.seconds
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import kotlinx.datetime.Clock
+import kotlin.time.Duration.Companion.seconds
 
 fun TimerApi.updateState(block: (TimerTimestamp?) -> TimerTimestamp?) {
     val newState = block.invoke(getTimestampState().value)
@@ -37,10 +37,10 @@ fun TimerApi.togglePause() {
 fun TimerApi.pause() {
     updateState { state ->
         if (state?.pauseData == null) {
-            state?.copy(
-                pauseData = PauseData(PauseType.NORMAL),
-            )
-        } else state
+            state?.copy(pauseData = PauseData(PauseType.NORMAL),)
+        } else {
+            state
+        }
     }
 }
 
@@ -53,7 +53,9 @@ fun TimerApi.resume() {
                 pauseData = null,
                 start = state.start.plus(diff)
             )
-        } else state
+        } else {
+            state
+        }
     }
 }
 

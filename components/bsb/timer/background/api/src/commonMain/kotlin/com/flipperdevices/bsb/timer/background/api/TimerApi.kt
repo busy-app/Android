@@ -10,4 +10,3 @@ interface TimerApi {
 
     fun getState(): StateFlow<ControlledTimerState>
 }
-

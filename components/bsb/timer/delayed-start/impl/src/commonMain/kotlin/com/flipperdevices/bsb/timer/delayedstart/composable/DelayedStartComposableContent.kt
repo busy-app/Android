@@ -53,11 +53,10 @@ fun DelayedStartComposableContent(
 ) {
     Box(
         modifier = modifier.fillMaxSize()
-            .background(Color(0xFF212121))
+            .background(Color(color = 0xFF212121)) // todo no color in design pallet
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-
         Column(
             modifier = Modifier.fillMaxWidth().align(Alignment.Center),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -85,7 +84,7 @@ fun DelayedStartComposableContent(
                         stringResource(
                             Res.string.tds_title_busy_done,
                             "${timerSettings.name}",
-                            "${currentIteration}/${maxIteration}"
+                            "$currentIteration/$maxIteration"
                         )
                     }
 

@@ -14,24 +14,18 @@ import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
@@ -126,22 +120,35 @@ class CommonTimerApi(
             .filterIsInstance<ControlledTimerState.Running>()
             .distinctUntilChangedBy { it.timeLeft.inWholeSeconds }
             .map { state ->
-                if (state.timeLeft.inWholeSeconds != 0L) EventType.NONE
-                else when (state) {
-                    is ControlledTimerState.Running.LongRest -> {
-                        if (state.timerSettings.intervalsSettings.autoStartWork) EventType.NONE
-                        else if (state.isLastIteration) EventType.NONE
-                        else EventType.PAUSE_AFTER_REST
-                    }
+                if (state.timeLeft.inWholeSeconds != 0L) {
+                    EventType.NONE
+                } else {
+                    when (state) {
+                        is ControlledTimerState.Running.LongRest -> {
+                            if (state.timerSettings.intervalsSettings.autoStartWork) {
+                                EventType.NONE
+                            } else if (state.isLastIteration) {
+                                EventType.NONE
+                            } else {
+                                EventType.PAUSE_AFTER_REST
+                            }
+                        }
 
-                    is ControlledTimerState.Running.Rest -> {
-                        if (state.timerSettings.intervalsSettings.autoStartWork) EventType.NONE
-                        else EventType.PAUSE_AFTER_REST
-                    }
+                        is ControlledTimerState.Running.Rest -> {
+                            if (state.timerSettings.intervalsSettings.autoStartWork) {
+                                EventType.NONE
+                            } else {
+                                EventType.PAUSE_AFTER_REST
+                            }
+                        }
 
-                    is ControlledTimerState.Running.Work -> {
-                        if (state.timerSettings.intervalsSettings.autoStartRest) EventType.NONE
-                        else EventType.PAUSE_AFTER_WORK
+                        is ControlledTimerState.Running.Work -> {
+                            if (state.timerSettings.intervalsSettings.autoStartRest) {
+                                EventType.NONE
+                            } else {
+                                EventType.PAUSE_AFTER_WORK
+                            }
+                        }
                     }
                 }
             }

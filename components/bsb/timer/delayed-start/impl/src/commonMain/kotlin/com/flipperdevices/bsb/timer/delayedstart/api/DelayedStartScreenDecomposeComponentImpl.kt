@@ -3,7 +3,6 @@ package com.flipperdevices.bsb.timer.delayedstart.api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.sourceInformationMarkerStart
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnResume
@@ -12,7 +11,6 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.PauseData
 import com.flipperdevices.bsb.timer.background.model.PauseType
-import com.flipperdevices.bsb.timer.background.util.pause
 import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.background.util.updateState
@@ -53,12 +51,9 @@ class DelayedStartScreenDecomposeComponentImpl(
     override fun Render(modifier: Modifier) {
         val state by timerApi.getState().collectAsState()
         when (val state = state) {
-
-
             ControlledTimerState.Finished -> Unit
             ControlledTimerState.NotStarted -> Unit
             is ControlledTimerState.Running -> {
-
                 DelayedStartComposableContent(
                     typeEndDelay = typeEndDelay,
                     timerSettings = state.timerSettings,

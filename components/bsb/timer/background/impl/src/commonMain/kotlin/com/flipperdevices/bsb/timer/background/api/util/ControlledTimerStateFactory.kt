@@ -1,10 +1,8 @@
 package com.flipperdevices.bsb.timer.background.api.util
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
-import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.model.isOnPause
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.model.PauseType
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
@@ -142,7 +140,11 @@ internal fun calculateTimeLeft(
                 .plus(startOffset)
                 .plus(duration)
                 .minus(Clock.System.now())
-    }.also { TaggedLogger("MY_LOGGER").error { "#calculateTimeLeft start:$start; pause: $pause; duration: $duration startOffset: $startOffset" } }
+    }.also {
+        TaggedLogger(
+            "MY_LOGGER"
+        ).error { "#calculateTimeLeft start:$start; pause: $pause; duration: $duration startOffset: $startOffset" }
+    }
 }
 
 internal fun TimerTimestamp?.toState(): ControlledTimerState {

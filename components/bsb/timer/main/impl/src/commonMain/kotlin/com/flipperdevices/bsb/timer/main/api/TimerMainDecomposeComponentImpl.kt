@@ -4,15 +4,12 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
-import com.arkivanov.essenty.lifecycle.doOnResume
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.model.PauseData
 import com.flipperdevices.bsb.timer.background.model.PauseType
 import com.flipperdevices.bsb.timer.background.util.stop
-import com.flipperdevices.bsb.timer.background.util.updateState
 import com.flipperdevices.bsb.timer.cards.api.CardsDecomposeComponent
 import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent.TypeEndDelay
@@ -23,7 +20,6 @@ import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.tatarka.inject.annotations.Assisted
@@ -65,7 +61,6 @@ class TimerMainDecomposeComponentImpl(
                         is ControlledTimerState.Running.Work -> TimerMainNavigationConfig.Work
                     }
                 }
-
             }
         }
         return screen
