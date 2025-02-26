@@ -21,7 +21,7 @@ class DelayedStartScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
-    private val typeEndDelay: TypeEndDelay,
+    @Assisted private val typeEndDelay: TypeEndDelay,
 ) : DelayedStartScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
