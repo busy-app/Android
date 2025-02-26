@@ -11,6 +11,7 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.PauseData
 import com.flipperdevices.bsb.timer.background.model.PauseType
+import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.background.util.updateState
 import com.flipperdevices.bsb.timer.cards.api.CardsDecomposeComponent
 import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent
@@ -106,6 +107,7 @@ class TimerMainDecomposeComponentImpl(
         TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             onFinishCallback = {
+                timerApi.stop()
                 navigation.replaceAll(TimerMainNavigationConfig.Main)
             }
         )

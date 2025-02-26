@@ -142,7 +142,7 @@ internal fun calculateTimeLeft(
                 .plus(startOffset)
                 .plus(duration)
                 .minus(Clock.System.now())
-    }
+    }.also { TaggedLogger("MY_LOGGER").error { "#calculateTimeLeft start:$start; pause: $pause; duration: $duration startOffset: $startOffset" } }
 }
 
 internal fun TimerTimestamp?.toState(): ControlledTimerState {
@@ -154,7 +154,10 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
 
     // Filter only data which is not yet started
     val iterationsDataLeft = iterationList
-        .filter { data -> Clock.System.now() <= start.plus(data.startOffset).plus(data.duration) }
+        .filter { data ->
+            val now = pauseData?.instant ?: Clock.System.now()
+            now <= start.plus(data.startOffset).plus(data.duration)
+        }
     val currentIterationData = iterationsDataLeft.firstOrNull()
 
     if (currentIterationData == null) return ControlledTimerState.Finished
