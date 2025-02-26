@@ -140,10 +140,6 @@ internal fun calculateTimeLeft(
                 .plus(startOffset)
                 .plus(duration)
                 .minus(Clock.System.now())
-    }.also {
-        TaggedLogger(
-            "MY_LOGGER"
-        ).error { "#calculateTimeLeft start:$start; pause: $pause; duration: $duration startOffset: $startOffset" }
     }
 }
 

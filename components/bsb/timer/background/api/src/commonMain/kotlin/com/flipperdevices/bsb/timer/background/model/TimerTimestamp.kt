@@ -21,6 +21,3 @@ data class PauseData(
     val type: PauseType,
     val instant: Instant = Clock.System.now()
 )
-
-val TimerTimestamp.isOnPause: Boolean
-    get() = pauseData?.type == PauseType.NORMAL
