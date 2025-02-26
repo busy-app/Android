@@ -57,53 +57,41 @@ internal fun TimerSettings.buildIterationList(): List<IterationData> {
                 IterationType.REST -> intervalsSettings.rest
                 IterationType.LONG_REST -> intervalsSettings.longRest
             }.coerceAtMost(timeLeft)
-            when {
-                timeLeft <= iterationTypeDuration && type == IterationType.WORK -> {
-                    add(
-                        IterationData(
-                            startOffset = totalTime - timeLeft,
-                            iterationType = IterationType.LONG_REST,
-                            duration = iterationTypeDuration
-                        )
-                    )
-                }
 
-                timeLeft <= (iterationTypeDuration + intervalsSettings.work) && type == IterationType.REST -> {
-                    add(
-                        IterationData(
-                            startOffset = totalTime - timeLeft,
-                            iterationType = IterationType.LONG_REST,
-                            duration = iterationTypeDuration
-                                .plus(intervalsSettings.work)
-                                .coerceAtMost(timeLeft)
-                        )
-                    )
-                    timeLeft -= intervalsSettings.work
-                }
+            val isNoTimeForWorkLeft = timeLeft <= iterationTypeDuration
+                    && type == IterationType.WORK
 
-                timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) && type == IterationType.LONG_REST -> {
-                    add(
-                        IterationData(
-                            startOffset = totalTime - timeLeft,
-                            iterationType = IterationType.LONG_REST,
-                            duration = iterationTypeDuration
-                                .plus(intervalsSettings.longRest)
-                                .coerceAtMost(timeLeft)
-                        )
-                    )
-                    timeLeft -= intervalsSettings.longRest
-                }
+            val isNoTimeForShortRestLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.work)
+                    && type == IterationType.REST
 
-                else -> {
-                    add(
-                        IterationData(
-                            startOffset = totalTime - timeLeft,
-                            iterationType = type,
-                            duration = iterationTypeDuration
-                        )
-                    )
+            val isLongRestNeedMoreTimeThanTimeLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.longRest)
+                    && type == IterationType.LONG_REST
+
+            IterationData(
+                startOffset = totalTime - timeLeft,
+                iterationType = when {
+                    isNoTimeForWorkLeft
+                        .or(isNoTimeForShortRestLeft)
+                        .or(isLongRestNeedMoreTimeThanTimeLeft) -> IterationType.LONG_REST
+
+                    else -> type
+                },
+                duration = when {
+                    isNoTimeForShortRestLeft -> iterationTypeDuration
+                        .plus(intervalsSettings.work)
+                        .coerceAtMost(timeLeft)
+                        .also { timeLeft -= intervalsSettings.work }
+
+                    isLongRestNeedMoreTimeThanTimeLeft -> iterationTypeDuration
+                        .plus(intervalsSettings.longRest)
+                        .coerceAtMost(timeLeft)
+                        .also { timeLeft -= intervalsSettings.work }
+
+                    isNoTimeForWorkLeft -> iterationTypeDuration
+                    else -> iterationTypeDuration
                 }
-            }
+            ).run(::add)
+
             timeLeft -= iterationTypeDuration
             i += 1
         }
