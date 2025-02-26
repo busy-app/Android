@@ -8,11 +8,9 @@ import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.model.PauseType
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.cards.api.CardsDecomposeComponent
 import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent
-import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent.TypeEndDelay
 import com.flipperdevices.bsb.timer.done.api.DoneTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.finish.api.RestTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.main.model.TimerMainNavigationConfig
@@ -46,20 +44,10 @@ class TimerMainDecomposeComponentImpl(
             ControlledTimerState.Finished -> TimerMainNavigationConfig.Finished
             ControlledTimerState.NotStarted -> TimerMainNavigationConfig.Main
             is ControlledTimerState.Running -> {
-                when (pauseType) {
-                    PauseType.AFTER_WORK -> {
-                        TimerMainNavigationConfig.PauseAfter(TypeEndDelay.WORK)
-                    }
-
-                    PauseType.AFTER_REST -> {
-                        TimerMainNavigationConfig.PauseAfter(TypeEndDelay.REST)
-                    }
-
-                    PauseType.NORMAL, null -> when (this) {
-                        is ControlledTimerState.Running.LongRest -> TimerMainNavigationConfig.LongRest
-                        is ControlledTimerState.Running.Rest -> TimerMainNavigationConfig.Rest
-                        is ControlledTimerState.Running.Work -> TimerMainNavigationConfig.Work
-                    }
+                when (this) {
+                    is ControlledTimerState.Running.LongRest -> TimerMainNavigationConfig.LongRest
+                    is ControlledTimerState.Running.Rest -> TimerMainNavigationConfig.Rest
+                    is ControlledTimerState.Running.Work -> TimerMainNavigationConfig.Work
                 }
             }
         }
@@ -73,9 +61,9 @@ class TimerMainDecomposeComponentImpl(
                 when (state) {
                     ControlledTimerState.Finished -> 0
                     ControlledTimerState.NotStarted -> 1
-                    is ControlledTimerState.Running.LongRest -> "2_${state.pauseType}"
-                    is ControlledTimerState.Running.Rest -> "3_${state.pauseType}"
-                    is ControlledTimerState.Running.Work -> "4_${state.pauseType}"
+                    is ControlledTimerState.Running.LongRest -> 2
+                    is ControlledTimerState.Running.Rest -> 3
+                    is ControlledTimerState.Running.Work -> 4
                 }
             }
             .onEach { state -> navigation.replaceAll(state.getScreen()) }

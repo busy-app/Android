@@ -10,7 +10,6 @@ import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.composable.TimerOnComposableScreen
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.model.PauseType
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.bsb.timer.background.model.maxUiIterations
 import com.flipperdevices.bsb.timer.background.util.skip
@@ -63,7 +62,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
                         stopSessionSheetDecomposeComponent.show()
                     }
                 )
-                if (state.pauseType == PauseType.NORMAL) {
+                if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
                         onStartClick = { timerApi.togglePause() }
                     )

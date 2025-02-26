@@ -27,7 +27,7 @@ class TimerLoopJob(
     internal fun getInternalState(): StateFlow<ControlledTimerState> = timerStateFlow.asStateFlow()
 
     private val job = TickFlow()
-        .filter { initialTimerTimestamp.pauseData == null }
+        .filter { initialTimerTimestamp.pause != null }
         .onEach {
             withLock(mutex, "update") {
                 timerStateFlow.emit(initialTimerTimestamp.toState())

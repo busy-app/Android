@@ -3,10 +3,8 @@ package com.flipperdevices.bsb.timer.background.api
 import com.flipperdevices.bsb.metronome.api.MetronomeApi
 import com.flipperdevices.bsb.timer.background.api.delegates.CompositeTimerStateListener
 import com.flipperdevices.bsb.timer.background.api.delegates.TimerLoopJob
-import com.flipperdevices.bsb.timer.background.api.util.TimerPauseTypeFlow
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.util.pause
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
@@ -73,7 +71,7 @@ class CommonTimerApi(
                             ControlledTimerState.Finished -> Unit
 
                             is ControlledTimerState.Running -> {
-                                if (internalState.pauseType != null) {
+                                if (!internalState.isOnPause) {
                                     metronomeApi.play()
                                 }
                             }
@@ -101,15 +99,5 @@ class CommonTimerApi(
                 compositeListeners.onTimerStop()
             }
         }
-    }
-
-    private fun collectTimerPauseType() {
-        TimerPauseTypeFlow(this)
-            .onEach { type -> pause(type) }
-            .launchIn(scope)
-    }
-
-    init {
-        collectTimerPauseType()
     }
 }

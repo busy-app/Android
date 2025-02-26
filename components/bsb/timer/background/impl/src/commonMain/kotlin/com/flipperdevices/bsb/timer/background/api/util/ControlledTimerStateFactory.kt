@@ -125,7 +125,7 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
         return ControlledTimerState.NotStarted
     }
     val iterationList = settings.buildIterationList()
-    val now = pauseData?.instant ?: Clock.System.now()
+    val now = pause ?: Clock.System.now()
 
     // Filter only data which is not yet started
     val iterationsDataLeft = iterationList
@@ -145,7 +145,7 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
     return when (currentIterationData.iterationType) {
         IterationType.WORK -> ControlledTimerState.Running.Work(
             timeLeft = currentIterationTypeTimeLeft,
-            pauseType = pauseData?.type,
+            isOnPause = pause != null,
             timerSettings = settings,
             currentIteration = iterationCountLeft,
             maxIterations = settings.maxIterationCount,
@@ -153,7 +153,7 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
 
         IterationType.REST -> ControlledTimerState.Running.Rest(
             timeLeft = currentIterationTypeTimeLeft,
-            pauseType = pauseData?.type,
+            isOnPause = pause != null,
             timerSettings = settings,
             currentIteration = iterationCountLeft,
             maxIterations = settings.maxIterationCount,
@@ -161,7 +161,7 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
 
         IterationType.LONG_REST -> ControlledTimerState.Running.LongRest(
             timeLeft = currentIterationTypeTimeLeft,
-            pauseType = pauseData?.type,
+            isOnPause = pause != null,
             timerSettings = settings,
             currentIteration = iterationCountLeft,
             maxIterations = settings.maxIterationCount,
