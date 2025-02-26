@@ -158,7 +158,6 @@ class CommonTimerApi(
                     EventType.PAUSE_AFTER_REST -> PauseType.AFTER_REST
                     EventType.NONE -> return@onEach
                 }
-                TaggedLogger("MY_LOGGER").error { "#CommonTimerApi EXECUTED WITH $type ${type::class}" }
                 updateState { state ->
                     state ?: return@updateState state
                     if (state.pauseData != null) return@updateState state
