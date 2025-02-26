@@ -42,33 +42,12 @@ kotlin {
 
     jvm("desktop")
 
-    val xcFramework = XCFramework()
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "VideoTest"
-            isStatic = true
-
-            xcFramework.add(this)
-
-            export(libs.decompose)
-            export(libs.essenty.lifecycle)
-            export(libs.settings)
-            // TODO revert back export(projects.components.bsb.appblocker.api)
-        }
-    }
-
     sourceSets {
         val desktopMain by getting
 
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
-            implementation(libs.timber)
 
-            implementation(projects.components.core.activityholder)
             implementation(libs.appcompat)
         }
         commonMain.dependencies {
@@ -78,39 +57,21 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-
-            implementation(libs.settings)
-
-            implementation(libs.kotlin.inject.runtime)
-            implementation(libs.kotlin.inject.anvil.runtime)
-            implementation(libs.kotlin.inject.anvil.runtime.optional)
-
-            implementation(libs.ktor.client.core)
-            implementation(libs.decompose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.decompose.composeExtension)
 
             implementation(libs.kotlin.coroutines.swing)
-
-            implementation(projects.components.core.ui.timeline)
-        }
-        iosMain.dependencies {
-            api(libs.decompose)
-            api(libs.essenty.lifecycle)
-            api(libs.settings)
         }
         wasmJsMain.dependencies {
-            implementation(libs.settings.observable)
-            implementation(libs.kotlin.serialization.json)
         }
     }
 }
 
 compose.desktop {
     application {
-        mainClass = "com.flipperdevices.bsb.MainKt"
+        mainClass = "com.flipperdevices.videotest.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
