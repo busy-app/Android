@@ -28,7 +28,7 @@ object NotificationTimerBuilder {
             }
 
             is ControlledTimerState.Running -> {
-                timer.toHumanReadableString() + if (timer.isOnPause) {
+                timer.toHumanReadableString() + if (timer.pauseType != null) {
                     " (Paused)"
                 } else {
                     ""

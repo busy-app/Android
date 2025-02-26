@@ -71,7 +71,7 @@ class CommonTimerApi(
                             ControlledTimerState.Finished -> Unit
 
                             is ControlledTimerState.Running -> {
-                                if (!internalState.isOnPause) {
+                                if (internalState.pauseType != null) {
                                     metronomeApi.play()
                                 }
                             }

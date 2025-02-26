@@ -3,12 +3,19 @@ package com.flipperdevices.bsb.timer.delayedstart.api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.sourceInformationMarkerStart
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.PauseData
+import com.flipperdevices.bsb.timer.background.model.PauseType
+import com.flipperdevices.bsb.timer.background.util.pause
+import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.background.util.stop
+import com.flipperdevices.bsb.timer.background.util.updateState
 import com.flipperdevices.bsb.timer.delayedstart.composable.DelayedStartComposableContent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -24,6 +31,23 @@ class DelayedStartScreenDecomposeComponentImpl(
     @Assisted private val typeEndDelay: TypeEndDelay,
 ) : DelayedStartScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
+
+    init {
+        lifecycle.doOnResume {
+            timerApi.updateState { state ->
+                state ?: return@updateState state
+                if (state.pauseData != null) return@updateState state
+                state.copy(
+                    pauseData = PauseData(
+                        type = when (typeEndDelay) {
+                            TypeEndDelay.WORK -> PauseType.AFTER_WORK
+                            TypeEndDelay.REST -> PauseType.AFTER_REST
+                        }
+                    )
+                )
+            }
+        }
+    }
 
     @Composable
     override fun Render(modifier: Modifier) {
@@ -41,7 +65,7 @@ class DelayedStartScreenDecomposeComponentImpl(
                     currentIteration = state.currentIteration,
                     maxIteration = state.maxIterations,
                     onStartClick = {
-                        TODO()
+                        timerApi.resume()
                     },
                     onFinishClick = {
                         timerApi.stop()

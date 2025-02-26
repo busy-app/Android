@@ -4,6 +4,9 @@ import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.PauseData
+import com.flipperdevices.bsb.timer.background.model.PauseType
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.datetime.Clock
 
 fun TimerApi.updateState(block: (TimerTimestamp?) -> TimerTimestamp?) {
@@ -13,15 +16,50 @@ fun TimerApi.updateState(block: (TimerTimestamp?) -> TimerTimestamp?) {
 
 fun TimerApi.togglePause() {
     updateState { state ->
-        if (state?.pause != null) {
-            val diff = Clock.System.now() - state.pause
+        val pause = state?.pauseData?.instant
+        if (pause != null) {
+            val diff = Clock.System.now() - pause
+            val extraTime = when (state.pauseData.type) {
+                PauseType.AFTER_WORK -> 1.seconds
+                PauseType.AFTER_REST -> 1.seconds
+                PauseType.NORMAL -> 0.seconds
+            }
             state.copy(
-                pause = null,
-                start = state.start.plus(diff)
+                pauseData = null,
+                start = state.start.plus(diff).plus(extraTime)
             )
         } else {
-            state?.copy(pause = Clock.System.now())
+            state?.copy(pauseData = PauseData(PauseType.NORMAL))
         }
+    }
+}
+
+fun TimerApi.pause() {
+    updateState { state ->
+        if (state?.pauseData == null) {
+            state?.copy(
+                pauseData = PauseData(PauseType.NORMAL),
+            )
+        } else state
+    }
+}
+
+fun TimerApi.resume() {
+    updateState { state ->
+        val pause = state?.pauseData?.instant
+        if (pause != null) {
+            val diff = Clock.System.now() - pause
+            val extraTime = when (state.pauseData.type) {
+                PauseType.AFTER_WORK,
+                PauseType.AFTER_REST -> 0.seconds
+
+                PauseType.NORMAL -> 0.seconds
+            }
+            state.copy(
+                pauseData = null,
+                start = state.start.plus(diff).plus(extraTime)
+            )
+        } else state
     }
 }
 

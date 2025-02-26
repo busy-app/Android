@@ -16,7 +16,7 @@ sealed interface ControlledTimerState {
     @Serializable
     sealed interface Running : ControlledTimerState {
         val timeLeft: Duration
-        val isOnPause: Boolean
+        val pauseType: PauseType?
         val timerSettings: TimerSettings
         val currentIteration: Int
         val maxIterations: Int
@@ -24,7 +24,7 @@ sealed interface ControlledTimerState {
         @Serializable
         data class Work(
             override val timeLeft: Duration,
-            override val isOnPause: Boolean,
+            override val pauseType: PauseType?,
             override val timerSettings: TimerSettings,
             override val currentIteration: Int,
             override val maxIterations: Int
@@ -33,7 +33,7 @@ sealed interface ControlledTimerState {
         @Serializable
         data class Rest(
             override val timeLeft: Duration,
-            override val isOnPause: Boolean,
+            override val pauseType: PauseType?,
             override val timerSettings: TimerSettings,
             override val currentIteration: Int,
             override val maxIterations: Int
@@ -42,7 +42,7 @@ sealed interface ControlledTimerState {
         @Serializable
         data class LongRest(
             override val timeLeft: Duration,
-            override val isOnPause: Boolean,
+            override val pauseType: PauseType?,
             override val timerSettings: TimerSettings,
             override val currentIteration: Int,
             override val maxIterations: Int
@@ -52,11 +52,6 @@ sealed interface ControlledTimerState {
 
 val ControlledTimerState.Running.isLastIteration: Boolean
     get() = currentIteration == maxIterations
-val ControlledTimerState.isOnPause: Boolean
-    get() = when (this) {
-        is Running -> isOnPause
-        else -> false
-    }
 
 private const val MIN_TWO_DIGIT_VALUE = 10
 

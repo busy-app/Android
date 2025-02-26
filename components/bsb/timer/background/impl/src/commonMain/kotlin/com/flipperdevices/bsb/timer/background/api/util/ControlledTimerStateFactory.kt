@@ -4,6 +4,7 @@ import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.model.isOnPause
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.PauseType
 import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
@@ -163,7 +164,7 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
 
     val currentIterationTypeTimeLeft = calculateTimeLeft(
         start = start,
-        pause = pause,
+        pause = pauseData?.instant,
         duration = currentIterationData.duration,
         startOffset = currentIterationData.startOffset
     )
@@ -171,26 +172,26 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
     return when (currentIterationData.iterationType) {
         IterationType.WORK -> ControlledTimerState.Running.Work(
             timeLeft = currentIterationTypeTimeLeft,
-            isOnPause = isOnPause,
+            pauseType = pauseData?.type,
             timerSettings = settings,
             currentIteration = iterationCountLeft,
-            maxIterations = settings.maxIterationCount
+            maxIterations = settings.maxIterationCount,
         )
 
         IterationType.REST -> ControlledTimerState.Running.Rest(
             timeLeft = currentIterationTypeTimeLeft,
-            isOnPause = isOnPause,
+            pauseType = pauseData?.type,
             timerSettings = settings,
             currentIteration = iterationCountLeft,
-            maxIterations = settings.maxIterationCount
+            maxIterations = settings.maxIterationCount,
         )
 
         IterationType.LONG_REST -> ControlledTimerState.Running.LongRest(
             timeLeft = currentIterationTypeTimeLeft,
-            isOnPause = isOnPause,
+            pauseType = pauseData?.type,
             timerSettings = settings,
             currentIteration = iterationCountLeft,
-            maxIterations = settings.maxIterationCount
+            maxIterations = settings.maxIterationCount,
         )
     }
 }

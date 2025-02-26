@@ -4,25 +4,24 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
-import com.arkivanov.essenty.lifecycle.coroutines.repeatOnLifecycle
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.model.isLastIteration
-import com.flipperdevices.bsb.timer.background.util.togglePause
+import com.flipperdevices.bsb.timer.background.model.PauseData
+import com.flipperdevices.bsb.timer.background.model.PauseType
+import com.flipperdevices.bsb.timer.background.util.updateState
 import com.flipperdevices.bsb.timer.cards.api.CardsDecomposeComponent
 import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent
+import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent.TypeEndDelay
 import com.flipperdevices.bsb.timer.done.api.DoneTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.finish.api.RestTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.main.model.TimerMainNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
-import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -40,7 +39,7 @@ class TimerMainDecomposeComponentImpl(
     private val doneTimerScreenDecomposeComponentFactory: DoneTimerScreenDecomposeComponent.Factory,
     private val delayedStartScreenDecomposeComponentFactory: DelayedStartScreenDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
-    timerApi: TimerApi,
+    private val timerApi: TimerApi,
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     StatusBarIconStyleProvider by iconStyleProvider,
     ComponentContext by componentContext {
@@ -49,23 +48,71 @@ class TimerMainDecomposeComponentImpl(
         val screen = when (this) {
             ControlledTimerState.Finished -> TimerMainNavigationConfig.Finished
             ControlledTimerState.NotStarted -> TimerMainNavigationConfig.Main
-            is ControlledTimerState.Running.LongRest -> TimerMainNavigationConfig.LongRest
-            is ControlledTimerState.Running.Rest -> TimerMainNavigationConfig.Rest
-            is ControlledTimerState.Running.Work -> TimerMainNavigationConfig.Work
+            is ControlledTimerState.Running -> {
+                when (pauseType) {
+                    PauseType.AFTER_WORK -> {
+                        TimerMainNavigationConfig.PauseAfter(TypeEndDelay.WORK)
+                    }
+
+                    PauseType.AFTER_REST -> {
+                        TimerMainNavigationConfig.PauseAfter(TypeEndDelay.REST)
+                    }
+
+                    PauseType.NORMAL, null -> when (this) {
+                        is ControlledTimerState.Running.LongRest -> TimerMainNavigationConfig.LongRest
+                        is ControlledTimerState.Running.Rest -> TimerMainNavigationConfig.Rest
+                        is ControlledTimerState.Running.Work -> TimerMainNavigationConfig.Work
+                    }
+                }
+
+            }
         }
         return screen
     }
 
+    private fun tryWaitForInteraction(state: ControlledTimerState.Running) {
+        if (state.timeLeft.inWholeSeconds != 0L) return
+
+        val typeEndDelay = when (state) {
+            is ControlledTimerState.Running.LongRest,
+            is ControlledTimerState.Running.Rest -> {
+                if (state.timerSettings.intervalsSettings.autoStartWork) return
+                TypeEndDelay.REST
+            }
+
+            is ControlledTimerState.Running.Work -> {
+                if (state.timerSettings.intervalsSettings.autoStartRest) return
+                TypeEndDelay.WORK
+            }
+        }
+        timerApi.updateState { state ->
+            state ?: return@updateState state
+            if (state.pauseData != null) return@updateState state
+            state.copy(
+                pauseData = PauseData(
+                    type = when (typeEndDelay) {
+                        TypeEndDelay.WORK -> PauseType.AFTER_WORK
+                        TypeEndDelay.REST -> PauseType.AFTER_REST
+                    }
+                )
+            )
+        }
+    }
+
     init {
+        lifecycle.doOnResume {
+            val runningState = timerApi.getState().value as? ControlledTimerState.Running
+            runningState?.let(::tryWaitForInteraction)
+        }
         @Suppress("MagicNumber")
         timerApi.getState()
             .distinctUntilChangedBy { state ->
                 when (state) {
                     ControlledTimerState.Finished -> 0
                     ControlledTimerState.NotStarted -> 1
-                    is ControlledTimerState.Running.LongRest -> 2
-                    is ControlledTimerState.Running.Rest -> 3
-                    is ControlledTimerState.Running.Work -> 4
+                    is ControlledTimerState.Running.LongRest -> "2_${state.pauseType}"
+                    is ControlledTimerState.Running.Rest -> "3_${state.pauseType}"
+                    is ControlledTimerState.Running.Work -> "4_${state.pauseType}"
                 }
             }
             .onEach { state -> navigation.replaceAll(state.getScreen()) }
@@ -73,65 +120,11 @@ class TimerMainDecomposeComponentImpl(
 
 
         timerApi.getState()
-            .filterIsInstance<ControlledTimerState.Running.Work>()
-            .filter { !it.timerSettings.intervalsSettings.autoStartWork }
-            .filter { it.timeLeft in 1.seconds..2.seconds }
-            .distinctUntilChangedBy { it.timeLeft }
-            .debounce(1.seconds)
-            .onEach { state ->
-                navigation.replaceAll(
-                    TimerMainNavigationConfig.PauseAfter(
-                        DelayedStartScreenDecomposeComponent.TypeEndDelay.WORK
-                    ),
-                    onComplete = {
-                        if (!state.isOnPause) {
-                            timerApi.togglePause()
-                        }
-                    }
-                )
-            }
+            .filterIsInstance<ControlledTimerState.Running>()
+            .distinctUntilChangedBy { it.timeLeft.inWholeSeconds }
+            .onEach { state -> tryWaitForInteraction(state) }
             .launchIn(coroutineScope())
 
-        timerApi.getState()
-            .filterIsInstance<ControlledTimerState.Running.LongRest>()
-            .filter { !it.timerSettings.intervalsSettings.autoStartRest }
-            .filter { it.timeLeft in 1.seconds..2.seconds }
-            .filter { !it.isLastIteration }
-            .distinctUntilChangedBy { it.timeLeft }
-            .debounce(1.seconds)
-            .onEach { state ->
-                navigation.replaceAll(
-                    TimerMainNavigationConfig.PauseAfter(
-                        DelayedStartScreenDecomposeComponent.TypeEndDelay.REST
-                    ),
-                    onComplete = {
-                        if (!state.isOnPause) {
-                            timerApi.togglePause()
-                        }
-                    }
-                )
-            }
-            .launchIn(coroutineScope())
-
-        timerApi.getState()
-            .filterIsInstance<ControlledTimerState.Running.Rest>()
-            .filter { !it.timerSettings.intervalsSettings.autoStartRest }
-            .filter { it.timeLeft in 1.seconds..2.seconds }
-            .distinctUntilChangedBy { it.timeLeft }
-            .debounce(1.seconds)
-            .onEach { state ->
-                navigation.replaceAll(
-                    TimerMainNavigationConfig.PauseAfter(
-                        DelayedStartScreenDecomposeComponent.TypeEndDelay.REST
-                    ),
-                    onComplete = {
-                        if (!state.isOnPause) {
-                            timerApi.togglePause()
-                        }
-                    }
-                )
-            }
-            .launchIn(coroutineScope())
     }
 
     override val stack = childStack(

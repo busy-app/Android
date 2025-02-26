@@ -9,8 +9,18 @@ import kotlinx.serialization.Serializable
 data class TimerTimestamp(
     val settings: TimerSettings,
     val start: Instant = Clock.System.now(),
-    val pause: Instant? = null
+    val pauseData: PauseData? = null
+)
+
+enum class PauseType {
+    NORMAL, AFTER_WORK, AFTER_REST
+}
+
+@Serializable
+data class PauseData(
+    val type: PauseType,
+    val instant: Instant = Clock.System.now()
 )
 
 val TimerTimestamp.isOnPause: Boolean
-    get() = pause != null
+    get() = pauseData?.type == PauseType.NORMAL
