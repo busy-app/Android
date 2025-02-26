@@ -7,7 +7,6 @@ import com.flipperdevices.bsb.timer.background.model.PauseData
 import com.flipperdevices.bsb.timer.background.model.PauseType
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import kotlinx.datetime.Clock
-import kotlin.time.Duration.Companion.seconds
 
 fun TimerApi.updateState(block: (TimerTimestamp?) -> TimerTimestamp?) {
     val newState = block.invoke(getTimestampState().value)
@@ -19,14 +18,9 @@ fun TimerApi.togglePause() {
         val pause = state?.pauseData?.instant
         if (pause != null) {
             val diff = Clock.System.now() - pause
-            val extraTime = when (state.pauseData.type) {
-                PauseType.AFTER_WORK -> 1.seconds
-                PauseType.AFTER_REST -> 1.seconds
-                PauseType.NORMAL -> 0.seconds
-            }
             state.copy(
                 pauseData = null,
-                start = state.start.plus(diff).plus(extraTime)
+                start = state.start.plus(diff)
             )
         } else {
             state?.copy(pauseData = PauseData(PauseType.NORMAL))
