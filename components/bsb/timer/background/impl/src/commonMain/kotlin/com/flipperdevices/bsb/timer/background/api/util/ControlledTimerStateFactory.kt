@@ -110,19 +110,21 @@ internal fun TimerSettings.buildIterationList(): List<IterationData> {
                     else -> iterationTypeDuration
                 }
             ).run(::add)
-            if (type == IterationType.WORK && !intervalsSettings.autoStartRest) {
-                IterationData.Pending(
-                    startOffset = totalTime - timeLeft + iterationTypeDuration,
-                    iterationType = IterationType.WAIT_AFTER_WORK,
-                    duration = Duration.INFINITE
-                ).run(::add)
-            }
-            if (type in listOf(IterationType.REST, IterationType.LONG_REST) && !intervalsSettings.autoStartWork) {
-                IterationData.Pending(
-                    startOffset = totalTime - timeLeft + iterationTypeDuration,
-                    iterationType = IterationType.WAIT_AFTER_REST,
-                    duration = Duration.INFINITE
-                ).run(::add)
+            if (listOf(isNoTimeForWorkLeft, isNoTimeForShortRestLeft, isLongRestNeedMoreTimeThanTimeLeft).all { !it }) {
+                if (type == IterationType.WORK && !intervalsSettings.autoStartRest) {
+                    IterationData.Pending(
+                        startOffset = totalTime - timeLeft + iterationTypeDuration,
+                        iterationType = IterationType.WAIT_AFTER_WORK,
+                        duration = Duration.INFINITE
+                    ).run(::add)
+                }
+                if (type in listOf(IterationType.REST, IterationType.LONG_REST) && !intervalsSettings.autoStartWork) {
+                    IterationData.Pending(
+                        startOffset = totalTime - timeLeft + iterationTypeDuration,
+                        iterationType = IterationType.WAIT_AFTER_REST,
+                        duration = Duration.INFINITE
+                    ).run(::add)
+                }
             }
 
             timeLeft -= iterationTypeDuration
