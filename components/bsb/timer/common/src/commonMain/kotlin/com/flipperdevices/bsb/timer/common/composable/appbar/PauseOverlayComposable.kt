@@ -29,19 +29,20 @@ fun PauseFullScreenOverlayComposable(
         onDismissRequest = {},
         properties = DialogProperties(
             dismissOnBackPress = false,
-            dismissOnClickOutside = false,
-            usePlatformDefaultWidth = false
+            dismissOnClickOutside = false
         ),
         content = {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 64.dp),
+                    .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        12.dp,
+                        Alignment.CenterHorizontally
+                    ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     repeat(2) {
@@ -54,9 +55,10 @@ fun PauseFullScreenOverlayComposable(
                     }
                 }
                 ButtonTimerComposable(
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                        .padding(bottom = 64.dp),
                     state = ButtonTimerState.START,
                     onClick = onStartClick,
-                    modifier = Modifier.align(Alignment.BottomCenter)
                 )
             }
         }

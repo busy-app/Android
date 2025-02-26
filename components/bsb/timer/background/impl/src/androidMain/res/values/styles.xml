@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BSBTheme.Notification.Timer" parent="TextAppearance.Compat.Notification.Title">
+        <item name="android:fontFamily">@font/jetbrainsmono_medium</item>
+    </style>
+
+    <style name="BSBTheme.Notification.Text" parent="TextAppearance.Compat.Notification.Title">
+        <item name="android:fontFamily">@font/pragmatica_500</item>
+    </style>
+</resources>

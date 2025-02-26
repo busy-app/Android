@@ -12,9 +12,10 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.bsb.timer.background.model.maxUiIterations
+import com.flipperdevices.bsb.timer.background.util.pause
+import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.background.util.skip
 import com.flipperdevices.bsb.timer.background.util.stop
-import com.flipperdevices.bsb.timer.background.util.togglePause
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -56,7 +57,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
                         timerApi.skip()
                     },
                     onPauseClick = {
-                        timerApi.togglePause()
+                        timerApi.pause()
                     },
                     onBack = {
                         stopSessionSheetDecomposeComponent.show()
@@ -64,7 +65,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
                 )
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
-                        onStartClick = { timerApi.togglePause() }
+                        onStartClick = { timerApi.resume() }
                     )
                 }
             }

@@ -8,9 +8,10 @@ import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.util.pause
+import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.background.util.skip
 import com.flipperdevices.bsb.timer.background.util.stop
-import com.flipperdevices.bsb.timer.background.util.togglePause
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.finish.composable.RestComposableContent
@@ -48,12 +49,12 @@ class RestTimerScreenDecomposeComponentImpl(
                         timerApi.stop()
                     },
                     onPauseClick = {
-                        timerApi.togglePause()
+                        timerApi.pause()
                     }
                 )
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
-                        onStartClick = { timerApi.togglePause() }
+                        onStartClick = { timerApi.resume() }
                     )
                 }
             }

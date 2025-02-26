@@ -8,14 +8,17 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
+import com.flipperdevices.bsb.timer.background.api.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
-import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.notification.NotificationTimerBuilder
+import com.flipperdevices.bsb.timer.background.util.pause
+import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.android.toFullString
-import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
@@ -38,14 +41,16 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
     init {
         delegate.getState()
             .onEach { state ->
-                notificationManager.notify(
-                    NOTIFICATION_ID,
-                    NotificationTimerBuilder.buildNotification(
-                        this@TimerForegroundService,
-                        state
-                    )
+                val notification = NotificationTimerBuilder.buildNotification(
+                    this@TimerForegroundService,
+                    state
                 )
-            }.launchIn(lifecycleScope + FlipperDispatchers.default)
+                if (notification == null) {
+                    notificationManager.cancel(NOTIFICATION_ID)
+                } else {
+                    notificationManager.notify(NOTIFICATION_ID, notification)
+                }
+            }.launchIn(lifecycleScope + Dispatchers.Main)
     }
 
     override fun onCreate() {
@@ -56,7 +61,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
 
         startForeground(
             NOTIFICATION_ID,
-            NotificationTimerBuilder.buildNotification(applicationContext)
+            NotificationTimerBuilder.buildStartUpNotification(applicationContext)
         )
     }
 
@@ -81,6 +86,14 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                 TimerServiceActionEnum.STOP.actionId -> {
                     delegate.setTimestampState(null)
                     stopServiceInternal()
+                }
+
+                TimerServiceActionEnum.RESUME.actionId -> {
+                    delegate.resume()
+                }
+
+                TimerServiceActionEnum.PAUSE.actionId -> {
+                    delegate.pause()
                 }
             }
         } else {

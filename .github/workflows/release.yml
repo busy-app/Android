@@ -142,7 +142,7 @@ jobs:
             ${{ steps.artifacts_copy.outputs.path }}/busystatusbar-${{ steps.vars.outputs.major_version }}.${{ steps.vars.outputs.minor_version }}.apk
             ${{steps.download-desktop.outputs.download-path}}/*
           tag_name: ${{ steps.vars.outputs.major_version }}.${{ steps.vars.outputs.minor_version }}
-          name: Busy Status Bar ${{ steps.vars.outputs.major_version }}.${{ steps.vars.outputs.minor_version }}
+          name: Busy App ${{ steps.vars.outputs.major_version }}.${{ steps.vars.outputs.minor_version }}
           draft: false
           body: |
             Web version: [https://busy-app.github.io/Android/](https://busy-app.github.io/Android/)
