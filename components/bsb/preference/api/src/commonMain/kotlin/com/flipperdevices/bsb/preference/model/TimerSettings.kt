@@ -10,6 +10,8 @@ data class TimerSettings(
     val intervalsSettings: IntervalsSettings = IntervalsSettings(),
     val soundSettings: SoundSettings = SoundSettings()
 ) {
+    // todo no card name set yet
+    val name: String = "BUSY"
     @Serializable
     data class IntervalsSettings(
         val work: Duration = 25.minutes,

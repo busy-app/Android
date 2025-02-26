@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.service.EXTRA_KEY_TIMER_STATE
 import com.flipperdevices.bsb.timer.background.service.TimerForegroundService
 import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
@@ -25,7 +26,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding

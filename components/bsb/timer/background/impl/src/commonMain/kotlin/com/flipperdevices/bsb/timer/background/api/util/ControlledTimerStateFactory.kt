@@ -1,8 +1,8 @@
 package com.flipperdevices.bsb.timer.background.api.util
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
-import com.flipperdevices.bsb.timer.background.api.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.api.isOnPause
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.model.isOnPause
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error

@@ -2,7 +2,7 @@ package com.flipperdevices.bsb.timer.background.util
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
-import com.flipperdevices.bsb.timer.background.api.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import kotlinx.datetime.Clock
 

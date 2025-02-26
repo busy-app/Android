@@ -1,0 +1,12 @@
+<resources>
+    <string name="tds_title_busy_done">%1$s %2$s done!</string>
+    <string name="tds_desc_busy_done">It’s time to have a rest</string>
+    <string name="tds_action_busy_done">Start rest</string>
+
+
+    <string name="tds_title_rest_done">Rest is over</string>
+    <string name="tds_desc_rest_done">Time to get back to work</string>
+    <string name="tds_action_rest_done">Start %1$s</string>
+
+    <string name="tds_finish">Finish for today</string>
+</resources>

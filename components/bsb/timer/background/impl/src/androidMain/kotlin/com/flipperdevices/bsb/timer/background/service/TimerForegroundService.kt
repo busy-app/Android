@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
-import com.flipperdevices.bsb.timer.background.api.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.android.toFullString
