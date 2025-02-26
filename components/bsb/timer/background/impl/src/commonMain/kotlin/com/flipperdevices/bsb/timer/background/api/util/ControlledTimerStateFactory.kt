@@ -8,7 +8,6 @@ import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
 import com.flipperdevices.core.log.wtf
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -121,41 +120,16 @@ private val TimerSettings.maxIterationCount: Int
     get() = buildIterationList()
         .count { data -> data.iterationType == IterationType.WORK }
 
-internal fun calculateTimeLeft(
-    start: Instant,
-    pause: Instant?,
-    duration: Duration,
-    startOffset: Duration
-): Duration {
-    return when {
-        pause != null -> {
-            start
-                .plus(startOffset)
-                .plus(duration)
-                .minus(pause)
-        }
-
-        else ->
-            start
-                .plus(startOffset)
-                .plus(duration)
-                .minus(Clock.System.now())
-    }
-}
-
 internal fun TimerTimestamp?.toState(): ControlledTimerState {
     if (this == null) {
         return ControlledTimerState.NotStarted
     }
     val iterationList = settings.buildIterationList()
-    println("[LOGGER] iterationList: $iterationList")
+    val now = pauseData?.instant ?: Clock.System.now()
 
     // Filter only data which is not yet started
     val iterationsDataLeft = iterationList
-        .filter { data ->
-            val now = pauseData?.instant ?: Clock.System.now()
-            now <= start.plus(data.startOffset).plus(data.duration)
-        }
+        .filter { data -> now <= start.plus(data.startOffset).plus(data.duration) }
     val currentIterationData = iterationsDataLeft.firstOrNull()
 
     if (currentIterationData == null) return ControlledTimerState.Finished
@@ -163,12 +137,10 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
     val iterationCountLeft = settings.maxIterationCount
         .minus(iterationsDataLeft.count { data -> data.iterationType == IterationType.WORK })
 
-    val currentIterationTypeTimeLeft = calculateTimeLeft(
-        start = start,
-        pause = pauseData?.instant,
-        duration = currentIterationData.duration,
-        startOffset = currentIterationData.startOffset
-    )
+    val currentIterationTypeTimeLeft = start
+        .plus(currentIterationData.startOffset)
+        .plus(currentIterationData.duration)
+        .minus(now)
 
     return when (currentIterationData.iterationType) {
         IterationType.WORK -> ControlledTimerState.Running.Work(

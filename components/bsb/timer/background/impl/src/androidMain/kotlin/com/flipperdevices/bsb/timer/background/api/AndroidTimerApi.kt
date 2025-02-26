@@ -5,12 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import com.flipperdevices.bsb.timer.background.api.util.TimerPauseTypeFlow
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.service.EXTRA_KEY_TIMER_STATE
 import com.flipperdevices.bsb.timer.background.service.TimerForegroundService
 import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
 import com.flipperdevices.bsb.timer.background.service.TimerServiceBinder
+import com.flipperdevices.bsb.timer.background.util.pause
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
@@ -45,6 +47,7 @@ class AndroidTimerApi(
 
     private val mutex = Mutex()
     private var binderListenerJob: Job? = null
+    private var pauseTypeJob: Job? = null
 
     override fun setTimestampState(state: TimerTimestamp?) {
         info { "Request start timer via android service timer api" }
@@ -93,6 +96,9 @@ class AndroidTimerApi(
         runBlocking {
             withLock(mutex) {
                 binderListenerJob = getJob(timerBinder)
+                pauseTypeJob = TimerPauseTypeFlow(this@AndroidTimerApi)
+                    .onEach { type -> pause(type) }
+                    .launchIn(scope)
             }
         }
     }
@@ -102,6 +108,8 @@ class AndroidTimerApi(
             withLock(mutex) {
                 binderListenerJob?.cancelAndJoin()
                 binderListenerJob = null
+                pauseTypeJob?.cancelAndJoin()
+                pauseTypeJob = null
                 timerStateFlow.emit(ControlledTimerState.Finished)
             }
         }
