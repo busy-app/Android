@@ -12,15 +12,6 @@ fun TimerApi.updateState(block: (TimerTimestamp?) -> TimerTimestamp?) {
     setTimestampState(newState)
 }
 
-fun TimerApi.togglePause() {
-    val state = getState().value as? ControlledTimerState.Running ?: return
-    if (state.isOnPause) {
-        resume()
-    } else {
-        pause()
-    }
-}
-
 fun TimerApi.pause() {
     updateState { state ->
         if (state?.pause == null) {
