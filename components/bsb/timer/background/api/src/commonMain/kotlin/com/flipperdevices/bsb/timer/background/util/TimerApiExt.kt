@@ -35,9 +35,8 @@ fun TimerApi.confirmNextSte() {
 
 fun TimerApi.resume() {
     updateState { state ->
-        val pause = state?.pause
-        if (pause != null) {
-            val diff = Clock.System.now() - pause
+        if (state?.pause != null) {
+            val diff = Clock.System.now() - state.pause
             state.copy(
                 pause = null,
                 start = state.start.plus(diff)
