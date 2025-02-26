@@ -5,6 +5,7 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import kotlinx.datetime.Clock
+import kotlin.time.Duration.Companion.seconds
 
 fun TimerApi.updateState(block: (TimerTimestamp?) -> TimerTimestamp?) {
     val newState = block.invoke(getTimestampState().value)
@@ -27,6 +28,17 @@ fun TimerApi.pause() {
         } else {
             state
         }
+    }
+}
+
+fun TimerApi.confirmNextSte() {
+    val awaitState = getState().value as? ControlledTimerState.Await ?: return
+    updateState { state ->
+        state ?: return@updateState state
+        state.copy(
+            confirmNextStepClick = Clock.System.now().plus(1.seconds),
+            start = state.start.plus(Clock.System.now().minus(awaitState.pausedAt))
+        )
     }
 }
 

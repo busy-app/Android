@@ -43,6 +43,14 @@ class TimerMainDecomposeComponentImpl(
         val screen = when (this) {
             ControlledTimerState.Finished -> TimerMainNavigationConfig.Finished
             ControlledTimerState.NotStarted -> TimerMainNavigationConfig.Main
+            is ControlledTimerState.Await -> {
+                val typeEndDelay = when (type) {
+                    ControlledTimerState.AwaitType.AFTER_WORK -> DelayedStartScreenDecomposeComponent.TypeEndDelay.WORK
+                    ControlledTimerState.AwaitType.AFTER_REST -> DelayedStartScreenDecomposeComponent.TypeEndDelay.REST
+                }
+                TimerMainNavigationConfig.PauseAfter(typeEndDelay)
+            }
+
             is ControlledTimerState.Running -> {
                 when (this) {
                     is ControlledTimerState.Running.LongRest -> TimerMainNavigationConfig.LongRest
@@ -64,6 +72,7 @@ class TimerMainDecomposeComponentImpl(
                     is ControlledTimerState.Running.LongRest -> 2
                     is ControlledTimerState.Running.Rest -> 3
                     is ControlledTimerState.Running.Work -> 4
+                    is ControlledTimerState.Await -> 5
                 }
             }
             .onEach { state -> navigation.replaceAll(state.getScreen()) }

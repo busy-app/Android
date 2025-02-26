@@ -41,8 +41,10 @@ class ActiveTimerScreenDecomposeComponentImpl(
     override fun Render(modifier: Modifier) {
         val state by timerApi.getState().collectAsState()
         when (val state = state) {
-            ControlledTimerState.NotStarted -> Unit
+            is ControlledTimerState.Await,
+            ControlledTimerState.NotStarted,
             ControlledTimerState.Finished -> Unit
+
             is ControlledTimerState.Running -> {
                 TimerOnComposableScreen(
                     modifier = modifier,

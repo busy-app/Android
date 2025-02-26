@@ -59,7 +59,9 @@ class RestTimerScreenDecomposeComponentImpl(
                 }
             }
 
-            ControlledTimerState.NotStarted, ControlledTimerState.Finished -> Unit
+            is ControlledTimerState.Await,
+            ControlledTimerState.NotStarted,
+            ControlledTimerState.Finished -> Unit
         }
     }
 

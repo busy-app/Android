@@ -8,7 +8,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.util.resume
+import com.flipperdevices.bsb.timer.background.util.confirmNextSte
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.delayedstart.composable.DelayedStartComposableContent
 import com.flipperdevices.core.di.AppGraph
@@ -30,16 +30,18 @@ class DelayedStartScreenDecomposeComponentImpl(
     override fun Render(modifier: Modifier) {
         val state by timerApi.getState().collectAsState()
         when (val state = state) {
+            is ControlledTimerState.Running,
+            ControlledTimerState.NotStarted,
             ControlledTimerState.Finished -> Unit
-            ControlledTimerState.NotStarted -> Unit
-            is ControlledTimerState.Running -> {
+
+            is ControlledTimerState.Await -> {
                 DelayedStartComposableContent(
                     typeEndDelay = typeEndDelay,
                     timerSettings = state.timerSettings,
                     currentIteration = state.currentIteration,
                     maxIteration = state.maxIterations,
                     onStartClick = {
-                        timerApi.resume()
+                        timerApi.confirmNextSte()
                     },
                     onFinishClick = {
                         timerApi.stop()

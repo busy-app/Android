@@ -5,7 +5,6 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
-import com.flipperdevices.core.log.info
 import com.flipperdevices.core.log.wtf
 import kotlinx.datetime.Clock
 import kotlin.time.Duration
@@ -14,14 +13,26 @@ import kotlin.time.Duration.Companion.seconds
 private val logger = TaggedLogger("ControlledTimerStateFactory")
 
 internal enum class IterationType {
-    WORK, REST, LONG_REST
+    WORK, REST, LONG_REST, WAIT_AFTER_WORK, WAIT_AFTER_REST
 }
 
-internal data class IterationData(
-    val startOffset: Duration,
-    val duration: Duration,
+internal sealed interface IterationData {
     val iterationType: IterationType
-)
+    val startOffset: Duration
+    val duration: Duration
+
+    data class Pending(
+        override val startOffset: Duration,
+        override val iterationType: IterationType,
+        override val duration: Duration
+    ) : IterationData
+
+    data class Default(
+        override val startOffset: Duration,
+        override val duration: Duration,
+        override val iterationType: IterationType
+    ) : IterationData
+}
 
 @Suppress("MagicNumber")
 private fun getIterationTypeByIndex(i: Int): IterationType {
@@ -36,18 +47,18 @@ private fun getIterationTypeByIndex(i: Int): IterationType {
     }
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 internal fun TimerSettings.buildIterationList(): List<IterationData> {
     if (!intervalsSettings.isEnabled) {
         return listOf(
-            IterationData(
+            IterationData.Default(
                 startOffset = 0.seconds,
                 duration = totalTime,
                 iterationType = IterationType.WORK
             )
         )
     }
-    val list = buildList {
+    val list = buildList<IterationData> {
         var timeLeft = totalTime
         var i = 0
         while (timeLeft > 0.seconds) {
@@ -56,18 +67,24 @@ internal fun TimerSettings.buildIterationList(): List<IterationData> {
                 IterationType.WORK -> intervalsSettings.work
                 IterationType.REST -> intervalsSettings.rest
                 IterationType.LONG_REST -> intervalsSettings.longRest
+
+                IterationType.WAIT_AFTER_REST,
+                IterationType.WAIT_AFTER_WORK -> {
+                    logger.wtf { "#buildIterationList wait iteration appeared inside getIterationTypeByIndex" }
+                    0.seconds
+                }
             }.coerceAtMost(timeLeft)
 
-            val isNoTimeForWorkLeft = timeLeft <= iterationTypeDuration
-                    && type == IterationType.WORK
+            val isNoTimeForWorkLeft = timeLeft <= iterationTypeDuration &&
+                type == IterationType.WORK
 
-            val isNoTimeForShortRestLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.work)
-                    && type == IterationType.REST
+            val isNoTimeForShortRestLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.work) &&
+                type == IterationType.REST
 
-            val isLongRestNeedMoreTimeThanTimeLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.longRest)
-                    && type == IterationType.LONG_REST
+            val isLongRestNeedMoreTimeThanTimeLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) &&
+                type == IterationType.LONG_REST
 
-            IterationData(
+            IterationData.Default(
                 startOffset = totalTime - timeLeft,
                 iterationType = when {
                     isNoTimeForWorkLeft
@@ -77,26 +94,41 @@ internal fun TimerSettings.buildIterationList(): List<IterationData> {
                     else -> type
                 },
                 duration = when {
-                    isNoTimeForShortRestLeft -> iterationTypeDuration
-                        .plus(intervalsSettings.work)
-                        .coerceAtMost(timeLeft)
-                        .also { timeLeft -= intervalsSettings.work }
+                    isNoTimeForShortRestLeft ->
+                        iterationTypeDuration
+                            .plus(intervalsSettings.work)
+                            .coerceAtMost(timeLeft)
+                            .also { timeLeft -= intervalsSettings.work }
 
-                    isLongRestNeedMoreTimeThanTimeLeft -> iterationTypeDuration
-                        .plus(intervalsSettings.longRest)
-                        .coerceAtMost(timeLeft)
-                        .also { timeLeft -= intervalsSettings.work }
+                    isLongRestNeedMoreTimeThanTimeLeft ->
+                        iterationTypeDuration
+                            .plus(intervalsSettings.longRest)
+                            .coerceAtMost(timeLeft)
+                            .also { timeLeft -= intervalsSettings.work }
 
                     isNoTimeForWorkLeft -> iterationTypeDuration
                     else -> iterationTypeDuration
                 }
             ).run(::add)
+            if (type == IterationType.WORK && !intervalsSettings.autoStartRest) {
+                IterationData.Pending(
+                    startOffset = totalTime - timeLeft + iterationTypeDuration,
+                    iterationType = IterationType.WAIT_AFTER_WORK,
+                    duration = Duration.INFINITE
+                ).run(::add)
+            }
+            if (type in listOf(IterationType.REST, IterationType.LONG_REST) && !intervalsSettings.autoStartWork) {
+                IterationData.Pending(
+                    startOffset = totalTime - timeLeft + iterationTypeDuration,
+                    iterationType = IterationType.WAIT_AFTER_REST,
+                    duration = Duration.INFINITE
+                ).run(::add)
+            }
 
             timeLeft -= iterationTypeDuration
             i += 1
         }
     }.toMutableList()
-    logger.info { "#buildIterationList $list" }
     if (list.isEmpty()) {
         logger.wtf { "#buildIterationList was empty for $this" }
         return list
@@ -108,6 +140,7 @@ private val TimerSettings.maxIterationCount: Int
     get() = buildIterationList()
         .count { data -> data.iterationType == IterationType.WORK }
 
+@Suppress("LongMethod")
 internal fun TimerTimestamp?.toState(): ControlledTimerState {
     if (this == null) {
         return ControlledTimerState.NotStarted
@@ -117,7 +150,17 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
 
     // Filter only data which is not yet started
     val iterationsDataLeft = iterationList
-        .filter { data -> now <= start.plus(data.startOffset).plus(data.duration) }
+        .filter { data ->
+            when (data) {
+                is IterationData.Default -> {
+                    now <= start.plus(data.startOffset).plus(data.duration)
+                }
+
+                is IterationData.Pending -> {
+                    confirmNextStepClick < start.plus(data.startOffset)
+                }
+            }
+        }
     val currentIterationData = iterationsDataLeft.firstOrNull()
 
     if (currentIterationData == null) return ControlledTimerState.Finished
@@ -153,6 +196,22 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
             timerSettings = settings,
             currentIteration = iterationCountLeft,
             maxIterations = settings.maxIterationCount,
+        )
+
+        IterationType.WAIT_AFTER_REST -> ControlledTimerState.Await(
+            timerSettings = settings,
+            currentIteration = iterationCountLeft,
+            maxIterations = settings.maxIterationCount,
+            pausedAt = start.plus(currentIterationData.startOffset),
+            type = ControlledTimerState.AwaitType.AFTER_REST
+        )
+
+        IterationType.WAIT_AFTER_WORK -> ControlledTimerState.Await(
+            timerSettings = settings,
+            currentIteration = iterationCountLeft,
+            maxIterations = settings.maxIterationCount,
+            pausedAt = start.plus(currentIterationData.startOffset),
+            type = ControlledTimerState.AwaitType.AFTER_WORK
         )
     }
 }

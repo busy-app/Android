@@ -9,5 +9,6 @@ import kotlinx.serialization.Serializable
 data class TimerTimestamp(
     val settings: TimerSettings,
     val start: Instant = Clock.System.now(),
-    val pause: Instant? = null
+    val pause: Instant? = null,
+    val confirmNextStepClick: Instant = Instant.DISTANT_PAST
 )

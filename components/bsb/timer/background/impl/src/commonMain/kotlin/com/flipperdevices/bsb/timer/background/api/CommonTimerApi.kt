@@ -68,6 +68,7 @@ class CommonTimerApi(
                                 stopSelf()
                             }
 
+                            is ControlledTimerState.Await,
                             ControlledTimerState.Finished -> Unit
 
                             is ControlledTimerState.Running -> {
