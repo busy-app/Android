@@ -70,40 +70,7 @@ class TimerMainDecomposeComponentImpl(
         return screen
     }
 
-    private fun tryWaitForInteraction(state: ControlledTimerState.Running) {
-        if (state.timeLeft.inWholeSeconds != 0L) return
-
-        val typeEndDelay = when (state) {
-            is ControlledTimerState.Running.LongRest,
-            is ControlledTimerState.Running.Rest -> {
-                if (state.timerSettings.intervalsSettings.autoStartWork) return
-                TypeEndDelay.REST
-            }
-
-            is ControlledTimerState.Running.Work -> {
-                if (state.timerSettings.intervalsSettings.autoStartRest) return
-                TypeEndDelay.WORK
-            }
-        }
-        timerApi.updateState { state ->
-            state ?: return@updateState state
-            if (state.pauseData != null) return@updateState state
-            state.copy(
-                pauseData = PauseData(
-                    type = when (typeEndDelay) {
-                        TypeEndDelay.WORK -> PauseType.AFTER_WORK
-                        TypeEndDelay.REST -> PauseType.AFTER_REST
-                    }
-                )
-            )
-        }
-    }
-
     init {
-        lifecycle.doOnResume {
-            val runningState = timerApi.getState().value as? ControlledTimerState.Running
-            runningState?.let(::tryWaitForInteraction)
-        }
         @Suppress("MagicNumber")
         timerApi.getState()
             .distinctUntilChangedBy { state ->
@@ -117,14 +84,6 @@ class TimerMainDecomposeComponentImpl(
             }
             .onEach { state -> navigation.replaceAll(state.getScreen()) }
             .launchIn(coroutineScope())
-
-
-        timerApi.getState()
-            .filterIsInstance<ControlledTimerState.Running>()
-            .distinctUntilChangedBy { it.timeLeft.inWholeSeconds }
-            .onEach { state -> tryWaitForInteraction(state) }
-            .launchIn(coroutineScope())
-
     }
 
     override val stack = childStack(

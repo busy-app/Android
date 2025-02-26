@@ -49,15 +49,9 @@ fun TimerApi.resume() {
         val pause = state?.pauseData?.instant
         if (pause != null) {
             val diff = Clock.System.now() - pause
-            val extraTime = when (state.pauseData.type) {
-                PauseType.AFTER_WORK,
-                PauseType.AFTER_REST -> 0.seconds
-
-                PauseType.NORMAL -> 0.seconds
-            }
             state.copy(
                 pauseData = null,
-                start = state.start.plus(diff).plus(extraTime)
+                start = state.start.plus(diff)
             )
         } else state
     }
