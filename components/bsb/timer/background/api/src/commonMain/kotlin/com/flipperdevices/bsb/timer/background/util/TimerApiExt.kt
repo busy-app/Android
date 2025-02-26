@@ -34,10 +34,10 @@ fun TimerApi.togglePause() {
     }
 }
 
-fun TimerApi.pause() {
+fun TimerApi.pause(type: PauseType = PauseType.NORMAL) {
     updateState { state ->
         if (state?.pauseData == null) {
-            state?.copy(pauseData = PauseData(PauseType.NORMAL),)
+            state?.copy(pauseData = PauseData(type))
         } else {
             state
         }
