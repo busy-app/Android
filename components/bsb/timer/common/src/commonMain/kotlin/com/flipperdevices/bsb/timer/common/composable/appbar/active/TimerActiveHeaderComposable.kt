@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.active.composable
+package com.flipperdevices.bsb.timer.common.composable.appbar.active
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,11 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import busystatusbar.components.bsb.timer.active.impl.generated.resources.Res
-import busystatusbar.components.bsb.timer.active.impl.generated.resources.ic_skip
-import busystatusbar.components.bsb.timer.active.impl.generated.resources.ic_stop
-import busystatusbar.components.bsb.timer.active.impl.generated.resources.ta_skip
-import busystatusbar.components.bsb.timer.active.impl.generated.resources.ta_stop
+import busystatusbar.components.bsb.timer.common.generated.resources.Res
+import busystatusbar.components.bsb.timer.common.generated.resources.ic_skip
+import busystatusbar.components.bsb.timer.common.generated.resources.ic_stop
+import busystatusbar.components.bsb.timer.common.generated.resources.ta_skip
+import busystatusbar.components.bsb.timer.common.generated.resources.ta_stop
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
@@ -30,6 +30,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun TimerActiveHeaderComposable(
     state: ControlledTimerState.Running,
+    statusType: StatusType,
     onBack: () -> Unit,
     onSkip: (() -> Unit)?,
     modifier: Modifier = Modifier,
@@ -62,7 +63,7 @@ fun TimerActiveHeaderComposable(
 
         StatusLowBarComposable(
             modifier = Modifier.padding(top = 32.dp),
-            type = StatusType.BUSY,
+            type = statusType,
             statusDesc = workPhaseText
         )
     }
@@ -75,9 +76,8 @@ private fun SmallControlChipButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     BChipButton(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 24.dp, vertical = 12.dp),
         text = stringResource(text),
         painter = painterResource(icon),

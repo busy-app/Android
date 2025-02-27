@@ -1,9 +1,8 @@
-package com.flipperdevices.bsb.timer.active.composable
+package com.flipperdevices.bsb.timer.common.composable.appbar.active
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -29,19 +28,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastCoerceIn
-import busystatusbar.components.bsb.timer.active.impl.generated.resources.Res
-import busystatusbar.components.bsb.timer.active.impl.generated.resources.busy_fire_first_frame
-import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 import com.flipperdevices.ui.video.BSBVideoPlayer
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 private const val HD_RATIO = 16f / 9f
 
@@ -49,6 +41,7 @@ private const val HD_RATIO = 16f / 9f
 @OptIn(ExperimentalResourceApi::class)
 fun TimerCardComposable(
     timerState: ControlledTimerState.Running,
+    config: TimerActiveConfiguration,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -63,8 +56,8 @@ fun TimerCardComposable(
                 .onGloballyPositioned { coordinates ->
                     heightPx = coordinates.size.height
                 },
-            uri = Res.getUri("files/busy_fire.mp4"),
-            firstFrame = Res.drawable.busy_fire_first_frame
+            uri = config.videoUri,
+            firstFrame = config.firstFrame
         )
 
         var columnModifier: Modifier = Modifier
@@ -73,6 +66,7 @@ fun TimerCardComposable(
         }
         Column(
             modifier = columnModifier
+                .background(config.videoBackgroundColor.copy(alpha = 0.8f))
                 .padding(24.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -123,25 +117,9 @@ fun TimerCardComposable(
                     .padding(vertical = 3.5.dp)
                     .height(6.dp),
                 progress = progress,
-                color = LocalCorruptedPallet.current.accent.brand.primary,
-                backgroundColor = LocalCorruptedPallet.current.accent.brand.tertiary
+                color = config.progressBarColor,
+                backgroundColor = config.progressBarBackgroundColor
             )
         }
-    }
-}
-
-@Composable
-@Preview
-private fun TimerCardComposablePreview() {
-    BusyBarThemeInternal {
-        TimerCardComposable(
-            timerState = ControlledTimerState.Running.Work(
-                timeLeft = 13.minutes.plus(10.seconds),
-                isOnPause = false,
-                currentIteration = 1,
-                maxIterations = 4,
-                timerSettings = TimerSettings()
-            )
-        )
     }
 }

@@ -7,7 +7,11 @@ commonDependencies {
     implementation(projects.components.core.ktx)
     implementation(projects.components.bsb.core.theme)
     implementation(projects.components.core.ui.button)
+    implementation(projects.components.core.ui.video)
+    implementation(projects.components.core.ui.timeline)
 
+    implementation(projects.components.bsb.preference.api)
+    implementation(projects.components.bsb.timer.background.api)
 
     implementation(projects.components.bsb.root.api)
     implementation(projects.components.bsb.deeplink.api)

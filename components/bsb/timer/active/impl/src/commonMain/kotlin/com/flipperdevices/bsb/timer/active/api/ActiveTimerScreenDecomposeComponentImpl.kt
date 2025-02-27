@@ -7,7 +7,8 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
-import com.flipperdevices.bsb.timer.active.composable.TimerActiveComposableScreen
+import com.flipperdevices.bsb.timer.active.composable.TimerBusyComposableScreen
+import com.flipperdevices.bsb.timer.common.composable.appbar.active.TimerActiveComposableScreen
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.util.pause
@@ -42,7 +43,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
             ControlledTimerState.NotStarted -> Unit
             ControlledTimerState.Finished -> Unit
             is ControlledTimerState.Running -> {
-                TimerActiveComposableScreen(
+                TimerBusyComposableScreen(
                     modifier = modifier,
                     state = state,
                     onSkip = {

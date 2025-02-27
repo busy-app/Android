@@ -5,4 +5,7 @@
     <string name="tc_status_busy">BUSY</string>
     <string name="tc_status_rest">REST</string>
     <string name="tc_status_long_rest">LONG REST</string>
+
+    <string name="ta_stop">Stop</string>
+    <string name="ta_skip">Skip</string>
 </resources>
