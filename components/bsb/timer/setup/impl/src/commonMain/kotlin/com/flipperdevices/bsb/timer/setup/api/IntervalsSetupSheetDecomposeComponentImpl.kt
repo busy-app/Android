@@ -5,17 +5,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
-import com.flipperdevices.bsb.appblocker.card.api.AppBlockerCardContentDecomposeComponent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.LongRestSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.RestSetupModalBottomSheetContent
-import com.flipperdevices.bsb.timer.setup.composable.intervals.SoundSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.WorkSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.core.di.AppGraph
@@ -29,7 +26,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class IntervalsSetupSheetDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    appBlockerCardContentFactory: AppBlockerCardContentDecomposeComponent.Factory,
     timerSetupViewModelFactory: () -> TimerSetupViewModel
 ) : IntervalsSetupSheetDecomposeComponent(componentContext) {
     private val timerSetupViewModel = instanceKeeper.getOrCreate {
@@ -45,11 +41,6 @@ class IntervalsSetupSheetDecomposeComponentImpl(
         }
     )
 
-    private val appBlockerCardContent = appBlockerCardContentFactory(
-        componentContext = childContext("intervalsSetupSheetDecomposeComponent_appBlockerCardContent"),
-        onBackParameter = slot::dismiss
-    )
-
     @Serializable
     private sealed interface PickerConfiguration {
         @Serializable
@@ -60,12 +51,6 @@ class IntervalsSetupSheetDecomposeComponentImpl(
 
         @Serializable
         data object LongRest : PickerConfiguration
-
-        @Serializable
-        data object Sound : PickerConfiguration
-
-        @Serializable
-        data object BlockedApps : PickerConfiguration
     }
 
     override fun showRest() {
@@ -78,14 +63,6 @@ class IntervalsSetupSheetDecomposeComponentImpl(
 
     override fun showWork() {
         slot.activate(PickerConfiguration.Work)
-    }
-
-    override fun showSound() {
-        slot.activate(PickerConfiguration.Sound)
-    }
-
-    override fun showBlockedApps() {
-        slot.activate(PickerConfiguration.BlockedApps)
     }
 
     // todo This method will be rewritten with another design
@@ -127,25 +104,6 @@ class IntervalsSetupSheetDecomposeComponentImpl(
                                 onSaveClick = slot::dismiss,
                                 onTimeChange = timerSetupViewModel::setRest,
                                 onAutoStartToggle = timerSetupViewModel::toggleRestAutoStart,
-                            )
-                        }
-                    }
-
-                    PickerConfiguration.Sound -> {
-                        BModalBottomSheetContent(horizontalPadding = 0.dp) {
-                            SoundSetupModalBottomSheetContent(
-                                timerSettings = timerSettings.value,
-                                onSaveClick = slot::dismiss,
-                                onAlertBeforeWorkStartsToggle = timerSetupViewModel::toggleSoundBeforeWorkStarts,
-                                onAlertBeforeWorkEndsToggle = timerSetupViewModel::toggleSoundBeforeWorkEnds
-                            )
-                        }
-                    }
-
-                    PickerConfiguration.BlockedApps -> {
-                        BModalBottomSheetContent(horizontalPadding = 0.dp) {
-                            appBlockerCardContent.Render(
-                                modifier = Modifier
                             )
                         }
                     }

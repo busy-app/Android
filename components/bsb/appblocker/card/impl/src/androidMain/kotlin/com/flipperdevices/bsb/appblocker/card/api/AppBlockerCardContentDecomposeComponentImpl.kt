@@ -1,10 +1,7 @@
 package com.flipperdevices.bsb.appblocker.card.api
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
@@ -42,10 +39,7 @@ class AppBlockerCardContentDecomposeComponentImpl(
     @Composable
     override fun Render(modifier: Modifier) {
         Column(
-            modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(horizontal = 16.dp)
+            modifier.fillMaxWidth()
         ) {
             val isPermissionGranted by appBlockerPermissionCardContent.isAllPermissionGranted()
                 .collectAsState()
@@ -72,10 +66,8 @@ class AppBlockerCardContentDecomposeComponentImpl(
                         .systemBarsPadding()
                 )
             } else {
-                appBlockerPermissionCardContent.Render(Modifier.padding(top = 32.dp))
+                appBlockerPermissionCardContent.Render(Modifier.padding(top = 16.dp))
             }
-
-            Spacer(Modifier.height(16.dp))
         }
     }
 

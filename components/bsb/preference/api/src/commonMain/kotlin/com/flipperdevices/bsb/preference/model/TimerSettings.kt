@@ -41,7 +41,6 @@ data class TimerSettings(
 
     @Serializable
     data class SoundSettings(
-        val alertBeforeWorkStarts: Boolean = true,
-        val alertBeforeWorkEnds: Boolean = true
+        val alertWhenIntervalEnds: Boolean = true
     )
 }

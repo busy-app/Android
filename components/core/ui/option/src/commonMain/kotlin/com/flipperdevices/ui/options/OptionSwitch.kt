@@ -1,10 +1,11 @@
 package com.flipperdevices.ui.options
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
@@ -38,15 +39,16 @@ fun OptionSwitch(
         .copy(alpha = 0.3f),
     isEnabled: Boolean = true,
     checked: Boolean = true,
-    infoText: String? = null
+    infoText: String? = null,
+    verticalAlignment: Alignment.Vertical = Alignment.CenterVertically
 ) {
     Row(
-        modifier = Modifier.clickable { onCheckChange.invoke(!isEnabled) }.then(modifier),
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(
             8.dp,
             Alignment.CenterHorizontally
         ),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = verticalAlignment
     ) {
         icon?.let { icon ->
             Icon(
@@ -70,6 +72,7 @@ fun OptionSwitch(
                 fontSize = 18.sp
             )
             infoText?.let {
+                Spacer(Modifier.height(8.dp))
                 Text(
                     text = infoText,
                     color = LocalCorruptedPallet.current

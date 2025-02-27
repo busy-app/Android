@@ -24,10 +24,7 @@
     <string name="ts_bs_intervals_long_rest">Long rest</string>
 
     <string name="ts_bs_sound_title">Sound</string>
-    <string name="ts_bs_sound_alert_start_title">Alert before work starts</string>
-    <string name="ts_bs_sound_alert_start_desc">Get notified 5 seconds before your next work interval begins</string>
-    <string name="ts_bs_sound_alert_end_title">Alert before work ends</string>
-    <string name="ts_bs_sound_alert_end_desc">Get notified 5 seconds before your current work interval ends</string>
+    <string name="ts_bs_sound_desc">Get notified when current interval ends and it's time to start the next one</string>
 
     <string name="ts_bs_apps_card_all">All</string>
     <string name="ts_bs_apps_card_off">Off</string>
