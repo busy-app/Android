@@ -59,12 +59,7 @@ class AppBlockerPermissionBlockDecomposeComponentImpl(
 
     @Composable
     override fun Render(modifier: Modifier) {
-        Column(
-            modifier = modifier
-//                .clip(RoundedCornerShape(12.dp))
-//                .background(LocalCorruptedPallet.current.transparent.whiteInvert.quinary)
-//                .padding(16.dp),
-        ) {
+        Column(modifier = modifier) {
             PermissionHeaderComposable()
 
             Text(
