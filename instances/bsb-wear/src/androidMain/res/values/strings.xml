@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Busy App</string>
+    <string name="asset_statements" translatable="false">
+[{
+  \"include\": \"https://cloud.dev.busy.bar/.well-known/assetlinks.json\"
+}]
+</string>
+    <string name="deeplink_handle_email_verification" translatable="false">Handle of email verification links</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BSBTheme.SplashTheme" parent="BSBTheme">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/pic_splashscreen_logo_v31</item>
+    </style>
+</resources>

@@ -32,6 +32,7 @@ dependencyResolutionManagement {
 
 include(
     ":instances:bsb",
+    ":instances:bsb-wear",
 
     ":components:core:di",
     ":components:core:activityholder",
