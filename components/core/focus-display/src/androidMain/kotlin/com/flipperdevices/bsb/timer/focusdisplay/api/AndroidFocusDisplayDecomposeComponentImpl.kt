@@ -13,18 +13,26 @@ class AndroidFocusDisplayDecomposeComponentImpl(
     @Assisted lifecycle: Lifecycle
 ) : FocusDisplayDecomposeComponent(lifecycle) {
 
-    override fun onResume() {
+    private fun enableScreenOn() {
         CurrentActivityHolder
             .getCurrentActivity()
             ?.window
             ?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    override fun onPause() {
+    private fun disableScreenOn() {
         CurrentActivityHolder
             .getCurrentActivity()
             ?.window
-            ?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            ?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    override fun onResume() {
+        enableScreenOn()
+    }
+
+    override fun onPause() {
+        disableScreenOn()
     }
 
     @Inject
