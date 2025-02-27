@@ -1,3 +1,4 @@
 <resources>
     <string name="busycard_appblocker_all">All</string>
+    <string name="busycard_appblocker_edit">Edit</string>
 </resources>
