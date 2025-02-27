@@ -15,6 +15,7 @@ import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.finish.composable.RestComposableContent
+import com.flipperdevices.bsb.timer.finish.composable.TimerRestComposableScreen
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import me.tatarka.inject.annotations.Assisted
@@ -35,12 +36,12 @@ class RestTimerScreenDecomposeComponentImpl(
         val state by timerApi.getState().collectAsState()
         when (val state = state) {
             is ControlledTimerState.Running -> {
-                RestComposableContent(
+                TimerRestComposableScreen(
                     modifier = modifier,
                     onSkip = {
                         timerApi.skip()
                     },
-                    timeLeft = state.timeLeft,
+                    state = state,
                     statusType = when (breakType) {
                         BreakType.SHORT -> StatusType.REST
                         BreakType.LONG -> StatusType.LONG_REST

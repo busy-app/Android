@@ -12,7 +12,6 @@ import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.active.TimerActiveComposableScreen
 import com.flipperdevices.bsb.timer.common.composable.appbar.active.TimerActiveConfiguration
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @Composable
