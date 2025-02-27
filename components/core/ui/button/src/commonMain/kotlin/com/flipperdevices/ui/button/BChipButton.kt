@@ -19,6 +19,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -104,16 +105,17 @@ fun BChipButton(
     dashedBorderColor: Color? = null,
     enabled: Boolean = true,
     fontSize: TextUnit = 24.sp,
+    iconSize: Dp = 18.dp,
     contentPadding: PaddingValues = PaddingValues(
         horizontal = 12.dp,
         vertical = 16.dp
     ),
     onClick: () -> Unit
 ) {
-    val animatedContentColor = animateColorAsState(contentColor)
-    val animatedBackgroundColor = animateColorAsState(background)
+    val animatedContentColor by animateColorAsState(contentColor)
+    val animatedBackgroundColor by animateColorAsState(background)
     BChipButton(
-        background = animatedBackgroundColor.value,
+        background = animatedBackgroundColor,
         modifier = modifier,
         onClick = onClick,
         dashedBorderColor = dashedBorderColor,
@@ -127,9 +129,10 @@ fun BChipButton(
                 content = {
                     if (painter != null) {
                         Icon(
+                            modifier = Modifier.size(iconSize),
                             painter = painter,
                             contentDescription = null,
-                            tint = animatedContentColor.value
+                            tint = animatedContentColor
                         )
                     }
 
@@ -140,7 +143,7 @@ fun BChipButton(
                             maxLines = 1,
                             style = rememberPragmaticaTextStyle().copy(
                                 textAlign = TextAlign.Start,
-                                color = animatedContentColor.value,
+                                color = animatedContentColor,
                                 fontSize = fontSize,
                                 fontWeight = FontWeight.W500,
                             )
