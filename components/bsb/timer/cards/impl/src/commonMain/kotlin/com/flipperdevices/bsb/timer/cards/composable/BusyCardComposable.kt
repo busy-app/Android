@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.busycard_appblocker_all
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.busycard_appblocker_edit
-import busystatusbar.components.bsb.timer.cards.impl.generated.resources.ic_three_dots
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_block
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_work
