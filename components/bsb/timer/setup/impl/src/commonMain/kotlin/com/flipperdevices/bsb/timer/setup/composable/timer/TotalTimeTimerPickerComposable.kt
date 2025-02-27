@@ -12,7 +12,8 @@ import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.timeline.HorizontalWheelPicker
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
 
 @Composable
@@ -36,13 +37,13 @@ fun TotalTimeTimerPickerComposable(
     ) {
         HorizontalWheelPicker(
             progression = IntProgression.fromClosedRange(
-                rangeStart = 0.seconds.inWholeSeconds.toInt(),
-                rangeEnd = 30.seconds.inWholeSeconds.toInt(),
-                step = 5.seconds.inWholeSeconds.toInt()
+                rangeStart = 15.minutes.inWholeMinutes.toInt(),
+                rangeEnd = 9.hours.inWholeMinutes.toInt(),
+                step = 5.minutes.inWholeMinutes.toInt()
             ),
             initialSelectedItem = initialTime,
             onItemSelect = { duration -> onTotalTimeChange.invoke(duration) },
-            durationUnit = DurationUnit.SECONDS
+            durationUnit = DurationUnit.MINUTES
         )
     }
 }

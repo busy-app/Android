@@ -5,23 +5,21 @@ plugins {
 }
 
 commonDependencies {
-    implementation(projects.components.bsb.timer.active.api)
-
     implementation(projects.components.core.di)
     implementation(projects.components.core.ktx)
     implementation(projects.components.core.data)
-    implementation(projects.components.core.focusDisplay)
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.bsb.core.theme)
     implementation(projects.components.core.ui.sheet)
     implementation(projects.components.core.ui.button)
     implementation(projects.components.core.ui.timeline)
+    implementation(projects.components.core.activityholder)
 
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.background.api)
 
     implementation(libs.decompose)
-    implementation(libs.constraintlayout)
     implementation(libs.composables)
+    implementation(libs.kotlin.datetime)
 }

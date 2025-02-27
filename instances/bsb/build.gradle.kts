@@ -73,6 +73,8 @@ kotlin {
             implementation(libs.appcompat)
         }
         commonMain.dependencies {
+            implementation(projects.components.core.focusDisplay)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
