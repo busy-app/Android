@@ -14,13 +14,13 @@ android.namespace = "com.flipperdevices.bsbwearable"
 kotlin {
     androidTarget()
 }
-commonDependencies {
 
-    implementation(libs.timber)
+commonDependencies {
 
     implementation(projects.components.core.di)
     implementation(projects.components.core.log)
     implementation(projects.components.core.ktx)
+    implementation(projects.components.core.focusDisplay)
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.core.ui.lifecycle)
     implementation(projects.components.core.activityholder)
@@ -30,12 +30,11 @@ commonDependencies {
     implementation(projects.components.bsb.core.res)
 
     implementation(libs.settings)
+    implementation(libs.timber)
 
     implementation(libs.kotlin.inject.runtime)
     implementation(libs.kotlin.inject.anvil.runtime)
     implementation(libs.kotlin.inject.anvil.runtime.optional)
-
-    implementation(projects.components.core.focusDisplay)
 
     implementation(kotlin.compose.runtime)
     implementation(kotlin.compose.foundation)
@@ -44,36 +43,20 @@ commonDependencies {
     implementation(kotlin.compose.components.resources)
     implementation(kotlin.compose.components.uiToolingPreview)
 }
+
 dependencies {
-
-//    implementation(libs.androidx.activity.compose)
     implementation(libs.appcompat)
-
-//    implementation(libs.ktor.client.core)
-
-    // FL
-
-//    implementation(libs.appcompat)
     implementation(libs.timber)
-//    implementation(libs.datastore)
-//    implementation(libs.splashscreen)
-
     implementation(libs.wear)
     implementation(libs.wear.gms)
 
-    // Compose
     implementation(libs.androidx.activity.compose)
-//    implementation(libs.compose.ui)
-//    implementation(libs.compose.tooling)
     implementation(libs.compose.wear.foundation)
     implementation(libs.compose.wear.material)
     implementation(libs.horologist.layout)
     implementation(libs.decompose)
     implementation(libs.decompose.composeExtension)
-//    implementation(libs.lifecycle.compose)
-
     implementation(libs.kotlin.immutable)
-//    implementation(libs.kotlin.coroutines.play.services)
 }
 
 dependencies {
