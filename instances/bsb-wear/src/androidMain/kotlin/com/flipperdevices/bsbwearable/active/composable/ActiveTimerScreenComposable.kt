@@ -92,7 +92,7 @@ private fun ControlledTimerState.Running.rememberTimeLeftText(): String {
 }
 
 @Composable
-internal fun ActiveTimerScreenTitle(
+private fun ActiveTimerScreenTitle(
     timerState: ControlledTimerState.Running,
     modifier: Modifier = Modifier
 ) {
@@ -124,7 +124,7 @@ internal fun ActiveTimerScreenTitle(
 
 @Suppress("LongMethod")
 @Composable
-fun ActiveTimerScreenComposable(
+internal fun ActiveTimerScreenComposable(
     timerState: ControlledTimerState,
     onPauseClick: () -> Unit,
     onStopClick: () -> Unit,
