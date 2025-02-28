@@ -1,5 +1,7 @@
 package com.flipperdevices.bsb.timer.cards.composable
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.busycard_appblocker_all
-import busystatusbar.components.bsb.timer.cards.impl.generated.resources.ic_three_dots
+import busystatusbar.components.bsb.timer.cards.impl.generated.resources.busycard_appblocker_edit
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_block
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_work
@@ -51,8 +51,7 @@ fun BusyCardComposable(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
             .background(background)
-            .clickable(onClick = onClick)
-            .padding(16.dp)
+            .padding(24.dp)
             .height(232.dp)
     ) {
         Column(
@@ -72,31 +71,36 @@ fun BusyCardComposable(
                         .white
                         .invert
                 )
-                Icon(
-                    painter = painterResource(Res.drawable.ic_three_dots),
-                    contentDescription = null,
-                    tint = LocalCorruptedPallet.current
+                Text(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable(onClick = onClick),
+                    text = stringResource(Res.string.busycard_appblocker_edit),
+                    fontSize = 18.sp,
+                    color = LocalCorruptedPallet.current
                         .transparent
                         .whiteInvert
-                        .secondary,
-                    modifier = Modifier.size(48.dp)
+                        .primary
                 )
             }
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().animateContentSize(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
                 Column(
+                    modifier = Modifier.animateContentSize(),
                     verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom),
                 ) {
-                    Text(
-                        text = settings.totalTime.toFormattedTime(),
-                        fontSize = 40.sp,
-                        color = LocalCorruptedPallet.current
-                            .white
-                            .onColor
-                    )
+                    Crossfade(settings.totalTime.toFormattedTime()) { totalTimeFormatted ->
+                        Text(
+                            text = totalTimeFormatted,
+                            fontSize = 40.sp,
+                            color = LocalCorruptedPallet.current
+                                .white
+                                .onColor
+                        )
+                    }
                     if (settings.intervalsSettings.isEnabled) {
                         MiniFrameSection(
                             MiniFrameData(

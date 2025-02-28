@@ -16,6 +16,7 @@ import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.background.util.skip
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
+import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import me.tatarka.inject.annotations.Assisted
@@ -27,9 +28,14 @@ class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
-    private val stopSessionSheetDecomposeComponentFactory: StopSessionSheetDecomposeComponent.Factory
+    private val stopSessionSheetDecomposeComponentFactory: StopSessionSheetDecomposeComponent.Factory,
+    focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
 ) : ActiveTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
+
+    init {
+        focusDisplayDecomposeComponentFactory.invoke(lifecycle = lifecycle)
+    }
 
     private val stopSessionSheetDecomposeComponent = stopSessionSheetDecomposeComponentFactory.invoke(
         childContext("stopSessionSheetDecomposeComponent"),
@@ -40,8 +46,10 @@ class ActiveTimerScreenDecomposeComponentImpl(
     override fun Render(modifier: Modifier) {
         val state by timerApi.getState().collectAsState()
         when (val state = state) {
-            ControlledTimerState.NotStarted -> Unit
+            is ControlledTimerState.Await,
+            ControlledTimerState.NotStarted,
             ControlledTimerState.Finished -> Unit
+
             is ControlledTimerState.Running -> {
                 TimerBusyComposableScreen(
                     modifier = modifier,

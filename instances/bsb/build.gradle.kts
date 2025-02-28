@@ -73,6 +73,8 @@ kotlin {
             implementation(libs.appcompat)
         }
         commonMain.dependencies {
+            implementation(projects.components.core.focusDisplay)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -206,6 +208,8 @@ commonDependencies {
     implementation(projects.components.bsb.timer.background.impl)
     implementation(projects.components.bsb.timer.active.api)
     implementation(projects.components.bsb.timer.active.impl)
+    implementation(projects.components.bsb.timer.delayedStart.api)
+    implementation(projects.components.bsb.timer.delayedStart.impl)
     implementation(projects.components.bsb.timer.done.api)
     implementation(projects.components.bsb.timer.done.impl)
     implementation(projects.components.bsb.timer.rest.api)

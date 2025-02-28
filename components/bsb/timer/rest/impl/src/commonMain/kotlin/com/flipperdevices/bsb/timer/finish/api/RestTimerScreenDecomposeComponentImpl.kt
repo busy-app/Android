@@ -14,7 +14,7 @@ import com.flipperdevices.bsb.timer.background.util.skip
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
-import com.flipperdevices.bsb.timer.finish.composable.RestComposableContent
+import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
 import com.flipperdevices.bsb.timer.finish.composable.TimerRestComposableScreen
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -28,8 +28,13 @@ class RestTimerScreenDecomposeComponentImpl(
     @Assisted private val breakType: BreakType,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
+    focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
 ) : RestTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
+
+    init {
+        focusDisplayDecomposeComponentFactory.invoke(lifecycle = lifecycle)
+    }
 
     @Composable
     override fun Render(modifier: Modifier) {
@@ -60,7 +65,9 @@ class RestTimerScreenDecomposeComponentImpl(
                 }
             }
 
-            ControlledTimerState.NotStarted, ControlledTimerState.Finished -> Unit
+            is ControlledTimerState.Await,
+            ControlledTimerState.NotStarted,
+            ControlledTimerState.Finished -> Unit
         }
     }
 

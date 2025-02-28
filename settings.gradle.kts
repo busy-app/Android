@@ -40,6 +40,7 @@ include(
     ":components:core:ktx",
     ":components:core:data",
     ":components:core:build-konfig",
+    ":components:core:focus-display",
     ":components:core:ui:decompose",
     ":components:core:ui:lifecycle",
     ":components:core:ui:appbar",
@@ -130,6 +131,8 @@ include(
     ":components:bsb:timer:background:impl",
     ":components:bsb:timer:active:api",
     ":components:bsb:timer:active:impl",
+    ":components:bsb:timer:delayed-start:api",
+    ":components:bsb:timer:delayed-start:impl",
     ":components:bsb:timer:cards:api",
     ":components:bsb:timer:cards:impl",
 )

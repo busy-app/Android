@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.timer.setup.viewmodel
 
 import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.timer.setup.store.TimerSettingsReducer
+import com.flipperdevices.bsb.timer.setup.store.TimerSettingsReducer.reduce
 import com.flipperdevices.core.ui.lifecycle.DecomposeViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.launch
@@ -42,30 +43,6 @@ class TimerSetupViewModel(
         }
     }
 
-    fun toggleSoundBeforeWorkStarts() {
-        viewModelScope.launch {
-            krateApi.timerSettingsKrate.update { timerSettings ->
-                timerSettings.copy(
-                    soundSettings = timerSettings.soundSettings.copy(
-                        alertBeforeWorkStarts = !timerSettings.soundSettings.alertBeforeWorkStarts
-                    )
-                )
-            }
-        }
-    }
-
-    fun toggleSoundBeforeWorkEnds() {
-        viewModelScope.launch {
-            krateApi.timerSettingsKrate.update { timerSettings ->
-                timerSettings.copy(
-                    soundSettings = timerSettings.soundSettings.copy(
-                        alertBeforeWorkEnds = !timerSettings.soundSettings.alertBeforeWorkEnds
-                    )
-                )
-            }
-        }
-    }
-
     fun toggleIntervals() {
         viewModelScope.launch {
             krateApi.timerSettingsKrate.update { timerSettings ->
@@ -83,6 +60,18 @@ class TimerSetupViewModel(
             krateApi.timerSettingsKrate.update { timerSettings ->
                 timerSettings
                     .reduce(TimerSettingsReducer.Message.TotalTimeChanged(duration))
+            }
+        }
+    }
+
+    fun onSoundToggle() {
+        viewModelScope.launch {
+            krateApi.timerSettingsKrate.update { timerSettings ->
+                timerSettings.copy(
+                    soundSettings = timerSettings.soundSettings.copy(
+                        alertWhenIntervalEnds = !timerSettings.soundSettings.alertWhenIntervalEnds
+                    )
+                )
             }
         }
     }

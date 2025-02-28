@@ -2,8 +2,6 @@ package com.flipperdevices.bsb.timer.setup.api
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
@@ -14,8 +12,7 @@ import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
 import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
-import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
-import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
+import com.flipperdevices.bsb.appblocker.card.api.AppBlockerCardContentDecomposeComponent
 import com.flipperdevices.bsb.timer.setup.composable.timer.TimerSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
 import com.flipperdevices.core.di.AppGraph
@@ -31,7 +28,7 @@ class TimerSetupSheetDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     intervalsSetupSheetDecomposeComponentFactory: IntervalsSetupSheetDecomposeComponent.Factory,
     timerSetupViewModelFactory: () -> TimerSetupViewModel,
-    private val appBlockerFilterApi: AppBlockerFilterApi
+    appBlockerCardContentFactory: AppBlockerCardContentDecomposeComponent.Factory,
 ) : TimerSetupSheetDecomposeComponent(componentContext) {
     private val timerSetupViewModel = instanceKeeper.getOrCreate {
         timerSetupViewModelFactory.invoke()
@@ -40,6 +37,10 @@ class TimerSetupSheetDecomposeComponentImpl(
         intervalsSetupSheetDecomposeComponentFactory(
             componentContext = childContext("restSheetDecomposeComponent")
         )
+    private val appBlockerCardContent = appBlockerCardContentFactory(
+        componentContext = childContext("intervalsSetupSheetDecomposeComponent_appBlockerCardContent"),
+        onBackParameter = { }
+    )
     private val slot = SlotNavigation<Unit>()
     private val childSlot = childSlot(
         source = slot,
@@ -68,10 +69,6 @@ class TimerSetupSheetDecomposeComponentImpl(
                 BModalBottomSheetContent(
                     horizontalPadding = 0.dp,
                     content = {
-                        val appBlockerState by remember {
-                            appBlockerFilterApi.getBlockedAppCount()
-                        }.collectAsState(BlockedAppCount.TurnOff)
-
                         TimerSetupModalBottomSheetContent(
                             timerSettings = timerSettings.value,
                             onTotalTimeChange = { duration ->
@@ -86,19 +83,16 @@ class TimerSetupSheetDecomposeComponentImpl(
                             onShowLongRestTimer = {
                                 intervalsSetupSheetDecomposeComponent.showLongRest()
                             },
-                            onSoundClick = {
-                                intervalsSetupSheetDecomposeComponent.showSound()
-                            },
-                            appBlockerState = appBlockerState,
-                            onBlockedAppsClick = {
-                                intervalsSetupSheetDecomposeComponent.showBlockedApps()
-                            },
                             onShowWorkTimer = {
                                 intervalsSetupSheetDecomposeComponent.showWork()
                             },
                             onShowRestTimer = {
                                 intervalsSetupSheetDecomposeComponent.showRest()
-                            }
+                            },
+                            appBlockerCardContent = {
+                                appBlockerCardContent.Render(Modifier)
+                            },
+                            onSoundToggle = timerSetupViewModel::onSoundToggle
                         )
                     }
                 )

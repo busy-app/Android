@@ -1,15 +1,12 @@
 package com.flipperdevices.bsb.appblocker.permission.api
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,12 +59,7 @@ class AppBlockerPermissionBlockDecomposeComponentImpl(
 
     @Composable
     override fun Render(modifier: Modifier) {
-        Column(
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(LocalCorruptedPallet.current.transparent.whiteInvert.quinary)
-                .padding(16.dp),
-        ) {
+        Column(modifier = modifier) {
             PermissionHeaderComposable()
 
             Text(

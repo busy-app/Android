@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.timer.background.model
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState.Running
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 
@@ -48,15 +49,23 @@ sealed interface ControlledTimerState {
             override val maxIterations: Int
         ) : Running
     }
+
+    enum class AwaitType {
+        AFTER_WORK, AFTER_REST
+    }
+
+    @Serializable
+    data class Await(
+        val timerSettings: TimerSettings,
+        val currentIteration: Int,
+        val maxIterations: Int,
+        val pausedAt: Instant,
+        val type: AwaitType
+    ) : ControlledTimerState
 }
 
 val ControlledTimerState.Running.isLastIteration: Boolean
     get() = currentIteration == maxIterations
-val ControlledTimerState.isOnPause: Boolean
-    get() = when (this) {
-        is Running -> isOnPause
-        else -> false
-    }
 
 private const val MIN_TWO_DIGIT_VALUE = 10
 

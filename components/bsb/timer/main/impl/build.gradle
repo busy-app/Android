@@ -24,6 +24,7 @@ commonDependencies {
     implementation(projects.components.bsb.timer.setup.api)
     implementation(projects.components.bsb.timer.rest.api)
     implementation(projects.components.bsb.timer.active.api)
+    implementation(projects.components.bsb.timer.delayedStart.api)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.timer.cards.api)
@@ -33,4 +34,5 @@ commonDependencies {
     implementation(libs.decompose.composeExtension)
     implementation(libs.essenty.lifecycle.coroutines)
     implementation(libs.composables)
+    implementation(libs.kotlin.datetime)
 }

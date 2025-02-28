@@ -8,7 +8,9 @@ import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.cards.api.CardsDecomposeComponent
+import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.done.api.DoneTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.finish.api.RestTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.main.model.TimerMainNavigationConfig
@@ -30,8 +32,9 @@ class TimerMainDecomposeComponentImpl(
     private val cardsDecomposeComponentFactory: CardsDecomposeComponent.Factory,
     private val restTimerScreenDecomposeComponentFactory: RestTimerScreenDecomposeComponent.Factory,
     private val doneTimerScreenDecomposeComponentFactory: DoneTimerScreenDecomposeComponent.Factory,
+    private val delayedStartScreenDecomposeComponentFactory: DelayedStartScreenDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
-    timerApi: TimerApi,
+    private val timerApi: TimerApi,
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     StatusBarIconStyleProvider by iconStyleProvider,
     ComponentContext by componentContext {
@@ -40,9 +43,21 @@ class TimerMainDecomposeComponentImpl(
         val screen = when (this) {
             ControlledTimerState.Finished -> TimerMainNavigationConfig.Finished
             ControlledTimerState.NotStarted -> TimerMainNavigationConfig.Main
-            is ControlledTimerState.Running.LongRest -> TimerMainNavigationConfig.LongRest
-            is ControlledTimerState.Running.Rest -> TimerMainNavigationConfig.Rest
-            is ControlledTimerState.Running.Work -> TimerMainNavigationConfig.Work
+            is ControlledTimerState.Await -> {
+                val typeEndDelay = when (type) {
+                    ControlledTimerState.AwaitType.AFTER_WORK -> DelayedStartScreenDecomposeComponent.TypeEndDelay.WORK
+                    ControlledTimerState.AwaitType.AFTER_REST -> DelayedStartScreenDecomposeComponent.TypeEndDelay.REST
+                }
+                TimerMainNavigationConfig.PauseAfter(typeEndDelay)
+            }
+
+            is ControlledTimerState.Running -> {
+                when (this) {
+                    is ControlledTimerState.Running.LongRest -> TimerMainNavigationConfig.LongRest
+                    is ControlledTimerState.Running.Rest -> TimerMainNavigationConfig.Rest
+                    is ControlledTimerState.Running.Work -> TimerMainNavigationConfig.Work
+                }
+            }
         }
         return screen
     }
@@ -57,6 +72,7 @@ class TimerMainDecomposeComponentImpl(
                     is ControlledTimerState.Running.LongRest -> 2
                     is ControlledTimerState.Running.Rest -> 3
                     is ControlledTimerState.Running.Work -> 4
+                    is ControlledTimerState.Await -> 5
                 }
             }
             .onEach { state -> navigation.replaceAll(state.getScreen()) }
@@ -83,6 +99,7 @@ class TimerMainDecomposeComponentImpl(
         TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             onFinishCallback = {
+                timerApi.stop()
                 navigation.replaceAll(TimerMainNavigationConfig.Main)
             }
         )
@@ -95,6 +112,11 @@ class TimerMainDecomposeComponentImpl(
         TimerMainNavigationConfig.Rest -> restTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             breakType = RestTimerScreenDecomposeComponent.BreakType.SHORT
+        )
+
+        is TimerMainNavigationConfig.PauseAfter -> delayedStartScreenDecomposeComponentFactory.invoke(
+            componentContext = componentContext,
+            typeEndDelay = config.typeEndDelay
         )
     }
 

@@ -4,6 +4,7 @@ import com.flipperdevices.bsb.metronome.api.MetronomeApi
 import com.flipperdevices.bsb.timer.background.api.delegates.CompositeTimerStateListener
 import com.flipperdevices.bsb.timer.background.api.delegates.TimerLoopJob
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
@@ -67,6 +68,7 @@ class CommonTimerApi(
                                 stopSelf()
                             }
 
+                            is ControlledTimerState.Await,
                             ControlledTimerState.Finished -> Unit
 
                             is ControlledTimerState.Running -> {
