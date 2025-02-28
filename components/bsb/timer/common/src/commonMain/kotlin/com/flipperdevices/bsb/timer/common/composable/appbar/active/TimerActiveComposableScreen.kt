@@ -40,7 +40,6 @@ fun TimerActiveComposableScreen(
     modifier: Modifier = Modifier,
     onSkip: (() -> Unit)? = null,
 ) = Box(modifier = modifier) {
-
     Box(
         modifier = Modifier
             .fillMaxSize()

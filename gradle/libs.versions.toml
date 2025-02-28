@@ -38,6 +38,8 @@ composables = "1.20.1" # https://github.com/composablehorizons/compose-unstyled
 klibs-kstorage = "3.2.6" # https://github.com/makeevrserg/klibs.kstorage
 room = "2.7.0-rc01" # https://developer.android.com/jetpack/androidx/releases/room
 accompanist = "0.37.2" # https://github.com/google/accompanist/releases
+haze = "1.4.0"
+
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -85,6 +87,9 @@ essenty-lifecycle-coroutines = { module = "com.arkivanov.essenty:lifecycle-corou
 markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "markdown" }
 
 compose-placeholder = { module = "com.eygraber:compose-placeholder", version.ref = "compose-placeholder" }
+compose-haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
+compose-haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
+
 
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }

@@ -15,6 +15,9 @@ commonDependencies {
 
     implementation(projects.components.bsb.root.api)
     implementation(projects.components.bsb.deeplink.api)
+
+    implementation(libs.compose.haze)
+    implementation(libs.compose.haze.materials)
 }
 
 compose.resources {

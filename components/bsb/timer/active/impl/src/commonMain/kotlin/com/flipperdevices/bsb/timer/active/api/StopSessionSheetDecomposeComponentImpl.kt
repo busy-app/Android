@@ -8,25 +8,22 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
+import com.composables.core.Sheet
 import com.composables.core.SheetDetent
-import com.flipperdevices.bsb.timer.active.composable.StopSessionComposableContent
-import com.flipperdevices.core.di.AppGraph
-import com.flipperdevices.ui.sheet.BModalBottomSheetContent
+import com.flipperdevices.bsb.timer.common.composable.appbar.stop.StopSessionComposableContent
 import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
-import kotlinx.coroutines.coroutineScope
+import dev.chrisbanes.haze.HazeState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.builtins.serializer
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
 class StopSessionSheetDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onConfirm: () -> Unit
-) : StopSessionSheetDecomposeComponent(componentContext) {
-
+) : ComponentContext by componentContext {
     private val slot = SlotNavigation<Unit>()
     private val childSlot = childSlot(
         source = slot,
@@ -36,19 +33,19 @@ class StopSessionSheetDecomposeComponentImpl(
         }
     )
 
-    override fun show() {
+    fun show() {
         slot.activate(Unit)
     }
 
     @Composable
-    override fun Render(modifier: Modifier) {
+    fun Render(modifier: Modifier, hazeState: HazeState) {
         val coroutineScope = rememberCoroutineScope()
         ModalBottomSheetSlot(
             slot = childSlot,
-            initialDetent = SheetDetent.FullyExpanded,
+            initialDetent = SheetDetent.Hidden,
             onDismiss = { slot.dismiss() },
             content = {
-                BModalBottomSheetContent {
+                Sheet {
                     StopSessionComposableContent(
                         onConfirm = {
                             slot.dismiss()
@@ -58,24 +55,11 @@ class StopSessionSheetDecomposeComponentImpl(
                                 onConfirm.invoke()
                             }
                         },
-                        onDismiss = { slot.dismiss() }
+                        onDismiss = { slot.dismiss() },
+                        hazeState = hazeState
                     )
                 }
             }
         )
-    }
-
-    @Inject
-    @ContributesBinding(AppGraph::class, StopSessionSheetDecomposeComponent.Factory::class)
-    class Factory(
-        private val factory: (
-            componentContext: ComponentContext,
-            onConfirm: () -> Unit
-        ) -> StopSessionSheetDecomposeComponentImpl
-    ) : StopSessionSheetDecomposeComponent.Factory {
-        override fun invoke(
-            componentContext: ComponentContext,
-            onConfirm: () -> Unit
-        ) = factory(componentContext, onConfirm)
     }
 }
