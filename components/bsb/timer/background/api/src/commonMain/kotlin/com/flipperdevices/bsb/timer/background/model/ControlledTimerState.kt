@@ -100,3 +100,19 @@ val ControlledTimerState.Running.currentUiIteration: Int
 
 val ControlledTimerState.Running.maxUiIterations: Int
     get() = maxIterations
+
+val ControlledTimerState.Running.maxTime: Duration
+    get() = when (this) {
+        is Running.LongRest -> timerSettings.intervalsSettings.longRest
+        is Running.Rest -> timerSettings.intervalsSettings.rest
+        is Running.Work -> timerSettings.intervalsSettings.work
+    }
+
+val ControlledTimerState.Running.progress: Float
+    get() {
+        return when {
+            timeLeft > maxTime -> 1f
+            maxTime.inWholeSeconds == 0L -> 0f
+            else -> timeLeft.inWholeSeconds / maxTime.inWholeSeconds.toFloat()
+        }
+    }

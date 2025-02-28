@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import busystatusbar.components.core.ui.res_preview.generated.resources.Res
@@ -28,16 +29,17 @@ fun BIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
+    shape: Shape = RoundedCornerShape(12.dp),
     enabled: Boolean = true,
     background: Color = LocalCorruptedPallet.current.transparent.whiteInvert.quaternary,
     tint: Color = LocalCorruptedPallet.current.transparent.whiteInvert.primary,
 ) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(shape)
             .background(background)
             .clickable(enabled = enabled, onClick = onClick)
-            .padding(8.dp),
+            .padding(12.dp),
         contentAlignment = Alignment.Center
     ) {
         Icon(

@@ -123,7 +123,7 @@ fun BChipButton(
             Row(
                 modifier = Modifier.animateContentSize(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
                 content = {
                     if (painter != null) {
                         Icon(
