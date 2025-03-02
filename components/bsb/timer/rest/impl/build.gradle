@@ -24,4 +24,5 @@ commonDependencies {
     implementation(libs.decompose)
     implementation(libs.constraintlayout)
     implementation(libs.composables)
+    implementation(libs.compose.haze)
 }

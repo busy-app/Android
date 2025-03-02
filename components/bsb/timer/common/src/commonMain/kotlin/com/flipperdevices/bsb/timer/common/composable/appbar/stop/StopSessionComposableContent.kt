@@ -45,7 +45,6 @@ fun StopSessionComposableContent(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    HazeDialog()
     Column(
         modifier = modifier.fillMaxWidth()
             .navigationBarsPadding()
@@ -70,7 +69,7 @@ fun StopSessionComposableContent(
         ) {
             BChipButton(
                 modifier = Modifier.weight(1f),
-                onClick = onDismiss,
+                onClick = onConfirm,
                 painter = painterResource(Res.drawable.ic_stop),
                 text = stringResource(Res.string.ta_stop),
                 contentColor = LocalCorruptedPallet.current
@@ -82,7 +81,7 @@ fun StopSessionComposableContent(
             )
             BChipButton(
                 modifier = Modifier.weight(1f),
-                onClick = onConfirm,
+                onClick = onDismiss,
                 painter = null,
                 text = stringResource(Res.string.ta_keep_focusing),
                 contentColor = LocalCorruptedPallet.current

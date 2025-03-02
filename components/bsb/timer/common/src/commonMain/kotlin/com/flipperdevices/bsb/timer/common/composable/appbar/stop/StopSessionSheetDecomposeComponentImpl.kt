@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.active.api
+package com.flipperdevices.bsb.timer.common.composable.appbar.stop
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -8,9 +8,8 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
-import com.composables.core.Sheet
+import com.composables.core.Scrim
 import com.composables.core.SheetDetent
-import com.flipperdevices.bsb.timer.common.composable.appbar.stop.StopSessionComposableContent
 import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
 import dev.chrisbanes.haze.HazeState
 import kotlinx.coroutines.delay
@@ -38,14 +37,15 @@ class StopSessionSheetDecomposeComponentImpl(
     }
 
     @Composable
-    fun Render(modifier: Modifier, hazeState: HazeState) {
+    fun Render(hazeState: HazeState) {
         val coroutineScope = rememberCoroutineScope()
         ModalBottomSheetSlot(
             slot = childSlot,
             initialDetent = SheetDetent.Hidden,
             onDismiss = { slot.dismiss() },
             content = {
-                Sheet {
+                Scrim()
+                InvisibleSheet {
                     StopSessionComposableContent(
                         onConfirm = {
                             slot.dismiss()

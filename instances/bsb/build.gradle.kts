@@ -200,6 +200,7 @@ commonDependencies {
     implementation(projects.components.bsb.profile.passkeyview.api)
     implementation(projects.components.bsb.profile.passkeyview.impl)
 
+    implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.setup.api)
     implementation(projects.components.bsb.timer.setup.impl)
     implementation(projects.components.bsb.timer.main.api)

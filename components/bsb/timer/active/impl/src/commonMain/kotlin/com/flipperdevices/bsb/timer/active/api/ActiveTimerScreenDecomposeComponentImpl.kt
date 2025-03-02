@@ -17,6 +17,7 @@ import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.background.util.skip
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
+import com.flipperdevices.bsb.timer.common.composable.appbar.stop.StopSessionSheetDecomposeComponentImpl
 import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -32,7 +33,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
-    private val stopSessionSheetDecomposeComponentFactory: (
+    stopSessionSheetDecomposeComponentFactory: (
         componentContext: ComponentContext,
         onConfirm: () -> Unit
     ) -> StopSessionSheetDecomposeComponentImpl,
@@ -44,10 +45,11 @@ class ActiveTimerScreenDecomposeComponentImpl(
         focusDisplayDecomposeComponentFactory.invoke(lifecycle = lifecycle)
     }
 
-    private val stopSessionSheetDecomposeComponent = stopSessionSheetDecomposeComponentFactory.invoke(
-        childContext("stopSessionSheetDecomposeComponent"),
-        { timerApi.stop() }
-    )
+    private val stopSessionSheetDecomposeComponent =
+        stopSessionSheetDecomposeComponentFactory.invoke(
+            childContext("busy_stopSessionSheetDecomposeComponent"),
+            { timerApi.stop() }
+        )
 
     @Composable
     override fun Render(modifier: Modifier) {
@@ -61,7 +63,8 @@ class ActiveTimerScreenDecomposeComponentImpl(
             is ControlledTimerState.Running -> {
                 TimerBusyComposableScreen(
                     modifier = modifier
-                        .fillMaxSize(),
+                        .fillMaxSize()
+                        .hazeSource(hazeState),
                     state = state,
                     onSkip = {
                         timerApi.skip()
@@ -81,10 +84,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
             }
         }
 
-        stopSessionSheetDecomposeComponent.Render(
-            modifier = Modifier,
-            hazeState = hazeState
-        )
+        stopSessionSheetDecomposeComponent.Render(hazeState)
     }
 
     @Inject
