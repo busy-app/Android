@@ -1,7 +1,9 @@
 package com.flipperdevices.bsb.timer.background.notification
 
 import android.app.Notification
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.widget.RemoteViews
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationChannelCompat
@@ -11,23 +13,22 @@ import com.flipperdevices.bsb.timer.background.impl.R
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.toHumanReadableString
 import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
+import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.log.LogTagProvider
+import me.tatarka.inject.annotations.Inject
 
 private const val TIMER_NOTIFICATION_CHANNEL = "timer_notification_channel"
 
-object NotificationTimerBuilder : LogTagProvider {
+@Inject
+class NotificationTimerBuilder(
+    private val platformDependencies: AndroidPlatformDependencies,
+) : LogTagProvider {
     override val TAG = "NotificationTimerBuilder"
 
     fun buildStartUpNotification(
         context: Context
     ): Notification {
-        createChannelIfNotYet(context)
-
-        return NotificationCompat.Builder(context, TIMER_NOTIFICATION_CHANNEL)
-            .setSilent(true)
-            .setSmallIcon(R.drawable.ic_busy_logo)
-            .setColor(context.getColor(R.color.brand_color))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        return createBase(context)
             .setContentTitle(context.getString(R.string.timer_notification_title))
             .setContentText(context.getString(R.string.timer_notification_desc_empty))
             .build()
@@ -37,21 +38,36 @@ object NotificationTimerBuilder : LogTagProvider {
         context: Context,
         timer: ControlledTimerState = ControlledTimerState.NotStarted
     ): Notification? {
-        createChannelIfNotYet(context)
         if (timer !is ControlledTimerState.Running) {
             return null
         }
 
-        val notificationBuilder = NotificationCompat.Builder(context, TIMER_NOTIFICATION_CHANNEL)
-            .setSilent(true)
-            .setSmallIcon(R.drawable.ic_busy_logo)
-            .setColor(context.getColor(R.color.brand_color))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        val notificationBuilder = createBase(context)
 
         notificationBuilder.setCustomContentView(getCompactLayout(context, timer))
         notificationBuilder.setCustomBigContentView(getExpandedLayout(context, timer))
 
         return notificationBuilder.build()
+    }
+
+    private fun createBase(
+        context: Context
+    ): NotificationCompat.Builder {
+        createChannelIfNotYet(context)
+        return NotificationCompat.Builder(context, TIMER_NOTIFICATION_CHANNEL)
+            .setSilent(true)
+            .setSmallIcon(R.drawable.ic_busy_logo)
+            .setColor(context.getColor(R.color.brand_color))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setChannelId(TIMER_NOTIFICATION_CHANNEL)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    context,
+                    0,
+                    Intent(context, platformDependencies.splashScreenActivity.java),
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+            )
     }
 
     private fun createChannelIfNotYet(context: Context) {

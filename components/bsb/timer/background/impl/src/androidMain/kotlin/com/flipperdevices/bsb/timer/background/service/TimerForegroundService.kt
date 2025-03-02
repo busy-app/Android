@@ -34,6 +34,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
 
     private val serviceDIComponent = ComponentHolder.component<ServiceDIComponent>()
     private val delegate = serviceDIComponent.commonTimerApi
+    private val notificationBuilder = serviceDIComponent.notificationBuilder
 
     private val binder = TimerServiceBinder(delegate)
     private val notificationManager by lazy { getSystemService(NotificationManager::class.java) }
@@ -41,7 +42,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
     init {
         delegate.getState()
             .onEach { state ->
-                val notification = NotificationTimerBuilder.buildNotification(
+                val notification = notificationBuilder.buildNotification(
                     this@TimerForegroundService,
                     state
                 )
@@ -61,7 +62,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
 
         startForeground(
             NOTIFICATION_ID,
-            NotificationTimerBuilder.buildStartUpNotification(applicationContext)
+            notificationBuilder.buildStartUpNotification(applicationContext)
         )
     }
 
