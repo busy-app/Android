@@ -51,7 +51,7 @@ class AppBlockerTimerListener(
                     ControlledTimerState.InProgress.AwaitType.AFTER_REST -> false
                 }
 
-                is ControlledTimerState.InProgress.Running.Work -> true and internalState.isOnPause.not()
+                is ControlledTimerState.InProgress.Running.Work -> internalState.isOnPause.not()
                 is ControlledTimerState.InProgress.Running.LongRest,
                 is ControlledTimerState.InProgress.Running.Rest,
                 ControlledTimerState.Finished,
