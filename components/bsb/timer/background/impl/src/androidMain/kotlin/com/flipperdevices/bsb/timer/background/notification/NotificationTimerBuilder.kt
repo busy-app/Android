@@ -12,6 +12,9 @@ import androidx.core.app.NotificationManagerCompat
 import com.flipperdevices.bsb.timer.background.impl.R
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.toHumanReadableString
+import com.flipperdevices.bsb.timer.background.notification.layout.BaseNotificationLayoutBuilder
+import com.flipperdevices.bsb.timer.background.notification.layout.CompactNotificationLayoutBuilder
+import com.flipperdevices.bsb.timer.background.notification.layout.ExtendedNotificationLayoutBuilder
 import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
 import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.log.LogTagProvider
@@ -22,6 +25,8 @@ private const val TIMER_NOTIFICATION_CHANNEL = "timer_notification_channel"
 @Inject
 class NotificationTimerBuilder(
     private val platformDependencies: AndroidPlatformDependencies,
+    private val compactNotificationLayoutBuilder: CompactNotificationLayoutBuilder,
+    private val expandedNotificationLayoutBuilder: ExtendedNotificationLayoutBuilder
 ) : LogTagProvider {
     override val TAG = "NotificationTimerBuilder"
 
@@ -36,16 +41,26 @@ class NotificationTimerBuilder(
 
     fun buildNotification(
         context: Context,
-        timer: ControlledTimerState = ControlledTimerState.NotStarted
+        timer: ControlledTimerState
     ): Notification? {
-        if (timer !is ControlledTimerState.Running) {
+        if (timer !is ControlledTimerState.InProgress) {
             return null
         }
 
         val notificationBuilder = createBase(context)
 
-        notificationBuilder.setCustomContentView(getCompactLayout(context, timer))
-        notificationBuilder.setCustomBigContentView(getExpandedLayout(context, timer))
+        notificationBuilder.setCustomContentView(
+            compactNotificationLayoutBuilder.getLayout(
+                context,
+                timer
+            )
+        )
+        notificationBuilder.setCustomBigContentView(
+            expandedNotificationLayoutBuilder.getLayout(
+                context,
+                timer
+            )
+        )
 
         return notificationBuilder.build()
     }
@@ -81,85 +96,5 @@ class NotificationTimerBuilder(
             .build()
 
         notificationManager.createNotificationChannel(flipperChannel)
-    }
-
-    private fun getCompactLayout(
-        context: Context,
-        timer: ControlledTimerState.Running
-    ): RemoteViews {
-        val notificationLayout = RemoteViews(
-            context.packageName,
-            R.layout.notification_base_layout
-        )
-        notificationLayout.setTextViewText(
-            R.id.timer,
-            timer.toHumanReadableString()
-        )
-        notificationLayout.setImageViewResource(
-            R.id.status_pic,
-            timer.getStatusImageId()
-        )
-        return notificationLayout
-    }
-
-    private fun getExpandedLayout(
-        context: Context,
-        timer: ControlledTimerState.Running
-    ): RemoteViews {
-        val notificationLayout = RemoteViews(
-            context.packageName,
-            R.layout.notification_expanded
-        )
-        notificationLayout.setTextViewText(
-            R.id.timer,
-            timer.toHumanReadableString()
-        )
-        notificationLayout.setImageViewResource(
-            R.id.status_pic,
-            timer.getStatusImageId()
-        )
-
-        val iconId = when (timer.isOnPause) {
-            true -> R.drawable.ic_play
-            false -> R.drawable.ic_pause
-        }
-        notificationLayout.setImageViewResource(R.id.btn_icon, iconId)
-
-        val textId = when (timer.isOnPause) {
-            true -> R.string.timer_notification_btn_play
-            false -> R.string.timer_notification_btn_pause
-        }
-        notificationLayout.setTextViewText(R.id.btn_text, context.getString(textId))
-
-        val action = when (timer.isOnPause) {
-            true -> TimerServiceActionEnum.RESUME
-            false -> TimerServiceActionEnum.PAUSE
-        }
-
-        notificationLayout.setOnClickPendingIntent(
-            R.id.btn,
-            TimerBroadcastReceiver.getTimerIntent(context, action)
-        )
-
-        return notificationLayout
-    }
-}
-
-@DrawableRes
-private fun ControlledTimerState.Running.getStatusImageId(): Int {
-    return if (isOnPause) {
-        when (this) {
-            is ControlledTimerState.Running.Rest,
-            is ControlledTimerState.Running.LongRest -> R.drawable.pic_status_rest_paused
-
-            is ControlledTimerState.Running.Work -> R.drawable.pic_status_busy_paused
-        }
-    } else {
-        when (this) {
-            is ControlledTimerState.Running.Rest,
-            is ControlledTimerState.Running.LongRest -> R.drawable.pic_status_rest
-
-            is ControlledTimerState.Running.Work -> R.drawable.pic_status_busy
-        }
     }
 }

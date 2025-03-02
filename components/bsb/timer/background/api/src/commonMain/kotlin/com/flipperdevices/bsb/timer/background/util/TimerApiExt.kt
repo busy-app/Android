@@ -23,7 +23,7 @@ fun TimerApi.pause() {
 }
 
 fun TimerApi.confirmNextSte() {
-    val awaitState = getState().value as? ControlledTimerState.Await ?: return
+    val awaitState = getState().value as? ControlledTimerState.InProgress.Await ?: return
     updateState { state ->
         state ?: return@updateState state
         state.copy(
@@ -54,7 +54,7 @@ fun TimerApi.stop() {
 fun TimerApi.skip() {
     updateState { state ->
         state ?: return@updateState state
-        val startedState = getState().value as? ControlledTimerState.Running ?: return@updateState state
+        val startedState = getState().value as? ControlledTimerState.InProgress.Running ?: return@updateState state
 
         state.copy(start = state.start.minus(startedState.timeLeft))
     }

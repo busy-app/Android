@@ -176,7 +176,7 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
         .minus(now)
 
     return when (currentIterationData.iterationType) {
-        IterationType.WORK -> ControlledTimerState.Running.Work(
+        IterationType.WORK -> ControlledTimerState.InProgress.Running.Work(
             timeLeft = currentIterationTypeTimeLeft,
             isOnPause = pause != null,
             timerSettings = settings,
@@ -184,7 +184,7 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
             maxIterations = settings.maxIterationCount,
         )
 
-        IterationType.REST -> ControlledTimerState.Running.Rest(
+        IterationType.REST -> ControlledTimerState.InProgress.Running.Rest(
             timeLeft = currentIterationTypeTimeLeft,
             isOnPause = pause != null,
             timerSettings = settings,
@@ -192,7 +192,7 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
             maxIterations = settings.maxIterationCount,
         )
 
-        IterationType.LONG_REST -> ControlledTimerState.Running.LongRest(
+        IterationType.LONG_REST -> ControlledTimerState.InProgress.Running.LongRest(
             timeLeft = currentIterationTypeTimeLeft,
             isOnPause = pause != null,
             timerSettings = settings,
@@ -200,20 +200,20 @@ internal fun TimerTimestamp?.toState(): ControlledTimerState {
             maxIterations = settings.maxIterationCount,
         )
 
-        IterationType.WAIT_AFTER_REST -> ControlledTimerState.Await(
+        IterationType.WAIT_AFTER_REST -> ControlledTimerState.InProgress.Await(
             timerSettings = settings,
             currentIteration = iterationCountLeft,
             maxIterations = settings.maxIterationCount,
             pausedAt = start.plus(currentIterationData.startOffset),
-            type = ControlledTimerState.AwaitType.AFTER_REST
+            type = ControlledTimerState.InProgress.AwaitType.AFTER_REST
         )
 
-        IterationType.WAIT_AFTER_WORK -> ControlledTimerState.Await(
+        IterationType.WAIT_AFTER_WORK -> ControlledTimerState.InProgress.Await(
             timerSettings = settings,
             currentIteration = iterationCountLeft,
             maxIterations = settings.maxIterationCount,
             pausedAt = start.plus(currentIterationData.startOffset),
-            type = ControlledTimerState.AwaitType.AFTER_WORK
+            type = ControlledTimerState.InProgress.AwaitType.AFTER_WORK
         )
     }
 }

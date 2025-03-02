@@ -56,11 +56,11 @@ class ActiveTimerScreenDecomposeComponentImpl(
         val state by timerApi.getState().collectAsState()
         val hazeState = remember { HazeState() }
         when (val state = state) {
-            is ControlledTimerState.Await,
+            is ControlledTimerState.InProgress.Await,
             ControlledTimerState.NotStarted,
             ControlledTimerState.Finished -> Unit
 
-            is ControlledTimerState.Running -> {
+            is ControlledTimerState.InProgress.Running -> {
                 TimerBusyComposableScreen(
                     modifier = modifier
                         .fillMaxSize()

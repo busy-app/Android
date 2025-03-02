@@ -40,7 +40,7 @@ private const val HD_RATIO = 16f / 9f
 @Composable
 @OptIn(ExperimentalResourceApi::class)
 fun TimerCardComposable(
-    timerState: ControlledTimerState.Running,
+    timerState: ControlledTimerState.InProgress.Running,
     config: TimerActiveConfiguration,
     modifier: Modifier = Modifier,
 ) {
@@ -102,9 +102,9 @@ fun TimerCardComposable(
 
             val totalDuration = remember(timerState.timerSettings.intervalsSettings) {
                 when (timerState) {
-                    is ControlledTimerState.Running.LongRest -> timerState.timerSettings.intervalsSettings.longRest
-                    is ControlledTimerState.Running.Rest -> timerState.timerSettings.intervalsSettings.rest
-                    is ControlledTimerState.Running.Work -> timerState.timerSettings.intervalsSettings.work
+                    is ControlledTimerState.InProgress.Running.LongRest -> timerState.timerSettings.intervalsSettings.longRest
+                    is ControlledTimerState.InProgress.Running.Rest -> timerState.timerSettings.intervalsSettings.rest
+                    is ControlledTimerState.InProgress.Running.Work -> timerState.timerSettings.intervalsSettings.work
                 }
             }
             val progress = remember(timerState.timeLeft, totalDuration) {

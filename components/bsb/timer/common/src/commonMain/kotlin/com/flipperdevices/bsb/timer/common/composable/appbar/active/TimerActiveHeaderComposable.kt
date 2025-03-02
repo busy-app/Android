@@ -29,7 +29,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun TimerActiveHeaderComposable(
-    state: ControlledTimerState.Running,
+    state: ControlledTimerState.InProgress.Running,
     statusType: StatusType,
     onBack: () -> Unit,
     onSkip: (() -> Unit)?,

@@ -15,7 +15,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun TimerRestComposableScreen(
-    state: ControlledTimerState.Running,
+    state: ControlledTimerState.InProgress.Running,
     statusType: StatusType,
     onBackClick: () -> Unit,
     onPauseClick: () -> Unit,

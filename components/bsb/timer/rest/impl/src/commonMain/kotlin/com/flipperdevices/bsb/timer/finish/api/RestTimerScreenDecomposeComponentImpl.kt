@@ -58,7 +58,7 @@ class RestTimerScreenDecomposeComponentImpl(
         val hazeState = remember { HazeState() }
 
         when (val state = state) {
-            is ControlledTimerState.Running -> {
+            is ControlledTimerState.InProgress.Running -> {
                 TimerRestComposableScreen(
                     modifier = modifier
                         .fillMaxSize()
@@ -85,7 +85,7 @@ class RestTimerScreenDecomposeComponentImpl(
                 }
             }
 
-            is ControlledTimerState.Await,
+            is ControlledTimerState.InProgress.Await,
             ControlledTimerState.NotStarted,
             ControlledTimerState.Finished -> Unit
         }

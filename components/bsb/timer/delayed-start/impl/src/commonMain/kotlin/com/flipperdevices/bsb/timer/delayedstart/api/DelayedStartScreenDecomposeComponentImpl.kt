@@ -30,11 +30,11 @@ class DelayedStartScreenDecomposeComponentImpl(
     override fun Render(modifier: Modifier) {
         val state by timerApi.getState().collectAsState()
         when (val state = state) {
-            is ControlledTimerState.Running,
+            is ControlledTimerState.InProgress.Running,
             ControlledTimerState.NotStarted,
             ControlledTimerState.Finished -> Unit
 
-            is ControlledTimerState.Await -> {
+            is ControlledTimerState.InProgress.Await -> {
                 DelayedStartComposableContent(
                     typeEndDelay = typeEndDelay,
                     timerSettings = state.timerSettings,

@@ -2,8 +2,12 @@
 <resources>
     <string name="timer_notification_title">Busy Timer</string>
     <string name="timer_notification_desc_empty">Starting the timer…</string>
+    <string name="timer_notification_after_rest">Time to get back to work</string>
+    <string name="timer_notification_after_busy">%1$d/%2$d done, it’s time to start rest</string>
 
     <string name="timer_notification_btn_play">Start</string>
+    <string name="timer_notification_btn_play_after_rest">Start BUSY</string>
+    <string name="timer_notification_btn_play_after_busy">Start rest</string>
     <string name="timer_notification_btn_pause">Pause</string>
 
     <string name="timer_notification_channel_title">Busy Timer</string>

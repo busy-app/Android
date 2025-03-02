@@ -33,7 +33,7 @@ data class TimerActiveConfiguration(
 @Composable
 @Suppress("LongMethod")
 fun TimerActiveComposableScreen(
-    state: ControlledTimerState.Running,
+    state: ControlledTimerState.InProgress.Running,
     config: TimerActiveConfiguration,
     onPauseClick: () -> Unit,
     onBack: () -> Unit,
