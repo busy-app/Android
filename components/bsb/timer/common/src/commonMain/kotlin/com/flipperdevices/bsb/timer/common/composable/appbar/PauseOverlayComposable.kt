@@ -56,7 +56,7 @@ fun PauseFullScreenOverlayComposable(
                 }
                 ButtonTimerComposable(
                     modifier = Modifier.align(Alignment.BottomCenter)
-                        .padding(bottom = 64.dp),
+                        .padding(bottom = 16.dp),
                     state = ButtonTimerState.START,
                     onClick = onStartClick,
                 )

@@ -38,7 +38,7 @@ fun AppBlockerContentComposable(
         val context = LocalContext.current
         val drawable = remember(applicationInfo.packageName, context) {
             runCatching {
-                context.packageManager.getApplicationIcon(applicationInfo.packageName)
+                context.packageManager.getApplicationIcon(context.packageName)
             }.getOrNull()
         }
 
