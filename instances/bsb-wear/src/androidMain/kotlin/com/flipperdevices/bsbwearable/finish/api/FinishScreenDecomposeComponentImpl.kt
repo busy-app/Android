@@ -19,7 +19,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class FinishScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-) : AutoPauseScreenDecomposeComponent(componentContext) {
+) : FinishScreenDecomposeComponent(componentContext) {
 
     // todo
     private fun getTimerState(): StateFlow<ControlledTimerState> {
@@ -44,12 +44,12 @@ class FinishScreenDecomposeComponentImpl(
     }
 
     @Inject
-    @ContributesBinding(AppGraph::class, AutoPauseScreenDecomposeComponent.Factory::class)
+    @ContributesBinding(AppGraph::class, FinishScreenDecomposeComponent.Factory::class)
     class Factory(
         private val factory: (
             componentContext: ComponentContext
         ) -> FinishScreenDecomposeComponentImpl
-    ) : AutoPauseScreenDecomposeComponent.Factory {
+    ) : FinishScreenDecomposeComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext
         ) = factory(componentContext)
