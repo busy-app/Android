@@ -7,4 +7,5 @@ sealed interface RootNavigationConfig {
     data object HelloWord : RootNavigationConfig
     data object Active : RootNavigationConfig
     data object AutoPause : RootNavigationConfig
+    data object Finish : RootNavigationConfig
 }

@@ -14,6 +14,7 @@ import com.arkivanov.decompose.value.Value
 import com.flipperdevices.bsbwearable.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.autopause.api.AutoPauseScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.composable.SwipeToDismissBox
+import com.flipperdevices.bsbwearable.finish.api.FinishScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.root.api.model.RootNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
@@ -26,7 +27,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class RootDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val activeTimerScreenDecomposeComponentFactory: ActiveTimerScreenDecomposeComponent.Factory,
-    private val autoPauseScreenDecomposeComponentFactpry: AutoPauseScreenDecomposeComponent.Factory
+    private val autoPauseScreenDecomposeComponentFactory: AutoPauseScreenDecomposeComponent.Factory,
+    private val finishScreenDecomposeComponentFactory: FinishScreenDecomposeComponent.Factory
 ) : RootDecomposeComponent(),
     ComponentContext by componentContext {
     override val stack: Value<ChildStack<RootNavigationConfig, DecomposeComponent>> = childStack(
@@ -65,7 +67,11 @@ class RootDecomposeComponentImpl(
             componentContext = componentContext
         )
 
-        RootNavigationConfig.AutoPause -> autoPauseScreenDecomposeComponentFactpry.invoke(
+        RootNavigationConfig.AutoPause -> autoPauseScreenDecomposeComponentFactory.invoke(
+            componentContext = componentContext
+        )
+
+        RootNavigationConfig.Finish -> finishScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext
         )
     }
