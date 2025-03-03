@@ -8,6 +8,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsbwearable.active.composable.ActiveTimerScreenComposable
+import com.flipperdevices.bsbwearable.interrupt.composable.PauseWearOverlayComposable
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -44,6 +45,10 @@ class ActiveTimerScreenDecomposeComponentImpl(
             onSkipClick = {},
             onPauseClick = {}
         )
+
+        if ((timerState as? ControlledTimerState.Running)?.isOnPause == true) {
+            PauseWearOverlayComposable(onStartClick = {})
+        }
     }
 
     @Inject
