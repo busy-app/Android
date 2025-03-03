@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsbwearable.autopause.api.AutoPauseScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.finish.composable.FinishScreenComposable
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.flow.MutableStateFlow
