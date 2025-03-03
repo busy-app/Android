@@ -22,4 +22,5 @@
     <string name="bwin_stop_desc">Stopping will reset this BUSY progress. Are you sure?</string>
     <!--    Busy-Wear-CArd-->
     <string name="bwca_blocked_all">All</string>
+    <string name="bwca_button_start">Start</string>
 </resources>
