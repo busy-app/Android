@@ -52,7 +52,7 @@ fun AppBlockerScreenComposable(
             color = LocalPallet.current.black.invert,
             fontSize = 16.sp,
             fontFamily = LocalBusyBarFonts.current.pragmatica,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -65,7 +65,7 @@ private fun AppBlockerScreenComposablePreview() {
             applicationInfo = InternalApplicationInfo(
                 packageName = "com.example",
                 openCount = 10,
-                name = "Test app"
+                name = "Long Test app"
             ),
             onBack = {}
         )

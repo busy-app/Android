@@ -1,7 +1,7 @@
 package com.flipperdevices.bsb.timer.background.model
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
-import com.flipperdevices.bsb.timer.background.model.ControlledTimerState.Running
+import com.flipperdevices.bsb.timer.background.model.ControlledTimerState.InProgress.Running
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
@@ -15,56 +15,59 @@ sealed interface ControlledTimerState {
     data object Finished : ControlledTimerState
 
     @Serializable
-    sealed interface Running : ControlledTimerState {
-        val timeLeft: Duration
-        val isOnPause: Boolean
-        val timerSettings: TimerSettings
-        val currentIteration: Int
-        val maxIterations: Int
+    sealed interface InProgress : ControlledTimerState {
+        @Serializable
+        sealed interface Running : InProgress {
+            val timeLeft: Duration
+            val isOnPause: Boolean
+            val timerSettings: TimerSettings
+            val currentIteration: Int
+            val maxIterations: Int
+
+            @Serializable
+            data class Work(
+                override val timeLeft: Duration,
+                override val isOnPause: Boolean,
+                override val timerSettings: TimerSettings,
+                override val currentIteration: Int,
+                override val maxIterations: Int
+            ) : Running
+
+            @Serializable
+            data class Rest(
+                override val timeLeft: Duration,
+                override val isOnPause: Boolean,
+                override val timerSettings: TimerSettings,
+                override val currentIteration: Int,
+                override val maxIterations: Int
+            ) : Running
+
+            @Serializable
+            data class LongRest(
+                override val timeLeft: Duration,
+                override val isOnPause: Boolean,
+                override val timerSettings: TimerSettings,
+                override val currentIteration: Int,
+                override val maxIterations: Int
+            ) : Running
+        }
+
+        enum class AwaitType {
+            AFTER_WORK, AFTER_REST
+        }
 
         @Serializable
-        data class Work(
-            override val timeLeft: Duration,
-            override val isOnPause: Boolean,
-            override val timerSettings: TimerSettings,
-            override val currentIteration: Int,
-            override val maxIterations: Int
-        ) : Running
-
-        @Serializable
-        data class Rest(
-            override val timeLeft: Duration,
-            override val isOnPause: Boolean,
-            override val timerSettings: TimerSettings,
-            override val currentIteration: Int,
-            override val maxIterations: Int
-        ) : Running
-
-        @Serializable
-        data class LongRest(
-            override val timeLeft: Duration,
-            override val isOnPause: Boolean,
-            override val timerSettings: TimerSettings,
-            override val currentIteration: Int,
-            override val maxIterations: Int
-        ) : Running
+        data class Await(
+            val timerSettings: TimerSettings,
+            val currentIteration: Int,
+            val maxIterations: Int,
+            val pausedAt: Instant,
+            val type: AwaitType
+        ) : InProgress
     }
-
-    enum class AwaitType {
-        AFTER_WORK, AFTER_REST
-    }
-
-    @Serializable
-    data class Await(
-        val timerSettings: TimerSettings,
-        val currentIteration: Int,
-        val maxIterations: Int,
-        val pausedAt: Instant,
-        val type: AwaitType
-    ) : ControlledTimerState
 }
 
-val ControlledTimerState.Running.isLastIteration: Boolean
+val ControlledTimerState.InProgress.Running.isLastIteration: Boolean
     get() = currentIteration == maxIterations
 
 private const val MIN_TWO_DIGIT_VALUE = 10
@@ -84,7 +87,7 @@ private fun Int.fixedTwoDigitValue(): String {
     return this.toLong().fixedTwoDigitValue()
 }
 
-fun ControlledTimerState.Running.toHumanReadableString(): String {
+fun ControlledTimerState.InProgress.Running.toHumanReadableString(): String {
     return timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
         buildString {
             if (days > 0) append("${days.fixedTwoDigitValue()}:")
@@ -95,8 +98,8 @@ fun ControlledTimerState.Running.toHumanReadableString(): String {
     }
 }
 
-val ControlledTimerState.Running.currentUiIteration: Int
+val ControlledTimerState.InProgress.Running.currentUiIteration: Int
     get() = currentIteration + 1
 
-val ControlledTimerState.Running.maxUiIterations: Int
+val ControlledTimerState.InProgress.Running.maxUiIterations: Int
     get() = maxIterations

@@ -27,16 +27,16 @@ fun M3Switch(
             checkedTrackColor = LocalCorruptedPallet.current.accent.device.primary,
             uncheckedTrackColor = LocalCorruptedPallet.current.transparent.whiteInvert.tertiary,
             // todo no color for disabled in design system yet
-//            checkedIconColor = TODO(),
-//            disabledCheckedBorderColor = TODO(),
-//            disabledCheckedIconColor = TODO(),
-//            disabledCheckedThumbColor = TODO(),
-//            disabledCheckedTrackColor = TODO(),
-//            disabledUncheckedBorderColor = TODO(),
-//            disabledUncheckedIconColor = TODO(),
-//            disabledUncheckedThumbColor = TODO(),
-//            uncheckedIconColor = TODO(),
-//            disabledUncheckedTrackColor = TODO(),
+            // checkedIconColor = TODO(),
+            // disabledCheckedIconColor = TODO(),
+            // disabledUncheckedIconColor = TODO(),
+            // uncheckedIconColor = TODO(),
+            disabledCheckedBorderColor = Color.Transparent,
+            disabledCheckedThumbColor = LocalCorruptedPallet.current.transparent.whiteInvert.tertiary,
+            disabledCheckedTrackColor = LocalCorruptedPallet.current.accent.device.primary,
+            disabledUncheckedBorderColor = Color.Transparent,
+            disabledUncheckedThumbColor = LocalCorruptedPallet.current.transparent.whiteInvert.tertiary,
+            disabledUncheckedTrackColor = LocalCorruptedPallet.current.transparent.whiteInvert.tertiary,
         )
     )
 }

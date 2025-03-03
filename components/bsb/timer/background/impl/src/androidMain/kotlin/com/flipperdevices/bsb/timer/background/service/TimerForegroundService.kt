@@ -10,7 +10,6 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.notification.NotificationTimerBuilder
 import com.flipperdevices.bsb.timer.background.util.pause
 import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.core.di.ComponentHolder
@@ -34,6 +33,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
 
     private val serviceDIComponent = ComponentHolder.component<ServiceDIComponent>()
     private val delegate = serviceDIComponent.commonTimerApi
+    private val notificationBuilder = serviceDIComponent.notificationBuilder
 
     private val binder = TimerServiceBinder(delegate)
     private val notificationManager by lazy { getSystemService(NotificationManager::class.java) }
@@ -41,7 +41,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
     init {
         delegate.getState()
             .onEach { state ->
-                val notification = NotificationTimerBuilder.buildNotification(
+                val notification = notificationBuilder.buildNotification(
                     this@TimerForegroundService,
                     state
                 )
@@ -61,7 +61,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
 
         startForeground(
             NOTIFICATION_ID,
-            NotificationTimerBuilder.buildStartUpNotification(applicationContext)
+            notificationBuilder.buildStartUpNotification(applicationContext)
         )
     }
 

@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.googleServices)
     id("flipper.android-app")
     id("flipper.multiplatform-dependencies")
 }
@@ -200,6 +201,7 @@ commonDependencies {
     implementation(projects.components.bsb.profile.passkeyview.api)
     implementation(projects.components.bsb.profile.passkeyview.impl)
 
+    implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.setup.api)
     implementation(projects.components.bsb.timer.setup.impl)
     implementation(projects.components.bsb.timer.main.api)
@@ -219,6 +221,8 @@ commonDependencies {
 }
 
 dependencies {
+    implementation(platform(libs.firebase.bom))
+
     add("kspCommonMainMetadata", libs.kotlin.inject.ksp)
     add("kspAndroid", libs.kotlin.inject.ksp)
     add("kspIosArm64", libs.kotlin.inject.ksp)

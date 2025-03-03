@@ -5,4 +5,9 @@
     <string name="tc_status_busy">BUSY</string>
     <string name="tc_status_rest">REST</string>
     <string name="tc_status_long_rest">LONG REST</string>
+
+    <string name="ta_stop">Stop</string>
+    <string name="ta_ask_stop_session">Stopping will reset this BUSY progress. Are you sure?</string>
+    <string name="ta_keep_focusing">Keep BUSY</string>
+    <string name="ta_skip">Skip</string>
 </resources>

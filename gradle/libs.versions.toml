@@ -1,9 +1,13 @@
 [versions]
-agp = "8.8.1"
-androidx-activityCompose = "1.10.0"
+agp = "8.8.2"
+androidx-activityCompose = "1.10.1"
 androidx-annotation = "1.9.1"
 androidx-core = "1.15.0"
 androidx-browser = "1.8.0"
+androidx-video = "1.2.0" # https://github.com/dsa28s/compose-video/releases
+androidx-media = "1.5.1" # https://developer.android.com/jetpack/androidx/releases/media3
+google-services = "4.4.2"
+firebase = "33.10.0"
 appcompat = "1.7.0" # https://developer.android.com/jetpack/androidx/releases/appcompat
 constraintlayout = "0.5.1"
 compose-plugin = "1.7.3"
@@ -18,7 +22,6 @@ kotlin-inject-anvil = "0.1.2"
 decompose = "3.2.2"
 essenty = "2.5.0"
 settings = "1.3.0"
-moko-permissions = "0.18.1"
 markdown = "0.31.0" # https://github.com/mikepenz/multiplatform-markdown-renderer/releases
 ktor = "3.1.1" # https://ktor.io/
 timber = "5.0.1" # https://github.com/JakeWharton/timber/releases
@@ -35,7 +38,7 @@ compose-placeholder = "1.0.9"
 androidx-compose = "1.7.8" # https://github.com/eygraber/compose-placeholder/releases
 composables = "1.20.1" # https://github.com/composablehorizons/compose-unstyled
 klibs-kstorage = "3.2.6" # https://github.com/makeevrserg/klibs.kstorage
-room = "2.7.0-beta01" # https://developer.android.com/jetpack/androidx/releases/room
+room = "2.7.0-rc01" # https://developer.android.com/jetpack/androidx/releases/room
 accompanist = "0.37.2" # https://github.com/google/accompanist/releases
 # 0.6.17 requires androidx.navigation:navigation-compose:2.8.0-beta0
 # androidx.navigation:navigation-compose:2.8.0-beta0 requires Android API 35
@@ -47,6 +50,7 @@ wear-interaction-phone = "1.1.0-alpha05" # https://developer.android.com/jetpack
 wear-interaction-remote = "1.1.0" # https://developer.android.com/jetpack/androidx/releases/wear
 compose-wear = "1.4.0" # https://developer.android.com/jetpack/androidx/releases/wear-compose
 compose-wear-preview = "1.0.0" # https://mvnrepository.com/artifact/androidx.wear/wear-tooling-preview
+haze = "1.4.0"
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -77,6 +81,8 @@ kotlin-inject-anvil-runtime = { module = "software.amazon.lastmile.kotlin.inject
 kotlin-inject-anvil-runtime-optional = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional", version.ref = "kotlin-inject-anvil" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-composeExtension = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+
 
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
@@ -94,9 +100,17 @@ essenty-lifecycle-coroutines = { module = "com.arkivanov.essenty:lifecycle-corou
 markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "markdown" }
 
 compose-placeholder = { module = "com.eygraber:compose-placeholder", version.ref = "compose-placeholder" }
+compose-haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
+compose-haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
+
 
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
+androidx-video = { module = "io.sanghun:compose-video", version.ref = "androidx-video" }
+androidx-media-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media" }
+androidx-media-session = { module = "androidx.media3:media3-session", version.ref = "androidx-media" }
+androidx-media-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media" }
+
 
 settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
 settings-observable = { module = "com.russhwolf:multiplatform-settings-make-observable", version.ref = "settings" }
@@ -143,3 +157,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 buildkonfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildkonfig" }
 atomicflu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicflu" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }

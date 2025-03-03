@@ -23,4 +23,25 @@
         android:textAlignment="gravity"
         android:textSize="18sp"
         tools:text="25:55" />
+
+    <TextView
+        android:id="@+id/timer_status"
+        style="@style/BSBTheme.Notification.Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:textAlignment="gravity"
+        android:textSize="12sp"
+        tools:text="Time to get back to work"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/timer_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:importantForAccessibility="no"
+        tools:src="@drawable/ic_laptop"
+        tools:visibility="gone" />
 </LinearLayout>

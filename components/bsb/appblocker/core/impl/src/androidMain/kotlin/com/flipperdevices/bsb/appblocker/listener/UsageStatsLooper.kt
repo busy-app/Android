@@ -3,6 +3,8 @@ package com.flipperdevices.bsb.appblocker.listener
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import com.flipperdevices.bsb.appblocker.deeplink.AppBlockDeeplinkParser
 import com.flipperdevices.bsb.appblocker.stats.api.AppBlockerStatsApi
 import com.flipperdevices.bsb.appblocker.stats.model.AppLaunchRecordEvent
@@ -10,7 +12,7 @@ import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.info
-import com.flipperdevices.core.log.verbose
+import com.flipperdevices.core.log.warn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -63,7 +65,6 @@ class UsageStatsLooper(
         val event = UsageEvents.Event()
         while (events.hasNextEvent()) {
             events.getNextEvent(event)
-            verbose { "Process $event" }
             checkEvent(event)
         }
     }
@@ -77,7 +78,17 @@ class UsageStatsLooper(
             return
         }
 
-        info { "Detect forbidden app in event with type ${event.eventType}: $event" }
+        val applicationInfo = context.packageManager.getApplicationInfo(
+            event.packageName,
+            PackageManager.GET_META_DATA
+        )
+        val isSystem = (applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+        if (isSystem) {
+            warn { "Detect forbidden app, but it's system app: ${event.packageName}" }
+            return
+        }
+
+        info { "Detect forbidden app in event with type ${event.eventType}: ${event.packageName}" }
 
         appBlockerStatsApi.recordBlockApp(
             event = AppLaunchRecordEvent(

@@ -43,19 +43,22 @@ class TimerMainDecomposeComponentImpl(
         val screen = when (this) {
             ControlledTimerState.Finished -> TimerMainNavigationConfig.Finished
             ControlledTimerState.NotStarted -> TimerMainNavigationConfig.Main
-            is ControlledTimerState.Await -> {
+            is ControlledTimerState.InProgress.Await -> {
                 val typeEndDelay = when (type) {
-                    ControlledTimerState.AwaitType.AFTER_WORK -> DelayedStartScreenDecomposeComponent.TypeEndDelay.WORK
-                    ControlledTimerState.AwaitType.AFTER_REST -> DelayedStartScreenDecomposeComponent.TypeEndDelay.REST
+                    ControlledTimerState.InProgress.AwaitType.AFTER_WORK ->
+                        DelayedStartScreenDecomposeComponent.TypeEndDelay.WORK
+
+                    ControlledTimerState.InProgress.AwaitType.AFTER_REST ->
+                        DelayedStartScreenDecomposeComponent.TypeEndDelay.REST
                 }
                 TimerMainNavigationConfig.PauseAfter(typeEndDelay)
             }
 
-            is ControlledTimerState.Running -> {
+            is ControlledTimerState.InProgress.Running -> {
                 when (this) {
-                    is ControlledTimerState.Running.LongRest -> TimerMainNavigationConfig.LongRest
-                    is ControlledTimerState.Running.Rest -> TimerMainNavigationConfig.Rest
-                    is ControlledTimerState.Running.Work -> TimerMainNavigationConfig.Work
+                    is ControlledTimerState.InProgress.Running.LongRest -> TimerMainNavigationConfig.LongRest
+                    is ControlledTimerState.InProgress.Running.Rest -> TimerMainNavigationConfig.Rest
+                    is ControlledTimerState.InProgress.Running.Work -> TimerMainNavigationConfig.Work
                 }
             }
         }
@@ -69,10 +72,10 @@ class TimerMainDecomposeComponentImpl(
                 when (state) {
                     ControlledTimerState.Finished -> 0
                     ControlledTimerState.NotStarted -> 1
-                    is ControlledTimerState.Running.LongRest -> 2
-                    is ControlledTimerState.Running.Rest -> 3
-                    is ControlledTimerState.Running.Work -> 4
-                    is ControlledTimerState.Await -> 5
+                    is ControlledTimerState.InProgress.Running.LongRest -> 2
+                    is ControlledTimerState.InProgress.Running.Rest -> 3
+                    is ControlledTimerState.InProgress.Running.Work -> 4
+                    is ControlledTimerState.InProgress.Await -> 5
                 }
             }
             .onEach { state -> navigation.replaceAll(state.getScreen()) }
@@ -95,7 +98,10 @@ class TimerMainDecomposeComponentImpl(
             componentContext = componentContext,
         )
 
-        TimerMainNavigationConfig.Work -> activeTimerScreenDecomposeComponentFactory(componentContext)
+        TimerMainNavigationConfig.Work -> activeTimerScreenDecomposeComponentFactory(
+            componentContext
+        )
+
         TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             onFinishCallback = {

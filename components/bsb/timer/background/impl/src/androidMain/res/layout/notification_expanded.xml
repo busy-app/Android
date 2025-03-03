@@ -22,6 +22,7 @@
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:importantForAccessibility="no"
+            android:tint="@color/notification_icon_tint"
             tools:src="@drawable/ic_play" />
 
         <TextView

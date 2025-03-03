@@ -32,8 +32,6 @@ class TimerBroadcastReceiver : BroadcastReceiver(), LogTagProvider {
             val intent = Intent(context, TimerBroadcastReceiver::class.java)
             intent.action = serviceActionEnum.actionId
 
-            info { "Intent for pending intent is ${intent.toFullString()} for action $serviceActionEnum" }
-
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
             } else {

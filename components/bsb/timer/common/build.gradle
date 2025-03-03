@@ -1,16 +1,28 @@
 plugins {
     id("flipper.multiplatform-compose")
     id("flipper.multiplatform-dependencies")
+    id("flipper.anvil-multiplatform")
 }
 
 commonDependencies {
     implementation(projects.components.core.ktx)
     implementation(projects.components.bsb.core.theme)
     implementation(projects.components.core.ui.button)
+    implementation(projects.components.core.ui.decompose)
+    implementation(projects.components.core.ui.video)
+    implementation(projects.components.core.ui.timeline)
+    implementation(projects.components.core.ui.sheet)
 
+    implementation(projects.components.bsb.preference.api)
+    implementation(projects.components.bsb.timer.background.api)
 
     implementation(projects.components.bsb.root.api)
     implementation(projects.components.bsb.deeplink.api)
+
+    implementation(libs.decompose)
+    implementation(libs.composables)
+    implementation(libs.compose.haze)
+    implementation(libs.compose.haze.materials)
 }
 
 compose.resources {

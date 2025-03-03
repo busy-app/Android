@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="brand_color">#F81010</color>
-    <color name="divider_line_color">#0D000000</color>
+    <color name="notification_icon_tint">#000000</color>
 </resources>

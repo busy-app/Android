@@ -68,10 +68,10 @@ class CommonTimerApi(
                                 stopSelf()
                             }
 
-                            is ControlledTimerState.Await,
+                            is ControlledTimerState.InProgress.Await,
                             ControlledTimerState.Finished -> Unit
 
-                            is ControlledTimerState.Running -> {
+                            is ControlledTimerState.InProgress.Running -> {
                                 if (!internalState.isOnPause) {
                                     metronomeApi.play()
                                 }
