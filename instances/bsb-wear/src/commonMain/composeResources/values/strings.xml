@@ -3,4 +3,16 @@
     <string name="bwt_rest">REST</string>
     <string name="bwt_pause">Pause</string>
     <string name="tds_iteration_progress">%1$s/%2$s</string>
+    <!--    Busy-Wear-AUtopause-->
+    <string name="bwau_after_work_title">%1$s %2$s/%3$s done</string>
+    <string name="bwau_after_work_desc">It’s time to have a rest</string>
+    <string name="bwau_after_work_action">Start Rest</string>
+
+    <string name="bwau_after_rest_title">Rest is over</string>
+    <string name="bwau_after_rest_desc">Time to get back to work</string>
+    <string name="bwau_after_rest_action">Start %1$s</string>
+    <!--    Busy-Wear-FInish-->
+    <string name="bwfi_title">SUPERB!</string>
+    <string name="bwfi_desc">You’ve done this BUSY</string>
+    <string name="bwfi_action">Finish</string>
 </resources>

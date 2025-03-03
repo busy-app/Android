@@ -206,6 +206,7 @@ internal fun ActiveTimerScreenComposable(
                     painter = painterResource(CTRes.drawable.ic_pause),
                     contentColor = Color(color = 0x80FFFFFF), // todo
                     modifier = Modifier,
+                    fontSize = 16.sp,
                     contentPadding = PaddingValues(
                         horizontal = 14.dp,
                         vertical = 10.dp
