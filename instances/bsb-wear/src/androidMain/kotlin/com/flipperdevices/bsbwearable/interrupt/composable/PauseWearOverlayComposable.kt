@@ -1,6 +1,5 @@
 package com.flipperdevices.bsbwearable.interrupt.composable
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,11 +19,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_play
+import busystatusbar.instances.bsb_wear.generated.resources.Res
+import busystatusbar.instances.bsb_wear.generated.resources.bwin_start
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.button.BChipButton
 import com.google.android.horologist.compose.layout.fillMaxRectangle
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CommonRes
 
@@ -65,7 +67,7 @@ internal fun PauseWearOverlayComposable(
                 BChipButton(
                     modifier = Modifier,
                     onClick = onStartClick,
-                    text = "Start",
+                    text = stringResource(Res.string.bwin_start),
                     painter = painterResource(CommonRes.drawable.ic_play),
                     contentColor = LocalCorruptedPallet.current.black.onColor,
                     background = LocalCorruptedPallet.current.white.onColor,

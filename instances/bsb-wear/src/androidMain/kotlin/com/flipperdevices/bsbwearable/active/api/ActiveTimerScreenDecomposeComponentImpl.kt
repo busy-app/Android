@@ -5,9 +5,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsbwearable.active.composable.ActiveTimerScreenComposable
+import com.flipperdevices.bsbwearable.interrupt.api.StopSessionDecomposeComponent
 import com.flipperdevices.bsbwearable.interrupt.composable.PauseWearOverlayComposable
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +23,11 @@ import kotlin.time.Duration.Companion.seconds
 @Inject
 class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
+    stopSessionDecomposeComponentFactory: StopSessionDecomposeComponent.Factory
 ) : ActiveTimerScreenDecomposeComponent(componentContext) {
+    private val stopSessionDecomposeComponentFactory = stopSessionDecomposeComponentFactory.invoke(
+        componentContext = childContext("atsdci_ssdcf")
+    )
 
     // todo
     private fun getTimerState(): StateFlow<ControlledTimerState> {
@@ -41,7 +47,9 @@ class ActiveTimerScreenDecomposeComponentImpl(
         val timerState by getTimerState().collectAsState()
         ActiveTimerScreenComposable(
             timerState = timerState,
-            onStopClick = {},
+            onStopClick = {
+                stopSessionDecomposeComponentFactory.show()
+            },
             onSkipClick = {},
             onPauseClick = {}
         )
@@ -49,6 +57,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
         if ((timerState as? ControlledTimerState.Running)?.isOnPause == true) {
             PauseWearOverlayComposable(onStartClick = {})
         }
+        stopSessionDecomposeComponentFactory.Render(Modifier)
     }
 
     @Inject
