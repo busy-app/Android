@@ -1,9 +1,7 @@
 package com.flipperdevices.bsbwearable.card.composable
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -20,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_block
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
@@ -36,13 +33,11 @@ import com.flipperdevices.ui.cardframe.MiniFrameSection
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
-import com.google.android.horologist.compose.layout.fillMaxRectangle
 import com.google.android.horologist.compose.layout.rememberColumnState
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CommonTimerRes
-
 
 @Composable
 private fun calculateBlockerText(blockerState: BlockedAppCount): String? {
@@ -59,6 +54,9 @@ private fun calculateBlockerText(blockerState: BlockedAppCount): String? {
     }
 }
 
+private const val DESIGN_CARD_ASPECT_RATIO = 170f / 107f
+
+@Suppress("LongMethod")
 @Composable
 fun WearCardComposable(
     settings: TimerSettings,
@@ -68,7 +66,7 @@ fun WearCardComposable(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(170f / 107f)
+            .aspectRatio(DESIGN_CARD_ASPECT_RATIO)
             .clip(RoundedCornerShape(20.dp))
             .background(LocalCorruptedPallet.current.accent.brand.primary)
             .padding(12.dp),
@@ -133,7 +131,6 @@ fun WearCardComposable(
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
                     )
                 }
-
             }
         }
     }
@@ -147,15 +144,15 @@ private fun PreviewWearCardComposable() {
         ScalingLazyColumn(
             columnState = rememberColumnState()
         ) {
-            items(4) {
+            items(count = 4) {
                 WearCardComposable(
                     settings = TimerSettings(
                         intervalsSettings = TimerSettings.IntervalsSettings(isEnabled = true)
                     ),
-                    blockerState = BlockedAppCount.Count(24)
+                    blockerState = BlockedAppCount.Count(count = 24)
                 )
             }
-            items(4) {
+            items(count = 4) {
                 WearCardComposable(
                     settings = TimerSettings(),
                     blockerState = BlockedAppCount.All

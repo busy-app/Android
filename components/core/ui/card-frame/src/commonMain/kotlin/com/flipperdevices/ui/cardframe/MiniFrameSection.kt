@@ -42,9 +42,9 @@ private fun FrameSectionInnerContent(
     painter: Painter,
     tint: Color,
     text: String,
-    modifier: Modifier = Modifier,
     iconSize: Dp,
-    fontSize: TextUnit
+    fontSize: TextUnit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
