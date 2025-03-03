@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1001071836653",
+    "project_id": "busyapp-firebase",
+    "storage_bucket": "busyapp-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001071836653:android:f6289e37f752359f4cbbe4",
+        "android_client_info": {
+          "package_name": "com.flipperdevices.bsb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAatAJxDp5425NDcEAJFfd2Ne_DSorTOGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001071836653:android:64d8de173b5111024cbbe4",
+        "android_client_info": {
+          "package_name": "com.flipperdevices.busybar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAatAJxDp5425NDcEAJFfd2Ne_DSorTOGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

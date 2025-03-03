@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.googleServices)
     id("flipper.android-app")
     id("flipper.multiplatform-dependencies")
 }
@@ -220,6 +221,8 @@ commonDependencies {
 }
 
 dependencies {
+    implementation(platform(libs.firebase.bom))
+
     add("kspCommonMainMetadata", libs.kotlin.inject.ksp)
     add("kspAndroid", libs.kotlin.inject.ksp)
     add("kspIosArm64", libs.kotlin.inject.ksp)

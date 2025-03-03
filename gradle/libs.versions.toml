@@ -6,6 +6,8 @@ androidx-core = "1.15.0"
 androidx-browser = "1.8.0"
 androidx-video = "1.2.0" # https://github.com/dsa28s/compose-video/releases
 androidx-media = "1.5.1" # https://developer.android.com/jetpack/androidx/releases/media3
+google-services = "4.4.2"
+firebase = "33.10.0"
 appcompat = "1.7.0" # https://developer.android.com/jetpack/androidx/releases/appcompat
 constraintlayout = "0.5.1"
 compose-plugin = "1.7.3"
@@ -70,6 +72,8 @@ kotlin-inject-anvil-runtime = { module = "software.amazon.lastmile.kotlin.inject
 kotlin-inject-anvil-runtime-optional = { module = "software.amazon.lastmile.kotlin.inject.anvil:runtime-optional", version.ref = "kotlin-inject-anvil" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-composeExtension = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+
 
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
@@ -132,3 +136,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 buildkonfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildkonfig" }
 atomicflu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "atomicflu" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
