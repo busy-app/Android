@@ -5,4 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface RootNavigationConfig {
     data object HelloWord : RootNavigationConfig
+    data object Active : RootNavigationConfig
 }
