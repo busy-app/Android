@@ -11,4 +11,8 @@
     <string name="bwau_after_rest_title">Rest is over</string>
     <string name="bwau_after_rest_desc">Time to get back to work</string>
     <string name="bwau_after_rest_action">Start %1$s</string>
+    <!--    Busy-Wear-FInish-->
+    <string name="bwfi_title">SUPERB!</string>
+    <string name="bwfi_desc">You’ve done this BUSY</string>
+    <string name="bwfi_action">Finish</string>
 </resources>
