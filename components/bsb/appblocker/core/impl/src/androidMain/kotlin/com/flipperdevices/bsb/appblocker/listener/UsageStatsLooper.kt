@@ -79,14 +79,14 @@ class UsageStatsLooper(
         }
 
         val applicationInfo = context.packageManager.getApplicationInfo(
-            event.packageName, PackageManager.GET_META_DATA
+            event.packageName,
+            PackageManager.GET_META_DATA
         )
         val isSystem = (applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
         if (isSystem) {
             warn { "Detect forbidden app, but it's system app: ${event.packageName}" }
             return
         }
-
 
         info { "Detect forbidden app in event with type ${event.eventType}: ${event.packageName}" }
 

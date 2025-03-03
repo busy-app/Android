@@ -12,8 +12,8 @@ import org.jetbrains.compose.resources.DrawableResource
 actual fun BSBVideoPlayer(
     uri: String,
     firstFrame: DrawableResource,
+    modifier: Modifier,
     fallback: DrawableResource,
-    modifier: Modifier
 ) {
     VideoPlayer(
         modifier = modifier,

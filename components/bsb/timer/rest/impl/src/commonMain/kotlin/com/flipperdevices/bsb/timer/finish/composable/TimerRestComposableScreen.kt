@@ -5,7 +5,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import busystatusbar.components.bsb.timer.rest.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.rest.impl.generated.resources.busy_smoke_first_frame
-import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.active.TimerActiveComposableScreen
@@ -23,12 +22,12 @@ fun TimerRestComposableScreen(
     onSkip: (() -> Unit)? = null,
 ) {
     val configuration = TimerActiveConfiguration(
-        gradientStartColor = when(statusType) {
+        gradientStartColor = when (statusType) {
             StatusType.BUSY -> error("Wrong status type")
             StatusType.REST -> Color(color = 0xFF416605)
             StatusType.LONG_REST -> Color(color = 0xFF003976)
         },
-        gradientEndColor = when(statusType) {
+        gradientEndColor = when (statusType) {
             StatusType.BUSY -> error("Wrong status type")
             StatusType.REST -> Color(color = 0xFF0D1500)
             StatusType.LONG_REST -> Color(color = 0xFF001A36)
@@ -37,7 +36,7 @@ fun TimerRestComposableScreen(
         videoUri = Res.getUri("files/busy_smoke.mp4"),
         firstFrame = Res.drawable.busy_smoke_first_frame,
         progressBarColor = Color(color = 0xFF00AC34),
-        progressBarBackgroundColor = Color(color =0x1A00AC34),
+        progressBarBackgroundColor = Color(color = 0x1A00AC34),
         videoBackgroundColor = Color(color = 0xFF213c00)
     )
 

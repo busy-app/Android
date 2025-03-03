@@ -9,10 +9,11 @@ import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class ExtendedNotificationLayoutBuilder
-    : BaseNotificationLayoutBuilder(R.layout.notification_expanded) {
+class ExtendedNotificationLayoutBuilder :
+    BaseNotificationLayoutBuilder(R.layout.notification_expanded) {
     override fun getLayout(
-        context: Context, timer: ControlledTimerState.InProgress
+        context: Context,
+        timer: ControlledTimerState.InProgress
     ): RemoteViews {
         val notificationLayout = super.getLayout(context, timer)
 
@@ -38,7 +39,6 @@ class ExtendedNotificationLayoutBuilder
                 false -> R.string.timer_notification_btn_pause
             }
         }
-
 
         notificationLayout.setTextViewText(R.id.btn_text, context.getString(textId))
 

@@ -45,8 +45,11 @@ class TimerMainDecomposeComponentImpl(
             ControlledTimerState.NotStarted -> TimerMainNavigationConfig.Main
             is ControlledTimerState.InProgress.Await -> {
                 val typeEndDelay = when (type) {
-                    ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> DelayedStartScreenDecomposeComponent.TypeEndDelay.WORK
-                    ControlledTimerState.InProgress.AwaitType.AFTER_REST -> DelayedStartScreenDecomposeComponent.TypeEndDelay.REST
+                    ControlledTimerState.InProgress.AwaitType.AFTER_WORK ->
+                        DelayedStartScreenDecomposeComponent.TypeEndDelay.WORK
+
+                    ControlledTimerState.InProgress.AwaitType.AFTER_REST ->
+                        DelayedStartScreenDecomposeComponent.TypeEndDelay.REST
                 }
                 TimerMainNavigationConfig.PauseAfter(typeEndDelay)
             }
@@ -95,7 +98,10 @@ class TimerMainDecomposeComponentImpl(
             componentContext = componentContext,
         )
 
-        TimerMainNavigationConfig.Work -> activeTimerScreenDecomposeComponentFactory(componentContext)
+        TimerMainNavigationConfig.Work -> activeTimerScreenDecomposeComponentFactory(
+            componentContext
+        )
+
         TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             onFinishCallback = {

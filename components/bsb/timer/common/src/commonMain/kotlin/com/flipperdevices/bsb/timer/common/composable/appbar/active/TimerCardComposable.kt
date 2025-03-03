@@ -33,12 +33,10 @@ import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 import com.flipperdevices.ui.video.BSBVideoPlayer
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 private const val HD_RATIO = 16f / 9f
 
 @Composable
-@OptIn(ExperimentalResourceApi::class)
 fun TimerCardComposable(
     timerState: ControlledTimerState.InProgress.Running,
     config: TimerActiveConfiguration,
@@ -52,7 +50,6 @@ fun TimerCardComposable(
         BSBVideoPlayer(
             modifier = Modifier.fillMaxWidth()
                 .aspectRatio(HD_RATIO)
-                .alpha(0.9f)
                 .onGloballyPositioned { coordinates ->
                     heightPx = coordinates.size.height
                 },
@@ -62,7 +59,11 @@ fun TimerCardComposable(
 
         var columnModifier: Modifier = Modifier
         heightPx?.let { heightPxLocal ->
-            columnModifier = columnModifier.height(LocalDensity.current.run { heightPxLocal.toDp() })
+            columnModifier = columnModifier.height(
+                LocalDensity.current.run {
+                    heightPxLocal.toDp()
+                }
+            )
         }
         Column(
             modifier = columnModifier
@@ -73,38 +74,18 @@ fun TimerCardComposable(
         ) {
             Box(Modifier.height(13.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                timerState.timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
-                    val timeComponentList = listOfNotNull(
-                        hours.takeIf { h -> h > 0 },
-                        minutes,
-                        seconds
-                    )
-                    Text(
-                        text = timeComponentList.joinToString(
-                            separator = ":",
-                            prefix = "",
-                            transform = { timeComponent -> timeComponent.toFormattedTime() }
-                        ),
-                        style = TextStyle(
-                            fontSize = 64.sp,
-                            fontWeight = FontWeight.W500,
-                            fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
-                            color = LocalCorruptedPallet.current.white.invert
-                        )
-                    )
-                }
-            }
+            TimerRow(timerState)
 
             val totalDuration = remember(timerState.timerSettings.intervalsSettings) {
                 when (timerState) {
-                    is ControlledTimerState.InProgress.Running.LongRest -> timerState.timerSettings.intervalsSettings.longRest
-                    is ControlledTimerState.InProgress.Running.Rest -> timerState.timerSettings.intervalsSettings.rest
-                    is ControlledTimerState.InProgress.Running.Work -> timerState.timerSettings.intervalsSettings.work
+                    is ControlledTimerState.InProgress.Running.LongRest ->
+                        timerState.timerSettings.intervalsSettings.longRest
+
+                    is ControlledTimerState.InProgress.Running.Rest ->
+                        timerState.timerSettings.intervalsSettings.rest
+
+                    is ControlledTimerState.InProgress.Running.Work ->
+                        timerState.timerSettings.intervalsSettings.work
                 }
             }
             val progress = remember(timerState.timeLeft, totalDuration) {
@@ -119,6 +100,39 @@ fun TimerCardComposable(
                 progress = progress,
                 color = config.progressBarColor,
                 backgroundColor = config.progressBarBackgroundColor
+            )
+        }
+    }
+}
+
+@Composable
+private fun TimerRow(
+    timerState: ControlledTimerState.InProgress.Running,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        timerState.timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
+            val timeComponentList = listOfNotNull(
+                hours.takeIf { h -> h > 0 },
+                minutes,
+                seconds
+            )
+            Text(
+                text = timeComponentList.joinToString(
+                    separator = ":",
+                    prefix = "",
+                    transform = { timeComponent -> timeComponent.toFormattedTime() }
+                ),
+                style = TextStyle(
+                    fontSize = 64.sp,
+                    fontWeight = FontWeight.W500,
+                    fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
+                    color = LocalCorruptedPallet.current.white.invert
+                )
             )
         }
     }

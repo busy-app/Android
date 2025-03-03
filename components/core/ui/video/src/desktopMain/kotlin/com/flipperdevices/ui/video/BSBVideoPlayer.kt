@@ -10,8 +10,8 @@ import org.jetbrains.compose.resources.painterResource
 actual fun BSBVideoPlayer(
     uri: String,
     firstFrame: DrawableResource,
+    modifier: Modifier,
     fallback: DrawableResource,
-    modifier: Modifier
 ) {
     Image(
         modifier = modifier,

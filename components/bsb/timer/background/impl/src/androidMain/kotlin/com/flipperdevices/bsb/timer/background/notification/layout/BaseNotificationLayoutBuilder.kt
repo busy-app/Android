@@ -72,7 +72,9 @@ abstract class BaseNotificationLayoutBuilder(
         notificationLayout.setImageViewResource(R.id.timer_icon, iconId)
 
         val text = when (timer.type) {
-            ControlledTimerState.InProgress.AwaitType.AFTER_REST -> context.getString(R.string.timer_notification_after_rest)
+            ControlledTimerState.InProgress.AwaitType.AFTER_REST -> context.getString(
+                R.string.timer_notification_after_rest
+            )
             ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> context.getString(
                 R.string.timer_notification_after_busy,
                 timer.currentIteration,

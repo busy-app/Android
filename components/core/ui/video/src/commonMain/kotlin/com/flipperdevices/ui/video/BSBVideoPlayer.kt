@@ -8,6 +8,6 @@ import org.jetbrains.compose.resources.DrawableResource
 expect fun BSBVideoPlayer(
     uri: String,
     firstFrame: DrawableResource,
+    modifier: Modifier = Modifier,
     fallback: DrawableResource = firstFrame,
-    modifier: Modifier = Modifier
 )

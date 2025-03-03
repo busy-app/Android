@@ -22,7 +22,6 @@ import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeCompon
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject

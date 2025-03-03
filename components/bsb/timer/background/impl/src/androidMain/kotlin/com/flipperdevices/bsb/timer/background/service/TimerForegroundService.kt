@@ -10,7 +10,6 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.notification.NotificationTimerBuilder
 import com.flipperdevices.bsb.timer.background.util.pause
 import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.core.di.ComponentHolder

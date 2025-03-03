@@ -18,8 +18,8 @@ import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.stop.StopSessionSheetDecomposeComponentImpl
-import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
 import com.flipperdevices.bsb.timer.finish.composable.TimerRestComposableScreen
+import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import dev.chrisbanes.haze.HazeState

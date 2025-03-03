@@ -65,7 +65,6 @@ sealed interface ControlledTimerState {
             val type: AwaitType
         ) : InProgress
     }
-
 }
 
 val ControlledTimerState.InProgress.Running.isLastIteration: Boolean

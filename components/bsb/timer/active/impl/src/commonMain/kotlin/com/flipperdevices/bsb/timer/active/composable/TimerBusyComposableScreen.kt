@@ -5,14 +5,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import busystatusbar.components.bsb.timer.active.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.active.impl.generated.resources.busy_fire_first_frame
-import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.active.TimerActiveComposableScreen
 import com.flipperdevices.bsb.timer.common.composable.appbar.active.TimerActiveConfiguration
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-
 
 @Composable
 @OptIn(ExperimentalResourceApi::class)
