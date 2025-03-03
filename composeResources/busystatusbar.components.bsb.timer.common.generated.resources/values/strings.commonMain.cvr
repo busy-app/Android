@@ -1,4 +1,8 @@
 version:0
+string|ta_ask_stop_session|U3RvcHBpbmcgd2lsbCByZXNldCB0aGlzIEJVU1kgcHJvZ3Jlc3MuIEFyZSB5b3Ugc3VyZT8=
+string|ta_keep_focusing|S2VlcCBCVVNZ
+string|ta_skip|U2tpcA==
+string|ta_stop|U3RvcA==
 string|tc_status_busy|QlVTWQ==
 string|tc_status_long_rest|TE9ORyBSRVNU
 string|tc_status_rest|UkVTVA==
