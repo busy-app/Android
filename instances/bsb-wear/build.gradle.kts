@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.decompose)
     implementation(libs.decompose.composeExtension)
     implementation(libs.kotlin.immutable)
+    implementation(libs.kotlin.datetime)
 }
 
 dependencies {
