@@ -11,7 +11,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
-import com.flipperdevices.bsbwearable.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.composable.SwipeToDismissBox
 import com.flipperdevices.bsbwearable.root.api.model.RootNavigationConfig
 import com.flipperdevices.core.di.AppGraph
@@ -24,7 +23,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class RootDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val activeTimerScreenDecomposeComponentFactory: ActiveTimerScreenDecomposeComponent.Factory
 ) : RootDecomposeComponent(),
     ComponentContext by componentContext {
     override val stack: Value<ChildStack<RootNavigationConfig, DecomposeComponent>> = childStack(
@@ -59,9 +57,6 @@ class RootDecomposeComponentImpl(
         componentContext: ComponentContext
     ): DecomposeComponent = when (config) {
         RootNavigationConfig.HelloWord -> HelloWorldDecomposeComponent(componentContext)
-        RootNavigationConfig.Active -> activeTimerScreenDecomposeComponentFactory.invoke(
-            componentContext = componentContext
-        )
     }
 
     @Composable
