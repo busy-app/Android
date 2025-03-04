@@ -25,12 +25,14 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastCoerceIn
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.ui.autosizetext.AutoSizeText
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 import com.flipperdevices.ui.video.BSBVideoPlayer
 
@@ -74,7 +76,10 @@ fun TimerCardComposable(
         ) {
             Box(Modifier.height(13.dp))
 
-            TimerRow(timerState)
+            TimerRow(
+                modifier = Modifier,
+                timerState = timerState
+            )
 
             val totalDuration = remember(timerState.timerSettings.intervalsSettings) {
                 when (timerState) {
@@ -110,30 +115,28 @@ private fun TimerRow(
     timerState: ControlledTimerState.InProgress.Running,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    val text = remember(timerState.timeLeft) {
         timerState.timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
             val timeComponentList = listOfNotNull(
                 hours.takeIf { h -> h > 0 },
                 minutes,
                 seconds
             )
-            Text(
-                text = timeComponentList.joinToString(
-                    separator = ":",
-                    prefix = "",
-                    transform = { timeComponent -> timeComponent.toFormattedTime() }
-                ),
-                style = TextStyle(
-                    fontSize = 64.sp,
-                    fontWeight = FontWeight.W500,
-                    fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
-                    color = LocalCorruptedPallet.current.white.invert
-                )
+
+            timeComponentList.joinToString(
+                separator = ":",
+                prefix = "",
+                transform = { timeComponent -> timeComponent.toFormattedTime() }
             )
         }
     }
+
+    AutoSizeText(
+        modifier = modifier,
+        text = text,
+        fontWeight = FontWeight.W500,
+        fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
+        color = LocalCorruptedPallet.current.white.invert,
+        maxLines = 1
+    )
 }
