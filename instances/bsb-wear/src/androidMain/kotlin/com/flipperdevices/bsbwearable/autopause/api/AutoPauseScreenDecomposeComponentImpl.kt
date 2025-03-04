@@ -25,12 +25,12 @@ class AutoPauseScreenDecomposeComponentImpl(
     // todo
     private fun getTimerState(): StateFlow<ControlledTimerState> {
         return MutableStateFlow(
-            ControlledTimerState.Await(
+            ControlledTimerState.InProgress.Await(
                 timerSettings = TimerSettings(),
                 currentIteration = 0,
                 maxIterations = 1,
                 pausedAt = Instant.DISTANT_PAST,
-                type = ControlledTimerState.AwaitType.AFTER_WORK
+                type = ControlledTimerState.InProgress.AwaitType.AFTER_WORK
             )
         ).asStateFlow()
     }
@@ -39,7 +39,7 @@ class AutoPauseScreenDecomposeComponentImpl(
     override fun Render(modifier: Modifier) {
         val timerState by getTimerState().collectAsState()
         when (val timerState = timerState) {
-            is ControlledTimerState.Await -> {
+            is ControlledTimerState.InProgress.Await -> {
                 AutoPauseScreenComposable(
                     state = timerState,
                     onButtonClick = {},

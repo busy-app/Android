@@ -126,7 +126,7 @@ private fun AutoPauseScreenComposable(
 
 @Composable
 internal fun AutoPauseScreenComposable(
-    state: ControlledTimerState.Await,
+    state: ControlledTimerState.InProgress.Await,
     onButtonClick: () -> Unit,
     onStopClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -137,27 +137,27 @@ internal fun AutoPauseScreenComposable(
         onButtonClick = onButtonClick,
         painter = painterResource(
             resource = when (state.type) {
-                ControlledTimerState.AwaitType.AFTER_WORK -> Res.drawable.ic_checkmark
-                ControlledTimerState.AwaitType.AFTER_REST -> Res.drawable.ic_laptop
+                ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> Res.drawable.ic_checkmark
+                ControlledTimerState.InProgress.AwaitType.AFTER_REST -> Res.drawable.ic_laptop
             }
         ),
         title = when (state.type) {
-            ControlledTimerState.AwaitType.AFTER_WORK -> stringResource(
+            ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> stringResource(
                 Res.string.bwau_after_work_title,
                 state.timerSettings.name,
                 "${state.currentIteration}",
                 "${state.maxIterations}"
             )
 
-            ControlledTimerState.AwaitType.AFTER_REST -> stringResource(Res.string.bwau_after_rest_title)
+            ControlledTimerState.InProgress.AwaitType.AFTER_REST -> stringResource(Res.string.bwau_after_rest_title)
         },
         desc = when (state.type) {
-            ControlledTimerState.AwaitType.AFTER_WORK -> stringResource(Res.string.bwau_after_work_desc)
-            ControlledTimerState.AwaitType.AFTER_REST -> stringResource(Res.string.bwau_after_rest_desc)
+            ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> stringResource(Res.string.bwau_after_work_desc)
+            ControlledTimerState.InProgress.AwaitType.AFTER_REST -> stringResource(Res.string.bwau_after_rest_desc)
         },
         buttonText = when (state.type) {
-            ControlledTimerState.AwaitType.AFTER_WORK -> stringResource(Res.string.bwau_after_work_action)
-            ControlledTimerState.AwaitType.AFTER_REST -> stringResource(
+            ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> stringResource(Res.string.bwau_after_work_action)
+            ControlledTimerState.InProgress.AwaitType.AFTER_REST -> stringResource(
                 Res.string.bwau_after_rest_action,
                 state.timerSettings.name
             )
@@ -170,12 +170,12 @@ internal fun AutoPauseScreenComposable(
 private fun PreviewAutoPauseWorkScreenComposable() {
     BusyBarThemeInternal {
         AutoPauseScreenComposable(
-            state = ControlledTimerState.Await(
+            state = ControlledTimerState.InProgress.Await(
                 timerSettings = TimerSettings(),
                 currentIteration = 1,
                 maxIterations = 3,
                 pausedAt = Instant.DISTANT_PAST,
-                type = ControlledTimerState.AwaitType.AFTER_REST
+                type = ControlledTimerState.InProgress.AwaitType.AFTER_REST
             ),
             onStopClick = {},
             onButtonClick = {},
@@ -188,12 +188,12 @@ private fun PreviewAutoPauseWorkScreenComposable() {
 private fun PreviewAutoPauseRestScreenComposable() {
     BusyBarThemeInternal {
         AutoPauseScreenComposable(
-            state = ControlledTimerState.Await(
+            state = ControlledTimerState.InProgress.Await(
                 timerSettings = TimerSettings(),
                 currentIteration = 1,
                 maxIterations = 3,
                 pausedAt = Instant.DISTANT_PAST,
-                type = ControlledTimerState.AwaitType.AFTER_WORK
+                type = ControlledTimerState.InProgress.AwaitType.AFTER_WORK
             ),
             onStopClick = {},
             onButtonClick = {},
