@@ -31,6 +31,8 @@ import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.ui.cardframe.MiniFrameData
+import com.flipperdevices.ui.cardframe.MiniFrameSection
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

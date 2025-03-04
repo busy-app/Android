@@ -35,6 +35,7 @@ commonDependencies {
     implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.preference.api)
+    implementation(projects.components.bsb.appblocker.filter.api)
 
     implementation(libs.settings)
     implementation(libs.timber)
