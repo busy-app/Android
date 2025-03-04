@@ -54,7 +54,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
             onPauseClick = {}
         )
 
-        if ((timerState as? ControlledTimerState.Running)?.isOnPause == true) {
+        if ((timerState as? ControlledTimerState.InProgress.Running)?.isOnPause == true) {
             PauseWearOverlayComposable(onStartClick = {})
         }
         stopSessionDecomposeComponentFactory.Render(Modifier)
