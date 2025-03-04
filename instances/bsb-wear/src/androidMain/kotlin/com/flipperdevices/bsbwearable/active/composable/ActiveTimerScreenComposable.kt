@@ -52,20 +52,20 @@ import kotlin.time.Duration.Companion.minutes
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CTRes
 
 @Composable
-private fun ControlledTimerState.Running.getBrush(): Brush {
+private fun ControlledTimerState.InProgress.Running.getBrush(): Brush {
     return Brush.verticalGradient(
         colors = when (this) {
-            is ControlledTimerState.Running.Work -> listOf(
+            is ControlledTimerState.InProgress.Running.Work -> listOf(
                 Color(color = 0xFF900606), // todo
                 Color(color = 0xFF430303),
             )
 
-            is ControlledTimerState.Running.Rest -> listOf(
+            is ControlledTimerState.InProgress.Running.Rest -> listOf(
                 Color(color = 0xFF416605), // todo
                 Color(color = 0xFF0D1500),
             )
 
-            is ControlledTimerState.Running.LongRest -> listOf(
+            is ControlledTimerState.InProgress.Running.LongRest -> listOf(
                 Color(color = 0xFF003976), // todo
                 Color(color = 0xFF001A36),
             )
@@ -74,7 +74,7 @@ private fun ControlledTimerState.Running.getBrush(): Brush {
 }
 
 @Composable
-private fun ControlledTimerState.Running.rememberTimeLeftText(): String {
+private fun ControlledTimerState.InProgress.Running.rememberTimeLeftText(): String {
     return remember(timeLeft) {
         timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
             val timeComponentList = listOfNotNull(
@@ -93,7 +93,7 @@ private fun ControlledTimerState.Running.rememberTimeLeftText(): String {
 
 @Composable
 private fun ActiveTimerScreenTitle(
-    timerState: ControlledTimerState.Running,
+    timerState: ControlledTimerState.InProgress.Running,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -103,9 +103,9 @@ private fun ActiveTimerScreenTitle(
     ) {
         Text(
             text = when (timerState) {
-                is ControlledTimerState.Running.LongRest -> stringResource(Res.string.bwt_long_rest)
-                is ControlledTimerState.Running.Rest -> stringResource(Res.string.bwt_rest)
-                is ControlledTimerState.Running.Work -> timerState.timerSettings.name
+                is ControlledTimerState.InProgress.Running.LongRest -> stringResource(Res.string.bwt_long_rest)
+                is ControlledTimerState.InProgress.Running.Rest -> stringResource(Res.string.bwt_rest)
+                is ControlledTimerState.InProgress.Running.Work -> timerState.timerSettings.name
             },
             fontSize = 20.sp,
             color = LocalCorruptedPallet.current.white.onColor
@@ -132,11 +132,11 @@ internal fun ActiveTimerScreenComposable(
     modifier: Modifier = Modifier
 ) {
     when (timerState) {
-        is ControlledTimerState.Await,
+        is ControlledTimerState.InProgress.Await,
         ControlledTimerState.Finished,
         ControlledTimerState.NotStarted -> Unit
 
-        is ControlledTimerState.Running -> {
+        is ControlledTimerState.InProgress.Running -> {
             Box(
                 modifier = modifier
                     .fillMaxSize()
@@ -189,9 +189,9 @@ internal fun ActiveTimerScreenComposable(
                         modifier = Modifier.padding(horizontal = 14.dp),
                         progress = animateFloatAsState(timerState.progress).value,
                         color = when (timerState) {
-                            is ControlledTimerState.Running.LongRest -> Color(color = 0xFF0053AC) // todo
-                            is ControlledTimerState.Running.Rest -> Color(color = 0xFF00AC34) // todo
-                            is ControlledTimerState.Running.Work ->
+                            is ControlledTimerState.InProgress.Running.LongRest -> Color(color = 0xFF0053AC) // todo
+                            is ControlledTimerState.InProgress.Running.Rest -> Color(color = 0xFF00AC34) // todo
+                            is ControlledTimerState.InProgress.Running.Work ->
                                 LocalCorruptedPallet
                                     .current
                                     .accent
@@ -228,7 +228,7 @@ private fun ActiveScreenComposablePreview() {
             },
             onStopClick = {},
             timerState = when (i % 3) {
-                0 -> ControlledTimerState.Running.Work(
+                0 -> ControlledTimerState.InProgress.Running.Work(
                     timeLeft = 123.minutes,
                     isOnPause = false,
                     timerSettings = TimerSettings(
@@ -240,7 +240,7 @@ private fun ActiveScreenComposablePreview() {
                     maxIterations = 3
                 )
 
-                1 -> ControlledTimerState.Running.Rest(
+                1 -> ControlledTimerState.InProgress.Running.Rest(
                     timeLeft = 12.minutes,
                     isOnPause = false,
                     timerSettings = TimerSettings(
@@ -252,7 +252,7 @@ private fun ActiveScreenComposablePreview() {
                     maxIterations = 3
                 )
 
-                else -> ControlledTimerState.Running.LongRest(
+                else -> ControlledTimerState.InProgress.Running.LongRest(
                     timeLeft = 3.minutes,
                     isOnPause = false,
                     timerSettings = TimerSettings(

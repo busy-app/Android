@@ -25,7 +25,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
     // todo
     private fun getTimerState(): StateFlow<ControlledTimerState> {
         return MutableStateFlow(
-            ControlledTimerState.Running.Work(
+            ControlledTimerState.InProgress.Running.Work(
                 timeLeft = 110.seconds,
                 isOnPause = false,
                 timerSettings = TimerSettings(),
