@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.2"
+agp = "8.9.0"
 androidx-activityCompose = "1.10.1"
 androidx-annotation = "1.9.1"
 androidx-core = "1.15.0"
@@ -16,10 +16,10 @@ kotlin-coroutines = "1.10.1"
 kotlin-serialization-runtime = "1.8.0"
 kotlin-datetime = "0.6.2" # https://github.com/Kotlin/kotlinx-datetime/releases
 kotlin-immutable = "0.3.8"
-ksp = "2.1.10-1.0.30"
+ksp = "2.1.10-1.0.31"
 kotlin-inject = "0.7.2"
 kotlin-inject-anvil = "0.1.2"
-decompose = "3.2.2"
+decompose = "3.3.0"
 essenty = "2.5.0"
 settings = "1.3.0"
 markdown = "0.31.0" # https://github.com/mikepenz/multiplatform-markdown-renderer/releases
@@ -43,12 +43,12 @@ accompanist = "0.37.2" # https://github.com/google/accompanist/releases
 # 0.6.17 requires androidx.navigation:navigation-compose:2.8.0-beta0
 # androidx.navigation:navigation-compose:2.8.0-beta0 requires Android API 35
 # Android API 35 not supported by roboelectric
-horologist = "0.6.17" # https://github.com/google/horologist/releases
+horologist = "0.6.22" # https://github.com/google/horologist/releases
 wear = "1.3.0" # https://developer.android.com/jetpack/androidx/releases/wear
 wear-gms = "19.0.0" # https://mvnrepository.com/artifact/com.google.android.gms/play-services-wearable?repo=google
-wear-interaction-phone = "1.1.0-alpha05" # https://developer.android.com/jetpack/androidx/releases/wear
+wear-interaction-phone = "1.1.0" # https://developer.android.com/jetpack/androidx/releases/wear
 wear-interaction-remote = "1.1.0" # https://developer.android.com/jetpack/androidx/releases/wear
-compose-wear = "1.4.0" # https://developer.android.com/jetpack/androidx/releases/wear-compose
+compose-wear = "1.4.1" # https://developer.android.com/jetpack/androidx/releases/wear-compose
 compose-wear-preview = "1.0.0" # https://mvnrepository.com/artifact/androidx.wear/wear-tooling-preview
 haze = "1.4.0"
 
