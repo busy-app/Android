@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.appblocker.listener
 
 import com.flipperdevices.bsb.appblocker.api.AppBlockerApi
+import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -32,7 +33,8 @@ class AppBlockerTimerListener(
     private var looper: UsageStatsLooper? = null
     private var timerStateListenerJob: Job? = null
 
-    override fun onTimerStart() {
+    override fun onTimerStart(timerSettings: TimerSettings) {
+        timerStateListenerJob?.cancel()
         timerStateListenerJob = combine(
             timerApi.getState(),
             appBlockerApi.isAppBlockerSupportActive()

@@ -16,13 +16,14 @@ sealed interface ControlledTimerState {
 
     @Serializable
     sealed interface InProgress : ControlledTimerState {
+        val timerSettings: TimerSettings
+        val currentIteration: Int
+        val maxIterations: Int
+
         @Serializable
         sealed interface Running : InProgress {
             val timeLeft: Duration
             val isOnPause: Boolean
-            val timerSettings: TimerSettings
-            val currentIteration: Int
-            val maxIterations: Int
 
             @Serializable
             data class Work(
@@ -58,9 +59,9 @@ sealed interface ControlledTimerState {
 
         @Serializable
         data class Await(
-            val timerSettings: TimerSettings,
-            val currentIteration: Int,
-            val maxIterations: Int,
+            override val timerSettings: TimerSettings,
+            override val currentIteration: Int,
+            override val maxIterations: Int,
             val pausedAt: Instant,
             val type: AwaitType
         ) : InProgress

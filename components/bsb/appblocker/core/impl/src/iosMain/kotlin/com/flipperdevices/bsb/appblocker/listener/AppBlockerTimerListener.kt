@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.appblocker.listener
 
 import com.flipperdevices.bsb.appblocker.api.AppBlockerApi
 import com.flipperdevices.bsb.appblocker.api.FamilyControlApi
+import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.core.di.AppGraph
 import me.tatarka.inject.annotations.Inject
@@ -15,7 +16,7 @@ class AppBlockerTimerListener(
     private val appBlockerApi: AppBlockerApi,
     private val familyControlApi: FamilyControlApi
 ) : TimerStateListener {
-    override fun onTimerStart() {
+    override fun onTimerStart(timerSettings: TimerSettings) {
         if (appBlockerApi.isAppBlockerSupportActive()) {
             familyControlApi.enableFamilyControls()
         }

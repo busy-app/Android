@@ -76,10 +76,15 @@ fun TimerCardComposable(
         ) {
             Box(Modifier.height(13.dp))
 
-            TimerRow(
-                modifier = Modifier,
-                timerState = timerState
-            )
+            Box(
+                Modifier.weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                TimerRow(
+                    modifier = Modifier,
+                    timerState = timerState
+                )
+            }
 
             val totalDuration = remember(timerState.timerSettings.intervalsSettings) {
                 when (timerState) {
@@ -99,9 +104,9 @@ fun TimerCardComposable(
 
             LinearProgressIndicator(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 3.5.dp)
-                    .height(6.dp),
+                    .background(config.progressBarColor)
+                    .height(6.dp)
+                    .fillMaxWidth(),
                 progress = progress,
                 color = config.progressBarColor,
                 backgroundColor = config.progressBarBackgroundColor
