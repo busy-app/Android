@@ -122,9 +122,9 @@ internal fun VerticalLine(
 
     val paddingBottom by animateDpAsState(
         targetValue = when {
-            indexAtCenter -> sqrt(lineStyle.selectedLineHeight.value).dp / 2
-            adjustedIndex % lineStyle.step == 0 -> -sqrt(lineStyle.stepLineHeight.value).dp * 2
-            else -> -sqrt(lineStyle.normalLineHeight.value).dp
+            indexAtCenter -> 0.dp
+            adjustedIndex % lineStyle.step == 0 -> lineStyle.normalLineHeight.value.dp/2
+            else -> lineStyle.normalLineHeight.value.dp
         },
         animationSpec = tween(durationMillis = 500)
     )
@@ -147,9 +147,9 @@ internal fun VerticalLine(
     )
     val textYOffset by animateFloatAsState(
         targetValue = when {
-            indexAtCenter -> sqrt(tlr.size.height.toFloat())
+            indexAtCenter -> 0f//sqrt(sqrt(tlr.size.height.toFloat()))
 
-            else -> tlr.size.height.toFloat()
+            else -> 0f
         }
     )
     Canvas(
@@ -157,7 +157,7 @@ internal fun VerticalLine(
             .width(1.dp)
             .height(
                 height = with(localDensity) {
-                    val doubleTextHeight = tlr.size.height.toDp().times(other = 2)
+                    val doubleTextHeight = lineStyle.selectedZeroFontSize.toPx().toDp().times(other = 2)
                     lineStyle.selectedLineHeight + doubleTextHeight
                 }
             )
