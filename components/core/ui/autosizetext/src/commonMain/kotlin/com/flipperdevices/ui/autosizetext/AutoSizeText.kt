@@ -1,4 +1,7 @@
+@file:Suppress("MaxLineLength")
+
 package com.flipperdevices.ui.autosizetext
+
 /*
 * Copy from https://gist.github.com/inidamleader/b594d35362ebcf3cedf81055df519300
  */
@@ -34,12 +37,12 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
-import androidx.compose.ui.util.fastAll
-import androidx.compose.ui.util.fastFilter
 import com.flipperdevices.ui.autosizetext.SuggestedFontSizesStatus.Companion.validSuggestedFontSizes
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import kotlin.math.min
-
-private const val TAG = "AutoSizeText"
 
 /**
  * Composable function that automatically adjusts the text size to fit within given constraints, considering the ratio of line spacing to text size.
@@ -94,7 +97,7 @@ fun AutoSizeText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    suggestedFontSizes: List<TextUnit> = emptyList(),
+    suggestedFontSizes: ImmutableList<TextUnit> = persistentListOf(),
     suggestedFontSizesStatus: SuggestedFontSizesStatus = SuggestedFontSizesStatus.UNKNOWN,
     stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
     minTextSize: TextUnit = TextUnit.Unspecified,
@@ -149,11 +152,12 @@ fun AutoSizeText(
  * @see AutoSizeText
  */
 @Composable
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 fun AutoSizeText(
     text: AnnotatedString,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    suggestedFontSizes: List<TextUnit> = emptyList(),
+    suggestedFontSizes: ImmutableList<TextUnit> = persistentListOf(),
     suggestedFontSizesStatus: SuggestedFontSizesStatus = SuggestedFontSizesStatus.UNKNOWN,
     stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
     minTextSize: TextUnit = TextUnit.Unspecified,
@@ -168,7 +172,7 @@ fun AutoSizeText(
     softWrap: Boolean = true,
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
-    inlineContent: Map<String, InlineTextContent> = mapOf(),
+    inlineContent: ImmutableMap<String, InlineTextContent> = persistentMapOf(),
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current,
     lineSpacingRatio: Float = style.lineHeight.value / style.fontSize.value,
@@ -220,10 +224,11 @@ fun AutoSizeText(
                 key1 = suggestedFontSizes,
                 key2 = suggestedFontSizesStatus,
             ) {
-                if (suggestedFontSizesStatus == SuggestedFontSizesStatus.VALID)
+                if (suggestedFontSizesStatus == SuggestedFontSizesStatus.VALID) {
                     suggestedFontSizes
-                else
+                } else {
                     suggestedFontSizes.validSuggestedFontSizes
+                }
             }?.let {
                 remember(
                     key1 = it,
@@ -267,6 +272,7 @@ fun AutoSizeText(
     }
 }
 
+@Suppress("LongParameterList")
 private fun BoxWithConstraintsScope.shouldShrink(
     text: AnnotatedString,
     textStyle: TextStyle,
@@ -353,28 +359,11 @@ private fun <T> IntProgression.findElectedValue(
     var high = last / step
     while (low <= high) {
         val mid = low + (high - low) / 2
-        if (shouldMoveBackward(transform(mid * step)))
+        if (shouldMoveBackward(transform(mid * step))) {
             high = mid - 1
-        else
+        } else {
             low = mid + 1
+        }
     }
     transform((high * step).coerceAtLeast(first * step))
-}
-
-enum class SuggestedFontSizesStatus {
-    VALID, INVALID, UNKNOWN;
-
-    companion object {
-        val List<TextUnit>.suggestedFontSizesStatus
-            get() = if (isNotEmpty() && fastAll { it.isSp } && sortedBy { it.value } == this)
-                VALID
-            else
-                INVALID
-
-        val List<TextUnit>.validSuggestedFontSizes
-            get() = takeIf { it.isNotEmpty() } // Optimization: empty check first to immediately return null
-                ?.fastFilter { it.isSp }
-                ?.takeIf { it.isNotEmpty() }
-                ?.sortedBy { it.value }
-    }
 }

@@ -4,14 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,11 +21,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastCoerceIn
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
@@ -86,32 +81,35 @@ fun TimerCardComposable(
                 )
             }
 
-            val totalDuration = remember(timerState.timerSettings.intervalsSettings) {
-                when (timerState) {
-                    is ControlledTimerState.InProgress.Running.LongRest ->
-                        timerState.timerSettings.intervalsSettings.longRest
-
-                    is ControlledTimerState.InProgress.Running.Rest ->
-                        timerState.timerSettings.intervalsSettings.rest
-
-                    is ControlledTimerState.InProgress.Running.Work ->
-                        timerState.timerSettings.intervalsSettings.work
-                }
-            }
-            val progress = remember(timerState.timeLeft, totalDuration) {
-                (timerState.timeLeft / totalDuration).toFloat().fastCoerceIn(0f, 1f)
-            }
-
             LinearProgressIndicator(
                 modifier = Modifier
                     .background(config.progressBarColor)
                     .height(6.dp)
                     .fillMaxWidth(),
-                progress = progress,
+                progress = getTimerProgress(timerState),
                 color = config.progressBarColor,
                 backgroundColor = config.progressBarBackgroundColor
             )
         }
+    }
+}
+
+@Composable
+private fun getTimerProgress(timerState: ControlledTimerState.InProgress.Running): Float {
+    val totalDuration = remember(timerState.timerSettings.intervalsSettings) {
+        when (timerState) {
+            is ControlledTimerState.InProgress.Running.LongRest ->
+                timerState.timerSettings.intervalsSettings.longRest
+
+            is ControlledTimerState.InProgress.Running.Rest ->
+                timerState.timerSettings.intervalsSettings.rest
+
+            is ControlledTimerState.InProgress.Running.Work ->
+                timerState.timerSettings.intervalsSettings.work
+        }
+    }
+    return remember(timerState.timeLeft, totalDuration) {
+        (timerState.timeLeft / totalDuration).toFloat().fastCoerceIn(0f, 1f)
     }
 }
 

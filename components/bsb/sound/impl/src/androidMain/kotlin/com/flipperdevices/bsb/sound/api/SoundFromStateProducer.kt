@@ -29,8 +29,8 @@ class SoundFromStateProducer(
     private val mutex = Mutex()
 
     suspend fun tryPlaySound(state: ControlledTimerState.InProgress) = mutex.withLock {
-        if (!state.timerSettings.intervalsSettings.isEnabled
-            || !state.timerSettings.soundSettings.alertWhenIntervalEnds
+        if (!state.timerSettings.intervalsSettings.isEnabled ||
+            !state.timerSettings.soundSettings.alertWhenIntervalEnds
         ) {
             return@withLock
         }
@@ -82,6 +82,4 @@ class SoundFromStateProducer(
     suspend fun clear() = mutex.withLock {
         lastSoundEvent = null
     }
-
-
 }

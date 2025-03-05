@@ -4,6 +4,6 @@ plugins {
 }
 
 commonDependencies {
-    implementation(projects.components.bsb.core.theme)
+    implementation(libs.kotlin.immutable)
 }
 

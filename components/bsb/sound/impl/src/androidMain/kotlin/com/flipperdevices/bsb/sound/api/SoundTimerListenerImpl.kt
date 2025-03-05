@@ -1,7 +1,5 @@
 package com.flipperdevices.bsb.sound.api
 
-import com.flipperdevices.bsb.preference.api.PreferenceApi
-import com.flipperdevices.bsb.preference.model.SettingsEnum
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
@@ -9,11 +7,8 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.runBlocking
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -23,7 +18,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, TimerStateListener::class, multibinding = true)
 class SoundTimerListenerImpl(
-    private val preferenceApi: PreferenceApi,
     private val timerApi: TimerApi,
     private val scope: CoroutineScope,
     private val soundFromStateProducer: SoundFromStateProducer
