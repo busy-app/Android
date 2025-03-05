@@ -27,6 +27,7 @@ import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.timeline.model.PickerLineStyle
 import com.flipperdevices.ui.timeline.util.animateTextUnitAsState
 import kotlin.math.absoluteValue
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 @Composable
@@ -146,15 +147,9 @@ internal fun VerticalLine(
     )
     val textYOffset by animateFloatAsState(
         targetValue = when {
-            indexAtCenter ->
-                -tlr.size.height
-                    .div(other = 4)
-                    .toFloat()
+            indexAtCenter -> sqrt(tlr.size.height.toFloat())
 
-            else ->
-                tlr.size.height
-                    .times(other = 1.3)
-                    .toFloat()
+            else -> tlr.size.height.toFloat()
         }
     )
     Canvas(
