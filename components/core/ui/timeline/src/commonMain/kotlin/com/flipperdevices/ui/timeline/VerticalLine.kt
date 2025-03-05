@@ -29,7 +29,10 @@ import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.timeline.model.PickerLineStyle
 import com.flipperdevices.ui.timeline.util.animateTextUnitAsState
 import com.flipperdevices.ui.timeline.util.normalAndSelectedLineDiff
+import com.flipperdevices.ui.timeline.util.plus
 import com.flipperdevices.ui.timeline.util.stepAndSelectedLineDiff
+import com.flipperdevices.ui.timeline.util.unselectedAndSelectedFontDiff
+import com.flipperdevices.ui.timeline.util.unselectedAndSelectedZeroFontDiff
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -37,44 +40,84 @@ import kotlin.math.sqrt
 @Composable
 internal fun calculateTlr(
     adjustedIndex: Int,
+    progress: Float,
+    isByProgress: Boolean,
     style: PickerLineStyle,
     isSelected: Boolean,
     isVisible: Boolean,
     transform: (Int) -> String
 ): TextLayoutResult {
     val textMeasurer = rememberTextMeasurer()
-    val fontSize by animateTextUnitAsState(
-        targetValue = when {
-            isSelected && adjustedIndex == 0 -> style.selectedZeroFontSize
-            isSelected -> style.selectedFontSize
-            else -> style.unselectedFontSize
-        },
-        animationSpec = tween()
-    )
-    val fontColor by animateColorAsState(
-        targetValue = when {
-            !isVisible -> Color.Transparent
-            isSelected ->
-                LocalCorruptedPallet.current
-                    .white
-                    .invert
-
-            else ->
-                LocalCorruptedPallet.current
-                    .white
-                    .invert
-                    .copy(alpha = 0.2f)
-        }
-    )
-    val textColor by animateColorAsState(
-        targetValue = fontColor.copy(
-            alpha = when {
-                adjustedIndex % style.step.times(2) == 0 -> 1f
-                (isSelected && adjustedIndex % style.step == 0) -> 1f
-                else -> 0f
-            }.coerceAtMost(fontColor.alpha)
+    val fontSize by when {
+        isByProgress -> animateTextUnitAsState(
+            targetValue = when {
+                adjustedIndex == 0 -> style.unselectedFontSize.plus(style.unselectedAndSelectedZeroFontDiff * progress)
+                else -> style.unselectedFontSize.plus(style.unselectedAndSelectedFontDiff * progress)
+            },
         )
-    )
+
+        else -> animateTextUnitAsState(
+            targetValue = when {
+                isSelected && adjustedIndex == 0 -> style.selectedZeroFontSize
+                isSelected -> style.selectedFontSize
+                else -> style.unselectedFontSize
+            },
+            animationSpec = tween()
+        )
+    }
+    val fontColor by when {
+        isByProgress -> animateColorAsState(
+            targetValue = when {
+                !isVisible -> LocalCorruptedPallet.current
+                    .white
+                    .invert
+                    .copy(alpha = progress)
+
+
+                else -> LocalCorruptedPallet.current
+                    .white
+                    .invert
+                    .copy(alpha = progress.coerceAtLeast(0.2f))
+            }
+        )
+
+        else -> animateColorAsState(
+            targetValue = when {
+                !isVisible -> Color.Transparent
+                isSelected ->
+                    LocalCorruptedPallet.current
+                        .white
+                        .invert
+
+                else ->
+                    LocalCorruptedPallet.current
+                        .white
+                        .invert
+                        .copy(alpha = 0.2f)
+            }
+        )
+    }
+    val textColor by when {
+        isByProgress -> animateColorAsState(
+            targetValue = fontColor.copy(
+                alpha = when {
+                    adjustedIndex % style.step.times(2) == 0 -> 1f
+                    (adjustedIndex % style.step == 0) -> 1f * progress
+                    else -> 0f
+                }.coerceAtMost(fontColor.alpha)
+            )
+        )
+
+        else -> animateColorAsState(
+            targetValue = fontColor.copy(
+                alpha = when {
+                    adjustedIndex % style.step.times(2) == 0 -> 1f
+                    (isSelected && adjustedIndex % style.step == 0) -> 1f
+                    else -> 0f
+                }.coerceAtMost(fontColor.alpha)
+            )
+        )
+    }
     return textMeasurer.measure(
         text = transform.invoke(adjustedIndex),
         style = TextStyle(
@@ -134,13 +177,14 @@ internal fun VerticalLine(
             animationSpec = tween(durationMillis = 500)
         )
     }
-    
+
     val paddingBottom by when {
         isByProgress -> animateDpAsState(
             targetValue = when {
                 adjustedIndex % lineStyle.step == 0 -> lineStyle.normalLineHeight.value.dp
                     .div(2)
                     .minus(lineStyle.normalLineHeight.value.dp.div(2).times(progress))
+
                 else -> lineStyle.normalLineHeight.value.dp
             }.plus(lineStyle.normalLineHeight),
             animationSpec = tween(durationMillis = 500)
@@ -185,7 +229,9 @@ internal fun VerticalLine(
         style = lineStyle,
         isSelected = indexAtCenter,
         transform = transform,
-        isVisible = isVisible
+        isVisible = isVisible,
+        isByProgress = isByProgress,
+        progress = progress
     )
     val textYOffset by animateFloatAsState(
         targetValue = when {
