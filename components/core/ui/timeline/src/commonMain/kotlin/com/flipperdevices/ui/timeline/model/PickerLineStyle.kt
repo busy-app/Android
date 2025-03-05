@@ -54,7 +54,7 @@ data class PickerLineStyle(
                 normalLineHeight = 16.dp,
                 lineSpacing = 12.dp,
                 lineRoundedCorners = 0.dp,
-                selectedLineColor = LocalCorruptedPallet.current.white.invert,
+                selectedLineColor = LocalCorruptedPallet.current.accent.device.primary,
                 unselectedLineColor = LocalCorruptedPallet.current.white.invert.copy(0.2f),
                 fadeOutLinesCount = 12,
                 maxFadeTransparency = 0.95f,

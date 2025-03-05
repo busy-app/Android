@@ -16,6 +16,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -199,13 +200,15 @@ internal fun VerticalLine(
             animationSpec = tween(durationMillis = 500)
         )
     }
+
+
     val lineColor by when {
         isByProgress -> animateColorAsState(
             targetValue = when {
-                adjustedIndex % lineStyle.step == 0 -> lineStyle.selectedLineColor.copy(
-                    alpha = progress.coerceAtLeast(
-                        minimumValue = 0.2f
-                    )
+                adjustedIndex % lineStyle.step == 0 -> lerp(
+                    start = lineStyle.selectedLineColor,
+                    stop = lineStyle.unselectedLineColor,
+                    fraction = 1f - progress
                 )
 
                 else -> lineStyle.unselectedLineColor
