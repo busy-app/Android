@@ -68,7 +68,7 @@ fun RestSetupModalBottomSheetContent(
         ) {
             HorizontalWheelPicker(
                 progression = IntProgression.fromClosedRange(
-                    rangeStart = 15.minutes.inWholeMinutes.toInt(),
+                    rangeStart = 5.minutes.inWholeMinutes.toInt(),
                     rangeEnd = 1.hours.inWholeMinutes.toInt(),
                     step = 5.minutes.inWholeMinutes.toInt()
                 ),
