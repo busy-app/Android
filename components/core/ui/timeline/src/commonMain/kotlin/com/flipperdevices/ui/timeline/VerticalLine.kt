@@ -29,15 +29,13 @@ import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.timeline.model.PickerLineStyle
 import com.flipperdevices.ui.timeline.util.animateTextUnitAsState
-import com.flipperdevices.ui.timeline.util.normalAndSelectedLineDiff
 import com.flipperdevices.ui.timeline.util.plus
 import com.flipperdevices.ui.timeline.util.stepAndSelectedLineDiff
 import com.flipperdevices.ui.timeline.util.unselectedAndSelectedFontDiff
 import com.flipperdevices.ui.timeline.util.unselectedAndSelectedZeroFontDiff
 import kotlin.math.absoluteValue
-import kotlin.math.pow
-import kotlin.math.sqrt
 
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 internal fun calculateTlr(
     adjustedIndex: Int,
@@ -69,16 +67,17 @@ internal fun calculateTlr(
     val fontColor by when {
         isByProgress -> animateColorAsState(
             targetValue = when {
-                !isVisible -> LocalCorruptedPallet.current
-                    .white
-                    .invert
-                    .copy(alpha = progress)
+                !isVisible ->
+                    LocalCorruptedPallet.current
+                        .white
+                        .invert
+                        .copy(alpha = progress)
 
-
-                else -> LocalCorruptedPallet.current
-                    .white
-                    .invert
-                    .copy(alpha = progress.coerceAtLeast(0.2f))
+                else ->
+                    LocalCorruptedPallet.current
+                        .white
+                        .invert
+                        .copy(alpha = progress.coerceAtLeast(minimumValue = 0.2f))
             }
         )
 
@@ -163,7 +162,10 @@ internal fun VerticalLine(
     val lineHeight by when {
         isByProgress -> animateDpAsState(
             targetValue = when {
-                adjustedIndex % lineStyle.step == 0 -> lineStyle.stepLineHeight.plus(lineStyle.stepAndSelectedLineDiff * progress)
+                adjustedIndex % lineStyle.step == 0 -> lineStyle.stepLineHeight.plus(
+                    lineStyle.stepAndSelectedLineDiff * progress
+                )
+
                 else -> lineStyle.normalLineHeight
             },
             animationSpec = tween(durationMillis = 500)
@@ -182,9 +184,10 @@ internal fun VerticalLine(
     val paddingBottom by when {
         isByProgress -> animateDpAsState(
             targetValue = when {
-                adjustedIndex % lineStyle.step == 0 -> lineStyle.normalLineHeight.value.dp
-                    .div(2)
-                    .minus(lineStyle.normalLineHeight.value.dp.div(2).times(progress))
+                adjustedIndex % lineStyle.step == 0 ->
+                    lineStyle.normalLineHeight.value.dp
+                        .div(2)
+                        .minus(lineStyle.normalLineHeight.value.dp.div(2).times(progress))
 
                 else -> lineStyle.normalLineHeight.value.dp
             }.plus(lineStyle.normalLineHeight),
@@ -200,7 +203,6 @@ internal fun VerticalLine(
             animationSpec = tween(durationMillis = 500)
         )
     }
-
 
     val lineColor by when {
         isByProgress -> animateColorAsState(
@@ -240,7 +242,7 @@ internal fun VerticalLine(
         isByProgress -> animateFloatAsState(
             targetValue = with(localDensity) {
                 lineStyle.selectedLineHeight.toPx()
-                    .minus(lineStyle.selectedLineHeight.toPx().times(progress))
+                    .minus(lineStyle.selectedLineHeight.toPx().times(progress.coerceAtMost(maximumValue = 0.8f)))
             },
             animationSpec = spring(Spring.DampingRatioNoBouncy, Spring.StiffnessLow)
         )

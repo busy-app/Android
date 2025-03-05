@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -24,18 +23,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
-import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.ui.timeline.HorizontalWheelPicker
 import com.flipperdevices.ui.timeline.model.PickerLineStyle
 import com.flipperdevices.ui.timeline.model.VisibleLinesState
 import com.flipperdevices.ui.timeline.util.toDuration
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 import com.flipperdevices.ui.timeline.util.toLong
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * A customizable wheel picker component for Android Jetpack Compose.
@@ -55,12 +52,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Suppress("MaxLineLength", "LongMethod", "LambdaParameterInRestartableEffect")
 @Composable
 fun BoxWithConstraintsScope.HorizontalWheelPicker(
-    isByProgress: Boolean = true,
     totalItems: Int,
     initialSelectedItem: Int,
     transform: (Int) -> String,
     onItemSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    isByProgress: Boolean = true,
     wheelPickerWidth: Dp? = null,
     lineStyle: PickerLineStyle = PickerLineStyle.Default
 ) {
@@ -167,7 +164,6 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
         },
     )
 }
-
 
 @Preview
 @Composable
