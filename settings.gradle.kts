@@ -53,6 +53,7 @@ include(
     ":components:core:ui:card-frame",
     ":components:core:ui:res-preview",
     ":components:core:ui:video",
+    ":components:core:ui:autosizetext",
 
     ":components:bsb:core:theme",
     ":components:bsb:core:res",
@@ -71,8 +72,8 @@ include(
     ":components:bsb:deeplink:impl",
     ":components:bsb:inappnotification:api",
     ":components:bsb:inappnotification:impl",
-    ":components:bsb:metronome:api",
-    ":components:bsb:metronome:impl",
+    ":components:bsb:sound:api",
+    ":components:bsb:sound:impl",
     ":components:bsb:liveactivity:api",
 
     ":components:bsb:appblocker:core:api",

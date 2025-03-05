@@ -12,6 +12,7 @@ commonDependencies {
     implementation(projects.components.core.ui.video)
     implementation(projects.components.core.ui.timeline)
     implementation(projects.components.core.ui.sheet)
+    implementation(projects.components.core.ui.autosizetext)
 
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.timer.background.api)
@@ -19,6 +20,7 @@ commonDependencies {
     implementation(projects.components.bsb.root.api)
     implementation(projects.components.bsb.deeplink.api)
 
+    implementation(libs.kotlin.immutable)
     implementation(libs.decompose)
     implementation(libs.composables)
     implementation(libs.compose.haze)

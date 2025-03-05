@@ -1,7 +1,7 @@
 package com.flipperdevices.bsb.di
 
 import com.flipperdevices.bsb.appblocker.api.FamilyControlApi
-import com.flipperdevices.bsb.metronome.api.AudioPlayerApi
+import com.flipperdevices.bsb.sound.api.AudioPlayerApi
 import com.flipperdevices.core.di.AppGraph
 import com.russhwolf.settings.ObservableSettings
 import kotlinx.coroutines.CoroutineScope

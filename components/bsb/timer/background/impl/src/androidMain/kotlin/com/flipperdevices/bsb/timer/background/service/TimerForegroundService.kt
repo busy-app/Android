@@ -24,7 +24,6 @@ import kotlinx.coroutines.plus
 import kotlinx.serialization.json.Json
 
 internal const val EXTRA_KEY_TIMER_STATE = "timer_state"
-internal const val EXTRA_KEY_TIMER_ACTION = "timer_action"
 
 private const val NOTIFICATION_ID = 100
 

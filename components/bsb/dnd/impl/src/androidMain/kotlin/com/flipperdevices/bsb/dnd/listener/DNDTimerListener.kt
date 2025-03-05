@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.dnd.listener
 import android.app.NotificationManager
 import android.content.Context
 import com.flipperdevices.bsb.dnd.api.BusyDNDApi
+import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
@@ -20,7 +21,7 @@ class DNDTimerListener(
 
     private val notificationManager by lazy { context.getSystemService(NotificationManager::class.java) }
 
-    override fun onTimerStart() {
+    override fun onTimerStart(timerSettings: TimerSettings) {
         if (dndApi.isDNDSupportActive()) {
             info { "Receive #onTimerStart and turn on DND" }
             notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)

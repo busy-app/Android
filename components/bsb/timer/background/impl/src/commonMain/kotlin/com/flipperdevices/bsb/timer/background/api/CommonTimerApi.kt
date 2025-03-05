@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.timer.background.api
 
-import com.flipperdevices.bsb.metronome.api.MetronomeApi
 import com.flipperdevices.bsb.timer.background.api.delegates.CompositeTimerStateListener
 import com.flipperdevices.bsb.timer.background.api.delegates.TimerLoopJob
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -27,13 +26,13 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 class CommonTimerApi(
     private val scope: CoroutineScope,
-    private val compositeListeners: CompositeTimerStateListener,
-    private val metronomeApi: MetronomeApi
+    private val compositeListeners: CompositeTimerStateListener
 ) : TimerApi, LogTagProvider {
     override val TAG = "CommonTimerApi"
 
     private val mutex = Mutex()
-    private val timerStateFlow = MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
+    private val timerStateFlow =
+        MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
     private val timerTimestampFlow = MutableStateFlow<TimerTimestamp?>(null)
 
     private var timerJob: TimerLoopJob? = null
@@ -59,7 +58,7 @@ class CommonTimerApi(
                 timerTimestampFlow.emit(state)
                 val timer = TimerLoopJob(scope, state)
                 timerJob = timer
-                compositeListeners.onTimerStart()
+                compositeListeners.onTimerStart(state.settings)
                 stateInvalidateJob = timer.getInternalState()
                     .onEach { internalState ->
                         timerStateFlow.emit(internalState)
@@ -69,13 +68,8 @@ class CommonTimerApi(
                             }
 
                             is ControlledTimerState.InProgress.Await,
+                            is ControlledTimerState.InProgress.Running,
                             ControlledTimerState.Finished -> Unit
-
-                            is ControlledTimerState.InProgress.Running -> {
-                                if (!internalState.isOnPause) {
-                                    metronomeApi.play()
-                                }
-                            }
                         }
                     }.launchIn(scope)
             }
