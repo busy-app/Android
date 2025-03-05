@@ -233,14 +233,24 @@ internal fun VerticalLine(
         isByProgress = isByProgress,
         progress = progress
     )
-    val textYOffset by animateFloatAsState(
-        targetValue = when {
-            indexAtCenter -> 0f
+    val textYOffset by when {
+        isByProgress -> animateFloatAsState(
+            targetValue = with(localDensity) {
+                lineStyle.selectedLineHeight.toPx()
+                    .minus(lineStyle.selectedLineHeight.toPx().times(progress))
+            },
+            animationSpec = spring(Spring.DampingRatioNoBouncy, Spring.StiffnessLow)
+        )
 
-            else -> with(localDensity) { lineStyle.selectedLineHeight.toPx() }
-        },
-        animationSpec = spring(Spring.DampingRatioNoBouncy, Spring.StiffnessLow)
-    )
+        else -> animateFloatAsState(
+            targetValue = when {
+                indexAtCenter -> 0f
+
+                else -> with(localDensity) { lineStyle.selectedLineHeight.toPx() }
+            },
+            animationSpec = spring(Spring.DampingRatioNoBouncy, Spring.StiffnessLow)
+        )
+    }
     Canvas(
         Modifier
             .width(1.dp)
