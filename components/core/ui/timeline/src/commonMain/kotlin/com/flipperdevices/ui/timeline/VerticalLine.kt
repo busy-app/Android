@@ -1,6 +1,7 @@
 package com.flipperdevices.ui.timeline
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -126,7 +127,7 @@ internal fun VerticalLine(
             indexAtCenter -> 0.dp
             adjustedIndex % lineStyle.step == 0 -> lineStyle.normalLineHeight.value.dp / 2
             else -> lineStyle.normalLineHeight.value.dp
-        },
+        }.plus(lineStyle.normalLineHeight),
         animationSpec = tween(durationMillis = 500)
     )
     val lineColor by animateColorAsState(
@@ -150,8 +151,9 @@ internal fun VerticalLine(
         targetValue = when {
             indexAtCenter -> 0f
 
-            else -> tlr.size.height.toFloat() * 2 + sqrt(tlr.size.height.toFloat()) * 4
+            else -> with(localDensity) { lineStyle.selectedLineHeight.toPx() }
         },
+        animationSpec = spring(Spring.DampingRatioNoBouncy, Spring.StiffnessLow)
     )
     Canvas(
         Modifier
