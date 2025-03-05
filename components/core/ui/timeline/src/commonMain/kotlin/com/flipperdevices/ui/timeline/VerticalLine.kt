@@ -26,6 +26,7 @@ import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.timeline.model.PickerLineStyle
 import com.flipperdevices.ui.timeline.util.animateTextUnitAsState
+import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
 @Composable
@@ -95,13 +96,20 @@ internal fun calculateTlr(
 @Suppress("LongMethod", "MaxLineLength", "CyclomaticComplexMethod")
 @Composable
 internal fun VerticalLine(
+    index: Int,
     adjustedIndex: Int,
+    middleIndex: Int,
     lineStyle: PickerLineStyle,
     indexAtCenter: Boolean,
     lineTransparency: Float,
     isVisible: Boolean,
     transform: (Int) -> String
 ) {
+    val progress = when {
+        index.minus(middleIndex).absoluteValue > lineStyle.step -> 0f
+        lineStyle.step == 0 -> 0f
+        else -> 1f - index.minus(middleIndex).absoluteValue / lineStyle.step.toFloat()
+    }
     val lineHeight by animateDpAsState(
         targetValue = when {
             indexAtCenter -> lineStyle.selectedLineHeight

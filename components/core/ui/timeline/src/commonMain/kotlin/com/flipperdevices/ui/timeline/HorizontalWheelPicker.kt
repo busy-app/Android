@@ -1,7 +1,10 @@
 package com.flipperdevices.ui.timeline
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -14,14 +17,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
+import com.flipperdevices.ui.timeline.HorizontalWheelPicker
 import com.flipperdevices.ui.timeline.model.PickerLineStyle
 import com.flipperdevices.ui.timeline.model.VisibleLinesState
 import com.flipperdevices.ui.timeline.util.toDuration
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 import com.flipperdevices.ui.timeline.util.toLong
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * A customizable wheel picker component for Android Jetpack Compose.
@@ -107,9 +117,11 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                 val isGone =
                     index < visibleItemsInfo.bufferIndices || index > (totalItems + visibleItemsInfo.bufferIndices)
                 VerticalLine(
+                    index = index,
                     adjustedIndex = adjustedIndex,
                     lineStyle = lineStyle,
                     indexAtCenter = index == visibleItemsInfo.middleIndex,
+                    middleIndex = visibleItemsInfo.middleIndex,
                     lineTransparency = lineTransparency,
                     transform = transform,
                     isVisible = !isGone,
@@ -146,4 +158,29 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
             onItemSelect.invoke(durationUnit.toDuration(value).plus(firstDuration))
         },
     )
+}
+
+
+@Preview
+@Composable
+private fun HorizontalWheelPickerPreview() {
+    BusyBarThemeInternal {
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black),
+            contentAlignment = Alignment.Center
+        ) {
+            HorizontalWheelPicker(
+                progression = IntProgression.fromClosedRange(
+                    rangeStart = 15.minutes.inWholeMinutes.toInt(),
+                    rangeEnd = 3.hours.inWholeMinutes.toInt(),
+                    step = 5.minutes.inWholeMinutes.toInt()
+                ),
+                initialSelectedItem = 10.minutes,
+                onItemSelect = { _ -> },
+                durationUnit = DurationUnit.MINUTES
+            )
+        }
+    }
 }
