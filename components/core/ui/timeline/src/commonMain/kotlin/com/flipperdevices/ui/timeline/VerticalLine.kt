@@ -151,7 +151,7 @@ internal fun VerticalLine(
     indexAtCenter: Boolean,
     lineTransparency: Float,
     isVisible: Boolean,
-    isByProgress: Boolean = true,
+    isByProgress: Boolean,
     transform: (Int) -> String
 ) {
     val progress = when {

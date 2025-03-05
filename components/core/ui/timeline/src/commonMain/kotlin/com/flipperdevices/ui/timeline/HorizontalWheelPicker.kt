@@ -1,10 +1,13 @@
 package com.flipperdevices.ui.timeline
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.timeline.HorizontalWheelPicker
@@ -51,6 +55,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Suppress("MaxLineLength", "LongMethod", "LambdaParameterInRestartableEffect")
 @Composable
 fun BoxWithConstraintsScope.HorizontalWheelPicker(
+    isByProgress: Boolean = true,
     totalItems: Int,
     initialSelectedItem: Int,
     transform: (Int) -> String,
@@ -125,6 +130,7 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
                     lineTransparency = lineTransparency,
                     transform = transform,
                     isVisible = !isGone,
+                    isByProgress = isByProgress
                 )
 
                 Spacer(modifier = Modifier.width(lineStyle.lineSpacing))
@@ -140,12 +146,14 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
     progression: IntProgression,
     onItemSelect: (Duration) -> Unit,
     modifier: Modifier = Modifier,
-    lineStyle: PickerLineStyle = PickerLineStyle.Default
+    lineStyle: PickerLineStyle = PickerLineStyle.Default,
+    isByProgress: Boolean = true,
 ) {
     val firstDuration = durationUnit.toDuration(progression.first)
 
     HorizontalWheelPicker(
         modifier = modifier,
+        isByProgress = isByProgress,
         wheelPickerWidth = null,
         totalItems = progression.last - progression.first,
         initialSelectedItem = durationUnit
@@ -165,22 +173,44 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
 @Composable
 private fun HorizontalWheelPickerPreview() {
     BusyBarThemeInternal {
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black),
-            contentAlignment = Alignment.Center
-        ) {
-            HorizontalWheelPicker(
-                progression = IntProgression.fromClosedRange(
-                    rangeStart = 15.minutes.inWholeMinutes.toInt(),
-                    rangeEnd = 3.hours.inWholeMinutes.toInt(),
-                    step = 5.minutes.inWholeMinutes.toInt()
-                ),
-                initialSelectedItem = 10.minutes,
-                onItemSelect = { _ -> },
-                durationUnit = DurationUnit.MINUTES
-            )
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            BoxWithConstraints(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Black),
+                contentAlignment = Alignment.Center
+            ) {
+                HorizontalWheelPicker(
+                    progression = IntProgression.fromClosedRange(
+                        rangeStart = 15.minutes.inWholeMinutes.toInt(),
+                        rangeEnd = 3.hours.inWholeMinutes.toInt(),
+                        step = 5.minutes.inWholeMinutes.toInt()
+                    ),
+                    initialSelectedItem = 10.minutes,
+                    onItemSelect = { _ -> },
+                    durationUnit = DurationUnit.MINUTES,
+                    isByProgress = true
+                )
+            }
+
+            BoxWithConstraints(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.Black),
+                contentAlignment = Alignment.Center
+            ) {
+                HorizontalWheelPicker(
+                    progression = IntProgression.fromClosedRange(
+                        rangeStart = 15.minutes.inWholeMinutes.toInt(),
+                        rangeEnd = 3.hours.inWholeMinutes.toInt(),
+                        step = 5.minutes.inWholeMinutes.toInt()
+                    ),
+                    initialSelectedItem = 10.minutes,
+                    onItemSelect = { _ -> },
+                    durationUnit = DurationUnit.MINUTES,
+                    isByProgress = false
+                )
+            }
         }
     }
 }
