@@ -3,6 +3,7 @@ package com.flipperdevices.ui.timeline
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.height
@@ -123,7 +124,7 @@ internal fun VerticalLine(
     val paddingBottom by animateDpAsState(
         targetValue = when {
             indexAtCenter -> 0.dp
-            adjustedIndex % lineStyle.step == 0 -> lineStyle.normalLineHeight.value.dp/2
+            adjustedIndex % lineStyle.step == 0 -> lineStyle.normalLineHeight.value.dp / 2
             else -> lineStyle.normalLineHeight.value.dp
         },
         animationSpec = tween(durationMillis = 500)
@@ -147,10 +148,10 @@ internal fun VerticalLine(
     )
     val textYOffset by animateFloatAsState(
         targetValue = when {
-            indexAtCenter -> 0f//sqrt(sqrt(tlr.size.height.toFloat()))
+            indexAtCenter -> 0f
 
-            else -> 0f
-        }
+            else -> tlr.size.height.toFloat() * 2 + sqrt(tlr.size.height.toFloat()) * 4
+        },
     )
     Canvas(
         Modifier
