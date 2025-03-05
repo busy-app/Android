@@ -28,6 +28,8 @@ import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.ui.timeline.model.PickerLineStyle
 import com.flipperdevices.ui.timeline.util.animateTextUnitAsState
+import com.flipperdevices.ui.timeline.util.normalAndSelectedLineDiff
+import com.flipperdevices.ui.timeline.util.stepAndSelectedLineDiff
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -106,6 +108,7 @@ internal fun VerticalLine(
     indexAtCenter: Boolean,
     lineTransparency: Float,
     isVisible: Boolean,
+    isByProgress: Boolean = true,
     transform: (Int) -> String
 ) {
     val progress = when {
@@ -113,27 +116,64 @@ internal fun VerticalLine(
         lineStyle.step == 0 -> 0f
         else -> 1f - index.minus(middleIndex).absoluteValue / lineStyle.step.toFloat()
     }
-    val lineHeight by animateDpAsState(
-        targetValue = when {
-            indexAtCenter -> lineStyle.selectedLineHeight
-            adjustedIndex % lineStyle.step == 0 -> lineStyle.stepLineHeight
-            else -> lineStyle.normalLineHeight
-        },
-        animationSpec = tween(durationMillis = 500)
-    )
+    val lineHeight by when {
+        isByProgress -> animateDpAsState(
+            targetValue = when {
+                adjustedIndex % lineStyle.step == 0 -> lineStyle.stepLineHeight.plus(lineStyle.stepAndSelectedLineDiff * progress)
+                else -> lineStyle.normalLineHeight
+            },
+            animationSpec = tween(durationMillis = 500)
+        )
 
-    val paddingBottom by animateDpAsState(
-        targetValue = when {
-            indexAtCenter -> 0.dp
-            adjustedIndex % lineStyle.step == 0 -> lineStyle.normalLineHeight.value.dp / 2
-            else -> lineStyle.normalLineHeight.value.dp
-        }.plus(lineStyle.normalLineHeight),
-        animationSpec = tween(durationMillis = 500)
-    )
-    val lineColor by animateColorAsState(
-        targetValue = if (indexAtCenter) lineStyle.selectedLineColor else lineStyle.unselectedLineColor,
-        animationSpec = tween(durationMillis = 500)
-    )
+        else -> animateDpAsState(
+            targetValue = when {
+                indexAtCenter -> lineStyle.selectedLineHeight
+                adjustedIndex % lineStyle.step == 0 -> lineStyle.stepLineHeight
+                else -> lineStyle.normalLineHeight
+            },
+            animationSpec = tween(durationMillis = 500)
+        )
+    }
+    
+    val paddingBottom by when {
+        isByProgress -> animateDpAsState(
+            targetValue = when {
+                adjustedIndex % lineStyle.step == 0 -> lineStyle.normalLineHeight.value.dp
+                    .div(2)
+                    .minus(lineStyle.normalLineHeight.value.dp.div(2).times(progress))
+                else -> lineStyle.normalLineHeight.value.dp
+            }.plus(lineStyle.normalLineHeight),
+            animationSpec = tween(durationMillis = 500)
+        )
+
+        else -> animateDpAsState(
+            targetValue = when {
+                indexAtCenter -> 0.dp
+                adjustedIndex % lineStyle.step == 0 -> lineStyle.normalLineHeight.value.dp / 2
+                else -> lineStyle.normalLineHeight.value.dp
+            }.plus(lineStyle.normalLineHeight),
+            animationSpec = tween(durationMillis = 500)
+        )
+    }
+    val lineColor by when {
+        isByProgress -> animateColorAsState(
+            targetValue = when {
+                adjustedIndex % lineStyle.step == 0 -> lineStyle.selectedLineColor.copy(
+                    alpha = progress.coerceAtLeast(
+                        minimumValue = 0.2f
+                    )
+                )
+
+                else -> lineStyle.unselectedLineColor
+            },
+            animationSpec = tween(durationMillis = 500)
+        )
+
+        else -> animateColorAsState(
+            targetValue = if (indexAtCenter) lineStyle.selectedLineColor else lineStyle.unselectedLineColor,
+            animationSpec = tween(durationMillis = 500)
+        )
+    }
     val lineWidth by animateDpAsState(
         targetValue = if (indexAtCenter) lineStyle.selectedLineWidth else lineStyle.lineWidth,
         animationSpec = tween(durationMillis = 600)
