@@ -49,19 +49,19 @@ data class PickerLineStyle(
             @Composable
             get() = PickerLineStyle(
                 lineWidth = 2.dp,
-                selectedLineHeight = 54.dp,
-                stepLineHeight = 34.dp,
+                selectedLineHeight = 44.dp,
+                stepLineHeight = 32.dp,
                 normalLineHeight = 16.dp,
-                lineSpacing = 12.dp,
+                lineSpacing = 16.dp,
                 lineRoundedCorners = 0.dp,
                 selectedLineColor = LocalCorruptedPallet.current.accent.device.primary,
                 unselectedLineColor = LocalCorruptedPallet.current.white.invert.copy(0.2f),
                 fadeOutLinesCount = 12,
                 maxFadeTransparency = 0.95f,
                 step = 5,
-                selectedZeroFontSize = 50.sp,
-                selectedFontSize = 40.sp,
-                unselectedFontSize = 15.sp,
+                selectedZeroFontSize = 42.sp,
+                selectedFontSize = 28.sp,
+                unselectedFontSize = 16.sp,
             )
     }
 }
