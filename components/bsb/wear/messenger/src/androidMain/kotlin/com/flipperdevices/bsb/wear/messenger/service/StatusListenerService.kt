@@ -13,7 +13,7 @@ class StatusListenerService : WearableMessengerListenerService() {
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
         Log.d(TAG, "onMessageReceived: ${messageEvent.path}")
-        scope.launch { receivePingMessage(messageEvent) }
+        receivePingMessage(messageEvent)
     }
 
     private fun MessageEvent.toMessage() = when (this.path) {
@@ -23,7 +23,7 @@ class StatusListenerService : WearableMessengerListenerService() {
         else -> null
     }
 
-    private suspend fun receivePingMessage(messageEvent: MessageEvent) = kotlin.runCatching {
+    private fun receivePingMessage(messageEvent: MessageEvent) = kotlin.runCatching {
         val wearMessageReceiver = wearMessengerModule.wearMessageConsumer
         val message = messageEvent.toMessage() ?: run {
             Log.d(TAG, "receivePingMessage: can't handle message ${messageEvent.path}")

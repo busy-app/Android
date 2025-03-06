@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface WearMessageConsumer {
     val messagesFlow: Flow<DecodedWearMessage<*>>
-    suspend fun <T> consume(message: WearMessage<T>, byteArray: ByteArray)
+    fun <T> consume(message: WearMessage<T>, byteArray: ByteArray)
 }

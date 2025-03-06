@@ -31,6 +31,7 @@ class NotificationTimerBuilder(
         return createBase(context)
             .setContentTitle(context.getString(R.string.timer_notification_title))
             .setContentText(context.getString(R.string.timer_notification_desc_empty))
+            .setLocalOnly(true)
             .build()
     }
 

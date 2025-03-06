@@ -4,11 +4,15 @@ import android.app.Application
 import android.util.Log
 import com.flipperdevices.bsb.di.AndroidAppComponent
 import com.flipperdevices.bsb.di.create
+import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.wear.messenger.application.WearMessengerApplication
 import com.flipperdevices.bsb.wear.messenger.di.WearMessengerModule
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.core.activityholder.CurrentActivityHolder
 import com.flipperdevices.core.di.AndroidPlatformDependencies
+import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.russhwolf.settings.SharedPreferencesSettings
@@ -17,6 +21,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.isActive
@@ -35,12 +41,7 @@ class BSBApplication : Application(), WearMessengerApplication {
     private val applicationScope = CoroutineScope(
         SupervisorJob() + FlipperDispatchers.default
     )
-    override val wearMessengerModule by lazy {
-        WearMessengerModule.Default(
-            applicationContext,
-            applicationScope
-        )
-    }
+    override lateinit var wearMessengerModule: WearMessengerModule
 
     override fun onCreate() {
         super.onCreate()
@@ -53,19 +54,8 @@ class BSBApplication : Application(), WearMessengerApplication {
             this@BSBApplication,
             AndroidPlatformDependencies(MainActivity::class)
         )
+        wearMessengerModule = ComponentHolder.component<AndroidAppComponent>().wearMessengerModule
 
         Timber.plant(Timber.DebugTree())
-
-        wearMessengerModule.wearMessageConsumer.messagesFlow
-            .onEach { Log.d("BSBApplication", "#consumed: $it") }
-            .launchIn(GlobalScope)
-        GlobalScope.launch {
-            while (currentCoroutineContext().isActive) {
-                delay(1000L)
-                val message = PingMessage
-                Log.d("BSBApplication", "#sending: $message")
-                wearMessengerModule.wearMessageProducer.produce(PingMessage, 0)
-            }
-        }
     }
 }

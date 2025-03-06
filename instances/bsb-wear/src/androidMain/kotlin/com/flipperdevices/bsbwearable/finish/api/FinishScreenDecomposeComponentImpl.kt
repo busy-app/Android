@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
+import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsbwearable.finish.composable.FinishScreenComposable
 import com.flipperdevices.core.di.AppGraph
@@ -18,13 +19,12 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class FinishScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
+    private val timerApi: TimerApi
 ) : FinishScreenDecomposeComponent(componentContext) {
 
-    // todo
+
     private fun getTimerState(): StateFlow<ControlledTimerState> {
-        return MutableStateFlow(
-            ControlledTimerState.Finished
-        ).asStateFlow()
+        return timerApi.getState()
     }
 
     @Composable

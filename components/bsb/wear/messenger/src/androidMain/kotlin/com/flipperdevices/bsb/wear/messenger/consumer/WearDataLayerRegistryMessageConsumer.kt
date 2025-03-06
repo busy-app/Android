@@ -10,6 +10,7 @@ import com.google.android.horologist.data.WearDataLayerRegistry
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalHorologistApi::class)
 @Suppress("UnusedPrivateMember")
@@ -20,13 +21,13 @@ class WearDataLayerRegistryMessageConsumer(
     private val messageChannel = Channel<DecodedWearMessage<*>>()
     override val messagesFlow: Flow<DecodedWearMessage<*>> = messageChannel.receiveAsFlow()
 
-    override suspend fun <T> consume(message: WearMessage<T>, byteArray: ByteArray) {
+    override fun <T> consume(message: WearMessage<T>, byteArray: ByteArray) {
         kotlin.runCatching {
             val decodedWearMessage = DecodedWearMessage(
                 path = message.path,
                 value = message.decode(byteArray)
             )
-            messageChannel.send(decodedWearMessage)
+            runBlocking { messageChannel.send(decodedWearMessage) }
         }.onFailure {
             Log.d(TAG, "consume: could not publish message: ${it.stackTraceToString()}")
         }.onSuccess {

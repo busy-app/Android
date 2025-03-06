@@ -17,7 +17,9 @@ import com.flipperdevices.bsb.timer.main.model.TimerMainNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.tatarka.inject.annotations.Assisted
@@ -35,6 +37,7 @@ class TimerMainDecomposeComponentImpl(
     private val delayedStartScreenDecomposeComponentFactory: DelayedStartScreenDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
+    private val myService: MyService
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     StatusBarIconStyleProvider by iconStyleProvider,
     ComponentContext by componentContext {
@@ -80,6 +83,7 @@ class TimerMainDecomposeComponentImpl(
             }
             .onEach { state -> navigation.replaceAll(state.getScreen()) }
             .launchIn(coroutineScope())
+        myService.start(coroutineScope())
     }
 
     override val stack = childStack(

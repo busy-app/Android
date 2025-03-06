@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsbwearable.active.composable.ActiveTimerScreenComposable
 import com.flipperdevices.bsbwearable.interrupt.api.StopSessionDecomposeComponent
@@ -23,23 +24,15 @@ import kotlin.time.Duration.Companion.seconds
 @Inject
 class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    stopSessionDecomposeComponentFactory: StopSessionDecomposeComponent.Factory
+    stopSessionDecomposeComponentFactory: StopSessionDecomposeComponent.Factory,
+    private val timerApi: TimerApi
 ) : ActiveTimerScreenDecomposeComponent(componentContext) {
     private val stopSessionDecomposeComponentFactory = stopSessionDecomposeComponentFactory.invoke(
         componentContext = childContext("atsdci_ssdcf")
     )
 
-    // todo
     private fun getTimerState(): StateFlow<ControlledTimerState> {
-        return MutableStateFlow(
-            ControlledTimerState.InProgress.Running.Work(
-                timeLeft = 110.seconds,
-                isOnPause = false,
-                timerSettings = TimerSettings(),
-                currentIteration = 0,
-                maxIterations = 1
-            )
-        ).asStateFlow()
+        return timerApi.getState()
     }
 
     @Composable
