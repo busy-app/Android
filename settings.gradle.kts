@@ -137,4 +137,6 @@ include(
     ":components:bsb:timer:delayed-start:impl",
     ":components:bsb:timer:cards:api",
     ":components:bsb:timer:cards:impl",
+
+    ":components:bsb:wear:messenger",
 )
