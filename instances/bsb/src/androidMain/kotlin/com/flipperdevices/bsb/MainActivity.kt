@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import com.arkivanov.decompose.defaultComponentContext
+import com.flipperdevices.bsb.appblocker.screen.api.AppBlockerActivity
 import com.flipperdevices.bsb.deeplink.api.DeepLinkParser
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import com.flipperdevices.bsb.di.AndroidAppComponent
@@ -58,6 +59,9 @@ class MainActivity : ComponentActivity(), LogTagProvider {
         setContent {
             App(rootComponent, appComponent)
         }
+        if (savedInstanceState == null) {
+            openAppBlockerScreenIfNeed(intent)
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -74,6 +78,7 @@ class MainActivity : ComponentActivity(), LogTagProvider {
                 }
             }
         }
+        openAppBlockerScreenIfNeed(intent)
     }
 
     private suspend fun DeepLinkParser.parseOrLog(context: Context, intent: Intent): Deeplink? {
@@ -83,5 +88,25 @@ class MainActivity : ComponentActivity(), LogTagProvider {
             error(throwable) { "Failed parse deeplink" }
             null
         }
+    }
+
+    private fun openAppBlockerScreenIfNeed(intent: Intent) {
+        val parserApi = ComponentHolder.component<AndroidAppComponent>().applicationInfoParserApi
+        if (!parserApi.isApplicationInfoAction(intent.action)) {
+            return
+        }
+
+        info { "Open app blocker screen" }
+
+        parserApi.parse(intent)
+            .mapCatching { applicationInfo ->
+                parserApi.getIntent(
+                    applicationInfo = applicationInfo,
+                    context = this,
+                    activity = AppBlockerActivity::class
+                )
+            }.onSuccess { appBlockedActivityIntent ->
+                startActivity(appBlockedActivityIntent)
+            }
     }
 }

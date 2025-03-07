@@ -170,8 +170,7 @@ commonDependencies {
     implementation(projects.components.bsb.appblocker.filter.impl)
     implementation(projects.components.bsb.appblocker.permission.api)
     implementation(projects.components.bsb.appblocker.permission.impl)
-    implementation(projects.components.bsb.appblocker.screen.api)
-    implementation(projects.components.bsb.appblocker.screen.impl)
+    implementation(projects.components.bsb.appblocker.screen)
     implementation(projects.components.bsb.appblocker.stats.api)
     implementation(projects.components.bsb.appblocker.stats.impl)
 

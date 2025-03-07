@@ -5,7 +5,7 @@ import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import com.flipperdevices.bsb.appblocker.deeplink.AppBlockDeeplinkParser
+import com.flipperdevices.bsb.appblocker.api.ApplicationInfoIntentParserApi
 import com.flipperdevices.bsb.appblocker.stats.api.AppBlockerStatsApi
 import com.flipperdevices.bsb.appblocker.stats.model.AppLaunchRecordEvent
 import com.flipperdevices.core.di.AndroidPlatformDependencies
@@ -21,6 +21,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import me.tatarka.inject.annotations.Inject
+import com.flipperdevices.bsb.appblocker.model.ApplicationInfo as InternalApplicationInfo
 
 const val APP_LOCK_LOOP_INTERVAL = 500L
 const val APP_LOCK_CHECK_INTERVAL = 1000L
@@ -31,7 +32,8 @@ class UsageStatsLooper(
     private val scope: CoroutineScope,
     private val androidPlatformDependencies: AndroidPlatformDependencies,
     private val packageFilter: PackageFilter,
-    private val appBlockerStatsApi: AppBlockerStatsApi
+    private val appBlockerStatsApi: AppBlockerStatsApi,
+    private val parserApi: ApplicationInfoIntentParserApi
 ) : LogTagProvider {
     override val TAG = "UsageStatsLooper"
 
@@ -97,10 +99,12 @@ class UsageStatsLooper(
             event.packageName
         )
 
-        val intent = AppBlockDeeplinkParser.getIntent(
+        val intent = parserApi.getIntent(
             context = context,
-            packageName = event.packageName,
-            openCount = openCount,
+            applicationInfo = InternalApplicationInfo(
+                packageName = event.packageName,
+                openCount = openCount
+            ),
             activity = androidPlatformDependencies.splashScreenActivity,
         )
         context.startActivity(intent)
