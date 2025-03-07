@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.root.model
 
-import com.flipperdevices.bsb.appblocker.model.ApplicationInfo
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import kotlinx.serialization.Serializable
 
@@ -11,7 +10,4 @@ sealed interface RootNavigationConfig {
 
     @Serializable
     data class Profile(val deeplink: Deeplink.Root.Auth?) : RootNavigationConfig
-
-    @Serializable
-    data class AppLockScreen(val applicationInfo: ApplicationInfo) : RootNavigationConfig
 }

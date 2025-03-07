@@ -14,7 +14,6 @@ commonDependencies {
 
     implementation(projects.components.bsb.profile.main.api)
     implementation(projects.components.bsb.timer.main.api)
-    implementation(projects.components.bsb.appblocker.screen.api)
 
     implementation(projects.components.bsb.appblocker.core.api)
     implementation(projects.components.bsb.deeplink.api)

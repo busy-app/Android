@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.di
 
 import android.content.Context
+import com.flipperdevices.bsb.appblocker.screen.di.AppBlockerActivityComponent
 import com.flipperdevices.bsb.deeplink.api.DeepLinkParser
 import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.di.AppGraph
@@ -17,6 +18,6 @@ abstract class AndroidAppComponent(
     override val scope: CoroutineScope,
     @get:Provides val context: Context,
     @get:Provides val dependencies: AndroidPlatformDependencies
-) : AppComponent {
+) : AppComponent, AppBlockerActivityComponent {
     abstract val deeplinkParser: DeepLinkParser
 }

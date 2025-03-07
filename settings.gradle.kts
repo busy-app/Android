@@ -84,8 +84,7 @@ include(
     ":components:bsb:appblocker:filter:impl",
     ":components:bsb:appblocker:permission:api",
     ":components:bsb:appblocker:permission:impl",
-    ":components:bsb:appblocker:screen:api",
-    ":components:bsb:appblocker:screen:impl",
+    ":components:bsb:appblocker:screen",
     ":components:bsb:appblocker:stats:api",
     ":components:bsb:appblocker:stats:impl",
 
