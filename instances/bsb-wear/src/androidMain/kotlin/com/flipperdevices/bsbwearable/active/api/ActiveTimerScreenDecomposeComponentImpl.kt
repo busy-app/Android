@@ -6,13 +6,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
+import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
+import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.bsbwearable.active.composable.ActiveTimerScreenComposable
 import com.flipperdevices.bsbwearable.interrupt.api.StopSessionDecomposeComponent
 import com.flipperdevices.bsbwearable.interrupt.composable.PauseWearOverlayComposable
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -21,7 +26,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     stopSessionDecomposeComponentFactory: StopSessionDecomposeComponent.Factory,
-    private val timerApi: TimerApi
+    private val timerApi: TimerApi,
+    private val wearMessageProducer: WearMessageProducer
 ) : ActiveTimerScreenDecomposeComponent(componentContext) {
     private val stopSessionDecomposeComponentFactory = stopSessionDecomposeComponentFactory.invoke(
         componentContext = childContext("atsdci_ssdcf")
@@ -31,6 +37,8 @@ class ActiveTimerScreenDecomposeComponentImpl(
         return timerApi.getState()
     }
 
+    private val scope = coroutineScope()
+
     @Composable
     override fun Render(modifier: Modifier) {
         val timerState by getTimerState().collectAsState()
@@ -39,12 +47,20 @@ class ActiveTimerScreenDecomposeComponentImpl(
             onStopClick = {
                 stopSessionDecomposeComponentFactory.show()
             },
-            onSkipClick = {},
-            onPauseClick = {}
+            onSkipClick = {
+                scope.launch { wearMessageProducer.produce(TimerActionMessage.Skip) }
+            },
+            onPauseClick = {
+                scope.launch { wearMessageProducer.produce(TimerActionMessage.Pause) }
+            }
         )
 
         if ((timerState as? ControlledTimerState.InProgress.Running)?.isOnPause == true) {
-            PauseWearOverlayComposable(onStartClick = {})
+            PauseWearOverlayComposable(
+                onResumeClick = {
+                    scope.launch { wearMessageProducer.produce(TimerActionMessage.Resume) }
+                }
+            )
         }
         stopSessionDecomposeComponentFactory.Render(Modifier)
     }

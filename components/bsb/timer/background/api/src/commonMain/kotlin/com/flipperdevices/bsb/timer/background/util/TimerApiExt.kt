@@ -22,7 +22,7 @@ fun TimerApi.pause() {
     }
 }
 
-fun TimerApi.confirmNextSte() {
+fun TimerApi.confirmNextStep() {
     val awaitState = getState().value as? ControlledTimerState.InProgress.Await ?: return
     updateState { state ->
         state ?: return@updateState state

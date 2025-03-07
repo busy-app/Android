@@ -73,7 +73,8 @@ kotlin {
             implementation(projects.components.core.activityholder)
             implementation(libs.appcompat)
 
-            implementation(projects.components.bsb.wear.bridgeBsb)
+            implementation(projects.components.bsb.wear.bridge.common)
+            implementation(projects.components.bsb.wear.bridge.android)
 
             implementation(libs.google.horologist.datalayer)
             implementation(libs.google.horologist.datalayer.phone)

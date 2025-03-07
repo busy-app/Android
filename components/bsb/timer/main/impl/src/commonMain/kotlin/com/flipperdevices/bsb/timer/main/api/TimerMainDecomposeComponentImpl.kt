@@ -37,7 +37,6 @@ class TimerMainDecomposeComponentImpl(
     private val delayedStartScreenDecomposeComponentFactory: DelayedStartScreenDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
-    private val myService: MyService
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     StatusBarIconStyleProvider by iconStyleProvider,
     ComponentContext by componentContext {
@@ -83,7 +82,6 @@ class TimerMainDecomposeComponentImpl(
             }
             .onEach { state -> navigation.replaceAll(state.getScreen()) }
             .launchIn(coroutineScope())
-        myService.start(coroutineScope())
     }
 
     override val stack = childStack(

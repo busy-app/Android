@@ -5,11 +5,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
+import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
+import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.bsbwearable.autopause.composable.AutoPauseScreenComposable
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -17,12 +22,15 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class AutoPauseScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val timerApi: TimerApi
+    private val timerApi: TimerApi,
+    private val wearMessageProducer: WearMessageProducer
 ) : AutoPauseScreenDecomposeComponent(componentContext) {
 
     private fun getTimerState(): StateFlow<ControlledTimerState> {
         return timerApi.getState()
     }
+
+    private val scope = coroutineScope()
 
     @Composable
     override fun Render(modifier: Modifier) {
@@ -31,8 +39,12 @@ class AutoPauseScreenDecomposeComponentImpl(
             is ControlledTimerState.InProgress.Await -> {
                 AutoPauseScreenComposable(
                     state = timerState,
-                    onButtonClick = {},
-                    onStopClick = {},
+                    onButtonClick = {
+                        scope.launch { wearMessageProducer.produce(TimerActionMessage.ConfirmNextStage) }
+                    },
+                    onStopClick = {
+                        scope.launch { wearMessageProducer.produce(TimerActionMessage.Stop) }
+                    },
                 )
             }
 

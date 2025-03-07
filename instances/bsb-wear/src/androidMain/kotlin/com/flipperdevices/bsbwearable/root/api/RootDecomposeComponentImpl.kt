@@ -28,6 +28,7 @@ import com.flipperdevices.bsbwearable.root.api.model.RootNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -73,6 +74,16 @@ class RootDecomposeComponentImpl(
         }
         timerApi
             .getState()
+            .distinctUntilChangedBy { state ->
+                when (state) {
+                    ControlledTimerState.Finished -> 0
+                    ControlledTimerState.NotStarted -> 1
+                    is ControlledTimerState.InProgress.Running.LongRest -> 2
+                    is ControlledTimerState.InProgress.Running.Rest -> 3
+                    is ControlledTimerState.InProgress.Running.Work -> 4
+                    is ControlledTimerState.InProgress.Await -> 5
+                }
+            }
             .map {
                 when (it) {
                     ControlledTimerState.Finished -> {
@@ -99,7 +110,7 @@ class RootDecomposeComponentImpl(
                         RootNavigationConfig.Card
                     }
                 }
-            }.distinctUntilChanged()
+            }
             .onEach { navigation.replaceAll(it) }
             .launchIn(coroutineScope())
     }

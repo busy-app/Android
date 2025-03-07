@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.background.api.delegates
 
-import com.flipperdevices.bsb.timer.background.api.util.toState
+import com.flipperdevices.bsb.timer.background.flow.TickFlow
+import com.flipperdevices.bsb.timer.background.util.toState
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.core.ktx.common.withLock
