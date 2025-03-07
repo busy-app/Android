@@ -1,6 +1,9 @@
 package com.flipperdevices.bsb.timer.background.api.util
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.timer.background.util.IterationData
+import com.flipperdevices.bsb.timer.background.util.IterationType
+import com.flipperdevices.bsb.timer.background.util.buildIterationList
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.time.Duration.Companion.minutes

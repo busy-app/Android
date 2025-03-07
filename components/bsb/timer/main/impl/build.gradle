@@ -30,6 +30,8 @@ commonDependencies {
     implementation(projects.components.bsb.timer.cards.api)
     implementation(projects.components.bsb.timer.done.api)
 
+    implementation(projects.components.bsb.wear.bridge.common)
+
     implementation(libs.decompose)
     implementation(libs.decompose.composeExtension)
     implementation(libs.essenty.lifecycle.coroutines)

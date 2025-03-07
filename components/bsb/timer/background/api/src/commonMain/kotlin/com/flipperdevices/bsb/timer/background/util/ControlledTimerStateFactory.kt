@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.background.api.util
+package com.flipperdevices.bsb.timer.background.util
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -143,7 +143,7 @@ private val TimerSettings.maxIterationCount: Int
         .count { data -> data.iterationType == IterationType.WORK }
 
 @Suppress("LongMethod")
-internal fun TimerTimestamp?.toState(): ControlledTimerState {
+fun TimerTimestamp?.toState(): ControlledTimerState {
     if (this == null) {
         return ControlledTimerState.NotStarted
     }

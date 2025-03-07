@@ -24,7 +24,6 @@ internal class BSBApplication : Application() {
     private val applicationScope = CoroutineScope(
         SupervisorJob() + FlipperDispatchers.default
     )
-
     override fun onCreate() {
         super.onCreate()
 

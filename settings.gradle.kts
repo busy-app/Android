@@ -137,4 +137,9 @@ include(
     ":components:bsb:timer:delayed-start:impl",
     ":components:bsb:timer:cards:api",
     ":components:bsb:timer:cards:impl",
+
+    ":components:bsb:wear:bridge:api",
+    ":components:bsb:wear:bridge:common",
+    ":components:bsb:wear:bridge:wear",
+    ":components:bsb:wear:bridge:android",
 )

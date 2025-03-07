@@ -10,6 +10,7 @@ import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.russhwolf.settings.SharedPreferencesSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import om.flipperdevices.bsb.wear.messenger.service.WearMessageSyncService
 import timber.log.Timber
 
 class BSBApplication : Application() {
@@ -24,6 +25,9 @@ class BSBApplication : Application() {
     private val applicationScope = CoroutineScope(
         SupervisorJob() + FlipperDispatchers.default
     )
+    private val wearMessageSyncService by lazy {
+        WearMessageSyncService()
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -38,5 +42,11 @@ class BSBApplication : Application() {
         )
 
         Timber.plant(Timber.DebugTree())
+        wearMessageSyncService.onCreate()
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        wearMessageSyncService.onDestroy()
     }
 }
