@@ -73,7 +73,7 @@ kotlin {
             implementation(projects.components.core.activityholder)
             implementation(libs.appcompat)
 
-            implementation(projects.components.bsb.wear.messenger)
+            implementation(projects.components.bsb.wear.bridgeBsb)
         }
         commonMain.dependencies {
             implementation(projects.components.core.focusDisplay)

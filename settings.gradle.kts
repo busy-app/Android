@@ -138,5 +138,6 @@ include(
     ":components:bsb:timer:cards:api",
     ":components:bsb:timer:cards:impl",
 
-    ":components:bsb:wear:messenger",
+    ":components:bsb:wear:bridge",
+    ":components:bsb:wear:bridge-bsb",
 )

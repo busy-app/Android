@@ -4,10 +4,6 @@ class ByteWearMessageSerializer(
     path: String,
 ) : WearMessageSerializer<Byte> by InlineWearMessageSerializer(
     path = path,
-    encode = { value ->
-        byteArrayOf(overrideValue ?: value)
-    },
-    decode = { byteArray ->
-        overrideValue ?: byteArray.first()
-    }
+    encode = { value -> byteArrayOf(value) },
+    decode = { byteArray -> byteArray.first() }
 )

@@ -6,11 +6,6 @@ import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearMessage
-import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
-
-interface WearMessageProducer {
-    suspend fun <T> produce(message: WearMessageSerializer<T>, value: T)
-}
 
 suspend fun WearMessageProducer.produce(message: WearMessage) {
     when (message) {

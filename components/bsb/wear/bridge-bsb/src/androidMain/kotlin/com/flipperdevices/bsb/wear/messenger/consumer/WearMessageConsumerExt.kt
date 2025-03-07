@@ -7,15 +7,8 @@ import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearMessage
-import com.flipperdevices.bsb.wear.messenger.serializer.DecodedWearMessage
-import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
-
-interface WearMessageConsumer {
-    val messagesFlow: Flow<DecodedWearMessage<*>>
-    fun <T> consume(message: WearMessageSerializer<T>, byteArray: ByteArray)
-}
 
 val WearMessageConsumer.bMessageFlow: Flow<WearMessage>
     get() = messagesFlow

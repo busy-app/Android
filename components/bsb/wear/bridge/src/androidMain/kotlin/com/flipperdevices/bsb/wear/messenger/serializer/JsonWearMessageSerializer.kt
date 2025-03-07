@@ -23,7 +23,7 @@ class JsonWearMessageSerializer<T>(
     }
 ) {
     companion object {
-        internal val DEFAULT_JSON = Json {
+        val DEFAULT_JSON = Json {
             prettyPrint = false
             isLenient = true
             ignoreUnknownKeys = true
@@ -33,7 +33,7 @@ class JsonWearMessageSerializer<T>(
 
 @Suppress("FunctionNaming")
 inline fun <reified T> JsonWearMessage(
-    json: Json,
+    json: Json = JsonWearMessageSerializer.DEFAULT_JSON,
     path: String
 ): WearMessageSerializer<T> = JsonWearMessageSerializer(
     serializer = json.serializersModule.serializer<T>(),
