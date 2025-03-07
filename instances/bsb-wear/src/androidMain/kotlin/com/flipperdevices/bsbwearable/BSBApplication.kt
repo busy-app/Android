@@ -1,11 +1,8 @@
 package com.flipperdevices.bsbwearable
 
 import android.app.Application
-import android.util.Log
 import com.flipperdevices.bsb.wear.messenger.application.WearMessengerApplication
 import com.flipperdevices.bsb.wear.messenger.di.WearMessengerModule
-import com.flipperdevices.bsb.wear.messenger.model.PingMessage
-import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsbwearable.di.WearAppComponent
 import com.flipperdevices.bsbwearable.di.create
 import com.flipperdevices.core.activityholder.CurrentActivityHolder
@@ -14,15 +11,7 @@ import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.russhwolf.settings.SharedPreferencesSettings
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 internal class BSBApplication : Application(), WearMessengerApplication{

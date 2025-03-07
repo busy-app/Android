@@ -1,6 +1,6 @@
-package com.flipperdevices.bsb.wear.messenger.message
+package com.flipperdevices.bsb.wear.messenger.serializer
 
-interface WearMessage<T> {
+interface WearMessageSerializer<T> {
     val path: String
 
     fun encode(value: T): ByteArray

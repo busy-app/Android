@@ -1,6 +1,8 @@
 package com.flipperdevices.bsb.wear.messenger.model
 
-import com.flipperdevices.bsb.wear.messenger.message.ByteWearMessage
-import com.flipperdevices.bsb.wear.messenger.message.WearMessage
+import com.flipperdevices.bsb.wear.messenger.serializer.ByteWearMessageSerializer
+import com.flipperdevices.bsb.wear.messenger.serializer.UnitWearMessageSerializer
 
-object TimerRequestUpdateMessage: WearMessage<Byte> by ByteWearMessage(path = "/wearsync/request_update")
+object TimerRequestUpdateMessage: WearMessage {
+    val serializer = UnitWearMessageSerializer(path = "/wearsync/request_update")
+}

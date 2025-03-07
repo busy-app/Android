@@ -1,7 +1,7 @@
 package com.flipperdevices.bsb.wear.messenger.producer
 
 import android.util.Log
-import com.flipperdevices.bsb.wear.messenger.message.WearMessage
+import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.data.WearDataLayerRegistry
@@ -15,7 +15,7 @@ class WearDataLayerRegistryMessageProducer(
     private val wearDataLayerRegistry: WearDataLayerRegistry,
     private val messageClient: MessageClient,
 ) : WearMessageProducer {
-    override suspend fun <T> produce(message: WearMessage<T>, value: T): Unit = coroutineScope {
+    override suspend fun <T> produce(message: WearMessageSerializer<T>, value: T): Unit = coroutineScope {
         val nodes = wearDataLayerRegistry.nodeClient.connectedNodes.await()
         Log.d(TAG, "produce: found ${nodes.size} nodes")
         kotlin.runCatching {

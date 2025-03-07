@@ -1,11 +1,8 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
 import android.util.Log
-import com.flipperdevices.bsb.wear.messenger.model.PingMessage
-import com.flipperdevices.bsb.wear.messenger.model.PongMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
+import com.flipperdevices.bsb.wear.messenger.model.*
 import com.google.android.gms.wearable.MessageEvent
-import kotlinx.coroutines.launch
 
 class StatusListenerService : WearableMessengerListenerService() {
     override val TAG: String = "StatusListenerService"
@@ -17,9 +14,18 @@ class StatusListenerService : WearableMessengerListenerService() {
     }
 
     private fun MessageEvent.toMessage() = when (this.path) {
-        PingMessage.path -> PingMessage
-        PongMessage.path -> PongMessage
-        TimerTimestampMessage.path -> TimerTimestampMessage
+        PingMessage.serializer.path -> PingMessage.serializer
+        PongMessage.serializer.path -> PongMessage.serializer
+        TimerRequestUpdateMessage.serializer.path -> TimerRequestUpdateMessage.serializer
+        TimerTimestampMessage.serializer.path -> TimerTimestampMessage.serializer
+
+        TimerActionMessage.Finish.serializer.path -> TimerActionMessage.Finish.serializer
+        TimerActionMessage.ConfirmNextStage.serializer.path -> TimerActionMessage.ConfirmNextStage.serializer
+        TimerActionMessage.Pause.serializer.path -> TimerActionMessage.Pause.serializer
+        TimerActionMessage.Restart.serializer.path -> TimerActionMessage.Restart.serializer
+        TimerActionMessage.Resume.serializer.path -> TimerActionMessage.Resume.serializer
+        TimerActionMessage.Skip.serializer.path -> TimerActionMessage.Skip.serializer
+        TimerActionMessage.Stop.serializer.path -> TimerActionMessage.Stop.serializer
         else -> null
     }
 

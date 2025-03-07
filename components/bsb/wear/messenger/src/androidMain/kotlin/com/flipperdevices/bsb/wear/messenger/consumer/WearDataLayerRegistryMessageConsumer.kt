@@ -2,8 +2,8 @@ package com.flipperdevices.bsb.wear.messenger.consumer
 
 
 import android.util.Log
-import com.flipperdevices.bsb.wear.messenger.message.DecodedWearMessage
-import com.flipperdevices.bsb.wear.messenger.message.WearMessage
+import com.flipperdevices.bsb.wear.messenger.serializer.DecodedWearMessage
+import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.data.WearDataLayerRegistry
@@ -21,7 +21,7 @@ class WearDataLayerRegistryMessageConsumer(
     private val messageChannel = Channel<DecodedWearMessage<*>>()
     override val messagesFlow: Flow<DecodedWearMessage<*>> = messageChannel.receiveAsFlow()
 
-    override fun <T> consume(message: WearMessage<T>, byteArray: ByteArray) {
+    override fun <T> consume(message: WearMessageSerializer<T>, byteArray: ByteArray) {
         kotlin.runCatching {
             val decodedWearMessage = DecodedWearMessage(
                 path = message.path,

@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.wear.messenger.message
+package com.flipperdevices.bsb.wear.messenger.serializer
 
 
 data class DecodedWearMessage<T>(
