@@ -1,6 +1,5 @@
 package com.flipperdevices.bsbwearable.timer
 
-import android.util.Log
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.flow.TickFlow
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState

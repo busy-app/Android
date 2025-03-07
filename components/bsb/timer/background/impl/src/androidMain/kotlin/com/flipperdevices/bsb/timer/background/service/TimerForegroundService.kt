@@ -54,7 +54,6 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
 
         delegate.getTimestampState()
             .onEach {
-
             }
     }
 

@@ -27,7 +27,6 @@ import com.flipperdevices.bsbwearable.finish.api.FinishScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.root.api.model.RootNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -39,6 +38,7 @@ import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
+@Suppress("LongParameterList")
 class RootDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val wearMessageConsumer: WearMessageConsumer,
@@ -72,6 +72,7 @@ class RootDecomposeComponentImpl(
                 wearMessageProducer.produce(TimerRequestUpdateMessage)
             }
         }
+        @Suppress("MagicNumber")
         timerApi
             .getState()
             .distinctUntilChangedBy { state ->

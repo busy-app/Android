@@ -108,7 +108,6 @@ class WearMessageSyncService : LogTagProvider {
         }
     }
 
-
     fun onDestroy() {
         info { "#onDestroy" }
         wearSyncComponent.scope.launch {

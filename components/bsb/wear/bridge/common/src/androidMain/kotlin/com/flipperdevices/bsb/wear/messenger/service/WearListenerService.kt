@@ -8,7 +8,6 @@ import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
-import com.flipperdevices.bsb.wear.messenger.service.WearableMessengerListenerService
 import com.flipperdevices.core.di.ComponentHolder
 import com.google.android.gms.wearable.MessageEvent
 
