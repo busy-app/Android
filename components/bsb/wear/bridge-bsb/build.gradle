@@ -15,7 +15,7 @@ androidDependencies {
 
     implementation(libs.kotlin.serialization.json)
     implementation(libs.google.horologist.datalayer)
-    implementation(libs.google.horologist.datalayer.watch)
-    implementation(libs.google.horologist.datalayer.phone)
+    compileOnly(libs.google.horologist.datalayer.watch)
+    compileOnly(libs.google.horologist.datalayer.phone)
     implementation(libs.kotlin.coroutines.gplayservices)
 }

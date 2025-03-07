@@ -1,15 +1,25 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
 import android.util.Log
+import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
+import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
+import com.flipperdevices.core.di.ComponentHolder
 import com.google.android.gms.wearable.MessageEvent
 
 class StatusListenerService : WearableMessengerListenerService() {
     override val TAG: String = "StatusListenerService"
+    private val wearMessengerComponent by lazy {
+        ComponentHolder.component<WearDataLayerModule>()
+    }
+
+    private val wearMessageConsumer: WearMessageConsumer by lazy {
+        wearMessengerComponent.wearMessageConsumer
+    }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
@@ -34,12 +44,11 @@ class StatusListenerService : WearableMessengerListenerService() {
     }
 
     private fun receivePingMessage(messageEvent: MessageEvent) = kotlin.runCatching {
-        val wearMessageReceiver = wearMessengerModule.wearMessageConsumer
         val message = messageEvent.toMessage() ?: run {
             Log.d(TAG, "receivePingMessage: can't handle message ${messageEvent.path}")
             return@runCatching
         }
-        wearMessageReceiver.consume(
+        wearMessageConsumer.consume(
             message = message,
             byteArray = messageEvent.data
         )

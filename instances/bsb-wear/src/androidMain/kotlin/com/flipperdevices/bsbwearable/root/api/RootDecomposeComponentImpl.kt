@@ -13,10 +13,11 @@ import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
-import com.flipperdevices.bsb.wear.messenger.di.WearMessengerModule
 import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
+import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.bsbwearable.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.autopause.api.AutoPauseScreenDecomposeComponent
@@ -39,7 +40,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class RootDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val wearMessengerModule: WearMessengerModule,
+    private val wearMessageConsumer: WearMessageConsumer,
+    private val wearMessageProducer: WearMessageProducer,
     private val activeTimerScreenDecomposeComponentFactory: ActiveTimerScreenDecomposeComponent.Factory,
     private val autoPauseScreenDecomposeComponentFactory: AutoPauseScreenDecomposeComponent.Factory,
     private val finishScreenDecomposeComponentFactory: FinishScreenDecomposeComponent.Factory,
@@ -58,8 +60,7 @@ class RootDecomposeComponentImpl(
     )
 
     init {
-        wearMessengerModule
-            .wearMessageConsumer
+        wearMessageConsumer
             .bMessageFlow
             .onEach { Log.d("RootDecomposeComponent", ": $it") }
             .filterIsInstance<TimerTimestampMessage>()
@@ -67,9 +68,7 @@ class RootDecomposeComponentImpl(
             .launchIn(coroutineScope())
         doOnResume {
             coroutineScope().launch {
-                wearMessengerModule
-                    .wearMessageProducer
-                    .produce(TimerRequestUpdateMessage)
+                wearMessageProducer.produce(TimerRequestUpdateMessage)
             }
         }
         timerApi

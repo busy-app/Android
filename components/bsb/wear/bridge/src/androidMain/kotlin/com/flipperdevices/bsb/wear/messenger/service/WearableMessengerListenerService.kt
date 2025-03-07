@@ -1,7 +1,6 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
 import android.util.Log
-import com.flipperdevices.bsb.wear.messenger.application.WearMessengerApplication
 import com.google.android.gms.wearable.WearableListenerService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,11 +10,6 @@ import kotlinx.coroutines.cancel
 abstract class WearableMessengerListenerService : WearableListenerService() {
     @Suppress("VariableNaming")
     protected abstract val TAG: String
-
-    protected val wearMessengerModule by lazy {
-        (application as WearMessengerApplication).wearMessengerModule
-    }
-
     protected val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onCreate() {

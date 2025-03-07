@@ -3,20 +3,22 @@ package com.flipperdevices.bsb.wear.messenger.consumer
 import android.util.Log
 import com.flipperdevices.bsb.wear.messenger.serializer.DecodedWearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
-import com.google.android.gms.wearable.MessageClient
+import com.flipperdevices.core.di.AppGraph
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.data.WearDataLayerRegistry
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.runBlocking
+import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @OptIn(ExperimentalHorologistApi::class)
 @Suppress("UnusedPrivateMember")
-class WearDataLayerRegistryMessageConsumer(
-    private val wearDataLayerRegistry: WearDataLayerRegistry,
-    private val messageClient: MessageClient,
-) : WearMessageConsumer {
+@Inject
+@SingleIn(AppGraph::class)
+@ContributesBinding(AppGraph::class, WearMessageConsumer::class)
+class WearDataLayerRegistryMessageConsumer : WearMessageConsumer {
     private val messageChannel = Channel<DecodedWearMessage<*>>()
     override val messagesFlow: Flow<DecodedWearMessage<*>> = messageChannel.receiveAsFlow()
 

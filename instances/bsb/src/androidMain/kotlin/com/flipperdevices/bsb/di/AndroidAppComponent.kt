@@ -2,7 +2,6 @@ package com.flipperdevices.bsb.di
 
 import android.content.Context
 import com.flipperdevices.bsb.deeplink.api.DeepLinkParser
-import com.flipperdevices.bsb.wear.messenger.di.WearMessengerModule
 import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.di.AppGraph
 import com.russhwolf.settings.ObservableSettings
@@ -20,5 +19,4 @@ abstract class AndroidAppComponent(
     @get:Provides val dependencies: AndroidPlatformDependencies
 ) : AppComponent {
     abstract val deeplinkParser: DeepLinkParser
-    abstract val wearMessengerModule: WearMessengerModule
 }

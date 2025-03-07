@@ -1,6 +1,5 @@
 package com.flipperdevices.bsbwearable.di
 
-import com.flipperdevices.bsb.wear.messenger.di.WearMessengerModule
 import com.flipperdevices.bsbwearable.root.api.RootDecomposeComponent
 import com.russhwolf.settings.ObservableSettings
 import kotlinx.coroutines.CoroutineScope
@@ -14,5 +13,4 @@ interface AppComponent {
     val scope: CoroutineScope
 
     val rootDecomposeComponentFactory: RootDecomposeComponent.Factory
-    val wearMessengerModule: WearMessengerModule
 }

@@ -74,6 +74,9 @@ kotlin {
             implementation(libs.appcompat)
 
             implementation(projects.components.bsb.wear.bridgeBsb)
+
+            implementation(libs.google.horologist.datalayer)
+            implementation(libs.google.horologist.datalayer.phone)
         }
         commonMain.dependencies {
             implementation(projects.components.core.focusDisplay)

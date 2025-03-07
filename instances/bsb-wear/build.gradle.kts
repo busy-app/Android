@@ -69,6 +69,9 @@ dependencies {
     implementation(libs.decompose.composeExtension)
     implementation(libs.kotlin.immutable)
     implementation(libs.kotlin.datetime)
+
+    implementation(libs.google.horologist.datalayer)
+    implementation(libs.google.horologist.datalayer.watch)
 }
 
 dependencies {
