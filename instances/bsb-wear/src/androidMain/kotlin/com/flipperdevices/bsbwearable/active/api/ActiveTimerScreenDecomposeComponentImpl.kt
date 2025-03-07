@@ -6,20 +6,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
-import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsbwearable.active.composable.ActiveTimerScreenComposable
 import com.flipperdevices.bsbwearable.interrupt.api.StopSessionDecomposeComponent
 import com.flipperdevices.bsbwearable.interrupt.composable.PauseWearOverlayComposable
 import com.flipperdevices.core.di.AppGraph
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import kotlin.time.Duration.Companion.seconds
 
 @Inject
 class ActiveTimerScreenDecomposeComponentImpl(

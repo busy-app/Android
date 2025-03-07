@@ -14,7 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import timber.log.Timber
 
-internal class BSBApplication : Application(), WearMessengerApplication{
+internal class BSBApplication : Application(), WearMessengerApplication {
     private val settings by lazy {
         SharedPreferencesSettings(
             baseContext.getSharedPreferences(

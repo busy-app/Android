@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.di
 
-
 import android.content.Context
 import com.flipperdevices.bsb.wear.messenger.consumer.WearDataLayerRegistryMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
@@ -10,10 +9,8 @@ import com.flipperdevices.core.di.AppGraph
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.data.WearDataLayerRegistry
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
-
 
 @Inject
 @SingleIn(AppGraph::class)

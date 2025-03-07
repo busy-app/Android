@@ -1,7 +1,11 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
 import android.util.Log
-import com.flipperdevices.bsb.wear.messenger.model.*
+import com.flipperdevices.bsb.wear.messenger.model.PingMessage
+import com.flipperdevices.bsb.wear.messenger.model.PongMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.google.android.gms.wearable.MessageEvent
 
 class StatusListenerService : WearableMessengerListenerService() {

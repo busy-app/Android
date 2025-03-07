@@ -1,9 +1,6 @@
 package com.flipperdevices.bsbwearable.di
 
 import android.content.Context
-import com.flipperdevices.bsb.deeplink.api.DeepLinkParser
-import com.flipperdevices.bsb.wear.messenger.di.WearMessengerModule
-import com.flipperdevices.bsbwearable.root.api.RootDecomposeComponent
 import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.di.AppGraph
 import com.russhwolf.settings.ObservableSettings

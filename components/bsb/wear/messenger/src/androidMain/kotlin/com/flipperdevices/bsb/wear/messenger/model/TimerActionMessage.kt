@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package com.flipperdevices.bsb.wear.messenger.model
 
 import com.flipperdevices.bsb.wear.messenger.serializer.ByteWearMessageSerializer

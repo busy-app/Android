@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.consumer
 
-
 import android.util.Log
 import com.flipperdevices.bsb.wear.messenger.serializer.DecodedWearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer

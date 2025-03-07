@@ -12,7 +12,6 @@ interface WearMessageProducer {
     suspend fun <T> produce(message: WearMessageSerializer<T>, value: T)
 }
 
-
 suspend fun WearMessageProducer.produce(message: WearMessage) {
     when (message) {
         PingMessage -> produce(

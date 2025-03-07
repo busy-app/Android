@@ -10,9 +10,7 @@ import com.flipperdevices.bsb.wear.messenger.model.WearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.DecodedWearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.serialization.json.internal.decodeByReader
 
 interface WearMessageConsumer {
     val messagesFlow: Flow<DecodedWearMessage<*>>
@@ -39,5 +37,4 @@ val WearMessageConsumer.bMessageFlow: Flow<WearMessage>
                 TimerActionMessage.Stop.serializer.path -> TimerActionMessage.Stop
                 else -> null
             }
-
         }
