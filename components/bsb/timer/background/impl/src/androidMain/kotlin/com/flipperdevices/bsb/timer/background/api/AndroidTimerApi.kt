@@ -12,6 +12,9 @@ import com.flipperdevices.bsb.timer.background.service.EXTRA_KEY_TIMER_STATE
 import com.flipperdevices.bsb.timer.background.service.TimerForegroundService
 import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
 import com.flipperdevices.bsb.timer.background.service.TimerServiceBinder
+import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
+import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
+import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
@@ -25,6 +28,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.encodeToString
@@ -38,7 +42,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @ContributesBinding(AppGraph::class, TimerApi::class)
 class AndroidTimerApi(
     private val scope: CoroutineScope,
-    private val context: Context
+    private val context: Context,
+    private val wearMessageProducer: WearMessageProducer
 ) : TimerApi, ServiceConnection, LogTagProvider {
     override val TAG = "AndroidTimerApi"
 
@@ -48,8 +53,18 @@ class AndroidTimerApi(
     private val mutex = Mutex()
     private var binderListenerJob: Job? = null
 
-    override fun setTimestampState(state: TimerTimestamp?) {
+    override fun setTimestampState(state: TimerTimestamp?, broadcast: Boolean) {
         info { "Request start timer via android service timer api" }
+        timerTimestampFlow.value.let { oldState ->
+            val newState = when {
+                oldState == null || state == null -> state
+                state.lastSync > oldState.lastSync -> state
+                else -> oldState
+            }
+            if (broadcast) {
+                scope.launch { wearMessageProducer.produce(TimerTimestampMessage(newState)) }
+            }
+        }
         if (state == null) {
             stopTimer()
             return

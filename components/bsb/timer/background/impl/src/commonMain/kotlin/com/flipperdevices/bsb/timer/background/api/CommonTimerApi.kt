@@ -46,7 +46,7 @@ class CommonTimerApi(
         compositeListeners.removeListener(listener)
     }
 
-    override fun setTimestampState(state: TimerTimestamp?) {
+    override fun setTimestampState(state: TimerTimestamp?, broadcast: Boolean) {
         scope.launch {
             if (state == null) {
                 stopSelf()

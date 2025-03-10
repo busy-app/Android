@@ -32,7 +32,7 @@ class WearDataLayerRegistryMessageConsumer : WearMessageConsumer {
         }.onFailure {
             Log.d(TAG, "consume: could not publish message: ${it.stackTraceToString()}")
         }.onSuccess {
-            Log.d(TAG, "consume: published message: $message")
+            Log.d(TAG, "consume: published message: ${message.path} $message")
         }
     }
 
