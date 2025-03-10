@@ -3,9 +3,13 @@ package com.flipperdevices.bsb.wear.messenger.service
 import android.util.Log
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
+import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
+import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.core.di.ComponentHolder
@@ -30,6 +34,7 @@ class WearListenerService : WearableMessengerListenerService() {
     private fun MessageEvent.toMessage() = when (this.path) {
         PingMessage.serializer.path -> PingMessage.serializer
         PongMessage.serializer.path -> PongMessage.serializer
+
         TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
         TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer
 
@@ -40,6 +45,12 @@ class WearListenerService : WearableMessengerListenerService() {
         TimerActionMessage.Resume.serializer.path -> TimerActionMessage.Resume.serializer
         TimerActionMessage.Skip.serializer.path -> TimerActionMessage.Skip.serializer
         TimerActionMessage.Stop.serializer.path -> TimerActionMessage.Stop.serializer
+
+        AppBlockerCountMessage.serializer.path -> AppBlockerCountMessage.serializer
+        AppBlockerCountRequestMessage.serializer.path -> AppBlockerCountRequestMessage.serializer
+
+        TimerSettingsMessage.serializer.path -> TimerSettingsMessage.serializer
+        TimerSettingsRequestMessage.serializer.path -> TimerSettingsRequestMessage.serializer
         else -> null
     }
 

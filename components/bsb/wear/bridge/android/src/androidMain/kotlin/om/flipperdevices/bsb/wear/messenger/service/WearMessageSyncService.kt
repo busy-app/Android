@@ -74,60 +74,63 @@ class WearMessageSyncService : LogTagProvider {
         return wearDataLayerModule.wearMessageConsumer
             .bMessageFlow
             .onEach { message ->
-                when (message) {
-                    TimerActionMessage.ConfirmNextStage -> {
-                        wearSyncComponent.timerApi.confirmNextStep()
-                    }
+                info { "#startMessageJob got $message" }
+                scope.launch {
+                    when (message) {
+                        TimerActionMessage.ConfirmNextStage -> {
+                            wearSyncComponent.timerApi.confirmNextStep()
+                        }
 
-                    TimerActionMessage.Finish -> {
-                        wearSyncComponent.timerApi.stop()
-                    }
+                        TimerActionMessage.Finish -> {
+                            wearSyncComponent.timerApi.stop()
+                        }
 
-                    TimerActionMessage.Pause -> {
-                        wearSyncComponent.timerApi.pause()
-                    }
+                        TimerActionMessage.Pause -> {
+                            wearSyncComponent.timerApi.pause()
+                        }
 
-                    TimerActionMessage.Restart -> {
-                        val settings = wearSyncComponent.krateApi.timerSettingsKrate.loadAndGet()
-                        val timerTimestamp = TimerTimestamp(settings = settings)
-                        wearSyncComponent.timerApi.setTimestampState(timerTimestamp)
-                    }
+                        TimerActionMessage.Restart -> {
+                            val settings = wearSyncComponent.krateApi.timerSettingsKrate.loadAndGet()
+                            val timerTimestamp = TimerTimestamp(settings = settings)
+                            wearSyncComponent.timerApi.setTimestampState(timerTimestamp)
+                        }
 
-                    TimerActionMessage.Resume -> {
-                        wearSyncComponent.timerApi.resume()
-                    }
+                        TimerActionMessage.Resume -> {
+                            wearSyncComponent.timerApi.resume()
+                        }
 
-                    TimerActionMessage.Skip -> {
-                        wearSyncComponent.timerApi.skip()
-                    }
+                        TimerActionMessage.Skip -> {
+                            wearSyncComponent.timerApi.skip()
+                        }
 
-                    TimerActionMessage.Stop -> {
-                        wearSyncComponent.timerApi.stop()
-                    }
+                        TimerActionMessage.Stop -> {
+                            wearSyncComponent.timerApi.stop()
+                        }
 
-                    TimerTimestampRequestMessage -> {
-                        val timerTimestamp = wearSyncComponent.timerApi.getTimestampState().first()
-                        val message = TimerTimestampMessage(timerTimestamp)
-                        wearDataLayerModule.wearMessageProducer.produce(message)
-                    }
+                        TimerTimestampRequestMessage -> {
+                            val timerTimestamp = wearSyncComponent.timerApi.getTimestampState().first()
+                            val message = TimerTimestampMessage(timerTimestamp)
+                            wearDataLayerModule.wearMessageProducer.produce(message)
+                        }
 
-                    TimerSettingsRequestMessage -> {
-                        val settings = wearSyncComponent.krateApi.timerSettingsKrate.loadAndGet()
-                        val message = TimerSettingsMessage(settings)
-                        wearDataLayerModule.wearMessageProducer.produce(message)
-                    }
+                        TimerSettingsRequestMessage -> {
+                            val settings = wearSyncComponent.krateApi.timerSettingsKrate.loadAndGet()
+                            val message = TimerSettingsMessage(settings)
+                            wearDataLayerModule.wearMessageProducer.produce(message)
+                        }
 
-                    AppBlockerCountRequestMessage -> {
-                        val appBlockerCount = wearSyncComponent.appBlockerFilterApi.getBlockedAppCount().first()
-                        val message = AppBlockerCountMessage(appBlockerCount)
-                        wearDataLayerModule.wearMessageProducer.produce(message)
-                    }
+                        AppBlockerCountRequestMessage -> {
+                            val appBlockerCount = wearSyncComponent.appBlockerFilterApi.getBlockedAppCount().first()
+                            val message = AppBlockerCountMessage(appBlockerCount)
+                            wearDataLayerModule.wearMessageProducer.produce(message)
+                        }
 
-                    PongMessage,
-                    PingMessage,
-                    is AppBlockerCountMessage,
-                    is TimerSettingsMessage,
-                    is TimerTimestampMessage -> Unit
+                        PongMessage,
+                        PingMessage,
+                        is AppBlockerCountMessage,
+                        is TimerSettingsMessage,
+                        is TimerTimestampMessage -> Unit
+                    }
                 }
             }.launchIn(scope)
     }

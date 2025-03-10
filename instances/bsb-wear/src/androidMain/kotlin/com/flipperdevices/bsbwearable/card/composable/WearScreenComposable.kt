@@ -1,14 +1,22 @@
 package com.flipperdevices.bsbwearable.card.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.CircularProgressIndicator
+import androidx.wear.compose.material.ExperimentalWearMaterialApi
+import androidx.wear.compose.material.placeholderShimmer
+import androidx.wear.compose.material.rememberPlaceholderState
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_play
 import busystatusbar.instances.bsb_wear.generated.resources.Res
 import busystatusbar.instances.bsb_wear.generated.resources.bwca_button_start
@@ -16,6 +24,7 @@ import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.core.ktx.common.placeholder
 import com.flipperdevices.ui.button.BChipButton
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
@@ -25,11 +34,11 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CommonRes
 
-@OptIn(ExperimentalHorologistApi::class)
+@OptIn(ExperimentalHorologistApi::class, ExperimentalWearMaterialApi::class)
 @Composable
 fun WearScreenComposable(
-    settings: TimerSettings,
-    blockerState: BlockedAppCount,
+    settings: TimerSettings?,
+    blockerState: BlockedAppCount?,
     onStartClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -40,10 +49,20 @@ fun WearScreenComposable(
         columnState = rememberColumnState()
     ) {
         item {
-            WearCardComposable(
-                settings = settings,
-                blockerState = blockerState,
-            )
+            if (settings != null) {
+                WearCardComposable(
+                    settings = settings,
+                    blockerState = blockerState,
+                )
+            } else {
+                Box(modifier = Modifier.padding(vertical = 24.dp)) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(54.dp),
+                        indicatorColor = LocalCorruptedPallet.current.accent.device.secondary
+                    )
+                }
+            }
+
         }
         item {
             BChipButton(

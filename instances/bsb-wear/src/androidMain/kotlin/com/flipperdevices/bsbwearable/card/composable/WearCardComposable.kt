@@ -60,7 +60,7 @@ private const val DESIGN_CARD_ASPECT_RATIO = 170f / 107f
 @Composable
 fun WearCardComposable(
     settings: TimerSettings,
-    blockerState: BlockedAppCount,
+    blockerState: BlockedAppCount?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -116,20 +116,22 @@ fun WearCardComposable(
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
                     )
                 }
-                calculateBlockerText(blockerState)?.let { blockedText ->
-                    MiniFrameSection(
-                        MiniFrameData(
-                            text = blockedText,
-                            painter = painterResource(CommonTimerRes.drawable.ic_block),
-                            tint = LocalCorruptedPallet.current
-                                .transparent
-                                .whiteInvert
-                                .primary
-                        ),
-                        iconSize = 16.dp,
-                        fontSize = 11.sp,
-                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
-                    )
+                blockerState?.let {
+                    calculateBlockerText(blockerState)?.let { blockedText ->
+                        MiniFrameSection(
+                            MiniFrameData(
+                                text = blockedText,
+                                painter = painterResource(CommonTimerRes.drawable.ic_block),
+                                tint = LocalCorruptedPallet.current
+                                    .transparent
+                                    .whiteInvert
+                                    .primary
+                            ),
+                            iconSize = 16.dp,
+                            fontSize = 11.sp,
+                            contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
+                        )
+                    }
                 }
             }
         }

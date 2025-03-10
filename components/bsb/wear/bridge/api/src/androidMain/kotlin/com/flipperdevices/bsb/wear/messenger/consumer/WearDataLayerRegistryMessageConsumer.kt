@@ -7,6 +7,8 @@ import com.flipperdevices.core.di.AppGraph
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.runBlocking
 import me.tatarka.inject.annotations.Inject
@@ -19,8 +21,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, WearMessageConsumer::class)
 class WearDataLayerRegistryMessageConsumer : WearMessageConsumer {
-    private val messageChannel = Channel<DecodedWearMessage<*>>()
-    override val messagesFlow: Flow<DecodedWearMessage<*>> = messageChannel.receiveAsFlow()
+    private val messageChannel = MutableSharedFlow<DecodedWearMessage<*>>()
+    override val messagesFlow: Flow<DecodedWearMessage<*>> = messageChannel.asSharedFlow()
 
     override fun <T> consume(message: WearMessageSerializer<T>, byteArray: ByteArray) {
         kotlin.runCatching {
@@ -28,7 +30,7 @@ class WearDataLayerRegistryMessageConsumer : WearMessageConsumer {
                 path = message.path,
                 value = message.decode(byteArray)
             )
-            runBlocking { messageChannel.send(decodedWearMessage) }
+            runBlocking { messageChannel.emit(decodedWearMessage) }
         }.onFailure {
             Log.d(TAG, "consume: could not publish message: ${it.stackTraceToString()}")
         }.onSuccess {

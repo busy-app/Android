@@ -1,6 +1,5 @@
 package com.flipperdevices.bsbwearable.root.api
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,29 +9,21 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
-import com.arkivanov.essenty.lifecycle.doOnResume
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
-import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
-import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
-import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
-import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.bsbwearable.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.autopause.api.AutoPauseScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.card.api.CardDecomposeComponent
+import com.flipperdevices.bsbwearable.card.api.CardStorageApi
 import com.flipperdevices.bsbwearable.composable.SwipeToDismissBox
 import com.flipperdevices.bsbwearable.finish.api.FinishScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.root.api.model.RootNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
 import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -41,8 +32,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Suppress("LongParameterList")
 class RootDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val wearMessageConsumer: WearMessageConsumer,
-    private val wearMessageProducer: WearMessageProducer,
     private val activeTimerScreenDecomposeComponentFactory: ActiveTimerScreenDecomposeComponent.Factory,
     private val autoPauseScreenDecomposeComponentFactory: AutoPauseScreenDecomposeComponent.Factory,
     private val finishScreenDecomposeComponentFactory: FinishScreenDecomposeComponent.Factory,
@@ -61,17 +50,6 @@ class RootDecomposeComponentImpl(
     )
 
     init {
-        wearMessageConsumer
-            .bMessageFlow
-            .onEach { Log.d("RootDecomposeComponent", ": $it") }
-            .filterIsInstance<TimerTimestampMessage>()
-            .onEach { timerApi.setTimestampState(it.instance) }
-            .launchIn(coroutineScope())
-        doOnResume {
-            coroutineScope().launch {
-                wearMessageProducer.produce(TimerTimestampRequestMessage)
-            }
-        }
         @Suppress("MagicNumber")
         timerApi
             .getState()

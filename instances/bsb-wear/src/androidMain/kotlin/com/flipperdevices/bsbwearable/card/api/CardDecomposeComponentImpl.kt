@@ -24,16 +24,17 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class CardDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val wearMessageProducer: WearMessageProducer
+    private val wearMessageProducer: WearMessageProducer,
+    private val cardStorageApi: CardStorageApi
 ) : CardDecomposeComponent(componentContext) {
 
     // todo
-    private fun getTimerState(): StateFlow<TimerSettings> {
-        return MutableStateFlow(TimerSettings()).asStateFlow()
+    private fun getTimerState(): StateFlow<TimerSettings?> {
+        return cardStorageApi.settingFlow
     }
 
-    private fun getBlockerState(): StateFlow<BlockedAppCount> {
-        return MutableStateFlow(BlockedAppCount.All).asStateFlow()
+    private fun getBlockerState(): StateFlow<BlockedAppCount?> {
+        return  cardStorageApi.appBlockerFlow
     }
     private val scope = coroutineScope()
 
