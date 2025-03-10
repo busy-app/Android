@@ -1,5 +1,6 @@
 package om.flipperdevices.bsb.wear.messenger.service
 
+import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
 import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.core.di.AppGraph
@@ -13,4 +14,5 @@ interface WearSyncComponent {
     val timerApi: TimerApi
     val scope: CoroutineScope
     val krateApi: KrateApi
+    val appBlockerFilterApi: AppBlockerFilterApi
 }

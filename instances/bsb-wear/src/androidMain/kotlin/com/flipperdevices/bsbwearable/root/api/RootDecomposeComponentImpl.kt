@@ -16,6 +16,7 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.bsbwearable.active.api.ActiveTimerScreenDecomposeComponent
@@ -68,7 +69,7 @@ class RootDecomposeComponentImpl(
             .launchIn(coroutineScope())
         doOnResume {
             coroutineScope().launch {
-                wearMessageProducer.produce(TimerTimestampMessage.Request)
+                wearMessageProducer.produce(TimerTimestampRequestMessage)
             }
         }
         @Suppress("MagicNumber")

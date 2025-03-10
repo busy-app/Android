@@ -12,6 +12,7 @@ androidDependencies {
     implementation(projects.components.core.data)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.appblocker.filter.api)
     api(projects.components.bsb.wear.bridge.api)
     api(projects.components.bsb.wear.bridge.common)
 

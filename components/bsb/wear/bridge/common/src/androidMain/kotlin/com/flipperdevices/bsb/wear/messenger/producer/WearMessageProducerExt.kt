@@ -1,10 +1,14 @@
 package com.flipperdevices.bsb.wear.messenger.producer
 
+import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
+import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearMessage
 
 suspend fun WearMessageProducer.produce(message: WearMessage) {
@@ -24,8 +28,8 @@ suspend fun WearMessageProducer.produce(message: WearMessage) {
             value = message.value
         )
 
-        TimerTimestampMessage.Request -> produce(
-            message = TimerTimestampMessage.Request.serializer,
+        TimerTimestampRequestMessage -> produce(
+            message = TimerTimestampRequestMessage.serializer,
             value = Unit
         )
 
@@ -38,8 +42,19 @@ suspend fun WearMessageProducer.produce(message: WearMessage) {
             message = TimerSettingsMessage.serializer,
             value = message.instance
         )
-        TimerSettingsMessage.Request -> produce(
-            message = TimerSettingsMessage.Request.serializer,
+
+        TimerSettingsRequestMessage -> produce(
+            message = TimerSettingsRequestMessage.serializer,
+            value = Unit
+        )
+
+        is AppBlockerCountMessage -> produce(
+            message = AppBlockerCountMessage.serializer,
+            value = message.instance
+        )
+
+        AppBlockerCountRequestMessage -> produce(
+            message = AppBlockerCountRequestMessage.serializer,
             value = Unit
         )
     }

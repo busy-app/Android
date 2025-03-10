@@ -7,6 +7,7 @@ import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.core.di.ComponentHolder
 import com.google.android.gms.wearable.MessageEvent
 
@@ -29,7 +30,7 @@ class WearListenerService : WearableMessengerListenerService() {
     private fun MessageEvent.toMessage() = when (this.path) {
         PingMessage.serializer.path -> PingMessage.serializer
         PongMessage.serializer.path -> PongMessage.serializer
-        TimerTimestampMessage.Request.serializer.path -> TimerTimestampMessage.Request.serializer
+        TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
         TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer
 
         TimerActionMessage.Finish.serializer.path -> TimerActionMessage.Finish.serializer

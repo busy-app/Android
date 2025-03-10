@@ -8,16 +8,24 @@ import com.flipperdevices.bsb.timer.background.util.skip
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
+import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
+import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.ComponentHolder
+import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.info
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -34,8 +42,7 @@ class WearMessageSyncService : LogTagProvider {
     private val wearDataLayerModule by lazy {
         ComponentHolder.component<WearDataLayerModule>()
     }
-    private var stateChangeJob: Job? = null
-    private var messageJob: Job? = null
+    private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
 
     private val mutex = Mutex()
 
@@ -44,7 +51,23 @@ class WearMessageSyncService : LogTagProvider {
             .onEach { timerTimestamp ->
                 val message = TimerTimestampMessage(timerTimestamp)
                 wearDataLayerModule.wearMessageProducer.produce(message)
-            }.launchIn(wearSyncComponent.scope)
+            }.launchIn(scope)
+    }
+
+    private fun startSettingsChangeJob(): Job {
+        return wearSyncComponent.krateApi.timerSettingsKrate.flow
+            .onEach { settings ->
+                val message = TimerSettingsMessage(settings)
+                wearDataLayerModule.wearMessageProducer.produce(message)
+            }.launchIn(scope)
+    }
+
+    private fun startAppBlockerCountChangeJob(): Job {
+        return wearSyncComponent.appBlockerFilterApi.getBlockedAppCount()
+            .onEach { appBlockerCount ->
+                val message = AppBlockerCountMessage(appBlockerCount)
+                wearDataLayerModule.wearMessageProducer.produce(message)
+            }.launchIn(scope)
     }
 
     private fun startMessageJob(): Job {
@@ -82,38 +105,47 @@ class WearMessageSyncService : LogTagProvider {
                         wearSyncComponent.timerApi.stop()
                     }
 
-                    TimerTimestampMessage.Request -> {
+                    TimerTimestampRequestMessage -> {
                         val timerTimestamp = wearSyncComponent.timerApi.getTimestampState().first()
                         val message = TimerTimestampMessage(timerTimestamp)
                         wearDataLayerModule.wearMessageProducer.produce(message)
                     }
 
+                    TimerSettingsRequestMessage -> {
+                        val settings = wearSyncComponent.krateApi.timerSettingsKrate.loadAndGet()
+                        val message = TimerSettingsMessage(settings)
+                        wearDataLayerModule.wearMessageProducer.produce(message)
+                    }
+
+                    AppBlockerCountRequestMessage -> {
+                        val appBlockerCount = wearSyncComponent.appBlockerFilterApi.getBlockedAppCount().first()
+                        val message = AppBlockerCountMessage(appBlockerCount)
+                        wearDataLayerModule.wearMessageProducer.produce(message)
+                    }
+
                     PongMessage,
                     PingMessage,
+                    is AppBlockerCountMessage,
+                    is TimerSettingsMessage,
                     is TimerTimestampMessage -> Unit
                 }
-            }.launchIn(wearSyncComponent.scope)
+            }.launchIn(scope)
     }
 
     fun onCreate() {
         info { "#onCreate" }
-        wearSyncComponent.scope.launch {
+        scope.launch {
             mutex.withLock {
-                stateChangeJob?.cancelAndJoin()
-                messageJob?.cancelAndJoin()
-                stateChangeJob = startStateChangeJob()
-                messageJob = startMessageJob()
+                startStateChangeJob()
+                startMessageJob()
+                startSettingsChangeJob()
+                startAppBlockerCountChangeJob()
             }
         }
     }
 
     fun onDestroy() {
         info { "#onDestroy" }
-        wearSyncComponent.scope.launch {
-            stateChangeJob?.cancelAndJoin()
-            messageJob?.cancelAndJoin()
-            stateChangeJob = null
-            messageJob = null
-        }
+        scope.cancel()
     }
 }

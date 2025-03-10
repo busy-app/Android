@@ -3,7 +3,6 @@ package com.flipperdevices.bsb.wear.messenger.model
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.serializer.JsonWearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.JsonWearMessageSerializer
-import com.flipperdevices.bsb.wear.messenger.serializer.UnitWearMessageSerializer
 
 class TimerTimestampMessage(val instance: TimerTimestamp?) : WearMessage {
     companion object {
@@ -14,7 +13,4 @@ class TimerTimestampMessage(val instance: TimerTimestamp?) : WearMessage {
             )
     }
 
-    object Request : WearMessage {
-        val serializer = UnitWearMessageSerializer(path = "/wearsync/request_update")
-    }
 }
