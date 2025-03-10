@@ -4,7 +4,6 @@ import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearMessage
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +15,7 @@ val WearMessageConsumer.bMessageFlow: Flow<WearMessage>
             when (decodedWearMessage.path) {
                 PingMessage.serializer.path -> PingMessage
                 PongMessage.serializer.path -> PongMessage
-                TimerRequestUpdateMessage.serializer.path -> TimerRequestUpdateMessage
+                TimerTimestampMessage.Request.serializer.path -> TimerTimestampMessage.Request
                 TimerTimestampMessage.serializer.path -> TimerTimestampMessage(
                     decodedWearMessage.value as? TimerTimestamp
                 )

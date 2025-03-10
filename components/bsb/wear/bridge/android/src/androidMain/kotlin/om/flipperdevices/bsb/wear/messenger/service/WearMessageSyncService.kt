@@ -11,7 +11,6 @@ import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.ComponentHolder
@@ -83,7 +82,7 @@ class WearMessageSyncService : LogTagProvider {
                         wearSyncComponent.timerApi.stop()
                     }
 
-                    TimerRequestUpdateMessage -> {
+                    TimerTimestampMessage.Request -> {
                         val timerTimestamp = wearSyncComponent.timerApi.getTimestampState().first()
                         val message = TimerTimestampMessage(timerTimestamp)
                         wearDataLayerModule.wearMessageProducer.produce(message)

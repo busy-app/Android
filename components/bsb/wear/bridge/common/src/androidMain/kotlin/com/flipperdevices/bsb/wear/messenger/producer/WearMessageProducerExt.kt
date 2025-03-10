@@ -3,7 +3,7 @@ package com.flipperdevices.bsb.wear.messenger.producer
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerRequestUpdateMessage
+import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearMessage
 
@@ -24,14 +24,23 @@ suspend fun WearMessageProducer.produce(message: WearMessage) {
             value = message.value
         )
 
-        TimerRequestUpdateMessage -> produce(
-            message = TimerRequestUpdateMessage.serializer,
+        TimerTimestampMessage.Request -> produce(
+            message = TimerTimestampMessage.Request.serializer,
             value = Unit
         )
 
         is TimerTimestampMessage -> produce(
             message = TimerTimestampMessage.serializer,
             value = message.instance
+        )
+
+        is TimerSettingsMessage -> produce(
+            message = TimerSettingsMessage.serializer,
+            value = message.instance
+        )
+        TimerSettingsMessage.Request -> produce(
+            message = TimerSettingsMessage.Request.serializer,
+            value = Unit
         )
     }
 }
