@@ -24,7 +24,7 @@ class WearDataLayerRegistryMessageProducer(
     override suspend fun <T> produce(message: WearMessageSerializer<T>, value: T): Unit = coroutineScope {
         val nodes = wearDataLayerRegistry.nodeClient.connectedNodes.await()
         Log.d(TAG, "produce: found ${nodes.size} nodes")
-        kotlin.runCatching {
+        runCatching {
             val byteArray = message.encode(value)
             nodes.map {
                 async {
