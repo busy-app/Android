@@ -47,6 +47,7 @@ fun TimerApi.resume() {
             state.copy(
                 pause = null,
                 start = state.start.plus(diff),
+                confirmNextStepClick = state.confirmNextStepClick.plus(diff),
                 lastSync = Clock.System.now()
             )
         } else {
