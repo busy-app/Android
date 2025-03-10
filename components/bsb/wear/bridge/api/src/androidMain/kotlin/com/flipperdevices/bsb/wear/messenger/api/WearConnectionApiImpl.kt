@@ -1,6 +1,5 @@
-package com.flipperdevices.bsb.wear.messenger.connection
+package com.flipperdevices.bsb.wear.messenger.api
 
-import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.util.nodesFlow
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
@@ -13,6 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
+import kotlin.collections.map
 
 @Inject
 @SingleIn(AppGraph::class)
