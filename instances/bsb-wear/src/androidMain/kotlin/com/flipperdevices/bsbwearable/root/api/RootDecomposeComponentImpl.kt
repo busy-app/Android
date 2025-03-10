@@ -14,7 +14,6 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsbwearable.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.autopause.api.AutoPauseScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.card.api.CardDecomposeComponent
-import com.flipperdevices.bsbwearable.card.api.CardStorageApi
 import com.flipperdevices.bsbwearable.composable.SwipeToDismissBox
 import com.flipperdevices.bsbwearable.finish.api.FinishScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.root.api.model.RootNavigationConfig

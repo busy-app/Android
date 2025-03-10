@@ -12,5 +12,4 @@ class TimerSettingsMessage(val instance: TimerSettings) : WearMessage {
                 path = "/wearsync/timer_settings"
             )
     }
-
 }

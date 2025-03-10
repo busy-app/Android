@@ -1,8 +1,6 @@
 package com.flipperdevices.bsbwearable.card.api
 
 import android.util.Log
-import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
-import com.arkivanov.essenty.lifecycle.doOnResume
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
@@ -24,7 +22,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
@@ -71,6 +68,5 @@ class CardStorageApi(
             .onEach { timerSettingsMessage ->
                 settingsMutableFlow.emit(timerSettingsMessage.instance)
             }.launchIn(scope)
-
     }
 }

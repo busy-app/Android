@@ -13,9 +13,7 @@ import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.bsbwearable.card.composable.WearScreenComposable
 import com.flipperdevices.core.di.AppGraph
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
@@ -34,7 +32,7 @@ class CardDecomposeComponentImpl(
     }
 
     private fun getBlockerState(): StateFlow<BlockedAppCount?> {
-        return  cardStorageApi.appBlockerFlow
+        return cardStorageApi.appBlockerFlow
     }
     private val scope = coroutineScope()
 

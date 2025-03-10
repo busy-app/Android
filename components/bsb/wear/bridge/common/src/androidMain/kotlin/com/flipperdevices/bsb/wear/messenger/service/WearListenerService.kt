@@ -31,6 +31,7 @@ class WearListenerService : WearableMessengerListenerService() {
         receivePingMessage(messageEvent)
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun MessageEvent.toMessage() = when (this.path) {
         PingMessage.serializer.path -> PingMessage.serializer
         PongMessage.serializer.path -> PongMessage.serializer
