@@ -10,7 +10,7 @@ import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.russhwolf.settings.SharedPreferencesSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import om.flipperdevices.bsb.wear.messenger.service.WearMessageSyncService
+import com.flipperdevices.bsb.wear.messenger.service.WearMessageSyncService
 import timber.log.Timber
 
 class BSBApplication : Application() {

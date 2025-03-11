@@ -1,4 +1,4 @@
-package om.flipperdevices.bsb.wear.messenger.service
+package com.flipperdevices.bsb.wear.messenger.service
 
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
 import com.flipperdevices.bsb.preference.api.KrateApi
