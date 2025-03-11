@@ -34,6 +34,7 @@ import busystatusbar.instances.bsb_wear.generated.resources.Res
 import busystatusbar.instances.bsb_wear.generated.resources.bwt_long_rest
 import busystatusbar.instances.bsb_wear.generated.resources.bwt_pause
 import busystatusbar.instances.bsb_wear.generated.resources.bwt_rest
+import busystatusbar.instances.bsb_wear.generated.resources.tds_iteration_progress
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
@@ -112,7 +113,7 @@ private fun ActiveTimerScreenTitle(
         )
         Text(
             text = stringResource(
-                Res.string.bwt_long_rest,
+                Res.string.tds_iteration_progress,
                 "${timerState.currentUiIteration}",
                 "${timerState.maxUiIterations}"
             ),

@@ -48,8 +48,6 @@ internal fun ConfirmStopOverlayComposable(
             ScalingLazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 columnState = rememberColumnState()
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 item {
                     Text(

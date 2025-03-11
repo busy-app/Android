@@ -10,8 +10,9 @@ import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.data.WearDataLayerRegistry
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -22,27 +23,30 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @ContributesBinding(AppGraph::class, WearMessageProducer::class)
 class WearDataLayerRegistryMessageProducer(
     private val wearDataLayerRegistry: WearDataLayerRegistry,
-    private val wearConnectionApi: WearConnectionApi
+    private val wearConnectionApi: WearConnectionApi,
+
 ) : WearMessageProducer, LogTagProvider {
     override val TAG: String = "WearDataLayerRegistryMessageProducer"
 
-    override suspend fun <T> produce(message: WearMessageSerializer<T>, value: T): Unit = coroutineScope {
-        val nodes = listOfNotNull(wearConnectionApi.statusFlow.first().nodeOrNull)
-        runCatching {
-            val byteArray = message.encode(value)
-            nodes.map { node ->
-                async {
-                    wearDataLayerRegistry.messageClient.sendMessage(
-                        node.id,
-                        message.path,
-                        byteArray
-                    )
-                }
-            }.awaitAll()
-        }.onFailure { throwable ->
-            error(throwable) { "#produce failed to send message ${throwable.stackTraceToString()}" }
-        }.onSuccess {
-            info { "#produce message sent: ${message.path} $message" }
+    override suspend fun <T> produce(message: WearMessageSerializer<T>, value: T): Unit = supervisorScope {
+        launch {
+            val nodes = listOfNotNull(wearConnectionApi.statusFlow.first().nodeOrNull)
+            runCatching {
+                val byteArray = message.encode(value)
+                nodes.map { node ->
+                    async {
+                        wearDataLayerRegistry.messageClient.sendMessage(
+                            node.id,
+                            message.path,
+                            byteArray
+                        )
+                    }
+                }.awaitAll()
+            }.onFailure { throwable ->
+                error(throwable) { "#produce failed to send message ${throwable.stackTraceToString()}" }
+            }.onSuccess {
+                info { "#produce message sent: ${message.path} $message" }
+            }
         }
     }
 }
