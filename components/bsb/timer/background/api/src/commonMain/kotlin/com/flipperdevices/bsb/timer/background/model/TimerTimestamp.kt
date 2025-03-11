@@ -21,7 +21,6 @@ sealed interface TimerTimestamp {
         }
     }
 
-
     /**
      * [TimerTimestamp] shared synchronization model for timer
      * @param settings timer settings to determine new state

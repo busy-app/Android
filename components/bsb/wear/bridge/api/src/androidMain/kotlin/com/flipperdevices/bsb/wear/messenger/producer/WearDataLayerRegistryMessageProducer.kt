@@ -31,6 +31,7 @@ class WearDataLayerRegistryMessageProducer(
     override suspend fun <T> produce(message: WearMessageSerializer<T>, value: T): Unit = supervisorScope {
         launch {
             val nodes = listOfNotNull(wearConnectionApi.statusFlow.first().nodeOrNull)
+                .filter { node -> node.isNearby }
             runCatching {
                 val byteArray = message.encode(value)
                 nodes.map { node ->
