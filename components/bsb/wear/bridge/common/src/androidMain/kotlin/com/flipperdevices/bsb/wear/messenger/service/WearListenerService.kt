@@ -44,14 +44,14 @@ class WearListenerService : WearableMessengerListenerService() {
 
         TimerSettingsMessage.serializer.path -> TimerSettingsMessage.serializer
         TimerSettingsRequestMessage.serializer.path -> TimerSettingsRequestMessage.serializer
-        else -> null
+        else -> {
+            error { "#toMessage could not handle wear message ${this.path}" }
+            null
+        }
     }
 
     private fun receivePingMessage(messageEvent: MessageEvent) = runCatching {
-        val message = messageEvent.toMessage() ?: run {
-            error { "#receivePingMessage can't handle message ${messageEvent.path}" }
-            return@runCatching
-        }
+        val message = messageEvent.toMessage() ?: return@runCatching
         wearMessageConsumer.consume(
             message = message,
             byteArray = messageEvent.data

@@ -12,9 +12,12 @@ import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearMessage
+import com.flipperdevices.core.log.TaggedLogger
+import com.flipperdevices.core.log.error
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 
+private val logger = TaggedLogger("WearMessageConsumerExt")
 val WearMessageConsumer.bMessageFlow: Flow<WearMessage>
     get() = messagesFlow
         .mapNotNull { decodedWearMessage ->
@@ -38,6 +41,9 @@ val WearMessageConsumer.bMessageFlow: Flow<WearMessage>
 
                 TimerSettingsRequestMessage.serializer.path -> TimerSettingsRequestMessage
 
-                else -> null
+                else -> {
+                    logger.error { "#bMessageFlow could not handle wear message ${decodedWearMessage.path}" }
+                    null
+                }
             }
         }

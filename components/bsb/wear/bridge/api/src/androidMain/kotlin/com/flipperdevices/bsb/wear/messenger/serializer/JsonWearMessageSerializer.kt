@@ -32,7 +32,7 @@ class JsonWearMessageSerializer<T>(
 inline fun <reified T> JsonWearMessage(
     json: Json = JsonWearMessageSerializer.DEFAULT_JSON,
     path: String
-): WearMessageSerializer<T> = JsonWearMessageSerializer(
+): JsonWearMessageSerializer<T> = JsonWearMessageSerializer(
     serializer = json.serializersModule.serializer<T>(),
     path = path,
     json = json,
