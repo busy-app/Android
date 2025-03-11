@@ -16,7 +16,6 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushToFront
-import com.flipperdevices.bsb.appblocker.screen.api.AppBlockerScreenDecomposeComponent
 import com.flipperdevices.bsb.deeplink.model.Deeplink
 import com.flipperdevices.bsb.profile.main.api.ProfileDecomposeComponent
 import com.flipperdevices.bsb.root.deeplink.RootDeeplinkHandlerImpl
@@ -38,7 +37,6 @@ class RootDecomposeComponentImpl(
     @Assisted initialDeeplink: Deeplink?,
     private val profileDecomposeComponentFactory: ProfileDecomposeComponent.Factory,
     private val timerMainDecomposeComponentFactory: TimerMainDecomposeComponent.Factory,
-    private val appLockComponentFactory: AppBlockerScreenDecomposeComponent.Factory,
     inAppNotificationFactory: InAppNotificationDecomposeComponent.Factory
 ) : RootDecomposeComponent(),
     ComponentContext by componentContext {
@@ -77,12 +75,6 @@ class RootDecomposeComponentImpl(
 
         RootNavigationConfig.Timer -> timerMainDecomposeComponentFactory(
             componentContext
-        )
-
-        is RootNavigationConfig.AppLockScreen -> appLockComponentFactory(
-            componentContext,
-            config.applicationInfo,
-            navigation::pop
         )
     }
 

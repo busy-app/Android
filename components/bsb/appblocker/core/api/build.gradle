@@ -1,5 +1,5 @@
 plugins {
-    id("flipper.multiplatform.noandroidlib")
+    id("flipper.multiplatform")
     id("flipper.multiplatform-dependencies")
     id("kotlinx-serialization")
 }

@@ -19,7 +19,6 @@ class RootDeeplinkHandlerImpl(
     companion object {
         fun getConfigFromDeeplink(deeplink: Deeplink): RootNavigationConfig {
             return when (deeplink) {
-                is Deeplink.Root.AppLockScreen -> RootNavigationConfig.AppLockScreen(deeplink.applicationInfo)
                 is Deeplink.Root.Auth -> RootNavigationConfig.Profile(deeplink)
             }
         }
