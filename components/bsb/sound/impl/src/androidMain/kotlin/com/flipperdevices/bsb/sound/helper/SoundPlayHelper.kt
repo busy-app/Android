@@ -34,7 +34,6 @@ class SoundPlayHelper(
     private val mutex = Mutex()
 
     suspend fun play(sound: Sound) = mutex.withLock {
-        return@withLock true
         info { "Start playing for $sound" }
         val player = MediaPlayer.create(context, sound.resId)
         player.setOnCompletionListener {

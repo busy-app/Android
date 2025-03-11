@@ -51,10 +51,6 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                     notificationManager.notify(NOTIFICATION_ID, notification)
                 }
             }.launchIn(lifecycleScope + Dispatchers.Main)
-
-        delegate.getTimestampState()
-            .onEach {
-            }
     }
 
     override fun onCreate() {

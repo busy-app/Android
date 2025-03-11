@@ -1,9 +1,11 @@
 package com.flipperdevices.bsb.wear.messenger.consumer
 
-import android.util.Log
 import com.flipperdevices.bsb.wear.messenger.serializer.DecodedWearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.log.LogTagProvider
+import com.flipperdevices.core.log.error
+import com.flipperdevices.core.log.info
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +20,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, WearMessageConsumer::class)
-class WearDataLayerRegistryMessageConsumer : WearMessageConsumer {
+class WearDataLayerRegistryMessageConsumer : WearMessageConsumer, LogTagProvider {
+    override val TAG: String = "WearDataLayerRegistryMessageConsumer"
     private val messageChannel = MutableSharedFlow<DecodedWearMessage<*>>()
     override val messagesFlow: Flow<DecodedWearMessage<*>> = messageChannel.asSharedFlow()
 
@@ -29,14 +32,10 @@ class WearDataLayerRegistryMessageConsumer : WearMessageConsumer {
                 value = message.decode(byteArray)
             )
             runBlocking { messageChannel.emit(decodedWearMessage) }
-        }.onFailure {
-            Log.d(TAG, "consume: could not publish message: ${it.stackTraceToString()}")
+        }.onFailure { throwable ->
+            error(throwable) { "#consume: could not publish message: ${throwable.stackTraceToString()}" }
         }.onSuccess {
-            Log.d(TAG, "consume: published message: ${message.path} $message")
+            info { "#consume: published message: ${message.path} $message" }
         }
-    }
-
-    companion object {
-        private const val TAG = "WearMessageReceiver"
     }
 }

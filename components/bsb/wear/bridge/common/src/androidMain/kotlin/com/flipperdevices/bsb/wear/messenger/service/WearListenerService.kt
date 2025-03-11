@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
-import android.util.Log
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
@@ -13,6 +12,8 @@ import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.core.di.ComponentHolder
+import com.flipperdevices.core.log.error
+import com.flipperdevices.core.log.info
 import com.google.android.gms.wearable.MessageEvent
 
 class WearListenerService : WearableMessengerListenerService() {
@@ -27,7 +28,7 @@ class WearListenerService : WearableMessengerListenerService() {
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
-        Log.d(TAG, "onMessageReceived: ${messageEvent.path}")
+        info { "#onMessageReceived ${messageEvent.path}" }
         receivePingMessage(messageEvent)
     }
 
@@ -57,7 +58,7 @@ class WearListenerService : WearableMessengerListenerService() {
 
     private fun receivePingMessage(messageEvent: MessageEvent) = runCatching {
         val message = messageEvent.toMessage() ?: run {
-            Log.d(TAG, "receivePingMessage: can't handle message ${messageEvent.path}")
+            error { "#receivePingMessage can't handle message ${messageEvent.path}" }
             return@runCatching
         }
         wearMessageConsumer.consume(

@@ -1,6 +1,5 @@
 package com.flipperdevices.bsbwearable.card.api
 
-import android.util.Log
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
@@ -52,7 +51,6 @@ class CardStorageApi(
 
         wearMessageConsumer
             .bMessageFlow
-            .onEach { Log.d("RootDecomposeComponent", ": $it") }
             .filterIsInstance<TimerTimestampMessage>()
             .onEach { timerApi.setTimestampState(it.instance) }
             .launchIn(scope)

@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.serializer
 
-import android.util.Log
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
@@ -13,12 +12,10 @@ class JsonWearMessageSerializer<T>(
     path = path,
     encode = { value ->
         val string = json.encodeToString(serializer, value)
-        Log.d("InlineWearMessage", "InlineWearMessage->encode: $string")
         string.toByteArray()
     },
     decode = { byteArray ->
         val string = byteArray.decodeToString()
-        Log.d("InlineWearMessage", "InlineWearMessage->decode: $string")
         json.decodeFromString(serializer, string)
     }
 ) {

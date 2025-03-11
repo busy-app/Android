@@ -1,9 +1,11 @@
 package com.flipperdevices.bsb.wear.messenger.producer
 
-import android.util.Log
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.log.LogTagProvider
+import com.flipperdevices.core.log.error
+import com.flipperdevices.core.log.info
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.data.WearDataLayerRegistry
 import kotlinx.coroutines.async
@@ -21,11 +23,11 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class WearDataLayerRegistryMessageProducer(
     private val wearDataLayerRegistry: WearDataLayerRegistry,
     private val wearConnectionApi: WearConnectionApi
-) : WearMessageProducer {
+) : WearMessageProducer, LogTagProvider {
+    override val TAG: String = "WearDataLayerRegistryMessageProducer"
 
     override suspend fun <T> produce(message: WearMessageSerializer<T>, value: T): Unit = coroutineScope {
         val nodes = listOfNotNull(wearConnectionApi.statusFlow.first().nodeOrNull)
-        Log.d(TAG, "produce: found ${nodes.size} nodes")
         runCatching {
             val byteArray = message.encode(value)
             nodes.map { node ->
@@ -37,14 +39,10 @@ class WearDataLayerRegistryMessageProducer(
                     )
                 }
             }.awaitAll()
-        }.onFailure {
-            Log.e(TAG, "produce: failed to send message ${it.stackTraceToString()}")
+        }.onFailure { throwable ->
+            error(throwable) { "#produce failed to send message ${throwable.stackTraceToString()}" }
         }.onSuccess {
-            Log.d(TAG, "produce: message sent: ${message.path} $message")
+            info { "#produce message sent: ${message.path} $message" }
         }
-    }
-
-    companion object {
-        private const val TAG = "WearMessageProducer"
     }
 }
