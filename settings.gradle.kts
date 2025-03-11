@@ -54,6 +54,7 @@ include(
     ":components:core:ui:res-preview",
     ":components:core:ui:video",
     ":components:core:ui:autosizetext",
+    ":components:core:ui:text",
 
     ":components:bsb:core:theme",
     ":components:bsb:core:res",
