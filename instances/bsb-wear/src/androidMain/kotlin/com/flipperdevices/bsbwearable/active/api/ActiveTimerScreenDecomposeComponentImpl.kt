@@ -11,6 +11,7 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.util.pause
 import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.background.util.skip
+import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
 import com.flipperdevices.bsbwearable.active.composable.ActiveTimerScreenComposable
 import com.flipperdevices.bsbwearable.interrupt.api.StopSessionDecomposeComponent
 import com.flipperdevices.bsbwearable.interrupt.composable.PauseWearOverlayComposable
@@ -25,6 +26,8 @@ class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     stopSessionDecomposeComponentFactory: StopSessionDecomposeComponent.Factory,
     private val timerApi: TimerApi,
+
+    focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
 ) : ActiveTimerScreenDecomposeComponent(componentContext) {
     private val stopSessionDecomposeComponentFactory = stopSessionDecomposeComponentFactory.invoke(
         componentContext = childContext("atsdci_ssdcf")
@@ -58,6 +61,10 @@ class ActiveTimerScreenDecomposeComponentImpl(
             )
         }
         stopSessionDecomposeComponentFactory.Render(Modifier)
+    }
+
+    init {
+        focusDisplayDecomposeComponentFactory.invoke(lifecycle = lifecycle)
     }
 
     @Inject
