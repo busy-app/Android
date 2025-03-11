@@ -1,18 +1,14 @@
 package com.flipperdevices.bsbwearable.card.composable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_play
 import busystatusbar.instances.bsb_wear.generated.resources.Res
@@ -33,7 +29,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.Res as Comm
 @OptIn(ExperimentalHorologistApi::class, ExperimentalWearMaterialApi::class)
 @Composable
 fun WearScreenComposable(
-    settings: TimerSettings?,
+    settings: TimerSettings,
     blockerState: BlockedAppCount?,
     onStartClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -45,19 +41,10 @@ fun WearScreenComposable(
         columnState = rememberColumnState()
     ) {
         item {
-            if (settings != null) {
-                WearCardComposable(
-                    settings = settings,
-                    blockerState = blockerState,
-                )
-            } else {
-                Box(modifier = Modifier.padding(vertical = 24.dp)) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(54.dp),
-                        indicatorColor = LocalCorruptedPallet.current.accent.device.secondary
-                    )
-                }
-            }
+            WearCardComposable(
+                settings = settings,
+                blockerState = blockerState,
+            )
         }
         item {
             BChipButton(

@@ -1,4 +1,4 @@
-package com.flipperdevices.bsbwearable.card.api
+package com.flipperdevices.bsbwearable.card.viewmodel.data
 
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.preference.model.TimerSettings
@@ -17,28 +17,37 @@ import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
 @SingleIn(AppGraph::class)
-class CardStorageApi(
-    private val scope: CoroutineScope,
-    private val wearConnectionApi: WearConnectionApi,
-    private val wearMessageConsumer: WearMessageConsumer,
+@ContributesBinding(AppGraph::class, CardStorageApi::class)
+class CardStorageApiImpl(
+    scope: CoroutineScope,
+    wearConnectionApi: WearConnectionApi,
+    wearMessageConsumer: WearMessageConsumer,
     private val wearMessageProducer: WearMessageProducer,
     private val timerApi: TimerApi
-) {
+) : CardStorageApi {
 
-    private val settingsMutableFlow = MutableStateFlow<TimerSettings?>(null)
+    private val settingsMutableFlow = MutableStateFlow(
+        TimerSettings(
+            intervalsSettings = TimerSettings.IntervalsSettings(
+                isEnabled = true
+            )
+        )
+    )
     private val appBlockerMutableFlow = MutableStateFlow<BlockedAppCount?>(null)
 
-    val settingFlow = settingsMutableFlow.asStateFlow()
-    val appBlockerFlow = appBlockerMutableFlow.asStateFlow()
+    override val settingFlow: StateFlow<TimerSettings> = settingsMutableFlow.asStateFlow()
+    override val appBlockerFlow: StateFlow<BlockedAppCount?> = appBlockerMutableFlow.asStateFlow()
 
     init {
         wearConnectionApi.statusFlow
