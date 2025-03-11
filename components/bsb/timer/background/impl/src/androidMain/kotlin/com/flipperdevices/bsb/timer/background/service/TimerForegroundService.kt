@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
 import kotlinx.serialization.json.Json
 
 internal const val EXTRA_KEY_TIMER_STATE = "timer_state"
@@ -79,12 +80,12 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                         delegate.setTimestampState(timerState)
                     } else {
                         error { "Not found timer start" }
-                        delegate.setTimestampState(null)
+                        delegate.setTimestampState(TimerTimestamp.Pending())
                     }
                 }
 
                 TimerServiceActionEnum.STOP.actionId -> {
-                    delegate.setTimestampState(null)
+                    delegate.setTimestampState(TimerTimestamp.Pending(Clock.System.now()))
                     stopServiceInternal()
                 }
 

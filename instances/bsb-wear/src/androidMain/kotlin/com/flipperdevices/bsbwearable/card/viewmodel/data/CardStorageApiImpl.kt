@@ -2,18 +2,10 @@ package com.flipperdevices.bsbwearable.card.viewmodel.data
 
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.preference.model.TimerSettings
-import com.flipperdevices.bsb.timer.background.api.TimerApi
-import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
-import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
-import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
-import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,10 +23,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @ContributesBinding(AppGraph::class, CardStorageApi::class)
 class CardStorageApiImpl(
     scope: CoroutineScope,
-    wearConnectionApi: WearConnectionApi,
     wearMessageConsumer: WearMessageConsumer,
-    private val wearMessageProducer: WearMessageProducer,
-    private val timerApi: TimerApi
 ) : CardStorageApi {
 
     private val settingsMutableFlow = MutableStateFlow(

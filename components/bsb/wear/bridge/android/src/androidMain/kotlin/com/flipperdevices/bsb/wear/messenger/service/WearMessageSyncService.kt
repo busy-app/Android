@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
-import com.flipperdevices.bsb.timer.background.model.compareAndGetState
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
@@ -26,6 +25,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.text.compareTo
 
 class WearMessageSyncService : LogTagProvider {
     override val TAG = "TimerForegroundService"
@@ -111,12 +111,11 @@ class WearMessageSyncService : LogTagProvider {
                         val old = wearSyncComponent.timerApi
                             .getTimestampState()
                             .first()
-                        val resolved = old.compareAndGetState(message.instance)
-                        if (old == resolved) {
+                        if (old.lastSync > message.instance.lastSync) {
                             sendTimerTimestampMessage()
-                            return@onEach
+                        } else if (old.lastSync < message.instance.lastSync) {
+                            wearSyncComponent.timerApi.setTimestampState(message.instance)
                         }
-                        wearSyncComponent.timerApi.setTimestampState(resolved)
                     }
                 }
             }.launchIn(scope)

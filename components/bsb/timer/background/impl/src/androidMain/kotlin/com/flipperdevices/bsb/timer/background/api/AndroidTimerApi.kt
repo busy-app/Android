@@ -43,14 +43,14 @@ class AndroidTimerApi(
     override val TAG = "AndroidTimerApi"
 
     private val timerStateFlow = MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
-    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp?>(null)
+    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending())
 
     private val mutex = Mutex()
     private var binderListenerJob: Job? = null
 
-    override fun setTimestampState(state: TimerTimestamp?) {
+    override fun setTimestampState(state: TimerTimestamp) {
         info { "Request start timer via android service timer api" }
-        if (state == null) {
+        if (state is TimerTimestamp.Pending) {
             stopTimer()
             return
         }
@@ -76,13 +76,13 @@ class AndroidTimerApi(
     }
 
     private fun stopTimer() {
-        timerTimestampFlow.value = null
+        timerTimestampFlow.value = TimerTimestamp.Pending()
         val intent = Intent(context, TimerForegroundService::class.java)
         intent.setAction(TimerServiceActionEnum.STOP.actionId)
         context.startService(intent)
     }
 
-    override fun getTimestampState(): StateFlow<TimerTimestamp?> {
+    override fun getTimestampState(): StateFlow<TimerTimestamp> {
         return timerTimestampFlow.asStateFlow()
     }
 

@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
-import com.flipperdevices.bsb.timer.background.model.compareAndGetState
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
@@ -84,12 +83,11 @@ class WearMessageSyncService : LogTagProvider {
                         val old = wearSyncComponent.timerApi
                             .getTimestampState()
                             .first()
-                        val resolved = old.compareAndGetState(message.instance)
-                        if (old == resolved) {
+                        if (old.lastSync > message.instance.lastSync) {
                             sendTimerTimestampMessage()
-                            return@onEach
+                        } else if (old.lastSync < message.instance.lastSync) {
+                            wearSyncComponent.timerApi.setTimestampState(message.instance)
                         }
-                        wearSyncComponent.timerApi.setTimestampState(resolved)
                     }
                 }
             }.launchIn(scope)

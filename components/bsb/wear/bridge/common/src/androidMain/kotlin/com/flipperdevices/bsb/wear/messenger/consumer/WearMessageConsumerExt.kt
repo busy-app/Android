@@ -26,7 +26,7 @@ val WearMessageConsumer.bMessageFlow: Flow<WearMessage>
                 PongMessage.serializer.path -> PongMessage
                 TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage
                 TimerTimestampMessage.serializer.path -> TimerTimestampMessage(
-                    decodedWearMessage.value as? TimerTimestamp
+                    decodedWearMessage.value as TimerTimestamp
                 )
 
                 AppBlockerCountMessage.serializer.path -> AppBlockerCountMessage(

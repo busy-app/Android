@@ -143,8 +143,8 @@ private val TimerSettings.maxIterationCount: Int
         .count { data -> data.iterationType == IterationType.WORK }
 
 @Suppress("LongMethod")
-fun TimerTimestamp?.toState(): ControlledTimerState {
-    if (this == null) {
+fun TimerTimestamp.toState(): ControlledTimerState {
+    if (this !is TimerTimestamp.Running) {
         return ControlledTimerState.NotStarted
     }
     val iterationList = settings.buildIterationList()

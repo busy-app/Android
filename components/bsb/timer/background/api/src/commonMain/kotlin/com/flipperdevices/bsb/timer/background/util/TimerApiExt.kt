@@ -6,10 +6,9 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.seconds
-import kotlinx.datetime.Instant
 
 private fun TimerApi.updateState(
-    block: (TimerTimestamp?) -> TimerTimestamp?
+    block: (TimerTimestamp) -> TimerTimestamp
 ) {
     val newState = block.invoke(getTimestampState().value)
     setTimestampState(newState)
@@ -17,13 +16,18 @@ private fun TimerApi.updateState(
 
 fun TimerApi.pause() {
     updateState { state ->
-        if (state?.pause == null) {
-            state?.copy(
-                pause = Clock.System.now(),
-                lastSync = Clock.System.now()
-            )
-        } else {
-            state
+        when (state) {
+            is TimerTimestamp.Pending -> state
+            is TimerTimestamp.Running -> {
+                if (state.pause == null) {
+                    state.copy(
+                        pause = Clock.System.now(),
+                        lastSync = Clock.System.now()
+                    )
+                } else {
+                    state
+                }
+            }
         }
     }
 }
@@ -31,49 +35,68 @@ fun TimerApi.pause() {
 fun TimerApi.confirmNextStep() {
     val awaitState = getState().value as? ControlledTimerState.InProgress.Await ?: return
     updateState { state ->
-        state ?: return@updateState state
-        state.copy(
-            confirmNextStepClick = Clock.System.now().plus(1.seconds),
-            start = state.start.plus(Clock.System.now().minus(awaitState.pausedAt)),
-            lastSync = Clock.System.now()
-        )
+        when (state) {
+            is TimerTimestamp.Pending -> state
+            is TimerTimestamp.Running -> {
+                state.copy(
+                    confirmNextStepClick = Clock.System.now().plus(1.seconds),
+                    start = state.start.plus(Clock.System.now().minus(awaitState.pausedAt)),
+                    lastSync = Clock.System.now()
+                )
+            }
+        }
     }
 }
 
 fun TimerApi.resume() {
     updateState { state ->
-        if (state?.pause != null) {
-            val diff = Clock.System.now() - state.pause
-            state.copy(
-                pause = null,
-                start = state.start.plus(diff),
-                confirmNextStepClick = state.confirmNextStepClick.plus(diff),
-                lastSync = Clock.System.now()
-            )
-        } else {
-            state
+        when (state) {
+            is TimerTimestamp.Pending -> state
+            is TimerTimestamp.Running -> {
+                if (state.pause != null) {
+                    val diff = Clock.System.now() - state.pause
+                    state.copy(
+                        pause = null,
+                        start = state.start.plus(diff),
+                        confirmNextStepClick = state.confirmNextStepClick.plus(diff),
+                        lastSync = Clock.System.now()
+                    )
+                } else {
+                    state
+                }
+            }
         }
     }
 }
 
 fun TimerApi.stop() {
-    updateState { null }
+    updateState {
+        TimerTimestamp.Pending(Clock.System.now())
+    }
 }
 
 fun TimerApi.skip() {
     updateState { state ->
-        state ?: return@updateState state
-        val startedState = getState().value as? ControlledTimerState.InProgress.Running ?: return@updateState state
+        when (state) {
+            is TimerTimestamp.Pending -> state
+            is TimerTimestamp.Running -> {
+                val startedState = getState().value as? ControlledTimerState.InProgress.Running
+                startedState ?: return@updateState state
 
-        state.copy(
-            start = state.start.minus(startedState.timeLeft),
-            lastSync = Clock.System.now()
-        )
+                state.copy(
+                    start = state.start.minus(startedState.timeLeft),
+                    lastSync = Clock.System.now()
+                )
+            }
+        }
     }
 }
 
 fun TimerApi.startWith(settings: TimerSettings) {
     setTimestampState(
-        state = TimerTimestamp(settings = settings),
+        state = TimerTimestamp.Running(
+            settings = settings,
+            lastSync = Clock.System.now()
+        ),
     )
 }
