@@ -8,15 +8,14 @@ import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.seconds
 
 private fun TimerApi.updateState(
-    broadcast: Boolean = false,
     block: (TimerTimestamp?) -> TimerTimestamp?
 ) {
     val newState = block.invoke(getTimestampState().value)
-    setTimestampState(newState, broadcast = broadcast)
+    setTimestampState(newState)
 }
 
 fun TimerApi.pause() {
-    updateState(broadcast = true) { state ->
+    updateState { state ->
         if (state?.pause == null) {
             state?.copy(
                 pause = Clock.System.now(),
@@ -30,7 +29,7 @@ fun TimerApi.pause() {
 
 fun TimerApi.confirmNextStep() {
     val awaitState = getState().value as? ControlledTimerState.InProgress.Await ?: return
-    updateState(broadcast = true) { state ->
+    updateState { state ->
         state ?: return@updateState state
         state.copy(
             confirmNextStepClick = Clock.System.now().plus(1.seconds),
@@ -41,7 +40,7 @@ fun TimerApi.confirmNextStep() {
 }
 
 fun TimerApi.resume() {
-    updateState(broadcast = true) { state ->
+    updateState { state ->
         if (state?.pause != null) {
             val diff = Clock.System.now() - state.pause
             state.copy(
@@ -59,12 +58,11 @@ fun TimerApi.resume() {
 fun TimerApi.stop() {
     setTimestampState(
         state = null,
-        broadcast = true
     )
 }
 
 fun TimerApi.skip() {
-    updateState(broadcast = true) { state ->
+    updateState { state ->
         state ?: return@updateState state
         val startedState = getState().value as? ControlledTimerState.InProgress.Running ?: return@updateState state
 
@@ -78,6 +76,5 @@ fun TimerApi.skip() {
 fun TimerApi.startWith(settings: TimerSettings) {
     setTimestampState(
         state = TimerTimestamp(settings = settings),
-        broadcast = true
     )
 }

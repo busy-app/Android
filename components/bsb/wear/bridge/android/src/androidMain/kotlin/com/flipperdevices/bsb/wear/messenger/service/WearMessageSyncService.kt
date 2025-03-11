@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
+import com.flipperdevices.bsb.timer.background.model.compareAndGetState
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
@@ -37,7 +38,6 @@ class WearMessageSyncService : LogTagProvider {
     }
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
 
-
     private suspend fun sendTimerTimestampMessage() {
         val timerTimestamp = wearSyncComponent.timerApi.getTimestampState().first()
         val message = TimerTimestampMessage(timerTimestamp)
@@ -59,6 +59,12 @@ class WearMessageSyncService : LogTagProvider {
     private fun startSettingsChangeJob(): Job {
         return wearSyncComponent.krateApi.timerSettingsKrate.flow
             .onEach { sendTimerSettingsMessage() }
+            .launchIn(scope)
+    }
+
+    private fun startStateChangeJob(): Job {
+        return wearSyncComponent.timerApi.getTimestampState()
+            .onEach { sendTimerTimestampMessage() }
             .launchIn(scope)
     }
 
@@ -102,7 +108,12 @@ class WearMessageSyncService : LogTagProvider {
                     is TimerSettingsMessage -> Unit
 
                     is TimerTimestampMessage -> {
-                        wearSyncComponent.timerApi.setTimestampState(message.instance)
+                        val old = wearSyncComponent.timerApi
+                            .getTimestampState()
+                            .first()
+                        val resolved = old.compareAndGetState(message.instance)
+                        if (old == resolved) return@onEach
+                        wearSyncComponent.timerApi.setTimestampState(resolved)
                     }
                 }
             }.launchIn(scope)
@@ -115,6 +126,7 @@ class WearMessageSyncService : LogTagProvider {
             startSettingsChangeJob()
             startAppBlockerCountChangeJob()
             startClientConnectJob()
+            startStateChangeJob()
         }
     }
 

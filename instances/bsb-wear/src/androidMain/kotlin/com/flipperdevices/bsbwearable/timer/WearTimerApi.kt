@@ -5,12 +5,8 @@ import com.flipperdevices.bsb.timer.background.flow.TickFlow
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.util.toState
-import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
-import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
-import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.log.info
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -28,26 +23,13 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @ContributesBinding(AppGraph::class, TimerApi::class)
 @SingleIn(AppGraph::class)
 class WearTimerApi(
-    private val scope: CoroutineScope,
-    private val wearMessageProducer: WearMessageProducer
+    scope: CoroutineScope,
 ) : TimerApi, LogTagProvider {
     override val TAG: String = "WearTimerApi"
     private val timerTimestampStateFlow = MutableStateFlow<TimerTimestamp?>(null)
 
-    override fun setTimestampState(state: TimerTimestamp?, broadcast: Boolean) {
-        timerTimestampStateFlow.update { oldState ->
-            val newState = when {
-                state == null -> oldState
-                oldState == null -> state
-                state.lastSync > oldState.lastSync -> state
-                else -> oldState
-            }
-            if (broadcast) {
-                info { "#setTimestampState broadcasting" }
-                scope.launch { wearMessageProducer.produce(TimerTimestampMessage(newState)) }
-            }
-            newState
-        }
+    override fun setTimestampState(state: TimerTimestamp?) {
+        timerTimestampStateFlow.update { state }
     }
 
     override fun getTimestampState(): StateFlow<TimerTimestamp?> {
