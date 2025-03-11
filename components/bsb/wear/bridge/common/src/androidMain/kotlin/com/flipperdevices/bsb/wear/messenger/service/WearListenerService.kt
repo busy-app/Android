@@ -6,7 +6,6 @@ import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
@@ -39,14 +38,6 @@ class WearListenerService : WearableMessengerListenerService() {
 
         TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
         TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer
-
-        TimerActionMessage.Finish.serializer.path -> TimerActionMessage.Finish.serializer
-        TimerActionMessage.ConfirmNextStage.serializer.path -> TimerActionMessage.ConfirmNextStage.serializer
-        TimerActionMessage.Pause.serializer.path -> TimerActionMessage.Pause.serializer
-        TimerActionMessage.Restart.serializer.path -> TimerActionMessage.Restart.serializer
-        TimerActionMessage.Resume.serializer.path -> TimerActionMessage.Resume.serializer
-        TimerActionMessage.Skip.serializer.path -> TimerActionMessage.Skip.serializer
-        TimerActionMessage.Stop.serializer.path -> TimerActionMessage.Stop.serializer
 
         AppBlockerCountMessage.serializer.path -> AppBlockerCountMessage.serializer
         AppBlockerCountRequestMessage.serializer.path -> AppBlockerCountRequestMessage.serializer

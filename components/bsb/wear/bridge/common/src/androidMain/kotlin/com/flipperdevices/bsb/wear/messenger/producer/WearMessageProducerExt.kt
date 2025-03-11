@@ -4,7 +4,6 @@ import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
@@ -21,11 +20,6 @@ suspend fun WearMessageProducer.produce(message: WearMessage) {
         PongMessage -> produce(
             message = PongMessage.serializer,
             value = Unit
-        )
-
-        is TimerActionMessage -> produce(
-            message = message.serializer,
-            value = message.value
         )
 
         TimerTimestampRequestMessage -> produce(

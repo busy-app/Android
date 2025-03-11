@@ -1,18 +1,11 @@
 package om.flipperdevices.bsb.wear.messenger.service
 
-import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.util.confirmNextStep
-import com.flipperdevices.bsb.timer.background.util.pause
-import com.flipperdevices.bsb.timer.background.util.resume
-import com.flipperdevices.bsb.timer.background.util.skip
-import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.PingMessage
 import com.flipperdevices.bsb.wear.messenger.model.PongMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerActionMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
@@ -76,36 +69,6 @@ class WearMessageSyncService : LogTagProvider {
             .onEach { message ->
                 info { "#startMessageJob got $message" }
                 when (message) {
-                    TimerActionMessage.ConfirmNextStage -> {
-                        wearSyncComponent.timerApi.confirmNextStep()
-                    }
-
-                    TimerActionMessage.Finish -> {
-                        wearSyncComponent.timerApi.stop()
-                    }
-
-                    TimerActionMessage.Pause -> {
-                        wearSyncComponent.timerApi.pause()
-                    }
-
-                    TimerActionMessage.Restart -> {
-                        val settings = wearSyncComponent.krateApi.timerSettingsKrate.loadAndGet()
-                        val timerTimestamp = TimerTimestamp(settings = settings)
-                        wearSyncComponent.timerApi.setTimestampState(timerTimestamp)
-                    }
-
-                    TimerActionMessage.Resume -> {
-                        wearSyncComponent.timerApi.resume()
-                    }
-
-                    TimerActionMessage.Skip -> {
-                        wearSyncComponent.timerApi.skip()
-                    }
-
-                    TimerActionMessage.Stop -> {
-                        wearSyncComponent.timerApi.stop()
-                    }
-
                     TimerTimestampRequestMessage -> {
                         val timerTimestamp = wearSyncComponent.timerApi.getTimestampState().first()
                         val message = TimerTimestampMessage(timerTimestamp)
