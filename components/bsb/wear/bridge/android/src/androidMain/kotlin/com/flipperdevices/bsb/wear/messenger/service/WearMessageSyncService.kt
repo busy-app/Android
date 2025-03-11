@@ -23,8 +23,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 class WearMessageSyncService : LogTagProvider {
     override val TAG = "TimerForegroundService"
@@ -36,8 +34,6 @@ class WearMessageSyncService : LogTagProvider {
         ComponentHolder.component<WearDataLayerModule>()
     }
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
-
-    private val mutex = Mutex()
 
     private fun startStateChangeJob(): Job {
         return wearSyncComponent.timerApi.getTimestampState()
@@ -102,12 +98,10 @@ class WearMessageSyncService : LogTagProvider {
     fun onCreate() {
         info { "#onCreate" }
         scope.launch {
-            mutex.withLock {
-                startStateChangeJob()
-                startMessageJob()
-                startSettingsChangeJob()
-                startAppBlockerCountChangeJob()
-            }
+            startStateChangeJob()
+            startMessageJob()
+            startSettingsChangeJob()
+            startAppBlockerCountChangeJob()
         }
     }
 
