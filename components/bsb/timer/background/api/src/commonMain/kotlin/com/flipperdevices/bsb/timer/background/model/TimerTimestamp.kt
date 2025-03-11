@@ -10,7 +10,17 @@ sealed interface TimerTimestamp {
     val lastSync: Instant
 
     @Serializable
-    data class Pending(override val lastSync: Instant = Instant.DISTANT_PAST) : TimerTimestamp
+    class Pending private constructor(
+        override val lastSync: Instant
+    ) : TimerTimestamp {
+        companion object {
+            val NotStarted: Pending
+                get() = Pending(Instant.DISTANT_PAST)
+            val Finished: Pending
+                get() = Pending(Clock.System.now())
+        }
+    }
+
 
     /**
      * [TimerTimestamp] shared synchronization model for timer
@@ -29,6 +39,6 @@ sealed interface TimerTimestamp {
         override val lastSync: Instant
     ) : TimerTimestamp
 
-    val runningOrNull: TimerTimestamp.Running?
+    val runningOrNull: Running?
         get() = this as? Running
 }

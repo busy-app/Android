@@ -71,7 +71,7 @@ fun TimerApi.resume() {
 
 fun TimerApi.stop() {
     updateState {
-        TimerTimestamp.Pending(Clock.System.now())
+        TimerTimestamp.Pending.Finished
     }
 }
 

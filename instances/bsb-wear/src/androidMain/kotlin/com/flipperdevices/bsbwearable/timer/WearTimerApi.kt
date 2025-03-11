@@ -26,7 +26,7 @@ class WearTimerApi(
     scope: CoroutineScope,
 ) : TimerApi, LogTagProvider {
     override val TAG: String = "WearTimerApi"
-    private val timerTimestampStateFlow = MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending())
+    private val timerTimestampStateFlow = MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending.NotStarted)
 
     override fun setTimestampState(state: TimerTimestamp) {
         timerTimestampStateFlow.update { state }

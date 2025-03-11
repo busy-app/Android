@@ -43,7 +43,7 @@ class AndroidTimerApi(
     override val TAG = "AndroidTimerApi"
 
     private val timerStateFlow = MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
-    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending())
+    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending.NotStarted)
 
     private val mutex = Mutex()
     private var binderListenerJob: Job? = null
@@ -76,7 +76,7 @@ class AndroidTimerApi(
     }
 
     private fun stopTimer() {
-        timerTimestampFlow.value = TimerTimestamp.Pending()
+        timerTimestampFlow.value = TimerTimestamp.Pending.Finished
         val intent = Intent(context, TimerForegroundService::class.java)
         intent.setAction(TimerServiceActionEnum.STOP.actionId)
         context.startService(intent)
