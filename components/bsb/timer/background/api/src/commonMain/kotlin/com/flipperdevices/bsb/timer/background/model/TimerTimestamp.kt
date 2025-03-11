@@ -1,6 +1,9 @@
 package com.flipperdevices.bsb.timer.background.model
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.core.log.TaggedLogger
+import com.flipperdevices.core.log.info
+import kotlin.math.log
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
@@ -22,9 +25,12 @@ data class TimerTimestamp(
     val lastSync: Instant = Instant.DISTANT_PAST
 )
 
+private val logger = TaggedLogger("TimerTimestampKt")
+
 fun TimerTimestamp?.compareAndGetState(other: TimerTimestamp?): TimerTimestamp? {
     val oldState = this
     val state = other
+    logger.info { "#compareAndGetState old: $oldState; new: $state" }
     return when {
         state == null -> oldState
         oldState == null -> state

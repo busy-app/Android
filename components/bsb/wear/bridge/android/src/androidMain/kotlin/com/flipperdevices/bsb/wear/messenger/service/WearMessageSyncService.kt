@@ -112,7 +112,10 @@ class WearMessageSyncService : LogTagProvider {
                             .getTimestampState()
                             .first()
                         val resolved = old.compareAndGetState(message.instance)
-                        if (old == resolved) return@onEach
+                        if (old == resolved) {
+                            sendTimerTimestampMessage()
+                            return@onEach
+                        }
                         wearSyncComponent.timerApi.setTimestampState(resolved)
                     }
                 }

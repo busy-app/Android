@@ -6,6 +6,7 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.datetime.Instant
 
 private fun TimerApi.updateState(
     block: (TimerTimestamp?) -> TimerTimestamp?
@@ -56,9 +57,7 @@ fun TimerApi.resume() {
 }
 
 fun TimerApi.stop() {
-    setTimestampState(
-        state = null,
-    )
+    updateState { null }
 }
 
 fun TimerApi.skip() {

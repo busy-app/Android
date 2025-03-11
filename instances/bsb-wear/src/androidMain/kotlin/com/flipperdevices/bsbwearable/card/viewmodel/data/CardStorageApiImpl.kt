@@ -50,20 +50,6 @@ class CardStorageApiImpl(
     override val appBlockerFlow: StateFlow<BlockedAppCount?> = appBlockerMutableFlow.asStateFlow()
 
     init {
-        wearConnectionApi.statusFlow
-            .filterIsInstance<WearConnectionApi.Status.Connected>()
-            .onEach { connectionState ->
-                wearMessageProducer.produce(TimerTimestampRequestMessage)
-                wearMessageProducer.produce(TimerSettingsRequestMessage)
-                wearMessageProducer.produce(AppBlockerCountRequestMessage)
-            }.launchIn(scope)
-
-        wearMessageConsumer
-            .bMessageFlow
-            .filterIsInstance<TimerTimestampMessage>()
-            .onEach { timerApi.setTimestampState(it.instance) }
-            .launchIn(scope)
-
         wearMessageConsumer.bMessageFlow
             .filterIsInstance<AppBlockerCountMessage>()
             .onEach { appBlockerCountMessage ->

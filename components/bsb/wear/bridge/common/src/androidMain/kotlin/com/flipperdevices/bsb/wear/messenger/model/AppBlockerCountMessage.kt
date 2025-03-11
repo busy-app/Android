@@ -4,7 +4,7 @@ import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.wear.messenger.serializer.JsonWearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.JsonWearMessageSerializer
 
-class AppBlockerCountMessage(val instance: BlockedAppCount) : WearMessage {
+data class AppBlockerCountMessage(val instance: BlockedAppCount) : WearMessage {
     companion object {
         val serializer: JsonWearMessageSerializer<BlockedAppCount>
             get() = JsonWearMessage<BlockedAppCount>(
