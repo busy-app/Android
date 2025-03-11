@@ -19,5 +19,16 @@ data class TimerTimestamp(
     val start: Instant = Clock.System.now(),
     val pause: Instant? = null,
     val confirmNextStepClick: Instant = Instant.DISTANT_PAST,
-    val lastSync: Instant = Clock.System.now()
+    val lastSync: Instant = Instant.DISTANT_PAST
 )
+
+fun TimerTimestamp?.compareAndGetState(other: TimerTimestamp?): TimerTimestamp? {
+    val oldState = this
+    val state = other
+    return when {
+        state == null -> oldState
+        oldState == null -> state
+        state.lastSync > oldState.lastSync -> state
+        else -> oldState
+    }
+}

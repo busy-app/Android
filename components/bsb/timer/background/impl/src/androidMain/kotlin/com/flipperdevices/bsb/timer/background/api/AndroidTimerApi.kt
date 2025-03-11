@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.model.compareAndGetState
 import com.flipperdevices.bsb.timer.background.notification.NotificationPermissionHelper
 import com.flipperdevices.bsb.timer.background.service.EXTRA_KEY_TIMER_STATE
 import com.flipperdevices.bsb.timer.background.service.TimerForegroundService
@@ -55,15 +56,9 @@ class AndroidTimerApi(
 
     override fun setTimestampState(state: TimerTimestamp?, broadcast: Boolean) {
         info { "Request start timer via android service timer api" }
-        timerTimestampFlow.value.let { oldState ->
-            val newState = when {
-                oldState == null || state == null -> state
-                state.lastSync > oldState.lastSync -> state
-                else -> oldState
-            }
-            if (broadcast) {
-                scope.launch { wearMessageProducer.produce(TimerTimestampMessage(newState)) }
-            }
+        val state = timerTimestampFlow.value.compareAndGetState(state)
+        if (broadcast) {
+            scope.launch { wearMessageProducer.produce(TimerTimestampMessage(state)) }
         }
         if (state == null) {
             stopTimer()

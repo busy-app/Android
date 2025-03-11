@@ -9,6 +9,8 @@ import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.log.LogTagProvider
+import com.flipperdevices.core.log.info
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,17 +30,20 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class WearTimerApi(
     private val scope: CoroutineScope,
     private val wearMessageProducer: WearMessageProducer
-) : TimerApi {
+) : TimerApi, LogTagProvider {
+    override val TAG: String = "WearTimerApi"
     private val timerTimestampStateFlow = MutableStateFlow<TimerTimestamp?>(null)
 
     override fun setTimestampState(state: TimerTimestamp?, broadcast: Boolean) {
         timerTimestampStateFlow.update { oldState ->
             val newState = when {
-                oldState == null || state == null -> state
+                state == null -> oldState
+                oldState == null -> state
                 state.lastSync > oldState.lastSync -> state
                 else -> oldState
             }
             if (broadcast) {
+                info { "#setTimestampState broadcasting" }
                 scope.launch { wearMessageProducer.produce(TimerTimestampMessage(newState)) }
             }
             newState

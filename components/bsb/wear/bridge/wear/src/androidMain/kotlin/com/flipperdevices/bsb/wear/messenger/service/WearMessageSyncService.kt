@@ -39,43 +39,22 @@ class WearMessageSyncService : LogTagProvider {
 
 
     private suspend fun sendTimerTimestampMessage() {
-        val timerTimestamp = wearSyncComponent.timerApi.getTimestampState().first()
+        val timerTimestamp = wearSyncComponent.timerApi
+            .getTimestampState()
+            .first()
+        info { "#sendTimerTimestampMessage $timerTimestamp" }
         val message = TimerTimestampMessage(timerTimestamp)
         wearDataLayerModule.wearMessageProducer.produce(message)
-    }
-
-    private suspend fun sendTimerSettingsMessage() {
-        val settings = wearSyncComponent.krateApi.timerSettingsKrate.loadAndGet()
-        val message = TimerSettingsMessage(settings)
-        wearDataLayerModule.wearMessageProducer.produce(message)
-    }
-
-    private suspend fun sendAppBlockerCountMessage() {
-        val appBlockerCount = wearSyncComponent.appBlockerFilterApi.getBlockedAppCount().first()
-        val message = AppBlockerCountMessage(appBlockerCount)
-        wearDataLayerModule.wearMessageProducer.produce(message)
-    }
-
-    private fun startSettingsChangeJob(): Job {
-        return wearSyncComponent.krateApi.timerSettingsKrate.flow
-            .onEach { sendTimerSettingsMessage() }
-            .launchIn(scope)
-    }
-
-    private fun startAppBlockerCountChangeJob(): Job {
-        return wearSyncComponent.appBlockerFilterApi.getBlockedAppCount()
-            .onEach { sendAppBlockerCountMessage() }
-            .launchIn(scope)
     }
 
     private fun startClientConnectJob(): Job {
         return wearSyncComponent.wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
             .onEach {
+                info { "#startClientConnectJob got client" }
                 sendTimerTimestampMessage()
-                sendTimerSettingsMessage()
-                sendAppBlockerCountMessage()
-            }.launchIn(scope)
+            }
+            .launchIn(scope)
     }
 
     private fun startMessageJob(): Job {
@@ -88,14 +67,8 @@ class WearMessageSyncService : LogTagProvider {
                         sendTimerTimestampMessage()
                     }
 
-                    TimerSettingsRequestMessage -> {
-                        sendTimerSettingsMessage()
-                    }
-
-                    AppBlockerCountRequestMessage -> {
-                        sendAppBlockerCountMessage()
-                    }
-
+                    AppBlockerCountRequestMessage,
+                    TimerSettingsRequestMessage,
                     PongMessage,
                     PingMessage,
                     is AppBlockerCountMessage,
@@ -112,8 +85,6 @@ class WearMessageSyncService : LogTagProvider {
         info { "#onCreate" }
         scope.launch {
             startMessageJob()
-            startSettingsChangeJob()
-            startAppBlockerCountChangeJob()
             startClientConnectJob()
         }
     }

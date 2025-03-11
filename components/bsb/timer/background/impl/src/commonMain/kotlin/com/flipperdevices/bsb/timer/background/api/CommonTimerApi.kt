@@ -4,6 +4,7 @@ import com.flipperdevices.bsb.timer.background.api.delegates.CompositeTimerState
 import com.flipperdevices.bsb.timer.background.api.delegates.TimerLoopJob
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.model.compareAndGetState
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
@@ -47,6 +48,7 @@ class CommonTimerApi(
     }
 
     override fun setTimestampState(state: TimerTimestamp?, broadcast: Boolean) {
+        val state = timerTimestampFlow.value.compareAndGetState(state)
         scope.launch {
             if (state == null) {
                 stopSelf()
