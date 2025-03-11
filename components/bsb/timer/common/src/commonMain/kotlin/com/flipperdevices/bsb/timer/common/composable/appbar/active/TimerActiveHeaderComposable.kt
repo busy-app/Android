@@ -85,7 +85,8 @@ private fun SmallControlChipButton(
         iconSize = 12.dp,
         contentColor = LocalCorruptedPallet.current.transparent.whiteInvert.secondary,
         background = LocalCorruptedPallet.current.transparent.whiteInvert.quaternary,
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         onClick = onClick,
+        spacedBy = 8.dp
     )
 }
