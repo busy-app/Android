@@ -19,50 +19,53 @@ import com.flipperdevices.core.log.info
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class WearMessageSyncService : LogTagProvider {
     override val TAG = "TimerForegroundService"
     private val wearSyncComponent by lazy {
         ComponentHolder.component<WearSyncComponent>()
     }
-
     private val wearDataLayerModule by lazy {
         ComponentHolder.component<WearDataLayerModule>()
     }
+
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
+    private val jobs = mutableListOf<Job>()
+    private val mutex = Mutex()
 
     private suspend fun sendTimerTimestampMessage() {
         val timerTimestamp = wearSyncComponent.timerApi
             .getTimestampState()
             .first()
-        info { "#sendTimerTimestampMessage $timerTimestamp" }
         val message = TimerTimestampMessage(timerTimestamp)
         wearDataLayerModule.wearMessageProducer.produce(message)
     }
 
-    private fun startStateChangeJob(): Job {
+    private fun startAndGetStateChangeJob(): Job {
         return wearSyncComponent.timerApi.getTimestampState()
             .onEach { sendTimerTimestampMessage() }
             .launchIn(scope)
     }
 
-    private fun startClientConnectJob(): Job {
+    private fun startAndGetClientConnectJob(): Job {
         return wearSyncComponent.wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
-            .onEach {
-                info { "#startClientConnectJob got client" }
-                sendTimerTimestampMessage()
-            }
+            .onEach { sendTimerTimestampMessage() }
             .launchIn(scope)
     }
 
-    private fun startMessageJob(): Job {
+    private fun startAndGetMessageJob(): Job {
         return wearDataLayerModule.wearMessageConsumer
             .bMessageFlow
             .onEach { message ->
@@ -96,14 +99,19 @@ class WearMessageSyncService : LogTagProvider {
     fun onCreate() {
         info { "#onCreate" }
         scope.launch {
-            startStateChangeJob()
-            startMessageJob()
-            startClientConnectJob()
+            mutex.withLock {
+                jobs.map { job -> async { job.cancelAndJoin() } }.awaitAll()
+                jobs.add(startAndGetStateChangeJob())
+                jobs.add(startAndGetMessageJob())
+                jobs.add(startAndGetClientConnectJob())
+            }
         }
     }
 
     fun onDestroy() {
         info { "#onDestroy" }
+        jobs.map { job -> job.cancel() }
+        jobs.clear()
         scope.cancel()
     }
 }
