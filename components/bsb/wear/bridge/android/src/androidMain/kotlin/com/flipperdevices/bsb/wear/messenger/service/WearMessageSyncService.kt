@@ -126,14 +126,14 @@ class WearMessageSyncService : LogTagProvider {
     fun onCreate() {
         info { "#onCreate" }
         scope.launch {
-           mutex.withLock {
-               jobs.map { job -> async { job.cancelAndJoin() } }.awaitAll()
-               jobs.add(startMessageJob())
-               jobs.add(startSettingsChangeJob())
-               jobs.add(startAppBlockerCountChangeJob())
-               jobs.add(startClientConnectJob())
-               jobs.add(startStateChangeJob())
-           }
+            mutex.withLock {
+                jobs.map { job -> async { job.cancelAndJoin() } }.awaitAll()
+                jobs.add(startMessageJob())
+                jobs.add(startSettingsChangeJob())
+                jobs.add(startAppBlockerCountChangeJob())
+                jobs.add(startClientConnectJob())
+                jobs.add(startStateChangeJob())
+            }
         }
     }
 
