@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.util.startWith
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsbwearable.finish.composable.FinishScreenComposable
 import com.flipperdevices.core.di.AppGraph
@@ -31,9 +33,10 @@ class FinishScreenDecomposeComponentImpl(
         when (timerState) {
             is ControlledTimerState.Finished -> {
                 FinishScreenComposable(
-                    onReloadClick = {
-                        // todo
-//                        timerApi.startWith()
+                    onReloadClick = onReloadClick@{
+                        val runningState = timerApi.getTimestampState().value as? TimerTimestamp.Running
+                        runningState ?: return@onReloadClick
+                        timerApi.startWith(runningState.settings)
                     },
                     onButtonClick = {
                         timerApi.stop()
