@@ -5,8 +5,6 @@ import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
-import com.flipperdevices.bsb.wear.messenger.model.PingMessage
-import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
@@ -25,7 +23,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlin.text.compareTo
 
 class WearMessageSyncService : LogTagProvider {
     override val TAG = "TimerForegroundService"
@@ -102,8 +99,6 @@ class WearMessageSyncService : LogTagProvider {
                         sendAppBlockerCountMessage()
                     }
 
-                    PongMessage,
-                    PingMessage,
                     is AppBlockerCountMessage,
                     is TimerSettingsMessage -> Unit
 

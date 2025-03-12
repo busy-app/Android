@@ -4,8 +4,6 @@ import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
-import com.flipperdevices.bsb.wear.messenger.model.PingMessage
-import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
@@ -33,8 +31,6 @@ class WearListenerService : WearableMessengerListenerService() {
 
     @Suppress("CyclomaticComplexMethod")
     private fun MessageEvent.toMessage() = when (this.path) {
-        PingMessage.serializer.path -> PingMessage.serializer
-        PongMessage.serializer.path -> PongMessage.serializer
 
         TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
         TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer

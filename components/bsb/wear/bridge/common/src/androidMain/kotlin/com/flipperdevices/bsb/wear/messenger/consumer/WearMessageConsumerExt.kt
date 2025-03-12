@@ -5,8 +5,6 @@ import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
-import com.flipperdevices.bsb.wear.messenger.model.PingMessage
-import com.flipperdevices.bsb.wear.messenger.model.PongMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
@@ -22,8 +20,6 @@ val WearMessageConsumer.bMessageFlow: Flow<WearMessage>
     get() = messagesFlow
         .mapNotNull { decodedWearMessage ->
             when (decodedWearMessage.path) {
-                PingMessage.serializer.path -> PingMessage
-                PongMessage.serializer.path -> PongMessage
                 TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage
                 TimerTimestampMessage.serializer.path -> TimerTimestampMessage(
                     decodedWearMessage.value as TimerTimestamp
