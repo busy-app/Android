@@ -1,0 +1,23 @@
+plugins {
+    id("flipper.multiplatform")
+    id("flipper.anvil-multiplatform")
+    id("flipper.multiplatform-dependencies")
+    id("kotlinx-serialization")
+}
+
+androidDependencies {
+    implementation(projects.components.core.di)
+    implementation(projects.components.core.log)
+    implementation(projects.components.core.ktx)
+    implementation(projects.components.core.data)
+    implementation(projects.components.bsb.preference.api)
+    implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.appblocker.filter.api)
+    api(projects.components.bsb.wear.bridge.api)
+
+    implementation(libs.kotlin.serialization.json)
+    implementation(libs.google.horologist.datalayer)
+    compileOnly(libs.google.horologist.datalayer.watch)
+    compileOnly(libs.google.horologist.datalayer.phone)
+    implementation(libs.kotlin.coroutines.gplayservices)
+}

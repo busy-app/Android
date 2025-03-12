@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.background.api.util
+package com.flipperdevices.bsb.timer.background.util
 
 import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -12,11 +12,11 @@ import kotlin.time.Duration.Companion.seconds
 
 private val logger = TaggedLogger("ControlledTimerStateFactory")
 
-internal enum class IterationType {
+enum class IterationType {
     WORK, REST, LONG_REST, WAIT_AFTER_WORK, WAIT_AFTER_REST
 }
 
-internal sealed interface IterationData {
+sealed interface IterationData {
     val iterationType: IterationType
     val startOffset: Duration
     val duration: Duration
@@ -48,7 +48,7 @@ private fun getIterationTypeByIndex(i: Int): IterationType {
 }
 
 @Suppress("LongMethod", "CyclomaticComplexMethod")
-internal fun TimerSettings.buildIterationList(): List<IterationData> {
+fun TimerSettings.buildIterationList(): List<IterationData> {
     if (!intervalsSettings.isEnabled) {
         return listOf(
             IterationData.Default(
@@ -143,8 +143,8 @@ private val TimerSettings.maxIterationCount: Int
         .count { data -> data.iterationType == IterationType.WORK }
 
 @Suppress("LongMethod")
-internal fun TimerTimestamp?.toState(): ControlledTimerState {
-    if (this == null) {
+fun TimerTimestamp.toState(): ControlledTimerState {
+    if (this !is TimerTimestamp.Running) {
         return ControlledTimerState.NotStarted
     }
     val iterationList = settings.buildIterationList()

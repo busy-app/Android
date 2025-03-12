@@ -33,7 +33,7 @@ class CommonTimerApi(
     private val mutex = Mutex()
     private val timerStateFlow =
         MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
-    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp?>(null)
+    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending.NotStarted)
 
     private var timerJob: TimerLoopJob? = null
     private var stateInvalidateJob: Job? = null
@@ -46,9 +46,9 @@ class CommonTimerApi(
         compositeListeners.removeListener(listener)
     }
 
-    override fun setTimestampState(state: TimerTimestamp?) {
+    override fun setTimestampState(state: TimerTimestamp) {
         scope.launch {
-            if (state == null) {
+            if (state !is TimerTimestamp.Running) {
                 stopSelf()
                 return@launch
             }
@@ -76,7 +76,7 @@ class CommonTimerApi(
         }
     }
 
-    override fun getTimestampState(): StateFlow<TimerTimestamp?> {
+    override fun getTimestampState(): StateFlow<TimerTimestamp> {
         return timerTimestampFlow.asStateFlow()
     }
 
@@ -85,7 +85,7 @@ class CommonTimerApi(
     private suspend fun stopSelf() {
         withLock(mutex, "stop") {
             withContext(NonCancellable) {
-                timerTimestampFlow.value = null
+                timerTimestampFlow.value = TimerTimestamp.Pending.Finished
                 stateInvalidateJob?.cancel()
                 timerJob?.cancelAndJoin()
                 timerJob = null

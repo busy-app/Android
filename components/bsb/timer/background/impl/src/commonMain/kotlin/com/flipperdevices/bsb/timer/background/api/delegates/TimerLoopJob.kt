@@ -1,8 +1,9 @@
 package com.flipperdevices.bsb.timer.background.api.delegates
 
-import com.flipperdevices.bsb.timer.background.api.util.toState
+import com.flipperdevices.bsb.timer.background.flow.TickFlow
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.util.toState
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +28,7 @@ class TimerLoopJob(
     internal fun getInternalState(): StateFlow<ControlledTimerState> = timerStateFlow.asStateFlow()
 
     private val job = TickFlow()
-        .filter { initialTimerTimestamp.pause == null }
+        .filter { initialTimerTimestamp.runningOrNull?.pause == null }
         .onEach {
             withLock(mutex, "update") {
                 timerStateFlow.emit(initialTimerTimestamp.toState())

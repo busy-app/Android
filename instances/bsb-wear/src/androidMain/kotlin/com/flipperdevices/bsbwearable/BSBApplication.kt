@@ -1,6 +1,7 @@
 package com.flipperdevices.bsbwearable
 
 import android.app.Application
+import com.flipperdevices.bsb.wear.messenger.service.WearMessageSyncService
 import com.flipperdevices.bsbwearable.di.WearAppComponent
 import com.flipperdevices.bsbwearable.di.create
 import com.flipperdevices.core.activityholder.CurrentActivityHolder
@@ -24,7 +25,7 @@ internal class BSBApplication : Application() {
     private val applicationScope = CoroutineScope(
         SupervisorJob() + FlipperDispatchers.default
     )
-
+    private val wearMessageSyncService by lazy { WearMessageSyncService() }
     override fun onCreate() {
         super.onCreate()
 
@@ -38,5 +39,11 @@ internal class BSBApplication : Application() {
         )
 
         Timber.plant(Timber.DebugTree())
+        wearMessageSyncService.onCreate()
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        wearMessageSyncService.onDestroy()
     }
 }

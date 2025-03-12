@@ -5,14 +5,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.util.confirmNextStep
+import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsbwearable.autopause.composable.AutoPauseScreenComposable
 import com.flipperdevices.core.di.AppGraph
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.datetime.Instant
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -20,19 +19,11 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class AutoPauseScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
+    private val timerApi: TimerApi,
 ) : AutoPauseScreenDecomposeComponent(componentContext) {
 
-    // todo
     private fun getTimerState(): StateFlow<ControlledTimerState> {
-        return MutableStateFlow(
-            ControlledTimerState.InProgress.Await(
-                timerSettings = TimerSettings(),
-                currentIteration = 0,
-                maxIterations = 1,
-                pausedAt = Instant.DISTANT_PAST,
-                type = ControlledTimerState.InProgress.AwaitType.AFTER_WORK
-            )
-        ).asStateFlow()
+        return timerApi.getState()
     }
 
     @Composable
@@ -42,8 +33,12 @@ class AutoPauseScreenDecomposeComponentImpl(
             is ControlledTimerState.InProgress.Await -> {
                 AutoPauseScreenComposable(
                     state = timerState,
-                    onButtonClick = {},
-                    onStopClick = {},
+                    onButtonClick = {
+                        timerApi.confirmNextStep()
+                    },
+                    onStopClick = {
+                        timerApi.stop()
+                    },
                 )
             }
 

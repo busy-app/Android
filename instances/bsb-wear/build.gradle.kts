@@ -36,6 +36,8 @@ commonDependencies {
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.appblocker.filter.api)
+    implementation(projects.components.bsb.wear.bridge.common)
+    implementation(projects.components.bsb.wear.bridge.wear)
 
     implementation(libs.settings)
     implementation(libs.timber)
@@ -63,9 +65,13 @@ dependencies {
     implementation(libs.compose.wear.material)
     implementation(libs.horologist.layout)
     implementation(libs.decompose)
+    implementation(libs.essenty.lifecycle.coroutines)
     implementation(libs.decompose.composeExtension)
     implementation(libs.kotlin.immutable)
     implementation(libs.kotlin.datetime)
+
+    implementation(libs.google.horologist.datalayer)
+    implementation(libs.google.horologist.datalayer.watch)
 }
 
 dependencies {

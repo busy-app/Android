@@ -5,7 +5,7 @@ androidx-annotation = "1.9.1"
 androidx-core = "1.15.0"
 androidx-browser = "1.8.0"
 androidx-video = "1.2.0" # https://github.com/dsa28s/compose-video/releases
-androidx-media = "1.5.1" # https://developer.android.com/jetpack/androidx/releases/media3
+androidx-media = "1.6.0-beta01" # https://developer.android.com/jetpack/androidx/releases/media3
 androidx-splashscreen = "1.0.1"
 google-services = "4.4.2"
 firebase = "33.10.0"
@@ -14,6 +14,7 @@ constraintlayout = "0.5.1"
 compose-plugin = "1.7.3"
 kotlin = "2.1.10"
 kotlin-coroutines = "1.10.1"
+kotlin-coroutines-gplayservices = "1.10.1"
 kotlin-serialization-runtime = "1.8.0"
 kotlin-datetime = "0.6.2" # https://github.com/Kotlin/kotlinx-datetime/releases
 kotlin-immutable = "0.3.8"
@@ -92,6 +93,7 @@ identity = { module = "com.google.android.libraries.identity.googleid:googleid",
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization-runtime" }
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-datetime" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
+kotlin-coroutines-gplayservices = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlin-coroutines-gplayservices" }
 kotlin-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlin-coroutines" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlin-immutable" }
@@ -107,10 +109,10 @@ compose-haze-materials = { module = "dev.chrisbanes.haze:haze-materials", versio
 
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
-androidx-video = { module = "io.sanghun:compose-video", version.ref = "androidx-video" }
 androidx-media-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media" }
 androidx-media-session = { module = "androidx.media3:media3-session", version.ref = "androidx-media" }
 androidx-media-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media" }
+androidx-media-ui-compose = { module = "androidx.media3:media3-ui-compose", version.ref = "androidx-media" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
 
 settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
@@ -146,7 +148,9 @@ compose-wear-material = { module = "androidx.wear.compose:compose-material", ver
 compose-wear-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "compose-wear" }
 compose-wear-preview = { module = "androidx.wear:wear-tooling-preview", version.ref = "compose-wear-preview" }
 horologist-layout = { module = "com.google.android.horologist:horologist-compose-layout", version.ref = "horologist" }
-
+google-horologist-datalayer = { module = "com.google.android.horologist:horologist-datalayer", version.ref = "horologist" }
+google-horologist-datalayer-watch = { module = "com.google.android.horologist:horologist-datalayer-watch", version.ref = "horologist" }
+google-horologist-datalayer-phone = { module = "com.google.android.horologist:horologist-datalayer-phone", version.ref = "horologist" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

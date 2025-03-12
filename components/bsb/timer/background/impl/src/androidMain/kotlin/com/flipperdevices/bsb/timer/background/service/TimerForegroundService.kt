@@ -79,12 +79,12 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                         delegate.setTimestampState(timerState)
                     } else {
                         error { "Not found timer start" }
-                        delegate.setTimestampState(null)
+                        delegate.setTimestampState(TimerTimestamp.Pending.Finished)
                     }
                 }
 
                 TimerServiceActionEnum.STOP.actionId -> {
-                    delegate.setTimestampState(null)
+                    delegate.setTimestampState(TimerTimestamp.Pending.Finished)
                     stopServiceInternal()
                 }
 

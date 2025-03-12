@@ -103,7 +103,8 @@ private fun Project.suppressOptIn() {
                     "kotlin.RequiresOptIn",
                     "androidx.compose.animation.ExperimentalAnimationApi",
                     "com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
-                    "androidx.compose.foundation.layout.ExperimentalLayoutApi"
+                    "androidx.compose.foundation.layout.ExperimentalLayoutApi",
+                    "com.google.android.horologist.annotations.ExperimentalHorologistApi"
                 )
             }
         }

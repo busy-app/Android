@@ -15,12 +15,14 @@ private val placeholderColor = Color(color = 0x2A2A2A)
 @Suppress("ModifierComposable")
 fun Modifier.placeholder(
     visible: Boolean,
-    shape: Shape = RectangleShape
+    shape: Shape = RectangleShape,
+    highlightColor: Color = placeholderColor,
+    color: Color = placeholderColor.copy(alpha = 0.2f),
 ) = placeholder(
     visible = visible,
-    color = placeholderColor.copy(alpha = 0.2f),
+    color = color,
     shape = shape,
     highlight = PlaceholderHighlight.shimmer(
-        highlightColor = placeholderColor
+        highlightColor = highlightColor
     )
 )

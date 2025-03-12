@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_play
 import busystatusbar.instances.bsb_wear.generated.resources.Res
 import busystatusbar.instances.bsb_wear.generated.resources.bwca_button_start
@@ -25,11 +26,11 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CommonRes
 
-@OptIn(ExperimentalHorologistApi::class)
+@OptIn(ExperimentalHorologistApi::class, ExperimentalWearMaterialApi::class)
 @Composable
 fun WearScreenComposable(
     settings: TimerSettings,
-    blockerState: BlockedAppCount,
+    blockerState: BlockedAppCount?,
     onStartClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

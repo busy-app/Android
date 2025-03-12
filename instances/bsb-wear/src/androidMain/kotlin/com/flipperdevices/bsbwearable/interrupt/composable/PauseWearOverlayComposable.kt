@@ -32,7 +32,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.Res as Comm
 
 @Composable
 internal fun PauseWearOverlayComposable(
-    onStartClick: () -> Unit
+    onResumeClick: () -> Unit
 ) {
     Dialog(
         onDismissRequest = {},
@@ -66,7 +66,7 @@ internal fun PauseWearOverlayComposable(
 
                 BChipButton(
                     modifier = Modifier,
-                    onClick = onStartClick,
+                    onClick = onResumeClick,
                     text = stringResource(Res.string.bwin_start),
                     painter = painterResource(CommonRes.drawable.ic_play),
                     contentColor = LocalCorruptedPallet.current.black.onColor,
@@ -92,7 +92,7 @@ private fun PreviewPauseOverlayComposable() {
                 .background(Color.Red)
         )
         PauseWearOverlayComposable(
-            onStartClick = {}
+            onResumeClick = {}
         )
     }
 }
