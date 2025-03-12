@@ -33,9 +33,10 @@ class SoundTimerListenerImpl(
         timerStateListenerJob = timerApi.getState().onEach { internalState ->
             return@onEach when (internalState) {
                 ControlledTimerState.Finished,
-                ControlledTimerState.NotStarted -> return@onEach
+                ControlledTimerState.NotStarted,
+                is ControlledTimerState.InProgress.Await -> return@onEach
 
-                is ControlledTimerState.InProgress -> {
+                is ControlledTimerState.InProgress.Running -> {
                     soundFromStateProducer.tryPlaySound(internalState)
                 }
             }

@@ -16,10 +16,8 @@ import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 enum class Sound(@RawRes val resId: Int) {
-    REST_COUNTDOWN(R.raw.rest_countdown),
-    REST_FINISHED(R.raw.rest_finished),
-    WORK_COUNTDOWN(R.raw.work_countdown),
-    WORK_FINISHED(R.raw.work_finished)
+    REST_COUNTDOWN(R.raw.rest_alert),
+    WORK_COUNTDOWN(R.raw.work_alert),
 }
 
 @Inject
