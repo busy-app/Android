@@ -4,8 +4,7 @@ androidx-activityCompose = "1.10.1"
 androidx-annotation = "1.9.1"
 androidx-core = "1.15.0"
 androidx-browser = "1.8.0"
-androidx-video = "1.2.0" # https://github.com/dsa28s/compose-video/releases
-androidx-media = "1.5.1" # https://developer.android.com/jetpack/androidx/releases/media3
+androidx-media = "1.6.0-beta01" # https://developer.android.com/jetpack/androidx/releases/media3
 google-services = "4.4.2"
 firebase = "33.10.0"
 appcompat = "1.7.0" # https://developer.android.com/jetpack/androidx/releases/appcompat
@@ -106,10 +105,11 @@ compose-haze-materials = { module = "dev.chrisbanes.haze:haze-materials", versio
 
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 androidx-lifecycle = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
-androidx-video = { module = "io.sanghun:compose-video", version.ref = "androidx-video" }
 androidx-media-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media" }
 androidx-media-session = { module = "androidx.media3:media3-session", version.ref = "androidx-media" }
 androidx-media-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media" }
+androidx-media-ui-compose = { module = "androidx.media3:media3-ui-compose", version.ref = "androidx-media" }
+
 
 
 settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }

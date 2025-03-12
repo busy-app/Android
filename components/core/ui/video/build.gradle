@@ -9,8 +9,8 @@ commonDependencies {
 }
 
 androidDependencies {
-    implementation(libs.androidx.video)
     implementation(libs.androidx.media.exoplayer)
     implementation(libs.androidx.media.session)
     implementation(libs.androidx.media.ui)
+    implementation(libs.androidx.media.ui.compose)
 }
