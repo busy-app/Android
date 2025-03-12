@@ -72,6 +72,7 @@ kotlin {
 
             implementation(projects.components.core.activityholder)
             implementation(libs.appcompat)
+            implementation(libs.androidx.splashscreen)
         }
         commonMain.dependencies {
             implementation(projects.components.core.focusDisplay)

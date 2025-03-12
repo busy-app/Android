@@ -6,6 +6,7 @@ androidx-core = "1.15.0"
 androidx-browser = "1.8.0"
 androidx-video = "1.2.0" # https://github.com/dsa28s/compose-video/releases
 androidx-media = "1.5.1" # https://developer.android.com/jetpack/androidx/releases/media3
+androidx-splashscreen = "1.0.1"
 google-services = "4.4.2"
 firebase = "33.10.0"
 appcompat = "1.7.0" # https://developer.android.com/jetpack/androidx/releases/appcompat
@@ -110,7 +111,7 @@ androidx-video = { module = "io.sanghun:compose-video", version.ref = "androidx-
 androidx-media-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media" }
 androidx-media-session = { module = "androidx.media3:media3-session", version.ref = "androidx-media" }
 androidx-media-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media" }
-
+androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
 
 settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
 settings-observable = { module = "com.russhwolf:multiplatform-settings-make-observable", version.ref = "settings" }
