@@ -17,12 +17,17 @@ import com.flipperdevices.core.log.info
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class WearMessageSyncService : LogTagProvider {
     override val TAG = "TimerForegroundService"
@@ -34,6 +39,8 @@ class WearMessageSyncService : LogTagProvider {
         ComponentHolder.component<WearDataLayerModule>()
     }
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
+    private val jobs = mutableListOf<Job>()
+    private val mutex = Mutex()
 
     private suspend fun sendTimerTimestampMessage() {
         val timerTimestamp = wearSyncComponent.timerApi.getTimestampState().first()
@@ -119,16 +126,21 @@ class WearMessageSyncService : LogTagProvider {
     fun onCreate() {
         info { "#onCreate" }
         scope.launch {
-            startMessageJob()
-            startSettingsChangeJob()
-            startAppBlockerCountChangeJob()
-            startClientConnectJob()
-            startStateChangeJob()
+           mutex.withLock {
+               jobs.map { job -> async { job.cancelAndJoin() } }.awaitAll()
+               jobs.add(startMessageJob())
+               jobs.add(startSettingsChangeJob())
+               jobs.add(startAppBlockerCountChangeJob())
+               jobs.add(startClientConnectJob())
+               jobs.add(startStateChangeJob())
+           }
         }
     }
 
     fun onDestroy() {
         info { "#onDestroy" }
+        jobs.map { job -> job.cancel() }
+        jobs.clear()
         scope.cancel()
     }
 }
