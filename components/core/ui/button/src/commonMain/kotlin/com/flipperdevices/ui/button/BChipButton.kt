@@ -1,5 +1,6 @@
 package com.flipperdevices.ui.button
 
+import BaselineText
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -17,7 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import busystatusbar.components.core.ui.res_preview.generated.resources.Res
 import busystatusbar.components.core.ui.res_preview.generated.resources.ic_preview_pomodoro
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
+import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -141,16 +142,15 @@ fun BChipButton(
                     }
 
                     if (text != null) {
-                        Text(
-                            modifier = Modifier,
+                        BaselineText(
                             text = text,
                             maxLines = 1,
-                            style = rememberPragmaticaTextStyle().copy(
-                                textAlign = TextAlign.Start,
-                                color = animatedContentColor,
-                                fontSize = fontSize,
-                                fontWeight = FontWeight.W500,
-                            )
+                            textAlign = TextAlign.Start,
+                            color = animatedContentColor,
+                            fontSize = fontSize,
+                            lineHeight = fontSize,
+                            fontWeight = FontWeight.W500,
+                            fontFamily = LocalBusyBarFonts.current.pragmatica,
                         )
                     }
                 }
