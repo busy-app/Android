@@ -31,7 +31,6 @@ class WearListenerService : WearableMessengerListenerService() {
 
     @Suppress("CyclomaticComplexMethod")
     private fun MessageEvent.toMessage() = when (this.path) {
-
         TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
         TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer
 
