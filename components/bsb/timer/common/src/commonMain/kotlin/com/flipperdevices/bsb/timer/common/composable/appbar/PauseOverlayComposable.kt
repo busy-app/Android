@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.common.composable.appbar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -38,7 +39,8 @@ fun PauseFullScreenOverlayComposable(
                 contentAlignment = Alignment.Center
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .clickable(onClick = onStartClick),
                     horizontalArrangement = Arrangement.spacedBy(
                         12.dp,
                         Alignment.CenterHorizontally
