@@ -33,14 +33,14 @@ fun PermissionHeaderComposable(
             modifier = Modifier.size(24.dp),
             painter = painterResource(Res.drawable.ic_failed_status),
             contentDescription = null,
-            tint = LocalCorruptedPallet.current.danger.primary
+            tint = LocalCorruptedPallet.current.white.invert
         )
         Text(
             modifier = Modifier.padding(vertical = 12.dp),
             text = stringResource(Res.string.appblocker_permission_title),
             fontSize = 18.sp,
             fontWeight = FontWeight.W500,
-            color = LocalCorruptedPallet.current.danger.primary,
+            color = LocalCorruptedPallet.current.white.invert,
             fontFamily = LocalBusyBarFonts.current.pragmatica
         )
     }

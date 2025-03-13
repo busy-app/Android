@@ -47,7 +47,7 @@ fun PermissionCardButtonComposable(
             text = stringResource(title),
             fontFamily = LocalBusyBarFonts.current.pragmatica,
             fontSize = 18.sp,
-            color = LocalCorruptedPallet.current.white.invert
+            color = LocalCorruptedPallet.current.danger.primary
         )
         Icon(
             painter = painterResource(Res.drawable.ic_next),
