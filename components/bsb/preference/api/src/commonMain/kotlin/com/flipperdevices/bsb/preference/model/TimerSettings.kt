@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.preference.model
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @Serializable
 data class TimerSettings(
@@ -15,12 +16,12 @@ data class TimerSettings(
 
     @Serializable
     data class IntervalsSettings(
-        val work: Duration = 25.minutes,
-        val rest: Duration = 5.minutes,
-        val longRest: Duration = 15.minutes,
+        val work: Duration = 10.seconds,
+        val rest: Duration = 10.seconds,
+        val longRest: Duration = 10.seconds,
         val autoStartWork: Boolean = true,
         val autoStartRest: Boolean = true,
-        val isEnabled: Boolean = false
+        val isEnabled: Boolean = true
     )
 
     val totalIterations: Int
