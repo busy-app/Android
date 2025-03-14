@@ -10,6 +10,7 @@ dependencies {
     implementation(libs.kotlin.ksp.gradle)
     implementation(libs.compose.multiplatform.gradle)
     implementation(libs.compose.gradle)
+    implementation(libs.sentry.gradle)
 
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }

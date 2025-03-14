@@ -20,11 +20,6 @@ object ApkConfig {
             .plus(".")
             .plus(VERSION_CODE)
 
-    val Project.COUNTLY_URL
-        get() = prop("countly_url", "")
-    val Project.COUNTLY_APP_KEY
-        get() = prop("countly_app_key", "171c41398e2459b068869d6409047680896ed062")
-
     val Project.CURRENT_FLAVOR_TYPE: FlavorType
         get() {
             val default = FlavorType.DEV

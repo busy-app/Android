@@ -5,7 +5,7 @@ import androidx.annotation.OptIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,14 +39,19 @@ actual fun BSBVideoPlayer(
     val exoPlayer = rememberPlayer(context)
     var isPlayerReady by remember { mutableStateOf(false) }
 
-    LaunchedEffect(exoPlayer, uri) {
-        exoPlayer.addListener(object : Player.Listener {
+    DisposableEffect(exoPlayer, uri) {
+        val listener = object : Player.Listener {
             override fun onRenderedFirstFrame() {
                 isPlayerReady = true
             }
-        })
+        }
+        exoPlayer.addListener(listener)
         exoPlayer.addMediaItem(MediaItem.fromUri(uri))
         exoPlayer.prepare()
+        onDispose {
+            exoPlayer.removeListener(listener)
+            exoPlayer.release()
+        }
     }
 
     Box(
