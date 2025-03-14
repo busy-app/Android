@@ -43,7 +43,6 @@ class BSBApplication : Application() {
         )
         ComponentHolder.components += appComponent
 
-
         if (BuildKonfig.IS_LOG_ENABLED) {
             Timber.plant(Timber.DebugTree())
         }
