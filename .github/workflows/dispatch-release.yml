@@ -5,7 +5,7 @@ on:
     inputs:
       FLAVOR_TYPE:
         type: choice
-        options: [ "PROD", "DEV" ]
+        options: [ "PROD", "DEV", "PROD_NO_GMS" ]
         description: "Type of flavor"
         required: true
       TRACK:
