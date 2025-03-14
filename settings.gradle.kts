@@ -138,8 +138,12 @@ include(
     ":components:bsb:timer:cards:api",
     ":components:bsb:timer:cards:impl",
 
-    ":components:bsb:wear:bridge:api",
-    ":components:bsb:wear:bridge:common",
-    ":components:bsb:wear:bridge:wear",
-    ":components:bsb:wear:bridge:android",
+    ":components:bsb:wear:bridge:messenger:api",
+    ":components:bsb:wear:bridge:messenger:impl",
+    ":components:bsb:wear:bridge:messenger:common",
+    ":components:bsb:wear:bridge:messenger:noop",
+    ":components:bsb:wear:bridge:syncservice:api",
+    ":components:bsb:wear:bridge:syncservice:wear",
+    ":components:bsb:wear:bridge:syncservice:android",
+    ":components:bsb:wear:bridge:syncservice:noop",
 )

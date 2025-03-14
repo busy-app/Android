@@ -1,7 +1,6 @@
 package com.flipperdevices.bsbwearable
 
 import android.app.Application
-import com.flipperdevices.bsb.wear.messenger.service.WearMessageSyncService
 import com.flipperdevices.bsbwearable.di.WearAppComponent
 import com.flipperdevices.bsbwearable.di.create
 import com.flipperdevices.core.activityholder.CurrentActivityHolder
@@ -14,36 +13,33 @@ import kotlinx.coroutines.SupervisorJob
 import timber.log.Timber
 
 internal class BSBApplication : Application() {
-    private val settings by lazy {
-        SharedPreferencesSettings(
-            baseContext.getSharedPreferences(
-                "settings",
-                MODE_PRIVATE
-            )
+    private val wearAppComponent by lazy {
+        WearAppComponent::class.create(
+            observableSettingsDelegate = SharedPreferencesSettings(
+                baseContext.getSharedPreferences(
+                    "settings",
+                    MODE_PRIVATE
+                )
+            ),
+            scopeDelegate = CoroutineScope(SupervisorJob() + FlipperDispatchers.default),
+            contextDelegate = this@BSBApplication,
+            dependenciesDelegate = AndroidPlatformDependencies(MainActivity::class)
         )
     }
-    private val applicationScope = CoroutineScope(
-        SupervisorJob() + FlipperDispatchers.default
-    )
-    private val wearMessageSyncService by lazy { WearMessageSyncService() }
+
     override fun onCreate() {
         super.onCreate()
 
         CurrentActivityHolder.register(this)
 
-        ComponentHolder.components += WearAppComponent::class.create(
-            settings,
-            applicationScope,
-            this@BSBApplication,
-            AndroidPlatformDependencies(MainActivity::class)
-        )
+        ComponentHolder.components += wearAppComponent
 
         Timber.plant(Timber.DebugTree())
-        wearMessageSyncService.onCreate()
+        wearAppComponent.wearMessageSyncService.onCreate()
     }
 
     override fun onTerminate() {
         super.onTerminate()
-        wearMessageSyncService.onDestroy()
+        wearAppComponent.wearMessageSyncService.onDestroy()
     }
 }

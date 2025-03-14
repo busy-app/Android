@@ -1,3 +1,4 @@
+import com.flipperdevices.buildlogic.ApkConfig.CURRENT_FLAVOR_TYPE
 import com.flipperdevices.buildlogic.ApkConfig.VERSION_NAME
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
@@ -10,9 +11,12 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.googleServices)
     id("flipper.android-app")
     id("flipper.multiplatform-dependencies")
+}
+
+if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvaliable) {
+    apply(plugin = libs.plugins.googleServices.get().pluginId)
 }
 
 android.namespace = "com.flipperdevices.bsb"
@@ -74,11 +78,17 @@ kotlin {
             implementation(libs.appcompat)
             implementation(libs.androidx.splashscreen)
 
-            implementation(projects.components.bsb.wear.bridge.common)
-            implementation(projects.components.bsb.wear.bridge.android)
-
-            implementation(libs.google.horologist.datalayer)
-            implementation(libs.google.horologist.datalayer.phone)
+            implementation(projects.components.bsb.wear.bridge.syncservice.api)
+            if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvaliable) {
+                implementation(projects.components.bsb.wear.bridge.messenger.impl)
+                implementation(projects.components.bsb.wear.bridge.messenger.common)
+                implementation(projects.components.bsb.wear.bridge.syncservice.android)
+                implementation(libs.google.horologist.datalayer)
+                implementation(libs.google.horologist.datalayer.phone)
+            } else {
+                implementation(projects.components.bsb.wear.bridge.syncservice.api)
+                implementation(projects.components.bsb.wear.bridge.syncservice.noop)
+            }
         }
         commonMain.dependencies {
             implementation(projects.components.core.focusDisplay)
@@ -227,7 +237,9 @@ commonDependencies {
 }
 
 dependencies {
-    implementation(platform(libs.firebase.bom))
+    if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvaliable) {
+        implementation(platform(libs.firebase.bom))
+    }
 
     add("kspCommonMainMetadata", libs.kotlin.inject.ksp)
     add("kspAndroid", libs.kotlin.inject.ksp)
