@@ -39,7 +39,7 @@ class BSBApplication : Application() {
             Timber.plant(Timber.DebugTree())
         }
         if (BuildKonfig.IS_SENTRY_ENABLED) {
-            appComponent.shake2ReportApi.init(this)
+            androidAppComponent.shake2ReportApi.init(this)
         }
         androidAppComponent.wearMessageSyncService.onCreate()
     }
