@@ -21,6 +21,8 @@ jobs:
       GP_TRACK: ${{ steps.set_env.outputs.GP_TRACK }}
 
   # ${{ needs.build_number.outputs.BUILD_NUMBER }}
+  # ${{ needs.build_number.outputs.BUILD_NUMBER_WEAR }}
+  # ${{ needs.build_number.outputs.MAJOR_VERSION }}
   build_number:
     name: "Create build number"
     uses: ./.github/workflows/call-build-number.yml
@@ -62,7 +64,7 @@ jobs:
       MAJOR_VERSION: ${{ needs.build_number.outputs.MAJOR_VERSION }}
       MODULE_PATH: ":instances:bsb"
       DIR_PATH: "instances/bsb"
-      IDENTIFIER: "android"
+      IDENTIFIER: "android-nogms"
       FLAVOR_TYPE: PROD_NO_GMS
 
   # ${{ needs.assemble_wearos.outputs.ARTIFACTS_OUTPUT_PATH }}
@@ -78,7 +80,7 @@ jobs:
       KEY_ALIAS_PASSWORD: ${{ secrets.KEY_ALIAS_PASSWORD }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
     with:
-      BUILD_NUMBER: ${{ needs.build_number.outputs.BUILD_NUMBER }}
+      BUILD_NUMBER: ${{ needs.build_number.outputs.BUILD_NUMBER_WEAR }}
       MAJOR_VERSION: ${{ needs.build_number.outputs.MAJOR_VERSION }}
       MODULE_PATH: ":instances:bsb-wear"
       DIR_PATH: "instances/bsb-wear"

@@ -5,22 +5,34 @@ on:
       BUILD_NUMBER:
         description: "Auto-incremented build number"
         value: ${{ jobs.build_number.outputs.BUILD_NUMBER }}
+      BUILD_NUMBER_WEAR:
+        description: "Auto-incremented build number"
+        value: ${{ jobs.build_number.outputs.BUILD_NUMBER_WEAR }}
       MAJOR_VERSION:
         description: "Major version from gradle.properties"
         value: ${{ jobs.build_number.outputs.MAJOR_VERSION }}
 jobs:
   # ${{ jobs.build_number.outputs.BUILD_NUMBER }}
+  # ${{ jobs.build_number.outputs.BUILD_NUMBER_WEAR }}
+  # ${{ jobs.build_number.outputs.MAJOR_VERSION }}
   build_number:
     name: Generate build number
     runs-on: ubuntu-latest
     outputs:
       BUILD_NUMBER: ${{ steps.buildnumber.outputs.build_number }}
+      BUILD_NUMBER_WEAR: ${{ steps.buildnumber.outputs.buildnumber_wear }}
       MAJOR_VERSION: ${{ steps.properties.outputs.flipper-major_version }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       # ${{ steps.buildnumber.outputs.build_number }}
       - name: Generate build number
         id: buildnumber
+        uses: onyxmueller/build-tag-number@4a0c81c9af350d967032d49204c83c38e6b0c8e4 # v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      # ${{ steps.buildnumber_wear.outputs.build_number }}
+      - name: Generate build number for Wear
+        id: buildnumber_wear
         uses: onyxmueller/build-tag-number@4a0c81c9af350d967032d49204c83c38e6b0c8e4 # v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
