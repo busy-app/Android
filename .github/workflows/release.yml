@@ -44,6 +44,25 @@ jobs:
       IDENTIFIER: "android"
       FLAVOR_TYPE: ${{ needs.env.outputs.FLAVOR_TYPE }}
 
+  # ${{ needs.assemble_android_nogms.outputs.ARTIFACTS_OUTPUT_PATH }}
+  # ${{ needs.assemble_android_nogms.outputs.ARTIFACTS_NAME }}
+  assemble_android_nogms:
+    name: "Assemble Android-${{ needs.env.outputs.FLAVOR_TYPE }}"
+    needs: [ env, build_number ]
+    uses: ./.github/workflows/call-assemble-android.yml
+    secrets:
+      SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+      KEY_ALIAS_PASSWORD: ${{ secrets.KEY_ALIAS_PASSWORD }}
+    with:
+      BUILD_NUMBER: ${{ needs.build_number.outputs.BUILD_NUMBER }}
+      MAJOR_VERSION: ${{ needs.build_number.outputs.MAJOR_VERSION }}
+      MODULE_PATH: ":instances:bsb"
+      DIR_PATH: "instances/bsb"
+      IDENTIFIER: "android"
+      FLAVOR_TYPE: PROD_NO_GMS
+
   # ${{ needs.assemble_wearos.outputs.ARTIFACTS_OUTPUT_PATH }}
   # ${{ needs.assemble_wearos.outputs.ARTIFACTS_NAME }}
   assemble_wearos:
@@ -102,7 +121,7 @@ jobs:
   upload_to_github:
     name: Upload to Github Releases
     runs-on: ubuntu-latest
-    needs: [ env, assemble_android, assemble_wearos, build_number, build_desktop ]
+    needs: [ env, assemble_android, assemble_android_nogms, assemble_wearos, build_number, build_desktop ]
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
@@ -123,6 +142,13 @@ jobs:
           name: ${{ needs.assemble_android.outputs.ARTIFACTS_NAME }}
           path: artifacts/download_android
 
+      # ${{ steps.download_android_nogms.outputs.download-path }}
+      - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
+        id: download_android_nogms
+        with:
+          name: ${{ needs.assemble_android_nogms.outputs.ARTIFACTS_NAME }}
+          path: artifacts/download_android_nogms
+
       # ${{ steps.download_wear.outputs.download-path }}
       - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
         id: download_wear
@@ -135,6 +161,7 @@ jobs:
         run: |
           mkdir mappings
           mv "${{ steps.download_android.outputs.download-path }}/${{ needs.assemble_android.outputs.MAPPING_FILE }}" mappings/
+          mv "${{ steps.download_android_nogms.outputs.download-path }}/${{ needs.assemble_android_nogms.outputs.MAPPING_FILE }}" mappings/
           mv "${{ steps.download_wear.outputs.download-path }}/${{ needs.assemble_wearos.outputs.MAPPING_FILE }}" mappings/
           zip -qq -r mappings.zip mappings
           echo "archive=mappings.zip" >> $GITHUB_OUTPUT
@@ -143,6 +170,7 @@ jobs:
         run: |
           mkdir other
           mv ${{ steps.download_android.outputs.download-path }}/${{ needs.assemble_android.outputs.AAB_NAME }} other/
+          mv ${{ steps.download_android_nogms.outputs.download-path }}/${{ needs.assemble_android_nogms.outputs.AAB_NAME }} other/
           mv ${{ steps.download_wear.outputs.download-path }}/${{ needs.assemble_wearos.outputs.AAB_NAME }} other/
           zip -qq -r other.zip other
           echo "archive=other.zip" >> $GITHUB_OUTPUT
@@ -156,6 +184,7 @@ jobs:
             ${{ steps.mappings.outputs.archive }}
             ${{ steps.other.outputs.archive }}
             ${{ steps.download_android.outputs.download-path }}/${{ needs.assemble_android.outputs.APK_NAME }}
+            ${{ steps.download_android_nogms.outputs.download-path }}/${{ needs.assemble_android_nogms.outputs.APK_NAME }}
             ${{ steps.download_wear.outputs.download-path }}/${{ needs.assemble_wearos.outputs.APK_NAME }}
             ${{steps.download_desktop.outputs.download-path}}/*
           tag_name: ${{ needs.build_number.outputs.MAJOR_VERSION }}.${{ needs.build_number.outputs.BUILD_NUMBER }}
