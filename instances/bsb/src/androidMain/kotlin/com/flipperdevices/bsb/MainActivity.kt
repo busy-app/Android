@@ -30,6 +30,10 @@ class MainActivity : ComponentActivity(), LogTagProvider {
 
     private var rootDecomposeComponent: RootDecomposeComponent? = null
 
+    private val appComponent by lazy {
+        ComponentHolder.component<AndroidAppComponent>()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
@@ -46,8 +50,6 @@ class MainActivity : ComponentActivity(), LogTagProvider {
         }
 
         enableEdgeToEdge()
-
-        val appComponent = ComponentHolder.component<AndroidAppComponent>()
 
         val rootComponent = appComponent.rootDecomposeComponentFactory(
             defaultComponentContext(),
@@ -74,7 +76,6 @@ class MainActivity : ComponentActivity(), LogTagProvider {
             return
         }
         lifecycleScope.launch(FlipperDispatchers.default) {
-            val appComponent = ComponentHolder.component<AndroidAppComponent>()
             appComponent.deeplinkParser.parseOrLog(this@MainActivity, intent)?.let {
                 withContext(Dispatchers.Main) {
                     rootDecomposeComponent?.handleDeeplink(it)
@@ -94,7 +95,7 @@ class MainActivity : ComponentActivity(), LogTagProvider {
     }
 
     private fun openAppBlockerScreenIfNeed(intent: Intent) {
-        val parserApi = ComponentHolder.component<AndroidAppComponent>().applicationInfoParserApi
+        val parserApi = appComponent.applicationInfoParserApi
         if (!parserApi.isApplicationInfoAction(intent.action)) {
             return
         }

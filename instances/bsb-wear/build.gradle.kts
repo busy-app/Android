@@ -1,3 +1,5 @@
+import com.flipperdevices.buildlogic.ApkConfig
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -9,7 +11,12 @@ plugins {
     id("flipper.multiplatform-dependencies")
 }
 
-android.namespace = "com.flipperdevices.bsbwearable"
+android {
+    namespace = "com.flipperdevices.bsbwearable"
+    defaultConfig {
+        targetSdk = ApkConfig.TARGET_SDK_WEAROS_VERSION
+    }
+}
 
 kotlin {
     androidTarget()

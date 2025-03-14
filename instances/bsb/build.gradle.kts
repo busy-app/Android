@@ -1,3 +1,4 @@
+import com.flipperdevices.buildlogic.ApkConfig
 import com.flipperdevices.buildlogic.ApkConfig.CURRENT_FLAVOR_TYPE
 import com.flipperdevices.buildlogic.ApkConfig.VERSION_NAME
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
@@ -19,7 +20,12 @@ if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvaliable) {
     apply(plugin = libs.plugins.googleServices.get().pluginId)
 }
 
-android.namespace = "com.flipperdevices.bsb"
+android {
+    namespace = "com.flipperdevices.bsb"
+    defaultConfig {
+        targetSdk = ApkConfig.TARGET_SDK_ANDROID_VERSION
+    }
+}
 
 kotlin {
     wasmJs {

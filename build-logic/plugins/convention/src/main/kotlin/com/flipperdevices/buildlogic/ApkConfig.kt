@@ -9,7 +9,8 @@ object ApkConfig {
 
     const val MIN_SDK_VERSION = 26
 
-    const val TARGET_SDK_VERSION = 35
+    const val TARGET_SDK_ANDROID_VERSION = 35
+    const val TARGET_SDK_WEAROS_VERSION = 34 // Doesn't support target 35 and higher
     const val COMPILE_SDK_VERSION = 35
 
     val Project.VERSION_CODE

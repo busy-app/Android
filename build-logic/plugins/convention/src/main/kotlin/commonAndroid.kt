@@ -30,7 +30,6 @@ private fun BaseExtension.configureDefaultConfig(project: Project) {
     compileSdkVersion(ApkConfig.COMPILE_SDK_VERSION)
     defaultConfig {
         minSdk = ApkConfig.MIN_SDK_VERSION
-        targetSdk = ApkConfig.TARGET_SDK_VERSION
         versionCode = project.VERSION_CODE
         versionName = project.VERSION_NAME
 

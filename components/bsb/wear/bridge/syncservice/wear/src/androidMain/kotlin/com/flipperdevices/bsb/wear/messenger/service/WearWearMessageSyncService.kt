@@ -1,17 +1,20 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
+import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
+import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
-import com.flipperdevices.bsb.wear.messenger.di.WearOsSyncComponent
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
+import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.AppGraph
-import com.flipperdevices.core.di.ComponentHolder
+import com.flipperdevices.core.di.KIProvider
+import com.flipperdevices.core.di.provideDelegate
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.log.info
 import kotlinx.coroutines.CoroutineScope
@@ -35,42 +38,47 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, WearMessageSyncService::class)
-class WearWearMessageSyncService : WearMessageSyncService {
+class WearWearMessageSyncService(
+    timerApiProvider: KIProvider<TimerApi>,
+    wearConnectionApiProvider: KIProvider<WearConnectionApi>,
+    wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
+    wearMessageProducerProvider: KIProvider<WearMessageProducer>
+) : WearMessageSyncService {
     override val TAG = "WearWearMessageSyncService"
-    private val wearSyncComponent by lazy {
-        ComponentHolder.component<WearSyncComponent>()
-    }
-    private val wearOsSyncComponent by lazy {
-        ComponentHolder.component<WearOsSyncComponent>()
-    }
+
+    private val timerApi by timerApiProvider
+    private val wearConnectionApi by wearConnectionApiProvider
+
+    private val wearMessageConsumer by wearMessageConsumerProvider
+    private val wearMessageProducer by wearMessageProducerProvider
 
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
     private val jobs = mutableListOf<Job>()
     private val mutex = Mutex()
 
     private suspend fun sendTimerTimestampMessage() {
-        val timerTimestamp = wearSyncComponent.timerApi
+        val timerTimestamp = timerApi
             .getTimestampState()
             .first()
         val message = TimerTimestampMessage(timerTimestamp)
-        wearOsSyncComponent.wearMessageProducer.produce(message)
+        wearMessageProducer.produce(message)
     }
 
     private fun startAndGetStateChangeJob(): Job {
-        return wearSyncComponent.timerApi.getTimestampState()
+        return timerApi.getTimestampState()
             .onEach { sendTimerTimestampMessage() }
             .launchIn(scope)
     }
 
     private fun startAndGetClientConnectJob(): Job {
-        return wearSyncComponent.wearConnectionApi.statusFlow
+        return wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
             .onEach { sendTimerTimestampMessage() }
             .launchIn(scope)
     }
 
     private fun startAndGetMessageJob(): Job {
-        return wearOsSyncComponent.wearMessageConsumer
+        return wearMessageConsumer
             .bMessageFlow
             .onEach { message ->
                 info { "#startMessageJob got $message" }
@@ -85,13 +93,13 @@ class WearWearMessageSyncService : WearMessageSyncService {
                     is TimerSettingsMessage -> Unit
 
                     is TimerTimestampMessage -> {
-                        val old = wearSyncComponent.timerApi
+                        val old = timerApi
                             .getTimestampState()
                             .first()
                         if (old.lastSync > message.instance.lastSync) {
                             sendTimerTimestampMessage()
                         } else if (old.lastSync < message.instance.lastSync) {
-                            wearSyncComponent.timerApi.setTimestampState(message.instance)
+                            timerApi.setTimestampState(message.instance)
                         }
                     }
                 }
