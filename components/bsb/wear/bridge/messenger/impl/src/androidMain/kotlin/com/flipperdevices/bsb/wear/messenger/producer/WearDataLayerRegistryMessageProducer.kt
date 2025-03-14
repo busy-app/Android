@@ -6,7 +6,6 @@ import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
-import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.data.WearDataLayerRegistry
 import kotlinx.coroutines.async
@@ -25,7 +24,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class WearDataLayerRegistryMessageProducer(
     private val wearDataLayerRegistry: WearDataLayerRegistry,
     private val wearConnectionApi: GmsWearConnectionApi,
-    private val capabilityClient: CapabilityClient
 ) : WearMessageProducer, LogTagProvider {
     override val TAG: String = "WearDataLayerRegistryMessageProducer"
 
