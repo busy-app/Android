@@ -5,6 +5,7 @@ import com.flipperdevices.bsb.di.AndroidAppComponent
 import com.flipperdevices.bsb.di.create
 import com.flipperdevices.bsb.wear.messenger.service.WearMessageSyncService
 import com.flipperdevices.core.activityholder.CurrentActivityHolder
+import com.flipperdevices.core.buildkonfig.BuildKonfig
 import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
@@ -34,14 +35,21 @@ class BSBApplication : Application() {
 
         CurrentActivityHolder.register(this)
 
-        ComponentHolder.components += AndroidAppComponent::class.create(
+        val appComponent = AndroidAppComponent::class.create(
             settings,
             applicationScope,
             this@BSBApplication,
             AndroidPlatformDependencies(MainActivity::class)
         )
+        ComponentHolder.components += appComponent
 
-        Timber.plant(Timber.DebugTree())
+
+        if (BuildKonfig.IS_LOG_ENABLED) {
+            Timber.plant(Timber.DebugTree())
+        }
+        if (BuildKonfig.IS_SENTRY_ENABLED) {
+            appComponent.shake2ReportApi.init(this)
+        }
         wearMessageSyncService.onCreate()
     }
 

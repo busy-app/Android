@@ -1,0 +1,15 @@
+plugins {
+    id("flipper.multiplatform")
+    id("flipper.anvil-multiplatform")
+    id("flipper.multiplatform-dependencies")
+}
+
+androidDependencies {
+    implementation(projects.components.bsb.analytics.shake2report.api)
+
+    implementation(projects.components.core.di)
+    implementation(projects.components.core.log)
+
+    implementation(libs.sentry)
+    implementation(libs.sentry.timber)
+}

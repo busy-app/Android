@@ -53,6 +53,8 @@ wear-interaction-remote = "1.1.0" # https://developer.android.com/jetpack/androi
 compose-wear = "1.4.1" # https://developer.android.com/jetpack/androidx/releases/wear-compose
 compose-wear-preview = "1.0.0" # https://mvnrepository.com/artifact/androidx.wear/wear-tooling-preview
 haze = "1.4.0"
+sentry-runtime = "7.19.0" # https://github.com/getsentry/sentry-java/releases
+sentry-gradle = "4.14.1" # https://github.com/getsentry/sentry-android-gradle-plugin/releases
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -134,6 +136,9 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 atomicflu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicflu" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+sentry = { module = "io.sentry:sentry-android", version.ref = "sentry-runtime" }
+sentry-gradle = { module = "io.sentry:sentry-android-gradle-plugin", version.ref = "sentry-gradle" }
+sentry-timber = { module = "io.sentry:sentry-android-timber", version.ref = "sentry-runtime" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidx-compose" }
 
 accompanist-drawable = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanist" }

@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://2afe43520b2fbd6ed4b0bd41554377aa@sentry.flipp.dev/4" />
+    </application>
+</manifest>

@@ -10,6 +10,8 @@ on:
         required: true
       KEY_ALIAS_PASSWORD:
         required: true
+      SENTRY_AUTH_TOKEN:
+        required: true
     outputs:
       ARTIFACTS_NAME:
         description: "Name of uploaded artifacts"
@@ -78,6 +80,7 @@ jobs:
       - name: Build release
         env:
           ORG_GRADLE_PROJECT_version_code: ${{ inputs.BUILD_NUMBER }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ./gradlew ${{ inputs.MODULE_PATH }}:assembleRelease ${{ inputs.MODULE_PATH }}:bundleRelease
       # ${{ steps.sign_aab.outputs.signedReleaseFile }}
       - name: Sign AAB

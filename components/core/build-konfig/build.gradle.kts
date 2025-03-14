@@ -20,6 +20,7 @@ buildConfig {
     buildConfigField(String::class.java, "PACKAGE", "${android.namespace}")
     buildConfigField(Boolean::class.java, "IS_LOG_ENABLED", CURRENT_FLAVOR_TYPE.isLogEnabled)
     buildConfigField(Boolean::class.java, "IS_SENSITIVE_LOG_ENABLED", CURRENT_FLAVOR_TYPE.isSensitiveLogEnabled)
+    buildConfigField(Boolean::class.java, "IS_SENTRY_ENABLED", CURRENT_FLAVOR_TYPE.isSentryEnabled)
     buildConfigField(
         Boolean::class.java,
         "CRASH_APP_ON_FAILED_CHECKS",

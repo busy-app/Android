@@ -11,19 +11,22 @@ package com.flipperdevices.buildlogic.model
 enum class FlavorType(
     val isLogEnabled: Boolean,
     val crashAppOnFailedChecks: Boolean,
-    val loggingPendingCommands: Boolean,
+    val isSentryEnabled: Boolean,
+    val isSentryPublishMappingsEnabled: Boolean,
     val isSensitiveLogEnabled: Boolean
 ) {
     DEV(
         isLogEnabled = true,
         crashAppOnFailedChecks = true,
-        loggingPendingCommands = true,
+        isSentryEnabled = true,
+        isSentryPublishMappingsEnabled = false,
         isSensitiveLogEnabled = true
     ),
     PROD(
         isLogEnabled = true,
         crashAppOnFailedChecks = false,
-        loggingPendingCommands = true,
+        isSentryEnabled = true,
+        isSentryPublishMappingsEnabled = true,
         isSensitiveLogEnabled = false
     )
 }

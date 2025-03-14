@@ -150,6 +150,7 @@ commonDependencies {
     implementation(projects.components.core.di)
     implementation(projects.components.core.log)
     implementation(projects.components.core.ktx)
+    implementation(projects.components.core.buildKonfig)
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.core.ui.lifecycle)
     implementation(projects.components.bsb.core.theme)
@@ -168,6 +169,9 @@ commonDependencies {
     implementation(projects.components.bsb.inappnotification.impl)
     implementation(projects.components.bsb.sound.api)
     implementation(projects.components.bsb.sound.impl)
+
+    implementation(projects.components.bsb.analytics.shake2report.api)
+    implementation(projects.components.bsb.analytics.shake2report.impl)
 
     implementation(projects.components.bsb.appblocker.core.api)
     implementation(projects.components.bsb.appblocker.core.impl)

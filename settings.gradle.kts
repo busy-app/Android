@@ -77,6 +77,9 @@ include(
     ":components:bsb:sound:impl",
     ":components:bsb:liveactivity:api",
 
+    ":components:bsb:analytics:shake2report:api",
+    ":components:bsb:analytics:shake2report:impl",
+
     ":components:bsb:appblocker:core:api",
     ":components:bsb:appblocker:core:impl",
     ":components:bsb:appblocker:card:api",

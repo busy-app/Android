@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.di
 
 import android.content.Context
+import com.flipperdevices.bsb.analytics.shake2report.api.Shake2ReportApi
 import com.flipperdevices.bsb.appblocker.screen.di.AppBlockerActivityComponent
 import com.flipperdevices.bsb.deeplink.api.DeepLinkParser
 import com.flipperdevices.core.di.AndroidPlatformDependencies
@@ -20,4 +21,5 @@ abstract class AndroidAppComponent(
     @get:Provides val dependencies: AndroidPlatformDependencies
 ) : AppComponent, AppBlockerActivityComponent {
     abstract val deeplinkParser: DeepLinkParser
+    abstract val shake2ReportApi: Shake2ReportApi
 }
