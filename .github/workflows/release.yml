@@ -82,7 +82,7 @@ jobs:
       IDENTIFIER: "android-${{ needs.env.outputs.FLAVOR_TYPE }}"
       FLAVOR_TYPE: ${{ needs.env.outputs.FLAVOR_TYPE }}
       TRACK: ${{ needs.env.outputs.GP_TRACK }}
-      AAB_FILE: ${{ needs.assemble_android.outputs.AAB_FILE }}
+      AAB_NAME: ${{ needs.assemble_android.outputs.AAB_NAME }}
       MAPPING_FILE: ${{ needs.assemble_android.outputs.MAPPING_FILE }}
 
   upload_playstore_wear:
@@ -96,7 +96,7 @@ jobs:
       IDENTIFIER: "android-${{ needs.env.outputs.FLAVOR_TYPE }}"
       FLAVOR_TYPE: ${{ needs.env.outputs.FLAVOR_TYPE }}
       TRACK: ${{ needs.env.outputs.GP_TRACK }}
-      AAB_FILE: ${{ needs.assemble_wearos.outputs.AAB_FILE }}
+      AAB_NAME: ${{ needs.assemble_wearos.outputs.AAB_NAME }}
       MAPPING_FILE: ${{ needs.assemble_wearos.outputs.MAPPING_FILE }}
 
   upload_to_github:

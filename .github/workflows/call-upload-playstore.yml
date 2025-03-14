@@ -5,7 +5,7 @@ on:
       GOOGLE_PLAY_PUBLISHER_JSON:
         required: true
     inputs:
-      AAB_FILE:
+      AAB_NAME:
         required: true
         type: string
       MAPPING_FILE:
@@ -46,6 +46,6 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_PUBLISHER_JSON }}
           packageName: com.flipperdevices.bsb
-          releaseFiles: ${{ steps.download_artifact.outputs.download-path }}/${{ inputs.AAB_FILE }}
+          releaseFiles: ${{ steps.download_artifact.outputs.download-path }}/${{ inputs.AAB_NAME }}
           track: ${{ inputs.TRACK }}
           mappingFile: ${{ steps.download_artifact.outputs.download-path }}/${{ inputs.MAPPING_FILE }}
