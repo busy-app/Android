@@ -56,6 +56,7 @@ jobs:
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
       KEY_ALIAS_PASSWORD: ${{ secrets.KEY_ALIAS_PASSWORD }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
     with:
       BUILD_NUMBER: ${{ needs.build_number.outputs.BUILD_NUMBER }}
       MAJOR_VERSION: ${{ needs.build_number.outputs.MAJOR_VERSION }}

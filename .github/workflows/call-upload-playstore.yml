@@ -45,7 +45,7 @@ jobs:
         uses: r0adkll/upload-google-play@935ef9c68bb393a8e6116b1575626a7f5be3a7fb # v1.1.3
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_PUBLISHER_JSON }}
-          packageName: com.flipperdevices.bsb
+          packageName: com.flipperdevices.busybar
           releaseFiles: ${{ steps.download_artifact.outputs.download-path }}/${{ inputs.AAB_NAME }}
           track: ${{ inputs.TRACK }}
           mappingFile: ${{ steps.download_artifact.outputs.download-path }}/${{ inputs.MAPPING_FILE }}
