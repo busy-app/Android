@@ -34,6 +34,9 @@ val CapabilityClient.nodesFlow: Flow<List<Node>>
             send(capabilityInfo.nodes.filterNotNull())
         } catch (e: ApiException) {
             logger.error(e) { "#nodesFlow could not find wearable api while enabling" }
+        } catch (e: Throwable) {
+            logger.error(e) { "#nodesFlow unhandled exception during enable" }
+        } finally {
             close()
         }
 
@@ -44,6 +47,8 @@ val CapabilityClient.nodesFlow: Flow<List<Node>>
                     removeListener(listener, CAPABILITY_PHONE_APP).await()
                 } catch (e: ApiException) {
                     logger.error(e) { "#nodesFlow could not find wearable api while disabling" }
+                } catch (e: Throwable) {
+                    logger.error(e) { "#nodesFlow unhandled exception during disable" }
                 }
             }
         }

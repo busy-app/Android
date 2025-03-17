@@ -29,12 +29,10 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CommonRes
 
-
 @Composable
 internal fun PauseWearOverlayComposable(
     onResumeClick: () -> Unit
 ) {
-
     BWearDialog(
         onDismissRequest = {},
         properties = DialogProperties(
