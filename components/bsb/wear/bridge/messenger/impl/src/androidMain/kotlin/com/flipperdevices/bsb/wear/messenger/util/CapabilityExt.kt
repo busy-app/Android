@@ -40,7 +40,6 @@ val CapabilityClient.nodesFlow: Flow<List<Node>>
             close()
         }
 
-
         awaitClose {
             runBlocking {
                 try {
