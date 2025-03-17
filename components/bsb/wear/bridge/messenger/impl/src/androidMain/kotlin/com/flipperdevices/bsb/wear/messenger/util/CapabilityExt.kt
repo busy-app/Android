@@ -1,5 +1,8 @@
 package com.flipperdevices.bsb.wear.messenger.util
 
+import com.flipperdevices.core.log.TaggedLogger
+import com.flipperdevices.core.log.error
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Node
 import kotlinx.coroutines.channels.awaitClose
@@ -11,6 +14,8 @@ import kotlinx.coroutines.tasks.await
 
 const val CAPABILITY_PHONE_APP = "verify_remote_flipper_phone_app"
 
+private val logger = TaggedLogger("CapabilityExt")
+
 val CapabilityClient.nodesFlow: Flow<List<Node>>
     get() = callbackFlow {
         val listener = CapabilityClient.OnCapabilityChangedListener { capabilityInfo ->
@@ -20,17 +25,26 @@ val CapabilityClient.nodesFlow: Flow<List<Node>>
             }
         }
 
-        addListener(listener, CAPABILITY_PHONE_APP).await()
+        try {
+            addListener(listener, CAPABILITY_PHONE_APP).await()
+            val capabilityInfo = getCapability(
+                CAPABILITY_PHONE_APP,
+                CapabilityClient.FILTER_ALL
+            ).await()
+            send(capabilityInfo.nodes.filterNotNull())
+        } catch (e: ApiException) {
+            logger.error(e) { "#nodesFlow could not find wearable api while enabling" }
+            close()
+        }
 
-        val capabilityInfo = getCapability(
-            CAPABILITY_PHONE_APP,
-            CapabilityClient.FILTER_ALL
-        ).await()
-        send(capabilityInfo.nodes.filterNotNull())
 
         awaitClose {
             runBlocking {
-                removeListener(listener, CAPABILITY_PHONE_APP).await()
+                try {
+                    removeListener(listener, CAPABILITY_PHONE_APP).await()
+                } catch (e: ApiException) {
+                    logger.error(e) { "#nodesFlow could not find wearable api while disabling" }
+                }
             }
         }
     }
