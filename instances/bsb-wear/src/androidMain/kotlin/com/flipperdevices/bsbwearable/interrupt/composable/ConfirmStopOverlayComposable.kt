@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_stop
 import busystatusbar.instances.bsb_wear.generated.resources.Res
@@ -38,7 +37,7 @@ internal fun ConfirmStopOverlayComposable(
     onStopClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    Dialog(
+    BWearDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             dismissOnBackPress = true,

@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_play
 import busystatusbar.instances.bsb_wear.generated.resources.Res
@@ -30,11 +29,13 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CommonRes
 
+
 @Composable
 internal fun PauseWearOverlayComposable(
     onResumeClick: () -> Unit
 ) {
-    Dialog(
+
+    BWearDialog(
         onDismissRequest = {},
         properties = DialogProperties(
             dismissOnBackPress = false,
@@ -42,7 +43,8 @@ internal fun PauseWearOverlayComposable(
         ),
         content = {
             Column(
-                modifier = Modifier.fillMaxRectangle(),
+                modifier = Modifier
+                    .fillMaxRectangle(),
                 verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.Bottom),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
