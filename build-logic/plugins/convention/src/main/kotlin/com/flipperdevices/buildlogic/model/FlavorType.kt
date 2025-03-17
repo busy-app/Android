@@ -50,4 +50,4 @@ enum class FlavorType(
     )
 }
 
-const val SENTRY_PUBLISH_ENABLED = false // Disable sentry publishing if sentry.flipp.dev is down
+const val SENTRY_PUBLISH_ENABLED = true // Disable sentry publishing if sentry.flipp.dev is down
