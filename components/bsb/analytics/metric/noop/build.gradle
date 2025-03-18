@@ -1,0 +1,11 @@
+plugins {
+    id("flipper.multiplatform")
+    id("flipper.anvil-multiplatform")
+    id("flipper.multiplatform-dependencies")
+}
+
+commonDependencies {
+    implementation(projects.components.core.di)
+
+    implementation(projects.components.bsb.analytics.metric.api)
+}

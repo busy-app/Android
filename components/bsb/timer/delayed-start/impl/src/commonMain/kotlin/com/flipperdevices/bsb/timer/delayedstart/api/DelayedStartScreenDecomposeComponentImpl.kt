@@ -5,6 +5,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
+import com.flipperdevices.bsb.analytics.metric.api.MetricApi
+import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -13,6 +15,7 @@ import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.delayedstart.composable.DelayedStartComposableContent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
+import kotlinx.datetime.Clock
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -23,6 +26,7 @@ class DelayedStartScreenDecomposeComponentImpl(
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
     @Assisted private val typeEndDelay: TypeEndDelay,
+    private val metricApi: MetricApi
 ) : DelayedStartScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
@@ -44,6 +48,13 @@ class DelayedStartScreenDecomposeComponentImpl(
                         timerApi.confirmNextStep()
                     },
                     onFinishClick = {
+                        timerApi.getTimestampState().value
+                            .runningOrNull
+                            ?.let { running -> Clock.System.now().minus(running.start) }
+                            ?.let { timePassed ->
+                                metricApi.reportEvent(BEvent.TimerAborted(timePassed.inWholeMilliseconds))
+                            }
+
                         timerApi.stop()
                     },
                 )
