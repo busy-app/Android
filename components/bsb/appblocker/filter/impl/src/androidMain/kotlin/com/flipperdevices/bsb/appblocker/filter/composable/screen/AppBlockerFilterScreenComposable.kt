@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.sp
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.Res
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_empty
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_filter_loading
+import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.composable.screen.list.AppBlockerFilterListComposable
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
-import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet

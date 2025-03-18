@@ -8,6 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
+import com.flipperdevices.bsb.analytics.metric.api.MetricApi
+import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.composable.TimerBusyComposableScreen
 import com.flipperdevices.bsb.timer.background.api.TimerApi
@@ -23,6 +25,7 @@ import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
+import kotlinx.datetime.Clock
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -37,6 +40,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
         onConfirm: () -> Unit
     ) -> StopSessionSheetDecomposeComponentImpl,
     focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
+    private val metricApi: MetricApi
 ) : ActiveTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
@@ -44,11 +48,19 @@ class ActiveTimerScreenDecomposeComponentImpl(
         focusDisplayDecomposeComponentFactory.invoke(lifecycle = lifecycle)
     }
 
-    private val stopSessionSheetDecomposeComponent =
-        stopSessionSheetDecomposeComponentFactory.invoke(
-            childContext("busy_stopSessionSheetDecomposeComponent"),
-            { timerApi.stop() }
-        )
+    private val stopSessionSheetDecomposeComponent = stopSessionSheetDecomposeComponentFactory.invoke(
+        childContext("busy_stopSessionSheetDecomposeComponent"),
+        {
+            timerApi.getTimestampState().value
+                .runningOrNull
+                ?.let { running -> Clock.System.now().minus(running.start) }
+                ?.let { timePassed ->
+                    metricApi.reportEvent(BEvent.TimerAborted(timePassed.inWholeMilliseconds))
+                }
+
+            timerApi.stop()
+        }
+    )
 
     @Composable
     override fun Render(modifier: Modifier) {
@@ -66,9 +78,23 @@ class ActiveTimerScreenDecomposeComponentImpl(
                         .hazeSource(hazeState),
                     state = state,
                     onSkip = {
+                        timerApi.getTimestampState().value
+                            .runningOrNull
+                            ?.let { running -> Clock.System.now().minus(running.noOffsetStart) }
+                            ?.let { timePassed ->
+                                metricApi.reportEvent(BEvent.TimerSkipped(timePassed.inWholeMilliseconds))
+                            }
+
                         timerApi.skip()
                     },
                     onPauseClick = {
+                        timerApi.getTimestampState().value
+                            .runningOrNull
+                            ?.let { running -> running.pause?.minus(running.noOffsetStart) }
+                            ?.let { timePassed ->
+                                metricApi.reportEvent(BEvent.TimerPaused(timePassed.inWholeMilliseconds))
+                            }
+
                         timerApi.pause()
                     },
                     onBack = {
@@ -77,7 +103,16 @@ class ActiveTimerScreenDecomposeComponentImpl(
                 )
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
-                        onStartClick = { timerApi.resume() }
+                        onStartClick = {
+                            timerApi.getTimestampState().value
+                                .runningOrNull
+                                ?.let { running -> running.pause?.minus(Clock.System.now())?.absoluteValue }
+                                ?.let { timePausedPassed ->
+                                    metricApi.reportEvent(BEvent.TimerResumed(timePausedPassed.inWholeMilliseconds))
+                                }
+
+                            timerApi.resume()
+                        }
                     )
                 }
             }
