@@ -25,6 +25,7 @@ sealed interface TimerTimestamp {
      * [TimerTimestamp] shared synchronization model for timer
      * @param settings timer settings to determine new state
      * @param start time when timer was started
+     * @param noOffsetStart is real time of when timer started. Shouldn't be changed after timer start
      * @param pause time when pause was clicked
      * @param confirmNextStepClick time when next step was clicked after autopause
      * @param lastSync time when sync of this item was received on device
@@ -33,6 +34,7 @@ sealed interface TimerTimestamp {
     data class Running(
         val settings: TimerSettings,
         val start: Instant = Clock.System.now(),
+        val noOffsetStart: Instant = Clock.System.now(),
         val pause: Instant? = null,
         val confirmNextStepClick: Instant = Instant.DISTANT_PAST,
         override val lastSync: Instant

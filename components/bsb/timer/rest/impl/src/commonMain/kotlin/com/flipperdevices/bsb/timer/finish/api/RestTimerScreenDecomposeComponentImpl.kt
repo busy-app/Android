@@ -8,6 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
+import com.flipperdevices.bsb.analytics.metric.api.MetricApi
+import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -24,11 +26,13 @@ import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
+import kotlinx.datetime.Clock
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
+@Suppress("LongParameterList")
 class RestTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val breakType: BreakType,
@@ -39,6 +43,7 @@ class RestTimerScreenDecomposeComponentImpl(
         componentContext: ComponentContext,
         onConfirm: () -> Unit
     ) -> StopSessionSheetDecomposeComponentImpl,
+    private val metricApi: MetricApi
 ) : RestTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
@@ -46,11 +51,19 @@ class RestTimerScreenDecomposeComponentImpl(
         focusDisplayDecomposeComponentFactory.invoke(lifecycle = lifecycle)
     }
 
-    private val stopSessionSheetDecomposeComponent =
-        stopSessionSheetDecomposeComponentFactory.invoke(
-            childContext("rest_stopSessionSheetDecomposeComponent"),
-            { timerApi.stop() }
-        )
+    private val stopSessionSheetDecomposeComponent = stopSessionSheetDecomposeComponentFactory.invoke(
+        childContext("rest_stopSessionSheetDecomposeComponent"),
+        {
+            timerApi.getTimestampState().value
+                .runningOrNull
+                ?.let { running -> Clock.System.now().minus(running.noOffsetStart) }
+                ?.let { timePassed ->
+                    metricApi.reportEvent(BEvent.TimerAborted(timePassed.inWholeMilliseconds))
+                }
+
+            timerApi.stop()
+        }
+    )
 
     @Composable
     override fun Render(modifier: Modifier) {
@@ -64,6 +77,13 @@ class RestTimerScreenDecomposeComponentImpl(
                         .fillMaxSize()
                         .hazeSource(hazeState),
                     onSkip = {
+                        timerApi.getTimestampState().value
+                            .runningOrNull
+                            ?.let { running -> Clock.System.now().minus(running.noOffsetStart) }
+                            ?.let { timePassed ->
+                                metricApi.reportEvent(BEvent.TimerSkipped(timePassed.inWholeMilliseconds))
+                            }
+
                         timerApi.skip()
                     },
                     state = state,
@@ -75,12 +95,28 @@ class RestTimerScreenDecomposeComponentImpl(
                         stopSessionSheetDecomposeComponent.show()
                     },
                     onPauseClick = {
+                        timerApi.getTimestampState().value
+                            .runningOrNull
+                            ?.let { running -> running.pause?.minus(running.noOffsetStart) }
+                            ?.let { timePassed ->
+                                metricApi.reportEvent(BEvent.TimerPaused(timePassed.inWholeMilliseconds))
+                            }
+
                         timerApi.pause()
                     }
                 )
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
-                        onStartClick = { timerApi.resume() }
+                        onStartClick = {
+                            timerApi.getTimestampState().value
+                                .runningOrNull
+                                ?.let { running -> running.pause?.minus(Clock.System.now())?.absoluteValue }
+                                ?.let { timePausedPassed ->
+                                    metricApi.reportEvent(BEvent.TimerResumed(timePausedPassed.inWholeMilliseconds))
+                                }
+
+                            timerApi.resume()
+                        }
                     )
                 }
             }
