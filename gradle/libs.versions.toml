@@ -4,7 +4,6 @@ androidx-activityCompose = "1.10.1"
 androidx-annotation = "1.9.1"
 androidx-core = "1.15.0"
 androidx-browser = "1.8.0"
-androidx-video = "1.2.0" # https://github.com/dsa28s/compose-video/releases
 androidx-media = "1.6.0-beta01" # https://developer.android.com/jetpack/androidx/releases/media3
 androidx-splashscreen = "1.0.1"
 google-services = "4.4.2"

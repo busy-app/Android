@@ -2,7 +2,11 @@ package com.flipperdevices.bsb
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -39,6 +43,8 @@ class MainActivity : ComponentActivity(), LogTagProvider {
 
         super.onCreate(savedInstanceState)
 
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         if (savedInstanceState == null) {
             info {
                 "Create new activity with hashcode: ${this.hashCode()} " + "and intent ${intent.toFullString()}"
@@ -67,6 +73,14 @@ class MainActivity : ComponentActivity(), LogTagProvider {
         if (savedInstanceState == null) {
             openAppBlockerScreenIfNeed(intent)
         }
+
+        val container = window.decorView.findViewById<ViewGroup>(android.R.id.content)
+        container.addView(object : View(this) {
+            override fun onConfigurationChanged(newConfig: Configuration?) {
+                super.onConfigurationChanged(newConfig)
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+        })
     }
 
     override fun onNewIntent(intent: Intent) {

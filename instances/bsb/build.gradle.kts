@@ -79,6 +79,7 @@ kotlin {
             implementation(libs.androidx.splashscreen)
 
             implementation(projects.components.bsb.wear.bridge.syncservice.api)
+
             if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
                 implementation(projects.components.bsb.wear.bridge.messenger.impl)
                 implementation(projects.components.bsb.wear.bridge.messenger.common)
