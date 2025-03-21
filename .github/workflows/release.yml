@@ -148,35 +148,35 @@ jobs:
       - name: Install zip
         uses: montudor/action-zip@a8e75c9faefcd80fac3baf53ef40b9b119d5b702 # v1
 
-      - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         id: download_desktop
         with:
           name: ${{ needs.build_desktop.outputs.ARTIFACTS_NAME }}
           path: artifacts/download_desktop
 
       # ${{ steps.download_android.outputs.download-path }}
-      - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         id: download_android
         with:
           name: ${{ needs.assemble_android_gp.outputs.ARTIFACTS_NAME }}
           path: artifacts/download_android
 
       # ${{ steps.assemble_android_gh_gms.outputs.download-path }}
-      - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         id: download_android_gms
         with:
           name: ${{ needs.assemble_android_gh_gms.outputs.ARTIFACTS_NAME }}
           path: artifacts/download_android_nogms
           
       # ${{ steps.download_android_nogms.outputs.download-path }}
-      - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         id: download_android_nogms
         with:
           name: ${{ needs.assemble_android_gh_nogms.outputs.ARTIFACTS_NAME }}
           path: artifacts/download_android_nogms
 
       # ${{ steps.download_wear.outputs.download-path }}
-      - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         id: download_wear
         with:
           name: ${{ needs.assemble_wearos.outputs.ARTIFACTS_NAME }}

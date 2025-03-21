@@ -29,7 +29,7 @@ jobs:
           ORG_GRADLE_PROJECT_version_code: ${{ inputs.BUILD_NUMBER }}
         run: ./gradlew packageDistributionForCurrentOS
       - name: Upload Artifacts
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ env.ARTIFACT_PREFIX }}-windows
           path: instances/bsb/build/compose/binaries/main/msi/*
@@ -47,7 +47,7 @@ jobs:
           ORG_GRADLE_PROJECT_version_code: ${{ inputs.BUILD_NUMBER }}
         run: ./gradlew packageDistributionForCurrentOS
       - name: Upload Artifacts
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ env.ARTIFACT_PREFIX }}-linux
           path: instances/bsb/build/compose/binaries/main/deb/*
@@ -65,7 +65,7 @@ jobs:
           ORG_GRADLE_PROJECT_version_code: ${{ inputs.BUILD_NUMBER }}
         run: ./gradlew packageDistributionForCurrentOS
       - name: Upload Artifacts
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ env.ARTIFACT_PREFIX }}-macos
           path: instances/bsb/build/compose/binaries/main/dmg/*
@@ -76,14 +76,14 @@ jobs:
     outputs:
       ARTIFACTS_NAME: ${{ env.MERGED_ARTIFACT_NAME }}
     steps:
-      - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4
+      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         id: download
         with:
           path: download
           pattern: ${{ env.ARTIFACT_PREFIX }}-*
           merge-multiple: true
       - name: Upload Artifacts
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ env.MERGED_ARTIFACT_NAME }}
           path: ${{steps.download.outputs.download-path}}
