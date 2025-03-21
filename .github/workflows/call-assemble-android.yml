@@ -114,7 +114,7 @@ jobs:
           cp ${{ steps.sign_aab.outputs.signedReleaseFile }} ${{ env.ARTIFACTS_FOLDER_PATH }}/${{ env.AAB_NAME }}
           cp ${{ inputs.DIR_PATH }}/build/outputs/mapping/release/mapping.txt ${{ env.ARTIFACTS_FOLDER_PATH }}/${{ env.MAPPING_FILE }}
       - name: Upload Artifacts
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
           path: ${{ env.ARTIFACTS_FOLDER_PATH }}
