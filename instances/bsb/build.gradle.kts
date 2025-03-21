@@ -76,7 +76,11 @@ kotlin {
             implementation(projects.components.core.focusDisplay)
 
             implementation(projects.components.bsb.analytics.metric.api)
-            implementation(projects.components.bsb.analytics.metric.noop)
+            if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
+                implementation(projects.components.bsb.analytics.metric.firebase)
+            } else {
+                implementation(projects.components.bsb.analytics.metric.noop)
+            }
 
             implementation(compose.runtime)
             implementation(compose.foundation)
