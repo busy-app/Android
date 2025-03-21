@@ -219,8 +219,4 @@ jobs:
           tag_name: ${{ needs.build_number.outputs.MAJOR_VERSION }}.${{ needs.build_number.outputs.BUILD_NUMBER }}
           name: Busy App ${{ needs.build_number.outputs.MAJOR_VERSION }}.${{ needs.build_number.outputs.BUILD_NUMBER }}
           draft: false
-          body: |
-            Web version: [https://busy-app.github.io/Android/](https://busy-app.github.io/Android/)
-            
-            Doesn't work on Safari until this [PR by Apple](https://github.com/WebKit/WebKit/pull/31854) is released
             

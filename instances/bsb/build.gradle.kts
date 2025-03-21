@@ -3,7 +3,6 @@ import com.flipperdevices.buildlogic.ApkConfig.CURRENT_FLAVOR_TYPE
 import com.flipperdevices.buildlogic.ApkConfig.VERSION_NAME
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -28,24 +27,6 @@ android {
 
 kotlin {
     androidTarget()
-
-    wasmJs {
-        moduleName = "bsb"
-        browser {
-            val projectDirPath = project.projectDir.path
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(projectDirPath)
-                    }
-                }
-            }
-        }
-        binaries.executable()
-    }
-
     jvm("desktop")
 
     val xcFramework = XCFramework()
@@ -126,10 +107,6 @@ kotlin {
             // TODO revert back api(projects.components.bsb.appblocker.api)
             implementation(libs.settings.observable)
         }
-        wasmJsMain.dependencies {
-            implementation(libs.settings.observable)
-            implementation(libs.kotlin.serialization.json)
-        }
     }
 }
 
@@ -172,8 +149,6 @@ commonDependencies {
     implementation(projects.components.bsb.preference.impl)
     implementation(projects.components.bsb.cloud.api)
     implementation(projects.components.bsb.cloud.impl)
-    implementation(projects.components.bsb.dnd.api)
-    implementation(projects.components.bsb.dnd.impl)
     implementation(projects.components.bsb.deeplink.api)
     implementation(projects.components.bsb.deeplink.impl)
     implementation(projects.components.bsb.inappnotification.api)
@@ -252,7 +227,6 @@ dependencies {
     add("kspIosX64", libs.kotlin.inject.ksp)
     add("kspIosSimulatorArm64", libs.kotlin.inject.ksp)
     add("kspDesktop", libs.kotlin.inject.ksp)
-    add("kspWasmJs", libs.kotlin.inject.ksp)
 
     add("kspCommonMainMetadata", libs.kotlin.inject.anvil.ksp)
     add("kspAndroid", libs.kotlin.inject.anvil.ksp)
@@ -260,5 +234,4 @@ dependencies {
     add("kspIosX64", libs.kotlin.inject.anvil.ksp)
     add("kspIosSimulatorArm64", libs.kotlin.inject.anvil.ksp)
     add("kspDesktop", libs.kotlin.inject.anvil.ksp)
-    add("kspWasmJs", libs.kotlin.inject.anvil.ksp)
 }
