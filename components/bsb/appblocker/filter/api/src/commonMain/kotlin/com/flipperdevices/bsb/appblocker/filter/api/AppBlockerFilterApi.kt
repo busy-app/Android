@@ -7,4 +7,6 @@ interface AppBlockerFilterApi {
     suspend fun isBlocked(packageName: String): Boolean
 
     fun getBlockedAppCount(): Flow<BlockedAppCount>
+
+    suspend fun getBlockedCategories(): List<String>
 }

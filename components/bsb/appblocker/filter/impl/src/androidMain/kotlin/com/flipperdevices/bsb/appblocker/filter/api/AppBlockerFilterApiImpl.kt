@@ -3,13 +3,16 @@ package com.flipperdevices.bsb.appblocker.filter.api
 import android.content.Context
 import android.content.pm.PackageManager
 import com.flipperdevices.bsb.appblocker.api.AppBlockerApi
+import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.appblocker.filter.dao.AppFilterDatabase
-import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.fromCategoryId
+import com.flipperdevices.bsb.appblocker.filter.model.list.isAllCategoryContains
 import com.flipperdevices.bsb.appblocker.permission.api.AppBlockerPermissionApi
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -60,6 +63,12 @@ class AppBlockerFilterApiImpl(
             } else {
                 BlockedAppCount.Count(categoryIds.count() + appsCount)
             }
+        }
+    }
+
+    override suspend fun getBlockedCategories(): List<String> {
+        return database.categoryDao().getCheckedCategoryFlow().first().map {
+            AppCategory.fromCategoryId(it.categoryId).name
         }
     }
 }

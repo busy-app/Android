@@ -17,6 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.flipperdevices.bsb.analytics.metric.api.MetricApi
+import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
+import com.flipperdevices.bsb.analytics.metric.api.model.TimerConfigSnapshot
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.preference.api.KrateApi
@@ -36,6 +40,7 @@ import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
+@Suppress("LongParameterList")
 class CardsDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val timerApi: TimerApi,
@@ -43,6 +48,7 @@ class CardsDecomposeComponentImpl(
     private val appBlockerFilterApi: AppBlockerFilterApi,
     timerSetupSheetDecomposeComponentFactory: TimerSetupSheetDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
+    private val metricApi: MetricApi
 ) : CardsDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
     private val timerSetupSheetDecomposeComponent = timerSetupSheetDecomposeComponentFactory(
@@ -80,6 +86,25 @@ class CardsDecomposeComponentImpl(
                 ButtonTimerComposable(
                     state = ButtonTimerState.START,
                     onClick = {
+                        coroutineScope.launch {
+                            timerApi.getTimestampState().value.runningOrNull?.settings?.let { settings ->
+                                metricApi.reportEvent(
+                                    BEvent.TimerStarted(
+                                        TimerConfigSnapshot(
+                                            isIntervalsEnabled = settings.intervalsSettings.isEnabled,
+                                            totalTimeMillis = settings.totalTime.inWholeMilliseconds,
+                                            workTimerMillis = settings.intervalsSettings.work.inWholeMilliseconds,
+                                            restTimeMillis = settings.intervalsSettings.rest.inWholeMilliseconds,
+                                            isBlockingEnabled = when (blockerState) {
+                                                is BlockedAppCount.Count, BlockedAppCount.All -> true
+                                                else -> false
+                                            },
+                                            blockingCategories = appBlockerFilterApi.getBlockedCategories()
+                                        )
+                                    )
+                                )
+                            }
+                        }
                         coroutineScope.launch {
                             val settings = krateApi.timerSettingsKrate.flow.first()
                             timerApi.startWith(settings)

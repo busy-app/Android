@@ -94,6 +94,9 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.components.core.focusDisplay)
 
+            implementation(projects.components.bsb.analytics.metric.api)
+            implementation(projects.components.bsb.analytics.metric.noop)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
