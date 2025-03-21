@@ -171,6 +171,9 @@ commonDependencies {
     implementation(projects.components.bsb.appblocker.stats.api)
     implementation(projects.components.bsb.appblocker.stats.impl)
 
+    implementation(projects.components.bsb.dao.api)
+    implementation(projects.components.bsb.dao.impl)
+
     implementation(projects.components.bsb.auth.main.api)
     implementation(projects.components.bsb.auth.main.impl)
     implementation(projects.components.bsb.auth.login.api)

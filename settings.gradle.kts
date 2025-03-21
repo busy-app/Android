@@ -61,6 +61,10 @@ include(
     ":components:bsb:core:markdown",
     ":components:bsb:core:files",
 
+
+    ":components:bsb:dao:api",
+    ":components:bsb:dao:impl",
+
     ":components:bsb:root:api",
     ":components:bsb:root:impl",
     ":components:bsb:preference:api",

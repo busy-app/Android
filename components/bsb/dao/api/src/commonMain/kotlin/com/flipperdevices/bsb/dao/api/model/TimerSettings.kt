@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.preference.model
+package com.flipperdevices.bsb.dao.api.model
 
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes

@@ -87,12 +87,20 @@ class AppBlockerDaoHelper(
             val blockedCategories = currentState.categories.filter { it.isBlocked }
 
             blockedCategories.forEach {
-                database.categoryDao().insert(DBBlockedCategory(it.categoryEnum.id))
+                database.categoryDao().insert(
+                    DBBlockedCategory(
+                        it.categoryEnum.id
+                    )
+                )
             }
 
             currentState.categories.forEach { category ->
                 category.apps.filter { it.isBlocked }.forEach { app ->
-                    database.appDao().insert(DBBlockedApp(app.packageName))
+                    database.appDao().insert(
+                        DBBlockedApp(
+                            app.packageName
+                        )
+                    )
                 }
             }
         }
