@@ -9,7 +9,14 @@ commonDependencies {
     implementation(projects.components.core.log)
     implementation(projects.components.core.buildKonfig)
 
-
     implementation(libs.kotlin.datetime)
     implementation(libs.kotlin.serialization.json)
+}
+
+kotlin {
+    sourceSets {
+        val nonJvmMain by creating
+        wasmJsMain { dependsOn(nonJvmMain) }
+        iosMain { dependsOn(nonJvmMain) }
+    }
 }
