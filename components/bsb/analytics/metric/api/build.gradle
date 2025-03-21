@@ -12,11 +12,3 @@ commonDependencies {
     implementation(libs.kotlin.datetime)
     implementation(libs.kotlin.serialization.json)
 }
-
-kotlin {
-    sourceSets {
-        val nonJvmMain by creating
-        wasmJsMain { dependsOn(nonJvmMain) }
-        iosMain { dependsOn(nonJvmMain) }
-    }
-}
