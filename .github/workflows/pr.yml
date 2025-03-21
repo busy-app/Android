@@ -67,11 +67,11 @@ jobs:
         with:
           arguments: ${{ matrix.target }}
   build:
-    name: "Test build for Android/WasmJS/Desktop"
+    name: "Test build for Android/Desktop"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [ "assembleDebug", "wasmJsBrowserDistribution", "packageDistributionForCurrentOS" ]
+        target: [ "assembleDebug", "packageDistributionForCurrentOS" ]
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:

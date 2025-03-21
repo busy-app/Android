@@ -67,8 +67,6 @@ include(
     ":components:bsb:preference:impl",
     ":components:bsb:cloud:api",
     ":components:bsb:cloud:impl",
-    ":components:bsb:dnd:api",
-    ":components:bsb:dnd:impl",
     ":components:bsb:deeplink:api",
     ":components:bsb:deeplink:impl",
     ":components:bsb:inappnotification:api",

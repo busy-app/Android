@@ -34,7 +34,3 @@ desktopDependencies {
 iosDependencies {
     implementation(libs.ktor.client.cio)
 }
-
-wasmJsDependencies {
-    implementation(libs.ktor.client.js)
-}

@@ -1,6 +1,5 @@
 import com.android.build.gradle.BaseExtension
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
@@ -21,11 +20,6 @@ android.namespace = "com.flipperdevices.${
 
 @OptIn(ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        browser()
-    }
-
     androidTarget()
     jvm("desktop")
 

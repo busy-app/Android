@@ -1,7 +1,6 @@
 import com.flipperdevices.buildlogic.ApkConfig.VERSION_NAME
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -15,23 +14,6 @@ plugins {
 android.namespace = "com.flipperdevices.videotest"
 
 kotlin {
-    wasmJs {
-        moduleName = "videotest"
-        browser {
-            val projectDirPath = project.projectDir.path
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(projectDirPath)
-                    }
-                }
-            }
-        }
-        binaries.executable()
-    }
-
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
@@ -62,8 +44,6 @@ kotlin {
             implementation(libs.decompose.composeExtension)
 
             implementation(libs.kotlin.coroutines.swing)
-        }
-        wasmJsMain.dependencies {
         }
     }
 }
