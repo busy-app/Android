@@ -80,6 +80,7 @@ include(
     ":components:bsb:analytics:shake2report:api",
     ":components:bsb:analytics:shake2report:impl",
     ":components:bsb:analytics:metric:api",
+    ":components:bsb:analytics:metric:firebase",
     ":components:bsb:analytics:metric:noop",
 
     ":components:bsb:appblocker:core:api",
