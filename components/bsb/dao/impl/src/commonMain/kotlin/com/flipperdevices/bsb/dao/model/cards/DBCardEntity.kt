@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 
 @Entity(
     tableName = "cards",
@@ -13,7 +12,7 @@ import kotlin.time.Duration.Companion.minutes
 data class DBCardEntity(
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    val id: Long? = null,
     @ColumnInfo("name")
     val name: String,
     @ColumnInfo("time_total")
@@ -32,6 +31,4 @@ data class DBCardEntity(
     val isIntervalEnabled: Boolean,
     @ColumnInfo("is_alert_when_interval_ends")
     val alertWhenIntervalEnds: Boolean,
-    @ColumnInfo("is_all_apps_blocked")
-    val isAllAppsBlocked: Boolean = true // TODO
 )

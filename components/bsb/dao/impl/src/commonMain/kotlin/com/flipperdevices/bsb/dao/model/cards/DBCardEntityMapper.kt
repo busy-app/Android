@@ -1,6 +1,6 @@
 package com.flipperdevices.bsb.dao.model.cards
 
-import com.flipperdevices.bsb.dao.api.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
 
 
 object DBCardEntityMapper {

@@ -12,6 +12,7 @@ commonDependencies {
     implementation(projects.components.bsb.dao.api)
 
     implementation(projects.components.core.di)
+    implementation(projects.components.core.ktx)
 
     implementation(libs.room.runtime)
 }

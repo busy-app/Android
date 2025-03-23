@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.dao.api.model
+package com.flipperdevices.bsb.dao.model
 
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TimerSettings(
-    val id: Long = 0,
+    val id: Long? = null,
     val totalTime: Duration = 90.minutes,
     val intervalsSettings: IntervalsSettings = IntervalsSettings(),
     val soundSettings: SoundSettings = SoundSettings(),
-    val name: String = "BUSY"
+    val name: String = "BUSY",
 ) {
     @Serializable
     data class IntervalsSettings(
