@@ -14,6 +14,8 @@ commonDependencies {
     implementation(projects.components.core.di)
     implementation(projects.components.core.ktx)
 
+    implementation(projects.components.bsb.appblocker.permission.api)
+
     implementation(libs.room.runtime)
 }
 

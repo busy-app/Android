@@ -22,5 +22,5 @@ data class DBCardPlatformSpecificSettings(
     @ColumnInfo(name = "card_id")
     val cardId: Long,
     @ColumnInfo(name = "apps_blocked_state")
-    val isAllAppsBlocked: AppBlockerStateConverter,
+    val appBlockerState: AppBlockerState,
 )

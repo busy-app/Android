@@ -4,7 +4,7 @@ import com.flipperdevices.bsb.dao.model.TimerSettings
 import kotlinx.coroutines.flow.Flow
 
 interface TimerSettingsApi {
-    fun getTimerSettingsFlow(): Flow<TimerSettings>
+    fun getTimerSettingsFlow(): Flow<List<TimerSettings>>
 
     suspend fun insert(settings: TimerSettings)
 }

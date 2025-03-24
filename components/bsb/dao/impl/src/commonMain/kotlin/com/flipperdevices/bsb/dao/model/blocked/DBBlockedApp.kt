@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.dao.model.blocked
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.flipperdevices.bsb.dao.model.cards.DBCardEntity
 
@@ -16,6 +17,9 @@ import com.flipperdevices.bsb.dao.model.cards.DBCardEntity
             childColumns = arrayOf("card_id"),
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index("card_id")
     ]
 )
 data class DBBlockedApp(

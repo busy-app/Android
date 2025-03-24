@@ -5,7 +5,7 @@ import com.flipperdevices.bsb.dao.model.BlockedAppDetailedState
 import kotlinx.coroutines.flow.Flow
 
 interface CardAppBlockerApi {
-    fun getBlockedAppCount(cardId: Long): Flow<BlockedAppCount>
+    fun getBlockedAppCount(cardId: Long?): Flow<BlockedAppCount>
 
     suspend fun getBlockedAppDetailedState(cardId: Long): BlockedAppDetailedState
 

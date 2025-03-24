@@ -24,10 +24,13 @@ import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.util.startWith
 import com.flipperdevices.bsb.timer.cards.composable.BusyCardComposable
+import com.flipperdevices.bsb.timer.cards.viewmodel.CardsViewModel
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
 import com.flipperdevices.bsb.timer.setup.api.TimerSetupSheetDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.di.KIProvider
+import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -39,8 +42,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class CardsDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val timerApi: TimerApi,
-    private val krateApi: KrateApi,
-    private val appBlockerFilterApi: AppBlockerFilterApi,
+    private val cardsViewModelFactory: KIProvider<CardsViewModel>,
     timerSetupSheetDecomposeComponentFactory: TimerSetupSheetDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
 ) : CardsDecomposeComponent(componentContext),
@@ -48,6 +50,10 @@ class CardsDecomposeComponentImpl(
     private val timerSetupSheetDecomposeComponent = timerSetupSheetDecomposeComponentFactory(
         componentContext = childContext("timerSetupSheetDecomposeComponent_CardsDecomposeComponentImpl")
     )
+
+    private val cardsViewModel = viewModelWithFactory(null) {
+        cardsViewModelFactory()
+    }
 
     @Composable
     override fun Render(modifier: Modifier) {

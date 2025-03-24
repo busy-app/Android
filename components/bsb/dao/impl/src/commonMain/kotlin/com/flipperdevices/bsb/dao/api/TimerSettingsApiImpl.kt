@@ -8,6 +8,7 @@ import com.flipperdevices.core.di.KIProvider
 import com.flipperdevices.core.di.provideDelegate
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Inject
@@ -20,9 +21,13 @@ class TimerSettingsApiImpl(
 ) : TimerSettingsApi {
     private val dbCardRepository by dbCardRepositoryProvider
 
-    override fun getTimerSettingsFlow(): Flow<TimerSettings> {
-        return dbCardRepository.getTimerSettingsFlow().map {
-            DBCardEntityMapper.map(it)
+    override fun getTimerSettingsFlow(): Flow<List<TimerSettings>> {
+        return dbCardRepository.getTimerSettingsFlow().map { list ->
+            list.map {
+                DBCardEntityMapper.map(it)
+            }.ifEmpty {
+                listOf(TimerSettings())
+            }
         }
     }
 
