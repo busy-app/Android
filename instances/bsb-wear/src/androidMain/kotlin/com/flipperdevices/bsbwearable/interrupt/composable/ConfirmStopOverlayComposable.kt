@@ -33,6 +33,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.Res as Comm
 
 @OptIn(ExperimentalHorologistApi::class)
 @Composable
+@Suppress("LongMethod")
 internal fun ConfirmStopOverlayComposable(
     onStopClick: () -> Unit,
     onDismiss: () -> Unit
@@ -63,6 +64,8 @@ internal fun ConfirmStopOverlayComposable(
                     BChipButton(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = onStopClick,
+                        iconSize = 12.dp,
+                        spacedBy = 8.dp,
                         text = stringResource(Res.string.bwin_stop),
                         painter = painterResource(CommonRes.drawable.ic_stop),
                         contentColor = LocalCorruptedPallet.current.black.onColor,
@@ -84,6 +87,8 @@ internal fun ConfirmStopOverlayComposable(
                         contentColor = LocalCorruptedPallet.current.white.onColor,
                         background = Color(color = 0x1AFFFFFF), // todo
                         fontSize = 16.sp,
+                        iconSize = 12.dp,
+                        spacedBy = 8.dp,
                         contentPadding = PaddingValues(
                             vertical = 10.dp,
                             horizontal = 14.dp
