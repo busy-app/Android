@@ -95,8 +95,8 @@ class WearWearMessageSyncService(
                     ControlledTimerState.Finished -> 10
                     is ControlledTimerState.InProgress.Await -> 10
                     is ControlledTimerState.InProgress.Running.LongRest -> 0
-                    is ControlledTimerState.InProgress.Running.Rest -> 1
-                    is ControlledTimerState.InProgress.Running.Work -> 2
+                    is ControlledTimerState.InProgress.Running.Rest -> 0
+                    is ControlledTimerState.InProgress.Running.Work -> 0
                     ControlledTimerState.NotStarted -> -1
                 }
             }
