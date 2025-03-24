@@ -42,7 +42,6 @@ private fun WearDialogScrim() {
                 )
         )
     }
-
 }
 
 @Composable
