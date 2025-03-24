@@ -13,6 +13,7 @@ commonDependencies {
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.core.focusDisplay)
     implementation(projects.components.bsb.core.theme)
+    implementation(projects.components.bsb.analytics.metric.api)
     implementation(projects.components.core.ui.sheet)
     implementation(projects.components.core.ui.button)
     implementation(projects.components.core.ui.timeline)
@@ -25,4 +26,6 @@ commonDependencies {
     implementation(libs.constraintlayout)
     implementation(libs.composables)
     implementation(libs.compose.haze)
+
+    implementation(libs.kotlin.datetime)
 }

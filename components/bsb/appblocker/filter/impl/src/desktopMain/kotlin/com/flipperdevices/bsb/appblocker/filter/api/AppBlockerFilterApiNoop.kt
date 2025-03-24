@@ -11,4 +11,5 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class AppBlockerFilterApiNoop : AppBlockerFilterApi {
     override suspend fun isBlocked(packageName: String) = false
     override fun getBlockedAppCount() = flowOf(BlockedAppCount.TurnOff)
+    override suspend fun getBlockedCategories(): List<String> = emptyList()
 }

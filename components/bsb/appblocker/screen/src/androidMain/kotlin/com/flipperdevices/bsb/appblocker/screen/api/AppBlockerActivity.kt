@@ -50,7 +50,6 @@ class AppBlockerActivity : ComponentActivity(), LogTagProvider {
             finish()
             return
         }
-
         setContent {
             BusyBarTheme(darkMode = true) {
                 AppBlockerScreenComposable(

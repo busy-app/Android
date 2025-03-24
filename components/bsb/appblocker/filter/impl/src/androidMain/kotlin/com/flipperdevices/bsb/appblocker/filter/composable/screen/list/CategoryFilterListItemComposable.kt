@@ -21,6 +21,8 @@ import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.R
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.appblocker_card_all
 import busystatusbar.components.bsb.appblocker.filter.impl.generated.resources.ic_arrow
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.icon
+import com.flipperdevices.bsb.appblocker.filter.model.list.title
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.core.ktx.common.clickableRipple

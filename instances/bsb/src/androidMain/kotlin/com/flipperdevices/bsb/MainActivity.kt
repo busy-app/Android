@@ -13,6 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.arkivanov.decompose.defaultComponentContext
+import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
 import com.flipperdevices.bsb.appblocker.screen.api.AppBlockerActivity
 import com.flipperdevices.bsb.deeplink.api.DeepLinkParser
 import com.flipperdevices.bsb.deeplink.model.Deeplink
@@ -81,6 +82,7 @@ class MainActivity : ComponentActivity(), LogTagProvider {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             }
         })
+        appComponent.metricApi.reportEvent(BEvent.AppLaunched())
     }
 
     override fun onNewIntent(intent: Intent) {

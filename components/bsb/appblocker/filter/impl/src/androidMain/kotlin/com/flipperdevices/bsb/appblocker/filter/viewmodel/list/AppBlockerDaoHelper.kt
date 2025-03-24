@@ -4,13 +4,14 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.room.withTransaction
+import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.dao.AppFilterDatabase
 import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedApp
 import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
-import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
+import com.flipperdevices.bsb.appblocker.filter.model.list.fromCategoryId
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.verbose
 import kotlinx.collections.immutable.persistentListOf
