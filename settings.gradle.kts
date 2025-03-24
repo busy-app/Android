@@ -42,6 +42,7 @@ include(
     ":components:core:data",
     ":components:core:build-konfig",
     ":components:core:focus-display",
+    ":components:core:vibrator",
     ":components:core:ui:decompose",
     ":components:core:ui:lifecycle",
     ":components:core:ui:appbar",

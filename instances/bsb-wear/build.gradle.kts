@@ -28,6 +28,7 @@ commonDependencies {
     implementation(projects.components.core.log)
     implementation(projects.components.core.ktx)
     implementation(projects.components.core.focusDisplay)
+    implementation(projects.components.core.vibrator)
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.core.ui.lifecycle)
     implementation(projects.components.core.ui.button)
@@ -60,6 +61,9 @@ commonDependencies {
     implementation(kotlin.compose.ui)
     implementation(kotlin.compose.components.resources)
     implementation(kotlin.compose.components.uiToolingPreview)
+
+    implementation(libs.compose.haze)
+    implementation(libs.compose.haze.materials)
 }
 
 dependencies {
