@@ -105,6 +105,7 @@ kotlin {
             implementation(libs.kotlin.coroutines.swing)
 
             implementation(projects.components.core.ui.timeline)
+            implementation(projects.components.bsb.analytics.metric.noop)
         }
         iosMain.dependencies {
             api(libs.decompose)
@@ -113,6 +114,7 @@ kotlin {
 
             // TODO revert back api(projects.components.bsb.appblocker.api)
             implementation(libs.settings.observable)
+            implementation(projects.components.bsb.analytics.metric.noop)
         }
     }
 }
