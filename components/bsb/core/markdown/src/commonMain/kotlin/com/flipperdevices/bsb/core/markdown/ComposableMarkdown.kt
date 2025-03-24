@@ -84,5 +84,6 @@ fun markdownTypography(
         style = defaultTypography.copy(
             textDecoration = TextDecoration.Underline,
         ).toSpanStyle()
-    )
+    ),
+    table = defaultTypography
 )
