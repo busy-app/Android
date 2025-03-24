@@ -5,7 +5,10 @@ import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import com.flipperdevices.bsb.analytics.metric.api.MetricApi
+import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
 import com.flipperdevices.bsb.appblocker.api.ApplicationInfoIntentParserApi
+import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.stats.api.AppBlockerStatsApi
 import com.flipperdevices.bsb.appblocker.stats.model.AppLaunchRecordEvent
 import com.flipperdevices.core.di.AndroidPlatformDependencies
@@ -26,6 +29,7 @@ import com.flipperdevices.bsb.appblocker.model.ApplicationInfo as InternalApplic
 const val APP_LOCK_LOOP_INTERVAL = 500L
 const val APP_LOCK_CHECK_INTERVAL = 1000L
 
+@Suppress("LongParameterList")
 @Inject
 class UsageStatsLooper(
     private val context: Context,
@@ -33,7 +37,8 @@ class UsageStatsLooper(
     private val androidPlatformDependencies: AndroidPlatformDependencies,
     private val packageFilter: PackageFilter,
     private val appBlockerStatsApi: AppBlockerStatsApi,
-    private val parserApi: ApplicationInfoIntentParserApi
+    private val parserApi: ApplicationInfoIntentParserApi,
+    private val metricApi: MetricApi
 ) : LogTagProvider {
     override val TAG = "UsageStatsLooper"
 
@@ -97,6 +102,19 @@ class UsageStatsLooper(
 
         val openCount = appBlockerStatsApi.getBlockAppCount(
             event.packageName
+        )
+
+        metricApi.reportEvent(
+            BEvent.BlockedAppAttempt(
+                appName = applicationInfo.name,
+                appCategory = runCatching {
+                    context.packageManager
+                        .getApplicationInfo(applicationInfo.packageName, PackageManager.GET_META_DATA)
+                        .category
+                        .let { categoryId -> AppCategory.entries.first { entry -> entry.id == categoryId } }
+                }.getOrDefault(AppCategory.CATEGORY_UNDEFINED).name,
+                attemptCount = openCount
+            )
         )
 
         val intent = parserApi.getIntent(

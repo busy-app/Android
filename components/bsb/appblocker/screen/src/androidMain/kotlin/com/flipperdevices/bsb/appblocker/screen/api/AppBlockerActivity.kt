@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.appblocker.screen.api
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,8 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.ui.Modifier
-import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
-import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.screen.composable.AppBlockerScreenComposable
 import com.flipperdevices.bsb.appblocker.screen.di.AppBlockerActivityComponent
 import com.flipperdevices.bsb.appblocker.screen.model.toInternal
@@ -53,24 +50,6 @@ class AppBlockerActivity : ComponentActivity(), LogTagProvider {
             finish()
             return
         }
-
-        val metricApi = ComponentHolder
-            .component<AppBlockerActivityComponent>()
-            .metricApi
-
-        metricApi.reportEvent(
-            BEvent.BlockedAppAttempt(
-                appName = applicationInfo.name,
-                appCategory = runCatching {
-                    packageManager
-                        .getApplicationInfo(applicationInfo.packageName, PackageManager.GET_META_DATA)
-                        .category
-                        .let { categoryId -> AppCategory.entries.first { entry -> entry.id == categoryId } }
-                }.getOrDefault(AppCategory.CATEGORY_UNDEFINED).name,
-                attemptCount = applicationInfo.openCount
-            )
-        )
-
         setContent {
             BusyBarTheme(darkMode = true) {
                 AppBlockerScreenComposable(
