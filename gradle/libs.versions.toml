@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.0"
+agp = "8.9.1"
 androidx-activityCompose = "1.10.1"
 androidx-annotation = "1.9.1"
 androidx-core = "1.15.0"
@@ -23,7 +23,7 @@ kotlin-inject-anvil = "0.1.2"
 decompose = "3.3.0"
 essenty = "2.5.0"
 settings = "1.3.0"
-markdown = "0.31.0" # https://github.com/mikepenz/multiplatform-markdown-renderer/releases
+markdown = "0.32.0" # https://github.com/mikepenz/multiplatform-markdown-renderer/releases
 ktor = "3.1.1" # https://ktor.io/
 timber = "5.0.1" # https://github.com/JakeWharton/timber/releases
 credentials = "1.5.0" # https://developer.android.com/jetpack/androidx/releases/credentials
@@ -51,7 +51,7 @@ wear-interaction-phone = "1.1.0" # https://developer.android.com/jetpack/android
 wear-interaction-remote = "1.1.0" # https://developer.android.com/jetpack/androidx/releases/wear
 compose-wear = "1.4.1" # https://developer.android.com/jetpack/androidx/releases/wear-compose
 compose-wear-preview = "1.0.0" # https://mvnrepository.com/artifact/androidx.wear/wear-tooling-preview
-haze = "1.5.1"
+haze = "1.5.2"
 sentry-runtime = "8.5.0" # https://github.com/getsentry/sentry-java/releases
 sentry-gradle = "5.3.0" # https://github.com/getsentry/sentry-android-gradle-plugin/releases
 
