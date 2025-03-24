@@ -41,6 +41,7 @@ import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 
 @Inject
 @SingleIn(AppGraph::class)
@@ -90,6 +91,7 @@ class WearWearMessageSyncService(
     private fun startAndGetIntervalEndVibratorJob(): Job {
         return timerApi
             .getState()
+            .distinctUntilChangedBy { state -> state::class }
             .map {
                 when (it) {
                     ControlledTimerState.Finished -> 10
@@ -100,7 +102,6 @@ class WearWearMessageSyncService(
                     ControlledTimerState.NotStarted -> -1
                 }
             }
-            .distinctUntilChanged()
             .overflowChunked(2)
             .filter { (was, now) -> now >= was }
             .onEach { vibrator.vibrateOnce(VIBRATOR_DURATION) }
