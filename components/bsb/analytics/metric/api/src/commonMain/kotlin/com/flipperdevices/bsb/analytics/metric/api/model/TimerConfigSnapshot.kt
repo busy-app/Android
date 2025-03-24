@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.analytics.metric.api.model
 
+import com.flipperdevices.bsb.analytics.metric.api.JSerializable
 import kotlinx.serialization.SerialName
 
 data class TimerConfigSnapshot(
@@ -15,4 +16,4 @@ data class TimerConfigSnapshot(
     val isBlockingEnabled: Boolean,
     @SerialName("blocking_categories")
     val blockingCategories: List<String>
-)
+) : JSerializable
