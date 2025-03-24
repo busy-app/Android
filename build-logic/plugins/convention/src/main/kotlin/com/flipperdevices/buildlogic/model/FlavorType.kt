@@ -14,7 +14,8 @@ enum class FlavorType(
     val isSentryEnabled: Boolean,
     val isSentryPublishMappingsEnabled: Boolean,
     val isSensitiveLogEnabled: Boolean,
-    val isGoogleFeatureAvailable: Boolean
+    val isGoogleFeatureAvailable: Boolean,
+    val isTestLoginButtonShown: Boolean
 ) {
     DEV(
         isLogEnabled = true,
@@ -22,31 +23,38 @@ enum class FlavorType(
         isSentryEnabled = true,
         isSentryPublishMappingsEnabled = false,
         isSensitiveLogEnabled = true,
-        isGoogleFeatureAvailable = true
+        isGoogleFeatureAvailable = true,
+        isTestLoginButtonShown = true,
     ),
-    PROD_GP( // For Google Play
+    PROD_GP(
+        // For Google Play
         isLogEnabled = true,
         crashAppOnFailedChecks = false,
         isSentryEnabled = true,
         isSentryPublishMappingsEnabled = SENTRY_PUBLISH_ENABLED,
         isSensitiveLogEnabled = false,
-        isGoogleFeatureAvailable = true
+        isGoogleFeatureAvailable = true,
+        isTestLoginButtonShown = false,
     ),
-    PROD_GH_GMS( // For GitHub, with google services
+    PROD_GH_GMS(
+        // For GitHub, with google services
         isLogEnabled = true,
         crashAppOnFailedChecks = false,
         isSentryEnabled = true,
         isSentryPublishMappingsEnabled = SENTRY_PUBLISH_ENABLED,
         isSensitiveLogEnabled = false,
-        isGoogleFeatureAvailable = true
+        isGoogleFeatureAvailable = true,
+        isTestLoginButtonShown = false,
     ),
-    PROD_GH_NOGMS( // For GitHub, without google services
+    PROD_GH_NOGMS(
+        // For GitHub, without google services
         isLogEnabled = true,
         crashAppOnFailedChecks = false,
         isSentryEnabled = true,
         isSentryPublishMappingsEnabled = SENTRY_PUBLISH_ENABLED,
         isSensitiveLogEnabled = false,
-        isGoogleFeatureAvailable = false
+        isGoogleFeatureAvailable = false,
+        isTestLoginButtonShown = false,
     )
 }
 
