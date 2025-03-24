@@ -1,4 +1,5 @@
 <resources>
     <string name="busycard_appblocker_all">All</string>
     <string name="busycard_appblocker_edit">Edit</string>
+    <string name="tc_open_profile">Open Profile</string>
 </resources>
