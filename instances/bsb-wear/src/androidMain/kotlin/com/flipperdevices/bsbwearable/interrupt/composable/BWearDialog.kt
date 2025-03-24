@@ -15,25 +15,34 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 
 @OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
 private fun WearDialogScrim() {
+    val hazeState = remember { HazeState() }
     Box(
         Modifier
             .fillMaxSize()
-            .background(
-                color = Color(color = 0x000000).copy(alpha = 0.6f) // todo no color in pallet
-            )
-            .hazeEffect(
-                state = remember { HazeState() },
-                style = HazeMaterials.ultraThin(
-                    containerColor = Color.Black.copy(alpha = 0.8f)
+            .hazeSource(hazeState)
+    ) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(
+                    color = Color(color = 0x000000).copy(alpha = 0.6f) // todo no color in pallet
                 )
-            )
-    )
+                .hazeEffect(
+                    state = remember { HazeState() },
+                    style = HazeMaterials.ultraThin(
+                        containerColor = Color.Black.copy(alpha = 0.8f)
+                    )
+                )
+        )
+    }
+
 }
 
 @Composable
