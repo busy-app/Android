@@ -5,6 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlin.time.Duration
 
+internal const val AUTOGENERATE_PRIMARY_ID = 0L
+
 @Entity(
     tableName = "cards",
     indices = []
@@ -12,7 +14,7 @@ import kotlin.time.Duration
 data class DBCardEntity(
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    val id: Long,
     @ColumnInfo("name")
     val name: String,
     @ColumnInfo("time_total")

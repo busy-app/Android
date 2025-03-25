@@ -20,5 +20,5 @@ interface DBCardRepository {
     fun getPlatformSpecificSetting(cardId: Long): Flow<DBCardPlatformSpecificSettings?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdate(settings: DBCardEntity)
+    suspend fun insertOrUpdate(settings: DBCardEntity): Long
 }

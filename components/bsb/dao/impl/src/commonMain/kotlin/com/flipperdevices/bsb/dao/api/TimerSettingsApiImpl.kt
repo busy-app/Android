@@ -38,7 +38,9 @@ class TimerSettingsApiImpl(
         }
     }
 
-    override suspend fun insert(settings: TimerSettings) = withContext(FlipperDispatchers.default) {
+    override suspend fun insert(
+        settings: TimerSettings
+    ): Unit = withContext(FlipperDispatchers.default) {
         database.cardRepository().insertOrUpdate(DBCardEntityMapper.map(settings))
     }
 }
