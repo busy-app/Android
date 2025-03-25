@@ -5,16 +5,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.flipperdevices.bsb.dao.model.AppDatabase
 import com.flipperdevices.core.di.AppGraph
+import me.tatarka.inject.annotations.Inject
 import me.tatarka.inject.annotations.Provides
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
-@ContributesTo(AppGraph::class)
-interface AppDatabaseBuilderModule {
-    @Provides
-    fun provideAppDatabaseBuilder(
-        context: Context,
-    ): RoomDatabase.Builder<AppDatabase> {
+@Inject
+@ContributesBinding(AppGraph::class, AppDatabaseBuilder::class)
+class AppDatabaseBuilderImpl(
+    private val context: Context
+) : AppDatabaseBuilder {
+    override fun provideAppDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,

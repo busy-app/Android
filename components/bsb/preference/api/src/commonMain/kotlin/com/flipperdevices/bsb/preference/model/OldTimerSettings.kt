@@ -5,7 +5,7 @@ import kotlin.time.Duration.Companion.minutes
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TimerSettings(
+data class OldTimerSettings(
     val id: Long = 0,
     val totalTime: Duration = 90.minutes,
     val intervalsSettings: IntervalsSettings = IntervalsSettings(),

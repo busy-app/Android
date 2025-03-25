@@ -16,7 +16,7 @@ import busystatusbar.instances.bsb_wear.generated.resources.bwca_button_start
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.preference.model.OldTimerSettings
 import com.flipperdevices.ui.button.BChipButton
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
@@ -29,7 +29,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.Res as Comm
 @OptIn(ExperimentalHorologistApi::class, ExperimentalWearMaterialApi::class)
 @Composable
 fun WearScreenComposable(
-    settings: TimerSettings,
+    settings: OldTimerSettings,
     blockerState: BlockedAppCount?,
     onStartClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -69,8 +69,8 @@ fun WearScreenComposable(
 private fun PreviewWearScreenComposable() {
     BusyBarThemeInternal {
         WearScreenComposable(
-            settings = TimerSettings(
-                intervalsSettings = TimerSettings.IntervalsSettings(isEnabled = true)
+            settings = OldTimerSettings(
+                intervalsSettings = OldTimerSettings.IntervalsSettings(isEnabled = true)
             ),
             blockerState = BlockedAppCount.Count(count = 24),
             onStartClick = {}

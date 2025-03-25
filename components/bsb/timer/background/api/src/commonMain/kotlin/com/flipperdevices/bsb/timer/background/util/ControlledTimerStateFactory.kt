@@ -1,6 +1,6 @@
 package com.flipperdevices.bsb.timer.background.util
 
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.core.log.TaggedLogger
@@ -76,13 +76,15 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
             }.coerceAtMost(timeLeft)
 
             val isNoTimeForWorkLeft = timeLeft <= iterationTypeDuration &&
-                type == IterationType.WORK
+                    type == IterationType.WORK
 
-            val isNoTimeForShortRestLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.work) &&
-                type == IterationType.REST
+            val isNoTimeForShortRestLeft =
+                timeLeft <= (iterationTypeDuration + intervalsSettings.work) &&
+                        type == IterationType.REST
 
-            val isLongRestNeedMoreTimeThanTimeLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) &&
-                type == IterationType.LONG_REST
+            val isLongRestNeedMoreTimeThanTimeLeft =
+                timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) &&
+                        type == IterationType.LONG_REST
 
             IterationData.Default(
                 startOffset = totalTime - timeLeft,
@@ -110,7 +112,12 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
                     else -> iterationTypeDuration
                 }
             ).run(::add)
-            if (listOf(isNoTimeForWorkLeft, isNoTimeForShortRestLeft, isLongRestNeedMoreTimeThanTimeLeft).all { !it }) {
+            if (listOf(
+                    isNoTimeForWorkLeft,
+                    isNoTimeForShortRestLeft,
+                    isLongRestNeedMoreTimeThanTimeLeft
+                ).all { !it }
+            ) {
                 if (type == IterationType.WORK && !intervalsSettings.autoStartRest) {
                     IterationData.Pending(
                         startOffset = totalTime - timeLeft + iterationTypeDuration,
@@ -118,7 +125,11 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
                         duration = Duration.INFINITE
                     ).run(::add)
                 }
-                if (type in listOf(IterationType.REST, IterationType.LONG_REST) && !intervalsSettings.autoStartWork) {
+                if (type in listOf(
+                        IterationType.REST,
+                        IterationType.LONG_REST
+                    ) && !intervalsSettings.autoStartWork
+                ) {
                     IterationData.Pending(
                         startOffset = totalTime - timeLeft + iterationTypeDuration,
                         iterationType = IterationType.WAIT_AFTER_REST,
@@ -165,7 +176,9 @@ fun TimerTimestamp.toState(): ControlledTimerState {
         }
     val currentIterationData = iterationsDataLeft.firstOrNull()
 
-    if (currentIterationData == null) return ControlledTimerState.Finished
+    if (currentIterationData == null) {
+        return ControlledTimerState.Finished(timerSettings = settings)
+    }
 
     val iterationCountLeft = settings.maxIterationCount
         .minus(iterationsDataLeft.count { data -> data.iterationType == IterationType.WORK })

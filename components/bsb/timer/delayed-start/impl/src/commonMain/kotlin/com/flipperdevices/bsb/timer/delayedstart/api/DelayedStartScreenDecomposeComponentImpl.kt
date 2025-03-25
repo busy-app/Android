@@ -32,7 +32,7 @@ class DelayedStartScreenDecomposeComponentImpl(
         when (val state = state) {
             is ControlledTimerState.InProgress.Running,
             ControlledTimerState.NotStarted,
-            ControlledTimerState.Finished -> Unit
+            is ControlledTimerState.Finished -> Unit
 
             is ControlledTimerState.InProgress.Await -> {
                 DelayedStartComposableContent(

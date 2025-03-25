@@ -69,7 +69,7 @@ class CommonTimerApi(
 
                             is ControlledTimerState.InProgress.Await,
                             is ControlledTimerState.InProgress.Running,
-                            ControlledTimerState.Finished -> Unit
+                            is ControlledTimerState.Finished -> Unit
                         }
                     }.launchIn(scope)
             }

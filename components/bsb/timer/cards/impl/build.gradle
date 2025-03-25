@@ -22,15 +22,16 @@ commonDependencies {
     implementation(projects.components.core.ui.cardFrame)
 
     implementation(projects.components.bsb.root.api)
-    implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.setup.api)
     implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.appblocker.filter.api)
+    implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.dao.api)
 
     implementation(libs.decompose)
     implementation(libs.decompose.composeExtension)
     implementation(libs.essenty.lifecycle.coroutines)
     implementation(libs.composables)
+    implementation(libs.kotlin.immutable)
 }

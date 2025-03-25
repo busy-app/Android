@@ -1,6 +1,6 @@
 package com.flipperdevices.bsb.sound.api
 
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -32,7 +32,7 @@ class SoundTimerListenerImpl(
         runBlocking { soundFromStateProducer.clear() }
         timerStateListenerJob = timerApi.getState().onEach { internalState ->
             return@onEach when (internalState) {
-                ControlledTimerState.Finished,
+                is ControlledTimerState.Finished,
                 ControlledTimerState.NotStarted,
                 is ControlledTimerState.InProgress.Await -> return@onEach
 

@@ -27,7 +27,7 @@ import busystatusbar.instances.bsb_wear.generated.resources.bwca_blocked_all
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.preference.model.OldTimerSettings
 import com.flipperdevices.ui.cardframe.MiniFrameData
 import com.flipperdevices.ui.cardframe.MiniFrameSection
 import com.flipperdevices.ui.timeline.util.toFormattedTime
@@ -59,7 +59,7 @@ private const val DESIGN_CARD_ASPECT_RATIO = 170f / 107f
 @Suppress("LongMethod")
 @Composable
 fun WearCardComposable(
-    settings: TimerSettings,
+    settings: OldTimerSettings,
     blockerState: BlockedAppCount?,
     modifier: Modifier = Modifier
 ) {
@@ -148,15 +148,15 @@ private fun PreviewWearCardComposable() {
         ) {
             items(count = 4) {
                 WearCardComposable(
-                    settings = TimerSettings(
-                        intervalsSettings = TimerSettings.IntervalsSettings(isEnabled = true)
+                    settings = OldTimerSettings(
+                        intervalsSettings = OldTimerSettings.IntervalsSettings(isEnabled = true)
                     ),
                     blockerState = BlockedAppCount.Count(count = 24)
                 )
             }
             items(count = 4) {
                 WearCardComposable(
-                    settings = TimerSettings(),
+                    settings = OldTimerSettings(),
                     blockerState = BlockedAppCount.All
                 )
             }

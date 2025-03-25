@@ -7,6 +7,7 @@ import com.flipperdevices.bsb.dao.model.blocked.DBBlockedApp
 import com.flipperdevices.bsb.dao.model.blocked.DBBlockedAppRepository
 import com.flipperdevices.bsb.dao.model.blocked.DBBlockedCategory
 import com.flipperdevices.bsb.dao.model.cards.DBCardEntity
+import com.flipperdevices.bsb.dao.model.cards.DBCardPlatformSpecificSettings
 import com.flipperdevices.bsb.dao.model.cards.DBCardRepository
 import com.flipperdevices.bsb.dao.model.converters.AppBlockerStateConverter
 import com.flipperdevices.bsb.dao.model.converters.DurationConverter
@@ -16,6 +17,7 @@ import com.flipperdevices.bsb.dao.model.stats.DBBlockedAppStat
 @Database(
     entities = [
         DBCardEntity::class,
+        DBCardPlatformSpecificSettings::class,
         DBBlockedCategory::class,
         DBBlockedApp::class,
         DBBlockedAppStat::class

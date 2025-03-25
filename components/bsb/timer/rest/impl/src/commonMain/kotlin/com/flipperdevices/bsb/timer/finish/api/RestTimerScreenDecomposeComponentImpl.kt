@@ -87,7 +87,7 @@ class RestTimerScreenDecomposeComponentImpl(
 
             is ControlledTimerState.InProgress.Await,
             ControlledTimerState.NotStarted,
-            ControlledTimerState.Finished -> Unit
+            is ControlledTimerState.Finished -> Unit
         }
         stopSessionSheetDecomposeComponent.Render(hazeState)
     }

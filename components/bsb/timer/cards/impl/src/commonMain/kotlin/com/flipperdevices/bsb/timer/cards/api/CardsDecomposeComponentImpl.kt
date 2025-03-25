@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,9 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
-import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
-import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
-import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.util.startWith
@@ -27,12 +23,11 @@ import com.flipperdevices.bsb.timer.cards.composable.BusyCardComposable
 import com.flipperdevices.bsb.timer.cards.viewmodel.CardsViewModel
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
-import com.flipperdevices.bsb.timer.setup.api.TimerSetupSheetDecomposeComponent
+import com.flipperdevices.bsb.timer.setup.api.CardEditSheetDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.di.KIProvider
 import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
@@ -43,11 +38,11 @@ class CardsDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val timerApi: TimerApi,
     private val cardsViewModelFactory: KIProvider<CardsViewModel>,
-    timerSetupSheetDecomposeComponentFactory: TimerSetupSheetDecomposeComponent.Factory,
+    cardEditSheetDecomposeComponentFactory: CardEditSheetDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
 ) : CardsDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
-    private val timerSetupSheetDecomposeComponent = timerSetupSheetDecomposeComponentFactory(
+    private val timerSetupSheetDecomposeComponent = cardEditSheetDecomposeComponentFactory(
         componentContext = childContext("timerSetupSheetDecomposeComponent_CardsDecomposeComponentImpl")
     )
 
@@ -67,28 +62,25 @@ class CardsDecomposeComponentImpl(
                 verticalArrangement = Arrangement.spacedBy(92.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val blockerState by remember {
-                    appBlockerFilterApi.getBlockedAppCount()
-                }.collectAsState(BlockedAppCount.TurnOff)
-                @Suppress("MagicNumber")
-                BusyCardComposable(
-                    background = Color(0xFFE50000), // todo no color in design
-                    name = "BUSY", // todo raw string
-                    settings = krateApi.timerSettingsKrate
-                        .stateFlow(coroutineScope)
-                        .collectAsState()
-                        .value,
-                    blockerState = blockerState,
-                    onClick = {
-                        timerSetupSheetDecomposeComponent.show()
-                    }
-                )
+                val cards by cardsViewModel.getTimerSettingsState().collectAsState()
+
+                cards.forEach { card ->
+                    BusyCardComposable(
+                        background = Color(color = 0xFFE50000),
+                        settings = card.settings,
+                        blockerState = card.blockedAppCount,
+                        onClick = {
+                            timerSetupSheetDecomposeComponent.show(card.settings.id)
+                        }
+                    )
+                }
+
                 ButtonTimerComposable(
                     state = ButtonTimerState.START,
                     onClick = {
                         coroutineScope.launch {
-                            val settings = krateApi.timerSettingsKrate.flow.first()
-                            timerApi.startWith(settings)
+                            val settings = cards.firstOrNull() ?: return@launch
+                            timerApi.startWith(settings.settings)
                         }
                     }
                 )

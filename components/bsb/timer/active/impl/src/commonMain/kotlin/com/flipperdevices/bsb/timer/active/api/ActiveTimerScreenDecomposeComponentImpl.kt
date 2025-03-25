@@ -57,7 +57,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
         when (val state = state) {
             is ControlledTimerState.InProgress.Await,
             ControlledTimerState.NotStarted,
-            ControlledTimerState.Finished -> Unit
+            is ControlledTimerState.Finished -> Unit
 
             is ControlledTimerState.InProgress.Running -> {
                 TimerBusyComposableScreen(

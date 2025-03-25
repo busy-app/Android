@@ -15,13 +15,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_long_rest
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_long_rest_title
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_long_rest_desc
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
 import com.flipperdevices.bsb.timer.setup.composable.common.TitleInfoComposable
 import com.flipperdevices.ui.timeline.HorizontalWheelPicker
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -31,7 +35,7 @@ import kotlin.time.DurationUnit
 fun LongRestSetupModalBottomSheetContent(
     timerSettings: TimerSettings,
     onSaveClick: () -> Unit,
-    onTimeChange: (Duration) -> Unit,
+    onTimeChange: (TimerSettings, Duration) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -41,8 +45,8 @@ fun LongRestSetupModalBottomSheetContent(
     ) {
         TitleInfoComposable(
             modifier = Modifier.padding(horizontal = 16.dp),
-            title = "Long rest",
-            desc = "Pick how long you want to rest after completing 3 work intervals",
+            title = stringResource(Res.string.ts_bs_long_rest_title),
+            desc = stringResource(Res.string.ts_bs_long_rest_desc),
             icon = painterResource(Res.drawable.ic_long_rest)
         )
         BoxWithConstraints(
@@ -65,7 +69,7 @@ fun LongRestSetupModalBottomSheetContent(
                     step = 5.minutes.inWholeMinutes.toInt()
                 ),
                 initialSelectedItem = timerSettings.intervalsSettings.longRest,
-                onItemSelect = { duration -> onTimeChange.invoke(duration) },
+                onItemSelect = { duration -> onTimeChange(timerSettings, duration) },
                 durationUnit = DurationUnit.MINUTES
             )
         }
@@ -80,9 +84,9 @@ fun LongRestSetupModalBottomSheetContent(
 private fun LongRestSetupModalBottomSheetContentPreview() {
     BusyBarThemeInternal {
         LongRestSetupModalBottomSheetContent(
-            timerSettings = TimerSettings(),
+            timerSettings = TimerSettings(TimerSettingsId(id = -1)),
             onSaveClick = {},
-            onTimeChange = {}
+            onTimeChange = { _, _ -> }
         )
     }
 }

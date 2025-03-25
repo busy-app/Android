@@ -1,7 +1,8 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
-import com.flipperdevices.bsb.preference.api.KrateApi
+import com.flipperdevices.bsb.dao.api.TimerSettingsApi
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
@@ -42,7 +43,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @ContributesBinding(AppGraph::class, WearMessageSyncService::class)
 class AndroidWearMessageSyncService(
     timerApiProvider: KIProvider<TimerApi>,
-    krateApiProvider: KIProvider<KrateApi>,
+    timerSettingsApiProvider: KIProvider<TimerSettingsApi>,
     appBlockerFilterApiProvider: KIProvider<AppBlockerFilterApi>,
     wearConnectionApiProvider: KIProvider<WearConnectionApi>,
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
@@ -51,7 +52,7 @@ class AndroidWearMessageSyncService(
     override val TAG = "TimerForegroundService"
 
     private val timerApi by timerApiProvider
-    private val krateApi by krateApiProvider
+    private val timerSettingsApi by timerSettingsApiProvider
     private val appBlockerFilterApi by appBlockerFilterApiProvider
     private val wearConnectionApi by wearConnectionApiProvider
 
@@ -68,8 +69,10 @@ class AndroidWearMessageSyncService(
         wearMessageProducer.produce(message)
     }
 
-    private suspend fun sendTimerSettingsMessage() {
-        val settings = krateApi.timerSettingsKrate.loadAndGet()
+    private suspend fun sendTimerSettingsMessage(
+        timerSettingsList: List<TimerSettings>? = null
+    ) {
+        val settings = timerSettingsList ?: timerSettingsApi.getTimerSettingsListFlow().first()
         val message = TimerSettingsMessage(settings)
         wearMessageProducer.produce(message)
     }
@@ -81,9 +84,10 @@ class AndroidWearMessageSyncService(
     }
 
     private fun startSettingsChangeJob(): Job {
-        return krateApi.timerSettingsKrate.flow
-            .onEach { sendTimerSettingsMessage() }
-            .launchIn(scope)
+        return timerSettingsApi.getTimerSettingsListFlow()
+            .onEach {
+                sendTimerSettingsMessage(timerSettingsList = it)
+            }.launchIn(scope)
     }
 
     private fun startStateChangeJob(): Job {
@@ -100,7 +104,7 @@ class AndroidWearMessageSyncService(
 
     private fun startClientConnectJob(): Job {
         return wearConnectionApi.statusFlow
-            .filterIsInstance<com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi.Status.Connected>()
+            .filterIsInstance<WearConnectionApi.Status.Connected>()
             .onEach {
                 sendTimerTimestampMessage()
                 sendTimerSettingsMessage()

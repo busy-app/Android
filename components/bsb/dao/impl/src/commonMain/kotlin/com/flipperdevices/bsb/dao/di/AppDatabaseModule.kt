@@ -11,7 +11,15 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 interface AppDatabaseModule {
     @Provides
     @SingleIn(AppGraph::class)
-    fun provideAppDatabase(builder: RoomDatabase.Builder<AppDatabase>): AppDatabase {
-        return builder.build()
+    fun provideAppDatabase(builder: AppDatabaseBuilder): AppDatabase {
+        val callback = FirstMigrationCallback()
+
+        val database = builder.provideAppDatabaseBuilder()
+            .addCallback(callback)
+            .build()
+
+        callback.setDAO(database)
+
+        return database
     }
 }

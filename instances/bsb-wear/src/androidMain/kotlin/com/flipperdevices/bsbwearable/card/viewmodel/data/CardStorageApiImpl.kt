@@ -1,7 +1,7 @@
 package com.flipperdevices.bsbwearable.card.viewmodel.data
 
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.preference.model.OldTimerSettings
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
@@ -27,15 +27,15 @@ class CardStorageApiImpl(
 ) : CardStorageApi {
 
     private val settingsMutableFlow = MutableStateFlow(
-        TimerSettings(
-            intervalsSettings = TimerSettings.IntervalsSettings(
+        OldTimerSettings(
+            intervalsSettings = OldTimerSettings.IntervalsSettings(
                 isEnabled = true
             )
         )
     )
     private val appBlockerMutableFlow = MutableStateFlow<BlockedAppCount?>(null)
 
-    override val settingFlow: StateFlow<TimerSettings> = settingsMutableFlow.asStateFlow()
+    override val settingFlow: StateFlow<OldTimerSettings> = settingsMutableFlow.asStateFlow()
     override val appBlockerFlow: StateFlow<BlockedAppCount?> = appBlockerMutableFlow.asStateFlow()
 
     init {

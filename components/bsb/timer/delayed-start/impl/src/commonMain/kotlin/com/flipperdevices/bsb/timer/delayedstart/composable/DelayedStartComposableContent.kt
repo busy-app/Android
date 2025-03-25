@@ -33,7 +33,9 @@ import busystatusbar.components.bsb.timer.delayed_start.impl.generated.resources
 import busystatusbar.components.bsb.timer.delayed_start.impl.generated.resources.tds_title_rest_done
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
+import com.flipperdevices.bsb.preference.model.OldTimerSettings
 import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent
 import com.flipperdevices.ui.button.BChipButton
 import org.jetbrains.compose.resources.painterResource
@@ -175,7 +177,7 @@ private fun DoneRestComposableContentPreview() {
         DelayedStartComposableContent(
             onFinishClick = {},
             onStartClick = {},
-            timerSettings = TimerSettings(),
+            timerSettings = TimerSettings(TimerSettingsId(id = -1)),
             typeEndDelay = DelayedStartScreenDecomposeComponent.TypeEndDelay.REST,
             currentIteration = 1,
             maxIteration = 3
@@ -190,7 +192,7 @@ private fun DoneWorkComposableContentPreview() {
         DelayedStartComposableContent(
             onFinishClick = {},
             onStartClick = {},
-            timerSettings = TimerSettings(),
+            timerSettings = TimerSettings(TimerSettingsId(id = -1)),
             typeEndDelay = DelayedStartScreenDecomposeComponent.TypeEndDelay.WORK,
             currentIteration = 1,
             maxIteration = 3

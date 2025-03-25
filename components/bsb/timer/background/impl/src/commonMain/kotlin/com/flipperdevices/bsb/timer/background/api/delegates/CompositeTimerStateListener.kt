@@ -1,6 +1,6 @@
 package com.flipperdevices.bsb.timer.background.api.delegates
 
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import kotlinx.collections.immutable.minus
 import kotlinx.collections.immutable.plus

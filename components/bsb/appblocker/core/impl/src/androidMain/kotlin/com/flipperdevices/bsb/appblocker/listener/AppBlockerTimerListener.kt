@@ -1,7 +1,7 @@
 package com.flipperdevices.bsb.appblocker.listener
 
 import com.flipperdevices.bsb.appblocker.api.AppBlockerApi
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -10,7 +10,6 @@ import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.info
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -55,7 +54,7 @@ class AppBlockerTimerListener(
                 is ControlledTimerState.InProgress.Running.Work -> internalState.isOnPause.not()
                 is ControlledTimerState.InProgress.Running.LongRest,
                 is ControlledTimerState.InProgress.Running.Rest,
-                ControlledTimerState.Finished,
+                is ControlledTimerState.Finished,
                 ControlledTimerState.NotStarted -> false
             }
         }.stateIn(scope, SharingStarted.WhileSubscribed(), false)

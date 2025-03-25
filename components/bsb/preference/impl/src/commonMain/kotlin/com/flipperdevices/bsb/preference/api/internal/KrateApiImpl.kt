@@ -3,7 +3,7 @@ package com.flipperdevices.bsb.preference.api.internal
 import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.preference.api.PreferenceApi
 import com.flipperdevices.bsb.preference.model.SettingsEnum
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.preference.model.OldTimerSettings
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.serialization.serializer
 import me.tatarka.inject.annotations.Inject
@@ -19,21 +19,21 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class KrateApiImpl(
     private val preferenceApi: PreferenceApi
 ) : KrateApi {
-    override val timerSettingsKrate: FlowMutableKrate<TimerSettings>
+    override val timerSettingsKrate: FlowMutableKrate<OldTimerSettings>
         get() {
-            val factory = ValueFactory { TimerSettings() }
+            val factory = ValueFactory { OldTimerSettings() }
             return DefaultFlowMutableKrate(
                 factory = factory,
                 loader = {
                     preferenceApi.getFlowSerializable(
-                        serializer = serializer<TimerSettings>(),
+                        serializer = serializer<OldTimerSettings>(),
                         key = SettingsEnum.TIMER_SETTINGS,
                         default = factory.create()
                     )
                 },
                 saver = {
                     preferenceApi.setSerializable(
-                        serializer = serializer<TimerSettings>(),
+                        serializer = serializer<OldTimerSettings>(),
                         key = SettingsEnum.TIMER_SETTINGS,
                         value = it
                     )

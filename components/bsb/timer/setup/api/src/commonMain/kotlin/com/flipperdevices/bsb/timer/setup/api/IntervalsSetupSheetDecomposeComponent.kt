@@ -1,6 +1,8 @@
 package com.flipperdevices.bsb.timer.setup.api
 
 import com.arkivanov.decompose.ComponentContext
+import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.ui.decompose.ModalDecomposeComponent
 
 abstract class IntervalsSetupSheetDecomposeComponent(
@@ -16,6 +18,7 @@ abstract class IntervalsSetupSheetDecomposeComponent(
     fun interface Factory {
         operator fun invoke(
             componentContext: ComponentContext,
+            timerSettingsId: TimerSettingsId,
         ): IntervalsSetupSheetDecomposeComponent
     }
 }

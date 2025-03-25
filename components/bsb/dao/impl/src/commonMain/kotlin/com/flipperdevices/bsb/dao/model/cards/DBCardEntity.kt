@@ -12,7 +12,7 @@ import kotlin.time.Duration
 data class DBCardEntity(
     @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
-    val id: Long? = null,
+    val id: Long = 0,
     @ColumnInfo("name")
     val name: String,
     @ColumnInfo("time_total")

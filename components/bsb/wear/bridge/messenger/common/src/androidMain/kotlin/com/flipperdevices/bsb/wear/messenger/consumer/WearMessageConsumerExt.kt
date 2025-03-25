@@ -1,7 +1,7 @@
 package com.flipperdevices.bsb.wear.messenger.consumer
 
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
 import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
@@ -32,7 +32,7 @@ val WearMessageConsumer.bMessageFlow: Flow<WearMessage>
                 AppBlockerCountRequestMessage.serializer.path -> AppBlockerCountRequestMessage
 
                 TimerSettingsMessage.serializer.path -> TimerSettingsMessage(
-                    decodedWearMessage.value as TimerSettings
+                    decodedWearMessage.value as List<TimerSettings>
                 )
 
                 TimerSettingsRequestMessage.serializer.path -> TimerSettingsRequestMessage
