@@ -68,6 +68,7 @@ include(
     ":components:bsb:preference:impl",
     ":components:bsb:cloud:api",
     ":components:bsb:cloud:impl",
+    ":components:bsb:cloud-mock",
     ":components:bsb:deeplink:api",
     ":components:bsb:deeplink:impl",
     ":components:bsb:inappnotification:api",
