@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
+import com.flipperdevices.bsb.cloud.mock.api.BSBMockApi
 import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
@@ -19,6 +20,7 @@ import com.flipperdevices.core.di.KIProvider
 import com.flipperdevices.core.di.provideDelegate
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.log.info
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -26,10 +28,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -46,7 +52,8 @@ class AndroidWearMessageSyncService(
     appBlockerFilterApiProvider: KIProvider<AppBlockerFilterApi>,
     wearConnectionApiProvider: KIProvider<WearConnectionApi>,
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
-    wearMessageProducerProvider: KIProvider<WearMessageProducer>
+    wearMessageProducerProvider: KIProvider<WearMessageProducer>,
+    bsbMockApiProvider: KIProvider<BSBMockApi>
 ) : WearMessageSyncService {
     override val TAG = "TimerForegroundService"
 
@@ -57,6 +64,7 @@ class AndroidWearMessageSyncService(
 
     private val wearMessageConsumer by wearMessageConsumerProvider
     private val wearMessageProducer by wearMessageProducerProvider
+    private val bsbMockApi by bsbMockApiProvider
 
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
     private val jobs = mutableListOf<Job>()
@@ -108,6 +116,18 @@ class AndroidWearMessageSyncService(
             }.launchIn(scope)
     }
 
+    private fun startLongPollingTimerJob(): Job {
+        return flow {
+            while (currentCoroutineContext().isActive) {
+                delay(10.seconds)
+                val timer = bsbMockApi.getTimer().getOrNull() ?: continue
+                emit(timer)
+            }
+        }
+            .onEach { timer -> timerApi.setTimestampState(timer) }
+            .launchIn(scope)
+    }
+
     private fun startMessageJob(): Job {
         return wearMessageConsumer
             .bMessageFlow
@@ -153,6 +173,7 @@ class AndroidWearMessageSyncService(
                 jobs.add(startAppBlockerCountChangeJob())
                 jobs.add(startClientConnectJob())
                 jobs.add(startStateChangeJob())
+                jobs.add(startLongPollingTimerJob())
             }
         }
     }

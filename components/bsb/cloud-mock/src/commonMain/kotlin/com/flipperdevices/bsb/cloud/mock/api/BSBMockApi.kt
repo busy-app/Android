@@ -10,7 +10,7 @@ interface BSBMockApi {
 
     suspend fun getTimer(): Result<TimerTimestamp>
     companion object {
-        const val HOST_URL = "http://0.0.0.0:8080"
+        const val HOST_URL = "http://192.168.0.108:8080"
         const val BASE_URL = "${HOST_URL}/api"
     }
 }

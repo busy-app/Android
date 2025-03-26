@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.timer.background.api
 
+import com.flipperdevices.bsb.cloud.mock.api.BSBMockApi
 import com.flipperdevices.bsb.timer.background.api.delegates.CompositeTimerStateListener
 import com.flipperdevices.bsb.timer.background.api.delegates.TimerLoopJob
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -26,7 +27,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 class CommonTimerApi(
     private val scope: CoroutineScope,
-    private val compositeListeners: CompositeTimerStateListener
+    private val compositeListeners: CompositeTimerStateListener,
+    private val bsbMockApi: BSBMockApi
 ) : TimerApi, LogTagProvider {
     override val TAG = "CommonTimerApi"
 
@@ -47,6 +49,7 @@ class CommonTimerApi(
     }
 
     override fun setTimestampState(state: TimerTimestamp) {
+        scope.launch { bsbMockApi.saveTimer(state) }
         scope.launch {
             if (state !is TimerTimestamp.Running) {
                 stopSelf()

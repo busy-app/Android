@@ -16,6 +16,8 @@ commonDependencies {
     implementation(projects.components.core.log)
     implementation(projects.components.core.data)
 
+    implementation(projects.components.bsb.cloudMock)
+
     implementation(libs.kotlin.coroutines)
     implementation(libs.kotlin.datetime)
     implementation(libs.kotlin.immutable)
