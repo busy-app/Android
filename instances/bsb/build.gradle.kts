@@ -158,6 +158,7 @@ commonDependencies {
     implementation(projects.components.bsb.preference.impl)
     implementation(projects.components.bsb.cloud.api)
     implementation(projects.components.bsb.cloud.impl)
+    implementation(projects.components.bsb.cloudMock)
     implementation(projects.components.bsb.deeplink.api)
     implementation(projects.components.bsb.deeplink.impl)
     implementation(projects.components.bsb.inappnotification.api)

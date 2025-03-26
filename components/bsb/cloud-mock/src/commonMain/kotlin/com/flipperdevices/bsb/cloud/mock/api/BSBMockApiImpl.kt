@@ -22,23 +22,23 @@ class BSBMockApiImpl(
             httpClient.get {
                 url("${BSBMockApi.BASE_URL}/v0/auth")
             }.body<BSBApiUserObject>()
-        }
+        }.onFailure { it.printStackTrace() }
     }
 
     override suspend fun saveTimer(timestamp: TimerTimestamp): Result<TimerTimestamp> {
         return runCatching {
             httpClient.post {
-                url("${BSBMockApi.BASE_URL}/v0/auth")
+                url("${BSBMockApi.BASE_URL}/v0/timer/remember")
                 setBody(timestamp)
             }.body<TimerTimestamp>()
-        }
+        }.onFailure { it.printStackTrace() }
     }
 
     override suspend fun getTimer(): Result<TimerTimestamp> {
         return runCatching {
             httpClient.get {
-                url("${BSBMockApi.BASE_URL}/v0/auth")
+                url("${BSBMockApi.BASE_URL}/v0/timer/read")
             }.body<TimerTimestamp>()
-        }
+        }.onFailure { it.printStackTrace() }
     }
 }
