@@ -15,7 +15,7 @@ enum class FlavorType(
     val isSentryPublishMappingsEnabled: Boolean,
     val isSensitiveLogEnabled: Boolean,
     val isGoogleFeatureAvailable: Boolean,
-    val isTestLoginButtonShown: Boolean
+    val isTestLoginButtonShown: Boolean,
 ) {
     DEV(
         isLogEnabled = true,

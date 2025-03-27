@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.ksp)
     id("flipper.android-app")
     id("flipper.multiplatform-dependencies")
+    id("flipper.gservices")
 }
 
 if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
@@ -78,6 +79,7 @@ kotlin {
             implementation(projects.components.bsb.analytics.metric.api)
             if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
                 implementation(projects.components.bsb.analytics.metric.firebase)
+                implementation(projects.components.bsb.timer.syncservice.firebase)
             } else {
                 implementation(projects.components.bsb.analytics.metric.noop)
             }
@@ -224,7 +226,6 @@ commonDependencies {
     implementation(projects.components.bsb.timer.rest.impl)
     implementation(projects.components.bsb.timer.cards.api)
     implementation(projects.components.bsb.timer.cards.impl)
-    implementation(projects.components.bsb.timer.syncservice.firebase)
 }
 
 dependencies {
