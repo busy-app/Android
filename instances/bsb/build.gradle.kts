@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.ksp)
     id("flipper.android-app")
     id("flipper.multiplatform-dependencies")
+    id("flipper.gservices")
 }
 
 if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
@@ -61,15 +62,18 @@ kotlin {
 
             implementation(projects.components.bsb.wear.bridge.syncservice.api)
 
+            implementation(projects.components.bsb.timer.syncservice.api)
             if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
                 implementation(projects.components.bsb.wear.bridge.messenger.impl)
                 implementation(projects.components.bsb.wear.bridge.messenger.common)
                 implementation(projects.components.bsb.wear.bridge.syncservice.android)
                 implementation(libs.google.horologist.datalayer)
                 implementation(libs.google.horologist.datalayer.phone)
+                implementation(projects.components.bsb.timer.syncservice.firebase)
             } else {
                 implementation(projects.components.bsb.wear.bridge.syncservice.api)
                 implementation(projects.components.bsb.wear.bridge.syncservice.noop)
+                implementation(projects.components.bsb.timer.syncservice.noop)
             }
         }
         commonMain.dependencies {
@@ -106,6 +110,7 @@ kotlin {
 
             implementation(projects.components.core.ui.timeline)
             implementation(projects.components.bsb.analytics.metric.noop)
+            implementation(projects.components.bsb.timer.syncservice.noop)
         }
         iosMain.dependencies {
             api(libs.decompose)
@@ -115,6 +120,7 @@ kotlin {
             // TODO revert back api(projects.components.bsb.appblocker.api)
             implementation(libs.settings.observable)
             implementation(projects.components.bsb.analytics.metric.noop)
+            implementation(projects.components.bsb.timer.syncservice.noop)
         }
     }
 }
@@ -158,6 +164,7 @@ commonDependencies {
     implementation(projects.components.bsb.preference.impl)
     implementation(projects.components.bsb.cloud.api)
     implementation(projects.components.bsb.cloud.impl)
+    implementation(projects.components.bsb.cloudMock)
     implementation(projects.components.bsb.deeplink.api)
     implementation(projects.components.bsb.deeplink.impl)
     implementation(projects.components.bsb.inappnotification.api)

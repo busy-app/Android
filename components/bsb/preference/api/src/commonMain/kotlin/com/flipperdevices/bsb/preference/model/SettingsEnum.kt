@@ -10,4 +10,5 @@ enum class SettingsEnum(val key: String) {
     // https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce/call-your-api-using-the-authorization-code-flow-with-pkce#authorize-user
     AUTH_PENDING_CODE_VERIFIER("auth_pending_code_verifier"),
     TIMER_SETTINGS("timer_settings"),
+    FIREBASE_TOKEN("firebase_token"),
 }

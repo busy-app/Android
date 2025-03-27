@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.timer.cards.api
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import busystatusbar.components.bsb.timer.cards.impl.generated.resources.Res
+import busystatusbar.components.bsb.timer.cards.impl.generated.resources.tc_open_profile
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
@@ -23,20 +26,26 @@ import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
 import com.flipperdevices.bsb.analytics.metric.api.model.TimerConfigSnapshot
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
 import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
+import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.preference.api.KrateApi
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
+import com.flipperdevices.bsb.root.api.LocalRootNavigation
+import com.flipperdevices.bsb.root.model.RootNavigationConfig
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.util.startWith
 import com.flipperdevices.bsb.timer.cards.composable.BusyCardComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
 import com.flipperdevices.bsb.timer.setup.api.TimerSetupSheetDecomposeComponent
+import com.flipperdevices.core.buildkonfig.BuildKonfig
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
+import org.jetbrains.compose.resources.stringResource
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
@@ -56,8 +65,10 @@ class CardsDecomposeComponentImpl(
     )
 
     @Composable
+    @Suppress("LongMethod")
     override fun Render(modifier: Modifier) {
         val coroutineScope = rememberCoroutineScope()
+        val rootNavigation = LocalRootNavigation.current
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -111,6 +122,25 @@ class CardsDecomposeComponentImpl(
                         }
                     }
                 )
+                if (BuildKonfig.IS_TEST_LOGIN_BUTTON_SHOWN) {
+                    BChipButton(
+                        painter = null,
+                        text = stringResource(Res.string.tc_open_profile),
+                        contentColor = LocalCorruptedPallet.current
+                            .black
+                            .invert,
+                        background = LocalCorruptedPallet.current
+                            .white
+                            .invert,
+                        contentPadding = PaddingValues(
+                            horizontal = 48.dp,
+                            vertical = 24.dp
+                        ),
+                        onClick = {
+                            rootNavigation.push(RootNavigationConfig.Profile(null))
+                        },
+                    )
+                }
             }
         }
         timerSetupSheetDecomposeComponent.Render(Modifier)

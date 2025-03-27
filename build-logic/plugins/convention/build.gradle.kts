@@ -32,5 +32,10 @@ gradlePlugin {
             implementationClass =
                 "com.flipperdevices.buildlogic.plugin.BuildComposeResourcesPlugin"
         }
+        create("flipper.gservices") {
+            id = name
+            implementationClass =
+                "com.flipperdevices.buildlogic.plugin.gservices.GServicesFilePlugin"
+        }
     }
 }

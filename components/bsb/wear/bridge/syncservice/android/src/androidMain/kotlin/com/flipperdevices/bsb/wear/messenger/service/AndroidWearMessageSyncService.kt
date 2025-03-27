@@ -28,6 +28,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class AndroidWearMessageSyncService(
     appBlockerFilterApiProvider: KIProvider<AppBlockerFilterApi>,
     wearConnectionApiProvider: KIProvider<WearConnectionApi>,
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
-    wearMessageProducerProvider: KIProvider<WearMessageProducer>
+    wearMessageProducerProvider: KIProvider<WearMessageProducer>,
 ) : WearMessageSyncService {
     override val TAG = "TimerForegroundService"
 
