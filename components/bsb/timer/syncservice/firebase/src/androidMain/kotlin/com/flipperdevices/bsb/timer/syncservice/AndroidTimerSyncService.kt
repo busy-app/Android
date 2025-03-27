@@ -56,7 +56,7 @@ class AndroidTimerSyncService(
         )
     }
 
-    fun onCreate() {
+    override fun onCreate() {
         listenForTimerChange()
         listenForTokenChange()
     }
