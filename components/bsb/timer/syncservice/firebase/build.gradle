@@ -1,0 +1,23 @@
+plugins {
+    id("flipper.multiplatform-compose")
+    id("flipper.anvil-multiplatform")
+    id("flipper.multiplatform-dependencies")
+    id("kotlinx-serialization")
+}
+
+commonDependencies {
+    implementation(projects.components.core.log)
+    implementation(projects.components.core.di)
+
+    implementation(projects.components.bsb.timer.syncservice.api)
+    implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.preference.api)
+    implementation(projects.components.bsb.cloudMock)
+
+    implementation(libs.kotlin.serialization.json)
+}
+
+dependencies {
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-messaging")
+}

@@ -224,6 +224,7 @@ commonDependencies {
     implementation(projects.components.bsb.timer.rest.impl)
     implementation(projects.components.bsb.timer.cards.api)
     implementation(projects.components.bsb.timer.cards.impl)
+    implementation(projects.components.bsb.timer.syncservice.firebase)
 }
 
 dependencies {

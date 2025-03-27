@@ -1,10 +1,10 @@
 package com.flipperdevices.bsb.preference.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Transient
 
 @Serializable
 data class TimerSettings(
@@ -58,4 +58,3 @@ data class TimerSettings(
         val alertWhenIntervalEnds: Boolean = true
     )
 }
-

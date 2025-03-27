@@ -42,6 +42,8 @@ class BSBApplication : Application() {
             androidAppComponent.shake2ReportApi.init(this)
         }
         androidAppComponent.wearMessageSyncService.onCreate()
+
+        androidAppComponent.timerChangeListener.onCreate()
     }
 
     override fun onTerminate() {

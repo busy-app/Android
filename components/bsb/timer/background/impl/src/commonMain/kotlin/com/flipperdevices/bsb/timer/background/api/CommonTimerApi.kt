@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.timer.background.api
 
-import com.flipperdevices.bsb.cloud.mock.api.BSBMockApi
 import com.flipperdevices.bsb.timer.background.api.delegates.CompositeTimerStateListener
 import com.flipperdevices.bsb.timer.background.api.delegates.TimerLoopJob
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -8,20 +7,15 @@ import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
@@ -33,7 +27,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class CommonTimerApi(
     private val scope: CoroutineScope,
     private val compositeListeners: CompositeTimerStateListener,
-    private val bsbMockApi: BSBMockApi
 ) : TimerApi, LogTagProvider {
     override val TAG = "CommonTimerApi"
 
@@ -54,7 +47,6 @@ class CommonTimerApi(
     }
 
     override fun setTimestampState(state: TimerTimestamp) {
-        scope.launch { bsbMockApi.saveTimer(state) }
         scope.launch {
             if (state !is TimerTimestamp.Running) {
                 stopSelf()
@@ -102,21 +94,5 @@ class CommonTimerApi(
                 compositeListeners.onTimerStop()
             }
         }
-    }
-
-    private fun startLongPollingTimerJob(): Job {
-        return flow {
-            while (currentCoroutineContext().isActive) {
-                val timer = bsbMockApi.getTimer().getOrNull()
-                timer?.let { emit(timer) }
-                delay(10.seconds)
-            }
-        }
-            .onEach { timer -> setTimestampState(timer) }
-            .launchIn(scope)
-    }
-
-    init {
-        startLongPollingTimerJob()
     }
 }

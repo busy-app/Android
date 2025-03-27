@@ -1,0 +1,8 @@
+plugins {
+    id("flipper.multiplatform.noandroidlib")
+    id("flipper.multiplatform-dependencies")
+}
+
+commonDependencies {
+    implementation(projects.components.bsb.timer.syncservice.api)
+}

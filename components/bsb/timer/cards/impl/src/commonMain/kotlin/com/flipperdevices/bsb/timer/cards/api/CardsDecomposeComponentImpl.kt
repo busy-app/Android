@@ -65,6 +65,7 @@ class CardsDecomposeComponentImpl(
     )
 
     @Composable
+    @Suppress("LongMethod")
     override fun Render(modifier: Modifier) {
         val coroutineScope = rememberCoroutineScope()
         val rootNavigation = LocalRootNavigation.current
