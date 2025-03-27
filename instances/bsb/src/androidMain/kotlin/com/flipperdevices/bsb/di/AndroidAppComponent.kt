@@ -4,7 +4,7 @@ import android.content.Context
 import com.flipperdevices.bsb.analytics.shake2report.api.Shake2ReportApi
 import com.flipperdevices.bsb.appblocker.screen.di.AppBlockerActivityComponent
 import com.flipperdevices.bsb.deeplink.api.DeepLinkParser
-import com.flipperdevices.bsb.timer.syncservice.TimerChangeListener
+import com.flipperdevices.bsb.timer.syncservice.TimerSyncService
 import com.flipperdevices.bsb.wear.messenger.service.WearMessageSyncService
 import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.di.AppGraph
@@ -25,5 +25,5 @@ abstract class AndroidAppComponent(
     abstract val deeplinkParser: DeepLinkParser
     abstract val shake2ReportApi: Shake2ReportApi
     abstract val wearMessageSyncService: WearMessageSyncService
-    abstract val timerChangeListener: TimerChangeListener
+    abstract val timerSyncService: TimerSyncService
 }

@@ -16,16 +16,18 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
 @SingleIn(AppGraph::class)
-class TimerChangeListener(
+@ContributesBinding(AppGraph::class, TimerSyncService::class)
+class AndroidTimerSyncService(
     private val scope: CoroutineScope,
     private val timerApi: TimerApi,
     private val bsbMockApi: BSBMockApi,
     private val krateApi: KrateApi
-) : LogTagProvider {
+) : TimerSyncService, LogTagProvider {
     override val TAG: String = "MyFirebaseMessagingService"
 
     private fun listenForTimerChange() {

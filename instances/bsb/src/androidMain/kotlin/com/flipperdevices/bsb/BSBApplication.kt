@@ -43,7 +43,7 @@ class BSBApplication : Application() {
         }
         androidAppComponent.wearMessageSyncService.onCreate()
 
-        androidAppComponent.timerChangeListener.onCreate()
+        androidAppComponent.timerSyncService.onCreate()
     }
 
     override fun onTerminate() {
