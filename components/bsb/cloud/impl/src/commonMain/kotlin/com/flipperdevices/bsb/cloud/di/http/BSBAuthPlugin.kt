@@ -7,7 +7,7 @@ import io.ktor.client.plugins.api.createClientPlugin
 
 val BSBAuthPlugin = createClientPlugin("BSBAuthPlugin", ::AuthPluginConfig) {
     on(Send) { request ->
-        val token = pluginConfig.preferenceApi?.getString(SettingsEnum.AUTH_TOKEN, null) ?: "hello_workld_token"
+        val token = pluginConfig.preferenceApi?.getString(SettingsEnum.AUTH_TOKEN, null)
         if (token != null) {
             request.headers.append("Authorization", token)
         }

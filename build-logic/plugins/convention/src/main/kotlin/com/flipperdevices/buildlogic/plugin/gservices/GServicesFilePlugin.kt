@@ -19,6 +19,6 @@ class GServicesFilePlugin : Plugin<Project> {
         if (!googleServicesFile.exists()) {
             throw GradleException("Could not find file $googleServicesFile in $target")
         }
-        googleServicesFile.copyTo(target.file("google-services.json"))
+        googleServicesFile.copyTo(target.file("google-services.json"), true)
     }
 }
