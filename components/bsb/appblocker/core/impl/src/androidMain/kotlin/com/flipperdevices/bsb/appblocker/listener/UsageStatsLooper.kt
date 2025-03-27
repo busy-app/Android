@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import com.flipperdevices.bsb.appblocker.api.ApplicationInfoIntentParserApi
 import com.flipperdevices.bsb.appblocker.stats.api.AppBlockerStatsApi
 import com.flipperdevices.bsb.appblocker.stats.model.AppLaunchRecordEvent
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
@@ -20,6 +21,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import com.flipperdevices.bsb.appblocker.model.ApplicationInfo as InternalApplicationInfo
 
@@ -28,6 +30,7 @@ const val APP_LOCK_CHECK_INTERVAL = 1000L
 
 @Inject
 class UsageStatsLooper(
+    @Assisted private val timerSettingsId: TimerSettingsId,
     private val context: Context,
     private val scope: CoroutineScope,
     private val androidPlatformDependencies: AndroidPlatformDependencies,
@@ -72,7 +75,7 @@ class UsageStatsLooper(
             return // Not activity event
         }
 
-        if (packageFilter.isForbidden(event.packageName).not()) {
+        if (packageFilter.isForbidden(timerSettingsId, event.packageName).not()) {
             return
         }
 

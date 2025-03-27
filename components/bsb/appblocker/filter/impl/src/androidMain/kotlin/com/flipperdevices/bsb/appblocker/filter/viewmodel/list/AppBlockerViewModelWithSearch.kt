@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.appblocker.filter.viewmodel.list
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.ui.lifecycle.DecomposeViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -12,14 +13,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 @Inject
 class AppBlockerViewModelWithSearch(
-    appBlockerStateBuilderFactory: (scope: CoroutineScope) -> AppBlockerStateBuilder
+    @Assisted timerSettingsId: TimerSettingsId,
+    appBlockerStateBuilderFactory: (scope: CoroutineScope, TimerSettingsId) -> AppBlockerStateBuilder
 ) : DecomposeViewModel(), LogTagProvider {
     override val TAG = "AppBlockerViewModelWithSearch"
-    private val appBlockerStateBuilder = appBlockerStateBuilderFactory(viewModelScope)
+    private val appBlockerStateBuilder = appBlockerStateBuilderFactory(
+        viewModelScope,
+        timerSettingsId
+    )
 
     private val query = MutableStateFlow("")
 

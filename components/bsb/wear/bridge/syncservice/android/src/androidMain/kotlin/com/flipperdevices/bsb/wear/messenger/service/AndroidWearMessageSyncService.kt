@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
-import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterApi
 import com.flipperdevices.bsb.dao.api.TimerSettingsApi
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi

@@ -37,13 +37,14 @@ class TimerSetupSheetDecomposeComponentImpl(
     }
     private val appBlockerCardContent = appBlockerCardContentFactory(
         componentContext = childContext("intervalsSetupSheetDecomposeComponent_appBlockerCardContent"),
+        timerSettingsId = timerSettingsId,
         onBackParameter = { }
     )
 
     @Composable
     override fun Render(modifier: Modifier) {
         val state by timerSetupViewModel.getState().collectAsState()
-        val timerSettings = when(val localState = state) {
+        val timerSettings = when (val localState = state) {
             CardEditScreenState.NotInitialized -> return
             is CardEditScreenState.Loaded -> if (localState.timerSettings == null) {
                 onBack()

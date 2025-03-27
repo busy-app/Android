@@ -15,6 +15,7 @@ import com.flipperdevices.bsb.appblocker.api.AppBlockerApi
 import com.flipperdevices.bsb.appblocker.card.composable.AppBlockerHeaderComposable
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterElementDecomposeComponent
 import com.flipperdevices.bsb.appblocker.permission.api.AppBlockerPermissionBlockDecomposeComponent
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
 import me.tatarka.inject.annotations.Assisted
@@ -25,6 +26,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class AppBlockerCardContentDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onBackParameter: DecomposeOnBackParameter,
+    @Assisted timerSettingsId: TimerSettingsId,
     private val appBlockerApi: AppBlockerApi,
     appBlockerPermissionBlockFactory: AppBlockerPermissionBlockDecomposeComponent.Factory,
     appBlockerFilterBlockFactory: AppBlockerFilterElementDecomposeComponent.Factory
@@ -33,7 +35,8 @@ class AppBlockerCardContentDecomposeComponentImpl(
         componentContext = childContext("appBlockerCardContentDecomposeComponent_permission")
     )
     private val appBlockerFilterCardContent = appBlockerFilterBlockFactory(
-        componentContext = childContext("appBlockerCardContentDecomposeComponent_filter")
+        componentContext = childContext("appBlockerCardContentDecomposeComponent_filter"),
+        timerSettingsId = timerSettingsId
     )
 
     @Composable
@@ -76,12 +79,14 @@ class AppBlockerCardContentDecomposeComponentImpl(
     class Factory(
         private val factory: (
             componentContext: ComponentContext,
-            onBackParameter: DecomposeOnBackParameter
+            onBackParameter: DecomposeOnBackParameter,
+            timerSettingsId: TimerSettingsId,
         ) -> AppBlockerCardContentDecomposeComponentImpl
     ) : AppBlockerCardContentDecomposeComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
-            onBackParameter: DecomposeOnBackParameter
-        ) = factory(componentContext, onBackParameter)
+            onBackParameter: DecomposeOnBackParameter,
+            timerSettingsId: TimerSettingsId,
+        ) = factory(componentContext, onBackParameter, timerSettingsId)
     }
 }

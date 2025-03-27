@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.appblocker.listener
 
 import com.flipperdevices.bsb.appblocker.api.AppBlockerApi
 import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -26,7 +27,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @ContributesBinding(AppGraph::class, TimerStateListener::class, multibinding = true)
 class AppBlockerTimerListener(
     private val appBlockerApi: AppBlockerApi,
-    private val looperFactory: () -> UsageStatsLooper,
+    private val looperFactory: (TimerSettingsId) -> UsageStatsLooper,
     private val scope: CoroutineScope,
     private val timerApi: TimerApi
 ) : TimerStateListener, LogTagProvider {
@@ -60,7 +61,7 @@ class AppBlockerTimerListener(
         }.stateIn(scope, SharingStarted.WhileSubscribed(), false)
             .onEach { isBlockActive ->
                 if (isBlockActive) {
-                    startLoop()
+                    startLoop(timerSettings.id)
                 } else {
                     stopLoop()
                 }
@@ -72,9 +73,9 @@ class AppBlockerTimerListener(
         timerStateListenerJob?.cancel()
     }
 
-    private suspend fun startLoop() = mutex.withLock {
+    private suspend fun startLoop(timerSettingsId: TimerSettingsId) = mutex.withLock {
         info { "Start usage stats looper for app blocker" }
-        val nonNullLooper = looper ?: looperFactory().also { looper = it }
+        val nonNullLooper = looper ?: looperFactory(timerSettingsId).also { looper = it }
         nonNullLooper.startLoop()
     }
 

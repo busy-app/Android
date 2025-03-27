@@ -10,6 +10,7 @@ import com.flipperdevices.bsb.appblocker.filter.composable.card.EmptyListAppsBox
 import com.flipperdevices.bsb.appblocker.filter.composable.card.FilledListAppsBoxComposable
 import com.flipperdevices.bsb.appblocker.filter.model.card.AppBlockerCardListState
 import com.flipperdevices.bsb.appblocker.filter.viewmodel.card.AppBlockerCardListViewModel
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
 import me.tatarka.inject.annotations.Assisted
@@ -19,16 +20,18 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class AppBlockerFilterElementDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    filterScreenDecomposeComponentFactory: (ComponentContext) -> AppBlockerFilterScreenDecomposeComponent,
-    viewModelFactory: () -> AppBlockerCardListViewModel
+    @Assisted timerSettingsId: TimerSettingsId,
+    filterScreenDecomposeComponentFactory: (ComponentContext, TimerSettingsId) -> AppBlockerFilterScreenDecomposeComponent,
+    viewModelFactory: (TimerSettingsId) -> AppBlockerCardListViewModel
 ) : AppBlockerFilterElementDecomposeComponent(componentContext) {
     private val filterScreenDecomposeComponent = filterScreenDecomposeComponentFactory(
-        childContext("appBlockerFilter_screen")
+        childContext("appBlockerFilter_screen"),
+        timerSettingsId
     )
 
     private val viewModel by lazy {
-        viewModelWithFactory(null) {
-            viewModelFactory()
+        viewModelWithFactory(timerSettingsId) {
+            viewModelFactory(timerSettingsId)
         }
     }
 
@@ -57,11 +60,13 @@ class AppBlockerFilterElementDecomposeComponentImpl(
     @ContributesBinding(AppGraph::class, AppBlockerFilterElementDecomposeComponent.Factory::class)
     class Factory(
         private val factory: (
-            componentContext: ComponentContext
+            componentContext: ComponentContext,
+            timerSettingsId: TimerSettingsId
         ) -> AppBlockerFilterElementDecomposeComponentImpl
     ) : AppBlockerFilterElementDecomposeComponent.Factory {
         override fun invoke(
-            componentContext: ComponentContext
-        ) = factory(componentContext)
+            componentContext: ComponentContext,
+            timerSettingsId: TimerSettingsId
+        ) = factory(componentContext, timerSettingsId)
     }
 }
