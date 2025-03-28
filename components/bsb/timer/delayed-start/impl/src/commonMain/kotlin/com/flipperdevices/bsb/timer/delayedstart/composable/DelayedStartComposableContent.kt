@@ -35,7 +35,6 @@ import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
-import com.flipperdevices.bsb.preference.model.OldTimerSettings
 import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent
 import com.flipperdevices.ui.button.BChipButton
 import org.jetbrains.compose.resources.painterResource

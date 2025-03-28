@@ -19,25 +19,4 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class KrateApiImpl(
     private val preferenceApi: PreferenceApi
 ) : KrateApi {
-    override val timerSettingsKrate: FlowMutableKrate<OldTimerSettings>
-        get() {
-            val factory = ValueFactory { OldTimerSettings() }
-            return DefaultFlowMutableKrate(
-                factory = factory,
-                loader = {
-                    preferenceApi.getFlowSerializable(
-                        serializer = serializer<OldTimerSettings>(),
-                        key = SettingsEnum.TIMER_SETTINGS,
-                        default = factory.create()
-                    )
-                },
-                saver = {
-                    preferenceApi.setSerializable(
-                        serializer = serializer<OldTimerSettings>(),
-                        key = SettingsEnum.TIMER_SETTINGS,
-                        value = it
-                    )
-                }
-            )
-        }
 }

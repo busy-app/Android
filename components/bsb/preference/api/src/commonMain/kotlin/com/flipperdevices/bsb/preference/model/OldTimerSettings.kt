@@ -4,6 +4,13 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.serialization.Serializable
 
+@Deprecated(
+    "OldTimerSettings doesn't support multicard, so use new timer settings",
+    replaceWith = ReplaceWith(
+        "TimerSettings",
+        imports = ["com.flipperdevices.bsb.dao.model.TimerSettings"]
+    )
+)
 @Serializable
 data class OldTimerSettings(
     val id: Long = 0,

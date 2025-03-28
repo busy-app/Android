@@ -3,7 +3,6 @@ package com.flipperdevices.bsb.preference.model
 enum class SettingsEnum(val key: String) {
     USER_DATA("user_data"),
     AUTH_TOKEN("token"),
-    DND_SUPPORT("dnd_support"),
     APP_BLOCKING("app_blocking"),
 
     // Code verifier for auth PKCE:

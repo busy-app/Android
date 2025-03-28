@@ -24,10 +24,12 @@ import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_work
 import busystatusbar.instances.bsb_wear.generated.resources.Res
 import busystatusbar.instances.bsb_wear.generated.resources.bwca_blocked_all
-import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.OldTimerSettings
+import com.flipperdevices.bsb.dao.model.BlockedAppCount
+import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
+import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
 import com.flipperdevices.ui.cardframe.MiniFrameData
 import com.flipperdevices.ui.cardframe.MiniFrameSection
 import com.flipperdevices.ui.timeline.util.toFormattedTime
@@ -59,8 +61,7 @@ private const val DESIGN_CARD_ASPECT_RATIO = 170f / 107f
 @Suppress("LongMethod")
 @Composable
 fun WearCardComposable(
-    settings: OldTimerSettings,
-    blockerState: BlockedAppCount?,
+    settings: WearOSTimerSettings,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -73,7 +74,7 @@ fun WearCardComposable(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = settings.name,
+            text = settings.instance.name,
             fontSize = 20.sp,
             color = LocalCorruptedPallet.current.white.onColor,
             fontWeight = FontWeight.W500
@@ -82,7 +83,7 @@ fun WearCardComposable(
 
         Column {
             Text(
-                text = settings.totalTime.toFormattedTime(slim = true),
+                text = settings.instance.totalTime.toFormattedTime(slim = true),
                 fontSize = 18.sp,
                 color = LocalCorruptedPallet.current.white.onColor,
                 fontWeight = FontWeight.W500
@@ -93,10 +94,10 @@ fun WearCardComposable(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (settings.intervalsSettings.isEnabled) {
+                if (settings.instance.intervalsSettings.isEnabled) {
                     MiniFrameSection(
                         MiniFrameData(
-                            text = settings.intervalsSettings.work.toFormattedTime(slim = false),
+                            text = settings.instance.intervalsSettings.work.toFormattedTime(slim = false),
                             painter = painterResource(CommonTimerRes.drawable.ic_work),
                             tint = LocalCorruptedPallet.current
                                 .transparent
@@ -104,7 +105,7 @@ fun WearCardComposable(
                                 .primary
                         ),
                         MiniFrameData(
-                            text = settings.intervalsSettings.rest.toFormattedTime(slim = true),
+                            text = settings.instance.intervalsSettings.rest.toFormattedTime(slim = true),
                             painter = painterResource(CommonTimerRes.drawable.ic_rest),
                             tint = LocalCorruptedPallet.current
                                 .transparent
@@ -116,22 +117,20 @@ fun WearCardComposable(
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
                     )
                 }
-                blockerState?.let {
-                    calculateBlockerText(blockerState)?.let { blockedText ->
-                        MiniFrameSection(
-                            MiniFrameData(
-                                text = blockedText,
-                                painter = painterResource(CommonTimerRes.drawable.ic_block),
-                                tint = LocalCorruptedPallet.current
-                                    .transparent
-                                    .whiteInvert
-                                    .primary
-                            ),
-                            iconSize = 16.dp,
-                            fontSize = 11.sp,
-                            contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
-                        )
-                    }
+                calculateBlockerText(settings.blockedAppCount)?.let { blockedText ->
+                    MiniFrameSection(
+                        MiniFrameData(
+                            text = blockedText,
+                            painter = painterResource(CommonTimerRes.drawable.ic_block),
+                            tint = LocalCorruptedPallet.current
+                                .transparent
+                                .whiteInvert
+                                .primary
+                        ),
+                        iconSize = 16.dp,
+                        fontSize = 11.sp,
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
+                    )
                 }
             }
         }
@@ -148,16 +147,23 @@ private fun PreviewWearCardComposable() {
         ) {
             items(count = 4) {
                 WearCardComposable(
-                    settings = OldTimerSettings(
-                        intervalsSettings = OldTimerSettings.IntervalsSettings(isEnabled = true)
+                    settings = WearOSTimerSettings(
+                        instance = TimerSettings(
+                            id = TimerSettingsId(id = -1),
+                            intervalsSettings = TimerSettings.IntervalsSettings(isEnabled = true)
+                        ),
+                        blockedAppCount = BlockedAppCount.Count(count = 24)
                     ),
-                    blockerState = BlockedAppCount.Count(count = 24)
                 )
             }
             items(count = 4) {
                 WearCardComposable(
-                    settings = OldTimerSettings(),
-                    blockerState = BlockedAppCount.All
+                    settings = WearOSTimerSettings(
+                        instance = TimerSettings(
+                            id = TimerSettingsId(id = -1),
+                        ),
+                        blockedAppCount = BlockedAppCount.All
+                    )
                 )
             }
         }
