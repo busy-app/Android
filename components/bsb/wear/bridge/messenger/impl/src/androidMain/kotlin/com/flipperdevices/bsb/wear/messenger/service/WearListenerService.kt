@@ -2,8 +2,6 @@ package com.flipperdevices.bsb.wear.messenger.service
 
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
-import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
-import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
@@ -41,9 +39,6 @@ class WearListenerService : WearableListenerService(), LogTagProvider {
     private fun MessageEvent.toMessage() = when (this.path) {
         TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
         TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer
-
-        AppBlockerCountMessage.serializer.path -> AppBlockerCountMessage.serializer
-        AppBlockerCountRequestMessage.serializer.path -> AppBlockerCountRequestMessage.serializer
 
         TimerSettingsMessage.serializer.path -> TimerSettingsMessage.serializer
         TimerSettingsRequestMessage.serializer.path -> TimerSettingsRequestMessage.serializer

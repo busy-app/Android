@@ -7,6 +7,7 @@ import com.flipperdevices.bsb.dao.model.BlockedAppDetailedState
 import com.flipperdevices.bsb.dao.model.BlockedAppEntity
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.dao.model.cards.AppBlockerState
+import com.flipperdevices.core.apppackage.AppDetailedInfoProvider
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.di.KIProvider
 import com.flipperdevices.core.di.provideDelegate
@@ -24,7 +25,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @ContributesBinding(AppGraph::class, CardAppBlockerApi::class)
 class CardAppBlockerApiImpl(
     private val permissionApi: AppBlockerPermissionApi,
-    databaseProvider: KIProvider<AppDatabase>
+    databaseProvider: KIProvider<AppDatabase>,
+    private val appInfoProvider: AppDetailedInfoProvider
 ) : CardAppBlockerApi {
     private val database by databaseProvider
 
@@ -50,7 +52,7 @@ class CardAppBlockerApiImpl(
         return combine(
             database.cardRepository().getPlatformSpecificSettingFlow(cardId.id),
             database.blockedAppRepository().getBlockedCategories(cardId.id),
-            database.blockedAppRepository().getBlockedApp(cardId.id),
+            database.blockedAppRepository().getBlockedApps(cardId.id),
         ) { cardSettings, blockedCategories, blockedApps ->
             return@combine when (cardSettings?.appBlockerState) {
                 AppBlockerState.TURN_ON_ALL,
@@ -93,15 +95,37 @@ class CardAppBlockerApiImpl(
             .getPlatformSpecificSettingFlow(cardId.id)
             .first()
 
-        when (platformSettings?.appBlockerState) {
+        return when (platformSettings?.appBlockerState) {
             AppBlockerState.TURN_ON_ALL,
-            null -> return true
+            null -> true
 
-            AppBlockerState.TURN_OFF -> return false
-            AppBlockerState.TURN_ON_WHITE_LIST -> {}
+            AppBlockerState.TURN_OFF -> false
+            AppBlockerState.TURN_ON_WHITE_LIST -> isAppEntityBlocked(cardId, appEntity)
+        }
+    }
+
+    private suspend fun isAppEntityBlocked(
+        cardId: TimerSettingsId,
+        appEntity: BlockedAppEntity
+    ): Boolean {
+        val categories = database.blockedAppRepository().getBlockedCategories(cardId.id)
+            .first()
+            .map { it.categoryId }
+
+
+        val appPackage = when (appEntity) {
+            is BlockedAppEntity.Category -> return categories.contains(appEntity.categoryId)
+            is BlockedAppEntity.App -> appEntity.packageId // Continue flow
         }
 
-        val categories = database.blockedAppRepository().getBlockedCategories(cardId.id)
+        val blockedApp = database.blockedAppRepository().getBlockedApp(cardId.id, appPackage)
 
+        if (blockedApp != null) {
+            return true
+        }
+
+        val appInfo = appInfoProvider.provideAppInfo(appPackage) ?: return false
+
+        return categories.contains(appInfo.categoryId)
     }
 }

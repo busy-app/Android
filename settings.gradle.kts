@@ -37,6 +37,7 @@ include(
 
     ":components:core:di",
     ":components:core:activityholder",
+    ":components:core:apppackage",
     ":components:core:log",
     ":components:core:ktx",
     ":components:core:data",
