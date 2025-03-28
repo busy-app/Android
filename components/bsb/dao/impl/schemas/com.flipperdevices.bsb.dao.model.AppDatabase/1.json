@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b28936f123fea3eccf2befa040c5cf34",
+    "identityHash": "fc7efa0b1ded520b5b06d3f8ff0f714e",
     "entities": [
       {
         "tableName": "cards",
@@ -78,7 +78,7 @@
       },
       {
         "tableName": "cards_platform_settings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`card_id` INTEGER NOT NULL, `apps_blocked_state` INTEGER NOT NULL, PRIMARY KEY(`card_id`), FOREIGN KEY(`card_id`) REFERENCES `cards`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`card_id` INTEGER NOT NULL, `is_blocked_enabled` INTEGER NOT NULL, `is_block_all` INTEGER NOT NULL, PRIMARY KEY(`card_id`), FOREIGN KEY(`card_id`) REFERENCES `cards`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "cardId",
@@ -87,8 +87,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "appBlockerState",
-            "columnName": "apps_blocked_state",
+            "fieldPath": "isBlockedEnabled",
+            "columnName": "is_blocked_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isBlockedAll",
+            "columnName": "is_block_all",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -286,7 +292,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b28936f123fea3eccf2befa040c5cf34')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fc7efa0b1ded520b5b06d3f8ff0f714e')"
     ]
   }
 }

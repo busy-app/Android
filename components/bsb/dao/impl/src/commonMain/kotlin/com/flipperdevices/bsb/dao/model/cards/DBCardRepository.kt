@@ -25,15 +25,29 @@ interface DBCardRepository {
     fun insert(platformSpecificSettings: DBCardPlatformSpecificSettings)
 
     @Transaction
-    suspend fun updateAppBlockingState(
+    suspend fun updateBlockedEnabled(
         cardId: Long,
-        appBlockerState: AppBlockerState
+        isBlockedEnabled: Boolean
     ) {
         val settings = getPlatformSpecificSetting(cardId)
-        val newSettings = settings?.copy(appBlockerState = appBlockerState)
+        val newSettings = settings?.copy(isBlockedEnabled = isBlockedEnabled)
             ?: DBCardPlatformSpecificSettings(
                 cardId = cardId,
-                appBlockerState = appBlockerState
+                isBlockedEnabled = isBlockedEnabled
+            )
+        insert(newSettings)
+    }
+
+    @Transaction
+    suspend fun updateBlockedAll(
+        cardId: Long,
+        isBlockedAll: Boolean
+    ) {
+        val settings = getPlatformSpecificSetting(cardId)
+        val newSettings = settings?.copy(isBlockedAll = isBlockedAll)
+            ?: DBCardPlatformSpecificSettings(
+                cardId = cardId,
+                isBlockedAll = isBlockedAll
             )
         insert(newSettings)
     }

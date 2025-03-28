@@ -11,6 +11,10 @@ interface CardAppBlockerApi {
 
     fun getBlockedAppDetailedState(cardId: TimerSettingsId): Flow<BlockedAppDetailedState>
 
+    fun isEnabled(cardId: TimerSettingsId): Flow<Boolean>
+
+    suspend fun setEnabled(cardId: TimerSettingsId, isEnabled: Boolean)
+
     suspend fun updateBlockedApp(cardId: TimerSettingsId, blockedAppState: BlockedAppDetailedState)
 
     suspend fun isBlocked(cardId: TimerSettingsId, appEntity: BlockedAppEntity): Boolean

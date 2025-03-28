@@ -8,6 +8,7 @@ import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.dao.model.cards.AUTOGENERATE_PRIMARY_ID
 import com.flipperdevices.bsb.dao.model.cards.DBCardEntityMapper
 import com.flipperdevices.bsb.preference.api.PreferenceApi
+import com.flipperdevices.bsb.preference.api.get
 import com.flipperdevices.bsb.preference.model.OldTimerSettings
 import com.flipperdevices.bsb.preference.model.SettingsEnum
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
@@ -16,7 +17,6 @@ import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.serializer
 
 class FirstMigrationCallback(
@@ -43,14 +43,18 @@ class FirstMigrationCallback(
         scope.launch(FlipperDispatchers.default) {
             val oldTimerSettings = preferenceApi.getSerializable(
                 serializer = serializer<OldTimerSettings>(),
-                key = SettingsEnum.TIMER_SETTINGS,
+                key = SettingsEnum.DEPRECATED_TIMER_SETTINGS,
                 default = null
+            )
+            val isAppBlockingActive = preferenceApi.get(
+                SettingsEnum.DEPRECATED_APP_BLOCKING,
+                default = true
             )
 
             info { "Start make migration..." }
 
             val isSuccessful = runCatching {
-                migration(appDatabase, oldTimerSettings)
+                migration(appDatabase, oldTimerSettings, isAppBlockingActive)
             }.onFailure {
                 error(it) { "Exception while apply migration" }
             }.getOrNull() ?: return@launch
@@ -63,7 +67,11 @@ class FirstMigrationCallback(
         }
     }
 
-    private suspend fun migration(dao: AppDatabase, oldSettings: OldTimerSettings?): Boolean {
+    private suspend fun migration(
+        dao: AppDatabase,
+        oldSettings: OldTimerSettings?,
+        isAppBlockingActive: Boolean
+    ): Boolean {
         val newSettings = if (oldSettings == null) {
             TimerSettings(
                 id = TimerSettingsId(AUTOGENERATE_PRIMARY_ID)
@@ -87,8 +95,15 @@ class FirstMigrationCallback(
         }
 
         val dbSettings = DBCardEntityMapper.map(newSettings)
-        val insertedLine = dao.cardRepository().insertOrUpdate(dbSettings)
+        val newId = dao.cardRepository().insertOrUpdate(dbSettings)
+        if (newId > 0) {
+            dao.cardRepository().updateBlockedEnabled(
+                cardId = newId,
+                isBlockedEnabled = isAppBlockingActive
+            )
+            return true
+        }
 
-        return insertedLine > 0
+        return false
     }
 }

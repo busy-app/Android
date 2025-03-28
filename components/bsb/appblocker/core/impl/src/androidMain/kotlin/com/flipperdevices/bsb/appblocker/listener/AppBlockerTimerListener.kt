@@ -1,6 +1,6 @@
 package com.flipperdevices.bsb.appblocker.listener
 
-import com.flipperdevices.bsb.appblocker.api.AppBlockerApi
+import com.flipperdevices.bsb.dao.api.CardAppBlockerApi
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.api.TimerApi
@@ -26,7 +26,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, TimerStateListener::class, multibinding = true)
 class AppBlockerTimerListener(
-    private val appBlockerApi: AppBlockerApi,
+    private val appBlockerApi: CardAppBlockerApi,
     private val looperFactory: (TimerSettingsId) -> UsageStatsLooper,
     private val scope: CoroutineScope,
     private val timerApi: TimerApi
@@ -41,7 +41,7 @@ class AppBlockerTimerListener(
         timerStateListenerJob?.cancel()
         timerStateListenerJob = combine(
             timerApi.getState(),
-            appBlockerApi.isAppBlockerSupportActive()
+            appBlockerApi.isEnabled(timerSettings.id)
         ) { internalState, isAppBlockerSupportActive ->
             if (!isAppBlockerSupportActive) {
                 return@combine false

@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.flipperdevices.bsb.dao.model.converters.AppBlockerStateConverter
 
 @Entity(
     tableName = "cards_platform_settings",
@@ -21,6 +20,8 @@ data class DBCardPlatformSpecificSettings(
     @PrimaryKey
     @ColumnInfo(name = "card_id")
     val cardId: Long,
-    @ColumnInfo(name = "apps_blocked_state")
-    val appBlockerState: AppBlockerState,
+    @ColumnInfo(name = "is_blocked_enabled")
+    val isBlockedEnabled: Boolean = true,
+    @ColumnInfo(name = "is_block_all")
+    val isBlockedAll: Boolean = true
 )

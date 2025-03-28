@@ -6,7 +6,6 @@ import com.flipperdevices.bsb.dao.model.BlockedAppCount
 import com.flipperdevices.bsb.dao.model.BlockedAppDetailedState
 import com.flipperdevices.bsb.dao.model.BlockedAppEntity
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
-import com.flipperdevices.bsb.dao.model.cards.AppBlockerState
 import com.flipperdevices.core.apppackage.AppDetailedInfoProvider
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.di.KIProvider
@@ -54,34 +53,55 @@ class CardAppBlockerApiImpl(
             database.blockedAppRepository().getBlockedCategories(cardId.id),
             database.blockedAppRepository().getBlockedApps(cardId.id),
         ) { cardSettings, blockedCategories, blockedApps ->
-            return@combine when (cardSettings?.appBlockerState) {
-                AppBlockerState.TURN_ON_ALL,
-                null -> BlockedAppDetailedState.All
-
-                AppBlockerState.TURN_OFF -> BlockedAppDetailedState.TurnOff
-                AppBlockerState.TURN_ON_WHITE_LIST -> {
-                    BlockedAppDetailedState.TurnOnWhitelist(
-                        blockedCategories.map { BlockedAppEntity.Category(it.categoryId) } +
-                                blockedApps.map { BlockedAppEntity.App(it.appPackage) }
-                    )
-                }
+            return@combine if (cardSettings == null) {
+                BlockedAppDetailedState.All
+            } else if (cardSettings.isBlockedEnabled.not()) {
+                BlockedAppDetailedState.TurnOff
+            } else if (cardSettings.isBlockedAll) {
+                BlockedAppDetailedState.All
+            } else {
+                BlockedAppDetailedState.TurnOnWhitelist(
+                    blockedCategories.map { BlockedAppEntity.Category(it.categoryId) } +
+                            blockedApps.map { BlockedAppEntity.App(it.appPackage) }
+                )
             }
         }
+    }
+
+    override fun isEnabled(cardId: TimerSettingsId): Flow<Boolean> {
+        return combine(
+            permissionApi.isAllPermissionGranted(),
+            database.cardRepository().getPlatformSpecificSettingFlow(cardId.id)
+        ) { isPermissionEnabled, platformSettings ->
+            isPermissionEnabled && platformSettings?.isBlockedEnabled ?: true
+        }
+    }
+
+    override suspend fun setEnabled(cardId: TimerSettingsId, isEnabled: Boolean) {
+        database.cardRepository().updateBlockedEnabled(cardId.id, isEnabled)
     }
 
     override suspend fun updateBlockedApp(
         cardId: TimerSettingsId,
         blockedAppState: BlockedAppDetailedState
     ) {
-        val appBlockerState = when (blockedAppState) {
-            BlockedAppDetailedState.All -> AppBlockerState.TURN_ON_ALL
-            BlockedAppDetailedState.TurnOff -> AppBlockerState.TURN_OFF
-            is BlockedAppDetailedState.TurnOnWhitelist -> AppBlockerState.TURN_ON_WHITE_LIST
+        val repository = database.cardRepository()
+        when (blockedAppState) {
+            BlockedAppDetailedState.All -> {
+                repository.updateBlockedEnabled(cardId.id, true)
+                repository.updateBlockedAll(cardId.id, true)
+            }
+
+            is BlockedAppDetailedState.TurnOnWhitelist -> {
+                repository.updateBlockedEnabled(cardId.id, true)
+                repository.updateBlockedAll(cardId.id, false)
+            }
+
+            BlockedAppDetailedState.TurnOff -> {
+                repository.updateBlockedEnabled(cardId.id, false)
+            }
         }
-        database.cardRepository().updateAppBlockingState(
-            cardId.id,
-            appBlockerState
-        )
+
         if (blockedAppState is BlockedAppDetailedState.TurnOnWhitelist) {
             database.blockedAppRepository().replace(
                 cardId.id,
@@ -95,12 +115,14 @@ class CardAppBlockerApiImpl(
             .getPlatformSpecificSettingFlow(cardId.id)
             .first()
 
-        return when (platformSettings?.appBlockerState) {
-            AppBlockerState.TURN_ON_ALL,
-            null -> true
-
-            AppBlockerState.TURN_OFF -> false
-            AppBlockerState.TURN_ON_WHITE_LIST -> isAppEntityBlocked(cardId, appEntity)
+        return if (platformSettings == null) {
+            isAppEntityBlocked(cardId, appEntity)
+        } else if (platformSettings.isBlockedEnabled.not()) {
+            false
+        } else if (platformSettings.isBlockedAll) {
+            true
+        } else {
+            isAppEntityBlocked(cardId, appEntity)
         }
     }
 

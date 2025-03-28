@@ -9,7 +9,6 @@ import com.flipperdevices.bsb.dao.model.blocked.DBBlockedCategory
 import com.flipperdevices.bsb.dao.model.cards.DBCardEntity
 import com.flipperdevices.bsb.dao.model.cards.DBCardPlatformSpecificSettings
 import com.flipperdevices.bsb.dao.model.cards.DBCardRepository
-import com.flipperdevices.bsb.dao.model.converters.AppBlockerStateConverter
 import com.flipperdevices.bsb.dao.model.converters.DurationConverter
 import com.flipperdevices.bsb.dao.model.stats.DBBlockedAppStat
 
@@ -26,7 +25,7 @@ import com.flipperdevices.bsb.dao.model.stats.DBBlockedAppStat
     version = 1,
     exportSchema = true
 )
-@TypeConverters(DurationConverter::class, AppBlockerStateConverter::class)
+@TypeConverters(DurationConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cardRepository(): DBCardRepository
     abstract fun blockedAppRepository(): DBBlockedAppRepository

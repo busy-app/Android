@@ -7,17 +7,19 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
-import com.flipperdevices.bsb.appblocker.api.AppBlockerApi
 import com.flipperdevices.bsb.appblocker.card.composable.AppBlockerHeaderComposable
 import com.flipperdevices.bsb.appblocker.filter.api.AppBlockerFilterElementDecomposeComponent
 import com.flipperdevices.bsb.appblocker.permission.api.AppBlockerPermissionBlockDecomposeComponent
+import com.flipperdevices.bsb.dao.api.CardAppBlockerApi
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -26,8 +28,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class AppBlockerCardContentDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onBackParameter: DecomposeOnBackParameter,
-    @Assisted timerSettingsId: TimerSettingsId,
-    private val appBlockerApi: AppBlockerApi,
+    @Assisted private val timerSettingsId: TimerSettingsId,
+    private val appBlockerApi: CardAppBlockerApi,
     appBlockerPermissionBlockFactory: AppBlockerPermissionBlockDecomposeComponent.Factory,
     appBlockerFilterBlockFactory: AppBlockerFilterElementDecomposeComponent.Factory
 ) : AppBlockerCardContentDecomposeComponent(componentContext) {
@@ -47,16 +49,19 @@ class AppBlockerCardContentDecomposeComponentImpl(
             val isPermissionGranted by appBlockerPermissionCardContent.isAllPermissionGranted()
                 .collectAsState()
             val isAppBlockingEnabled by appBlockerApi
-                .isAppBlockerSupportActive()
+                .isEnabled(timerSettingsId)
                 .collectAsState(false)
+
+            val scope = rememberCoroutineScope()
 
             AppBlockerHeaderComposable(
                 checked = isAppBlockingEnabled,
                 onSwitch = {
-                    if (isAppBlockingEnabled) {
-                        appBlockerApi.disableSupport()
-                    } else {
-                        appBlockerApi.enableSupport()
+                    scope.launch {
+                        appBlockerApi.setEnabled(
+                            timerSettingsId,
+                            !isAppBlockingEnabled
+                        )
                     }
                 },
                 enabled = isPermissionGranted
