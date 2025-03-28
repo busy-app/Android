@@ -12,6 +12,7 @@ commonDependencies {
     implementation(projects.components.core.data)
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.bsb.core.theme)
+    implementation(projects.components.bsb.analytics.metric.api)
     implementation(projects.components.core.ui.sheet)
     implementation(projects.components.core.ui.button)
 
@@ -19,8 +20,10 @@ commonDependencies {
     implementation(projects.components.bsb.dao.api)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.appblocker.filter.api)
 
     implementation(libs.decompose)
+    implementation(libs.essenty.lifecycle.coroutines)
     implementation(libs.constraintlayout)
     implementation(libs.composables)
     implementation(libs.kotlin.immutable)

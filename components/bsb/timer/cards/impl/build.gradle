@@ -12,7 +12,9 @@ commonDependencies {
     implementation(projects.components.core.log)
     implementation(projects.components.core.ktx)
     implementation(projects.components.core.data)
+    implementation(projects.components.core.buildKonfig)
     implementation(projects.components.bsb.core.theme)
+    implementation(projects.components.bsb.analytics.metric.api)
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.core.ui.button)
     implementation(projects.components.core.ui.sheet)
@@ -21,7 +23,9 @@ commonDependencies {
     implementation(projects.components.core.ui.timeline)
     implementation(projects.components.core.ui.cardFrame)
 
+
     implementation(projects.components.bsb.root.api)
+    implementation(projects.components.bsb.deeplink.api)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.timer.setup.api)
     implementation(projects.components.bsb.timer.background.api)

@@ -25,7 +25,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
@@ -88,17 +88,17 @@ class WearWearMessageSyncService(
     private fun startAndGetIntervalEndVibratorJob(): Job {
         return timerApi
             .getState()
+            .distinctUntilChangedBy { state -> state::class }
             .map {
                 when (it) {
                     ControlledTimerState.Finished -> 10
                     is ControlledTimerState.InProgress.Await -> 10
                     is ControlledTimerState.InProgress.Running.LongRest -> 0
-                    is ControlledTimerState.InProgress.Running.Rest -> 1
-                    is ControlledTimerState.InProgress.Running.Work -> 2
+                    is ControlledTimerState.InProgress.Running.Rest -> 0
+                    is ControlledTimerState.InProgress.Running.Work -> 0
                     ControlledTimerState.NotStarted -> -1
                 }
             }
-            .distinctUntilChanged()
             .overflowChunked(2)
             .filter { (was, now) -> now >= was }
             .onEach { vibrator.vibrateOnce(VIBRATOR_DURATION) }

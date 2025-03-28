@@ -1,0 +1,20 @@
+plugins {
+    id("flipper.multiplatform")
+    id("flipper.anvil-multiplatform")
+    id("flipper.multiplatform-dependencies")
+    id("kotlinx-serialization")
+}
+
+dependencies {
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-analytics")
+}
+
+commonDependencies {
+    implementation(projects.components.core.di)
+    implementation(projects.components.core.log)
+    implementation(projects.components.core.buildKonfig)
+
+    implementation(projects.components.bsb.analytics.metric.api)
+    implementation(libs.kotlin.serialization.json)
+}

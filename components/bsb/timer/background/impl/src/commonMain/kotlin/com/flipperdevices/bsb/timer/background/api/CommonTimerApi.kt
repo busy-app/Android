@@ -26,7 +26,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 class CommonTimerApi(
     private val scope: CoroutineScope,
-    private val compositeListeners: CompositeTimerStateListener
+    private val compositeListeners: CompositeTimerStateListener,
 ) : TimerApi, LogTagProvider {
     override val TAG = "CommonTimerApi"
 

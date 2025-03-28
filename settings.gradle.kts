@@ -73,6 +73,7 @@ include(
     ":components:bsb:preference:impl",
     ":components:bsb:cloud:api",
     ":components:bsb:cloud:impl",
+    ":components:bsb:cloud-mock",
     ":components:bsb:deeplink:api",
     ":components:bsb:deeplink:impl",
     ":components:bsb:inappnotification:api",
@@ -83,6 +84,11 @@ include(
 
     ":components:bsb:analytics:shake2report:api",
     ":components:bsb:analytics:shake2report:impl",
+    ":components:bsb:analytics:timer:api",
+    ":components:bsb:analytics:timer:impl",
+    ":components:bsb:analytics:metric:api",
+    ":components:bsb:analytics:metric:firebase",
+    ":components:bsb:analytics:metric:noop",
 
     ":components:bsb:appblocker:core:api",
     ":components:bsb:appblocker:core:impl",
@@ -144,6 +150,9 @@ include(
     ":components:bsb:timer:delayed-start:impl",
     ":components:bsb:timer:cards:api",
     ":components:bsb:timer:cards:impl",
+    ":components:bsb:timer:syncservice:api",
+    ":components:bsb:timer:syncservice:firebase",
+    ":components:bsb:timer:syncservice:noop",
 
     ":components:bsb:wear:bridge:messenger:api",
     ":components:bsb:wear:bridge:messenger:impl",

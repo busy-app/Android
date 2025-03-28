@@ -5,13 +5,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.dao.model.TimerSettings
-import com.flipperdevices.bsb.preference.api.KrateApi
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.flipperdevices.bsb.analytics.metric.api.MetricApi
+import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
+import com.flipperdevices.bsb.analytics.metric.api.model.TimerConfigSnapshot
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.util.startWith
 import com.flipperdevices.bsb.timer.done.composable.DoneComposableContent
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
@@ -19,6 +24,7 @@ import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
+@Suppress("LongParameterList")
 class DoneTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onFinishCallback: OnFinishCallback,

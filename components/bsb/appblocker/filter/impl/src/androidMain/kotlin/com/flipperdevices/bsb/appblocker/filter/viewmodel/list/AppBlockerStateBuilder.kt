@@ -1,7 +1,7 @@
 package com.flipperdevices.bsb.appblocker.filter.viewmodel.list
 
+import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
-import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.log.LogTagProvider

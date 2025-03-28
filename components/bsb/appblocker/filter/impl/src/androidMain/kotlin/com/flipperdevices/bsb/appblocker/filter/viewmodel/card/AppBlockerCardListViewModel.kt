@@ -2,7 +2,9 @@ package com.flipperdevices.bsb.appblocker.filter.viewmodel.card
 
 import com.flipperdevices.bsb.appblocker.filter.model.card.AppBlockerCardListState
 import com.flipperdevices.bsb.appblocker.filter.model.card.AppIcon
-import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
+import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
+import com.flipperdevices.bsb.appblocker.filter.model.list.fromCategoryId
+import com.flipperdevices.bsb.appblocker.filter.model.list.icon
 import com.flipperdevices.bsb.dao.api.CardAppBlockerApi
 import com.flipperdevices.bsb.dao.model.BlockedAppDetailedState
 import com.flipperdevices.bsb.dao.model.BlockedAppEntity
@@ -11,7 +13,6 @@ import com.flipperdevices.core.ui.lifecycle.DecomposeViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach

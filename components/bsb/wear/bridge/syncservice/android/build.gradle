@@ -17,6 +17,7 @@ androidDependencies {
     api(projects.components.bsb.wear.bridge.messenger.api)
     api(projects.components.bsb.wear.bridge.messenger.common)
     api(projects.components.bsb.wear.bridge.syncservice.api)
+    implementation(projects.components.bsb.cloudMock)
 
     implementation(libs.kotlin.serialization.json)
     implementation(libs.google.horologist.datalayer)

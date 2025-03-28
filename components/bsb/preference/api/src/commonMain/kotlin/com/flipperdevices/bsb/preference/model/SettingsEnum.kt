@@ -12,4 +12,6 @@ enum class SettingsEnum(val key: String) {
     DEPRECATED_TIMER_SETTINGS("timer_settings"),
     @Deprecated("Use CardAppBlockerApi instead")
     DEPRECATED_APP_BLOCKING("app_blocking"),
+
+    FIREBASE_TOKEN("firebase_token"),
 }
