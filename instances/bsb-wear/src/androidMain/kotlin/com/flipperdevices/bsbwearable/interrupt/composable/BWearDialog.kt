@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,16 +13,35 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
+import dev.chrisbanes.haze.materials.HazeMaterials
 
+@OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
 private fun WearDialogScrim() {
+    val hazeState = remember { HazeState() }
     Box(
         Modifier
             .fillMaxSize()
-            .background(
-                color = Color(color = 0x90000000) // todo no color label in figma
-            )
-    )
+            .hazeSource(hazeState)
+    ) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(
+                    color = Color(color = 0x000000).copy(alpha = 0.6f) // todo no color in pallet
+                )
+                .hazeEffect(
+                    state = remember { HazeState() },
+                    style = HazeMaterials.ultraThin(
+                        containerColor = Color.Black.copy(alpha = 0.8f)
+                    )
+                )
+        )
+    }
 }
 
 @Composable

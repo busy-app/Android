@@ -62,14 +62,10 @@ private fun ControlledTimerState.InProgress.Running.getBrush(): Brush {
                 Color(color = 0xFF430303),
             )
 
+            is ControlledTimerState.InProgress.Running.LongRest,
             is ControlledTimerState.InProgress.Running.Rest -> listOf(
                 Color(color = 0xFF416605), // todo
                 Color(color = 0xFF0D1500),
-            )
-
-            is ControlledTimerState.InProgress.Running.LongRest -> listOf(
-                Color(color = 0xFF003976), // todo
-                Color(color = 0xFF001A36),
             )
         }
     )
@@ -112,15 +108,17 @@ private fun ActiveTimerScreenTitle(
             fontSize = 20.sp,
             color = LocalCorruptedPallet.current.white.onColor
         )
-        Text(
-            text = stringResource(
-                Res.string.tds_iteration_progress,
-                "${timerState.currentUiIteration}",
-                "${timerState.maxUiIterations}"
-            ),
-            fontSize = 14.sp,
-            color = Color(color = 0x4DFFFFFF) // todo
-        )
+        if (timerState is ControlledTimerState.InProgress.Running.Work) {
+            Text(
+                text = stringResource(
+                    Res.string.tds_iteration_progress,
+                    "${timerState.currentUiIteration}",
+                    "${timerState.maxUiIterations}"
+                ),
+                fontSize = 14.sp,
+                color = Color(color = 0x4DFFFFFF) // todo
+            )
+        }
     }
 }
 
@@ -191,7 +189,7 @@ internal fun ActiveTimerScreenComposable(
                         modifier = Modifier.padding(horizontal = 14.dp),
                         progress = animateFloatAsState(timerState.progress).value,
                         color = when (timerState) {
-                            is ControlledTimerState.InProgress.Running.LongRest -> Color(color = 0xFF0053AC) // todo
+                            is ControlledTimerState.InProgress.Running.LongRest,
                             is ControlledTimerState.InProgress.Running.Rest -> Color(color = 0xFF00AC34) // todo
                             is ControlledTimerState.InProgress.Running.Work ->
                                 LocalCorruptedPallet
@@ -209,6 +207,8 @@ internal fun ActiveTimerScreenComposable(
                     contentColor = Color(color = 0x80FFFFFF), // todo
                     modifier = Modifier,
                     fontSize = 16.sp,
+                    iconSize = 12.dp,
+                    spacedBy = 8.dp,
                     contentPadding = PaddingValues(
                         horizontal = 14.dp,
                         vertical = 10.dp

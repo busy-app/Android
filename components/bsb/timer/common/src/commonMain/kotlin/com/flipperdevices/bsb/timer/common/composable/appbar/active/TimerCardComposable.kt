@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastCoerceIn
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -83,7 +82,7 @@ fun TimerCardComposable(
 
             LinearProgressIndicator(
                 modifier = Modifier
-                    .background(config.progressBarColor)
+                    .background(config.progressBarBackgroundColor)
                     .height(6.dp)
                     .fillMaxWidth(),
                 progress = getTimerProgress(timerState),
@@ -109,7 +108,11 @@ private fun getTimerProgress(timerState: ControlledTimerState.InProgress.Running
         }
     }
     return remember(timerState.timeLeft, totalDuration) {
-        (timerState.timeLeft / totalDuration).toFloat().fastCoerceIn(0f, 1f)
+        when {
+            timerState.timeLeft > totalDuration -> 1f
+            totalDuration.inWholeSeconds == 0L -> 0f
+            else -> timerState.timeLeft.inWholeSeconds / totalDuration.inWholeSeconds.toFloat()
+        }
     }
 }
 

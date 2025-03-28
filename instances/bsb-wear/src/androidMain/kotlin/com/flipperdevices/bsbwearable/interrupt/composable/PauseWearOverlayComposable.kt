@@ -72,6 +72,8 @@ internal fun PauseWearOverlayComposable(
                     contentColor = LocalCorruptedPallet.current.black.onColor,
                     background = LocalCorruptedPallet.current.white.onColor,
                     fontSize = 16.sp,
+                    iconSize = 12.dp,
+                    spacedBy = 8.dp,
                     contentPadding = PaddingValues(
                         vertical = 10.dp,
                         horizontal = 14.dp

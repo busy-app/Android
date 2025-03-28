@@ -128,8 +128,8 @@ fun BChipButton(
                 modifier = Modifier.animateContentSize(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(
-                    spacedBy,
-                    Alignment.CenterHorizontally
+                    space = spacedBy,
+                    alignment = Alignment.CenterHorizontally
                 ),
                 content = {
                     if (painter != null) {

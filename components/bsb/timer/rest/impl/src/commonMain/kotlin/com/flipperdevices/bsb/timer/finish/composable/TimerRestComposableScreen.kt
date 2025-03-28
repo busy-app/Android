@@ -24,13 +24,13 @@ fun TimerRestComposableScreen(
     val configuration = TimerActiveConfiguration(
         gradientStartColor = when (statusType) {
             StatusType.BUSY -> error("Wrong status type")
+            StatusType.LONG_REST,
             StatusType.REST -> Color(color = 0xFF416605)
-            StatusType.LONG_REST -> Color(color = 0xFF003976)
         },
         gradientEndColor = when (statusType) {
             StatusType.BUSY -> error("Wrong status type")
+            StatusType.LONG_REST,
             StatusType.REST -> Color(color = 0xFF0D1500)
-            StatusType.LONG_REST -> Color(color = 0xFF001A36)
         },
         statusType = statusType,
         videoUri = Res.getUri("files/busy_smoke.mp4"),

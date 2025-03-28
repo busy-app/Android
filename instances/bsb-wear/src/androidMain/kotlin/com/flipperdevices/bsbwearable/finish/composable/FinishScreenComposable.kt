@@ -102,6 +102,8 @@ internal fun FinishScreenComposable(
                 contentColor = LocalCorruptedPallet.current.white.onColor,
                 background = Color(color = 0x0DFFFFFF), // todo
                 fontSize = 16.sp,
+                iconSize = 12.dp,
+                spacedBy = 8.dp,
                 contentPadding = PaddingValues(
                     vertical = 10.dp,
                     horizontal = 14.dp
