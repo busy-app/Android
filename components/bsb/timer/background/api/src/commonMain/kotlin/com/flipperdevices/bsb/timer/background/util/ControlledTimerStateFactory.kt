@@ -78,11 +78,13 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
             val isNoTimeForWorkLeft = timeLeft <= iterationTypeDuration &&
                 type == IterationType.WORK
 
-            val isNoTimeForShortRestLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.work) &&
-                type == IterationType.REST
+            val isNoTimeForShortRestLeft =
+                timeLeft <= (iterationTypeDuration + intervalsSettings.work) &&
+                    type == IterationType.REST
 
-            val isLongRestNeedMoreTimeThanTimeLeft = timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) &&
-                type == IterationType.LONG_REST
+            val isLongRestNeedMoreTimeThanTimeLeft =
+                timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) &&
+                    type == IterationType.LONG_REST
 
             val resolvedIterationType = when {
                 isNoTimeForWorkLeft
@@ -92,7 +94,9 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
                 else -> type
             }
 
-            if (resolvedIterationType == IterationType.LONG_REST && lastOrNull()?.iterationType == IterationType.LONG_REST) {
+            if (resolvedIterationType == IterationType.LONG_REST &&
+                lastOrNull()?.iterationType == IterationType.LONG_REST
+            ) {
                 timeLeft -= iterationTypeDuration
                 i += 1
                 continue
@@ -118,7 +122,12 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
                     else -> iterationTypeDuration
                 }
             ).run(::add)
-            if (listOf(isNoTimeForWorkLeft, isNoTimeForShortRestLeft, isLongRestNeedMoreTimeThanTimeLeft).all { !it }) {
+            if (listOf(
+                    isNoTimeForWorkLeft,
+                    isNoTimeForShortRestLeft,
+                    isLongRestNeedMoreTimeThanTimeLeft
+                ).all { !it }
+            ) {
                 if (type == IterationType.WORK && !intervalsSettings.autoStartRest) {
                     IterationData.Pending(
                         startOffset = totalTime - timeLeft + iterationTypeDuration,
@@ -126,7 +135,11 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
                         duration = Duration.INFINITE
                     ).run(::add)
                 }
-                if (type in listOf(IterationType.REST, IterationType.LONG_REST) && !intervalsSettings.autoStartWork) {
+                if (type in listOf(
+                        IterationType.REST,
+                        IterationType.LONG_REST
+                    ) && !intervalsSettings.autoStartWork
+                ) {
                     IterationData.Pending(
                         startOffset = totalTime - timeLeft + iterationTypeDuration,
                         iterationType = IterationType.WAIT_AFTER_REST,
@@ -176,7 +189,11 @@ fun TimerTimestamp.toState(): ControlledTimerState {
     if (currentIterationData == null) return ControlledTimerState.Finished
 
     val iterationCountLeft = settings.maxIterationCount
-        .minus(iterationsDataLeft.count { data -> data.iterationType == IterationType.WORK })
+        .minus(
+            iterationsDataLeft
+                .filterIndexed { i, _ -> i != 0 }
+                .count { data -> data.iterationType == IterationType.WORK }
+        )
 
     val currentIterationTypeTimeLeft = start
         .plus(currentIterationData.startOffset)
