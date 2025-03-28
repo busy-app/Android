@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.di
 
+import com.flipperdevices.bsb.timer.syncservice.TimerSyncService
 import com.flipperdevices.core.di.AppGraph
 import com.russhwolf.settings.ObservableSettings
 import kotlinx.coroutines.CoroutineScope
@@ -11,4 +12,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 abstract class DesktopAppComponent(
     override val observableSettings: ObservableSettings,
     override val scope: CoroutineScope
-) : AppComponent
+) : AppComponent {
+    abstract val timerSyncService: TimerSyncService
+}
