@@ -39,7 +39,18 @@ class ExtendedNotificationLayoutBuilder :
                 false -> R.string.timer_notification_btn_pause
             }
         }
-
+        when(timer) {
+            is ControlledTimerState.InProgress.Await -> when(timer.type) {
+                ControlledTimerState.InProgress.AwaitType.AFTER_REST,
+                ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> {
+                    notificationLayout.setOnClickPendingIntent(
+                        R.id.btn_text,
+                        TimerBroadcastReceiver.getTimerIntent(context, TimerServiceActionEnum.NEXT_STEP)
+                    )
+                }
+            }
+            else -> Unit
+        }
         notificationLayout.setTextViewText(R.id.btn_text, context.getString(textId))
 
         val action = when (isOnPause) {
