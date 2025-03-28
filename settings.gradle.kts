@@ -146,6 +146,7 @@ include(
     ":components:bsb:timer:syncservice:api",
     ":components:bsb:timer:syncservice:firebase",
     ":components:bsb:timer:syncservice:noop",
+    ":components:bsb:timer:syncservice:socket",
 
     ":components:bsb:wear:bridge:messenger:api",
     ":components:bsb:wear:bridge:messenger:impl",

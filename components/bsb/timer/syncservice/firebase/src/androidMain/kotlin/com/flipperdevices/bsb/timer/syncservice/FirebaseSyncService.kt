@@ -40,6 +40,11 @@ class FirebaseSyncService : FirebaseMessagingService(), LogTagProvider {
         }.onFailure {
             error(it) { "#onMessageReceived could not decode" }
         }.getOrNull() ?: return
+        val currentTimestamp = serviceDIComponent.timerApi.getTimestampState().value
+        if (currentTimestamp is TimerTimestamp.Pending && timerTimestamp is TimerTimestamp.Pending) return
+        if (currentTimestamp.lastSync == timerTimestamp.lastSync) return
+        if (currentTimestamp == timerTimestamp) return
+        if (currentTimestamp.lastSync > timerTimestamp.lastSync) return
         serviceDIComponent.timerApi.setTimestampState(timerTimestamp)
     }
 

@@ -10,10 +10,9 @@ class GServicesFilePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val gServicesFileName = when (target.CURRENT_FLAVOR_TYPE) {
             FlavorType.DEV -> "google-services-test.json"
+            FlavorType.PROD_GH_GMS,
             FlavorType.PROD_GP -> "google-services-prod.json"
-            FlavorType.PROD_GH_NOGMS, FlavorType.PROD_GH_GMS -> {
-                throw GradleException("This plugin can't be applied with this flavor type!")
-            }
+            FlavorType.PROD_GH_NOGMS, -> return
         }
         val googleServicesFile = target.file(gServicesFileName)
         if (!googleServicesFile.exists()) {
