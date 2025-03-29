@@ -69,7 +69,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
         when (val state = state) {
             is ControlledTimerState.InProgress.Await,
             ControlledTimerState.NotStarted,
-            ControlledTimerState.Finished -> Unit
+            is ControlledTimerState.Finished -> Unit
 
             is ControlledTimerState.InProgress.Running -> {
                 TimerBusyComposableScreen(
@@ -88,13 +88,6 @@ class ActiveTimerScreenDecomposeComponentImpl(
                         timerApi.skip()
                     },
                     onPauseClick = {
-                        timerApi.getTimestampState().value
-                            .runningOrNull
-                            ?.let { running -> running.pause?.minus(running.noOffsetStart) }
-                            ?.let { timePassed ->
-                                metricApi.reportEvent(BEvent.TimerPaused(timePassed.inWholeMilliseconds))
-                            }
-
                         timerApi.pause()
                     },
                     onBack = {
@@ -104,13 +97,6 @@ class ActiveTimerScreenDecomposeComponentImpl(
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
                         onStartClick = {
-                            timerApi.getTimestampState().value
-                                .runningOrNull
-                                ?.let { running -> running.pause?.minus(Clock.System.now())?.absoluteValue }
-                                ?.let { timePausedPassed ->
-                                    metricApi.reportEvent(BEvent.TimerResumed(timePausedPassed.inWholeMilliseconds))
-                                }
-
                             timerApi.resume()
                         }
                     )

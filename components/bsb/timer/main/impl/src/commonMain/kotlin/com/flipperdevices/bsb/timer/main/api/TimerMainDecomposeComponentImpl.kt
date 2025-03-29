@@ -41,7 +41,7 @@ class TimerMainDecomposeComponentImpl(
 
     private fun ControlledTimerState.getScreen(): TimerMainNavigationConfig {
         val screen = when (this) {
-            ControlledTimerState.Finished -> TimerMainNavigationConfig.Finished
+            is ControlledTimerState.Finished -> TimerMainNavigationConfig.Finished(timerSettings)
             ControlledTimerState.NotStarted -> TimerMainNavigationConfig.Main
             is ControlledTimerState.InProgress.Await -> {
                 val typeEndDelay = when (type) {
@@ -51,14 +51,22 @@ class TimerMainDecomposeComponentImpl(
                     ControlledTimerState.InProgress.AwaitType.AFTER_REST ->
                         DelayedStartScreenDecomposeComponent.TypeEndDelay.REST
                 }
-                TimerMainNavigationConfig.PauseAfter(typeEndDelay)
+                TimerMainNavigationConfig.PauseAfter(typeEndDelay, timerSettings)
             }
 
             is ControlledTimerState.InProgress.Running -> {
                 when (this) {
-                    is ControlledTimerState.InProgress.Running.LongRest -> TimerMainNavigationConfig.LongRest
-                    is ControlledTimerState.InProgress.Running.Rest -> TimerMainNavigationConfig.Rest
-                    is ControlledTimerState.InProgress.Running.Work -> TimerMainNavigationConfig.Work
+                    is ControlledTimerState.InProgress.Running.LongRest -> TimerMainNavigationConfig.LongRest(
+                        timerSettings
+                    )
+
+                    is ControlledTimerState.InProgress.Running.Rest -> TimerMainNavigationConfig.Rest(
+                        timerSettings
+                    )
+
+                    is ControlledTimerState.InProgress.Running.Work -> TimerMainNavigationConfig.Work(
+                        timerSettings
+                    )
                 }
             }
         }
@@ -70,7 +78,7 @@ class TimerMainDecomposeComponentImpl(
         timerApi.getState()
             .distinctUntilChangedBy { state ->
                 when (state) {
-                    ControlledTimerState.Finished -> 0
+                    is ControlledTimerState.Finished -> 0
                     ControlledTimerState.NotStarted -> 1
                     is ControlledTimerState.InProgress.Running.LongRest -> 2
                     is ControlledTimerState.InProgress.Running.Rest -> 3
@@ -94,28 +102,29 @@ class TimerMainDecomposeComponentImpl(
         config: TimerMainNavigationConfig,
         componentContext: ComponentContext
     ): DecomposeComponent = when (config) {
-        TimerMainNavigationConfig.Main -> cardsDecomposeComponentFactory(
+        is TimerMainNavigationConfig.Main -> cardsDecomposeComponentFactory(
             componentContext = componentContext,
         )
 
-        TimerMainNavigationConfig.Work -> activeTimerScreenDecomposeComponentFactory(
+        is TimerMainNavigationConfig.Work -> activeTimerScreenDecomposeComponentFactory(
             componentContext
         )
 
-        TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(
+        is TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             onFinishCallback = {
                 timerApi.stop()
                 navigation.replaceAll(TimerMainNavigationConfig.Main)
-            }
+            },
+            timerSettings = config.timerSettings
         )
 
-        TimerMainNavigationConfig.LongRest -> restTimerScreenDecomposeComponentFactory.invoke(
+        is TimerMainNavigationConfig.LongRest -> restTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             breakType = RestTimerScreenDecomposeComponent.BreakType.LONG
         )
 
-        TimerMainNavigationConfig.Rest -> restTimerScreenDecomposeComponentFactory.invoke(
+        is TimerMainNavigationConfig.Rest -> restTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             breakType = RestTimerScreenDecomposeComponent.BreakType.SHORT
         )

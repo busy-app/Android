@@ -12,6 +12,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.appblocker.filter.composable.screen.AppBlockerFilterScreenComposable
 import com.flipperdevices.bsb.appblocker.filter.viewmodel.list.AppBlockerViewModelWithSearch
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
 import com.flipperdevices.ui.decompose.ElementDecomposeComponent
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
@@ -22,12 +23,13 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class AppBlockerFilterScreenDecomposeComponent(
     @Assisted componentContext: ComponentContext,
-    private val appBlockerStateBuilderFactory: () -> AppBlockerViewModelWithSearch
+    @Assisted timerSettingsId: TimerSettingsId,
+    private val appBlockerStateBuilderFactory: (TimerSettingsId) -> AppBlockerViewModelWithSearch
 ) : ElementDecomposeComponent(componentContext) {
     private var isVisible by mutableStateOf(false)
     private val viewModel by lazy {
-        viewModelWithFactory(null) {
-            appBlockerStateBuilderFactory()
+        viewModelWithFactory(timerSettingsId) {
+            appBlockerStateBuilderFactory(timerSettingsId)
         }
     }
 

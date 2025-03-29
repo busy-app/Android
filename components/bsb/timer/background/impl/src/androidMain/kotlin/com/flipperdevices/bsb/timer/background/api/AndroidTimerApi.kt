@@ -106,7 +106,6 @@ class AndroidTimerApi(
             withLock(mutex) {
                 binderListenerJob?.cancelAndJoin()
                 binderListenerJob = null
-                timerStateFlow.emit(ControlledTimerState.Finished)
             }
         }
     }

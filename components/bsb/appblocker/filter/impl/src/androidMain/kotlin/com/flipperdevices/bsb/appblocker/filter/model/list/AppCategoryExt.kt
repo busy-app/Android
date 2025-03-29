@@ -57,9 +57,3 @@ fun AppCategory.Companion.fromCategoryId(categoryId: Int): AppCategory {
     return AppCategory.entries.find { it.id == categoryId }
         ?: AppCategory.CATEGORY_UNDEFINED
 }
-
-fun AppCategory.Companion.isAllCategoryContains(categories: List<Int>): Boolean {
-    val categoriesSet = categories.toSet()
-    val notContainsCategory = AppCategory.entries.find { categoriesSet.contains(it.id).not() }
-    return notContainsCategory == null
-}

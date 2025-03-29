@@ -38,7 +38,8 @@ import busystatusbar.instances.bsb_wear.generated.resources.tds_iteration_progre
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.bsb.timer.background.model.maxUiIterations
@@ -132,7 +133,7 @@ internal fun ActiveTimerScreenComposable(
 ) {
     when (timerState) {
         is ControlledTimerState.InProgress.Await,
-        ControlledTimerState.Finished,
+        is ControlledTimerState.Finished,
         ControlledTimerState.NotStarted -> Unit
 
         is ControlledTimerState.InProgress.Running -> {
@@ -234,6 +235,7 @@ private fun ActiveScreenComposablePreview() {
                     timeLeft = 123.minutes,
                     isOnPause = false,
                     timerSettings = TimerSettings(
+                        id = TimerSettingsId(id = -1),
                         intervalsSettings = TimerSettings.IntervalsSettings(
                             work = 150.minutes
                         )
@@ -246,6 +248,7 @@ private fun ActiveScreenComposablePreview() {
                     timeLeft = 12.minutes,
                     isOnPause = false,
                     timerSettings = TimerSettings(
+                        id = TimerSettingsId(id = -1),
                         intervalsSettings = TimerSettings.IntervalsSettings(
                             work = 150.minutes
                         )
@@ -258,6 +261,7 @@ private fun ActiveScreenComposablePreview() {
                     timeLeft = 3.minutes,
                     isOnPause = false,
                     timerSettings = TimerSettings(
+                        id = TimerSettingsId(id = -1),
                         intervalsSettings = TimerSettings.IntervalsSettings(
                             work = 150.minutes
                         )

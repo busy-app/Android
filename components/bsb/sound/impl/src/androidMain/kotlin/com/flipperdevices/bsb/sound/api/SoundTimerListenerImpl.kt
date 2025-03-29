@@ -1,6 +1,6 @@
 package com.flipperdevices.bsb.sound.api
 
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -10,15 +10,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
+import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@SingleIn(AppGraph::class)
-@ContributesBinding(AppGraph::class, TimerStateListener::class, multibinding = true)
 class SoundTimerListenerImpl(
-    private val timerApi: TimerApi,
+    @Assisted private val timerApi: TimerApi,
     private val scope: CoroutineScope,
     private val soundFromStateProducer: SoundFromStateProducer
 ) : TimerStateListener {
@@ -32,7 +30,7 @@ class SoundTimerListenerImpl(
         runBlocking { soundFromStateProducer.clear() }
         timerStateListenerJob = timerApi.getState().onEach { internalState ->
             return@onEach when (internalState) {
-                ControlledTimerState.Finished,
+                is ControlledTimerState.Finished,
                 ControlledTimerState.NotStarted,
                 is ControlledTimerState.InProgress.Await -> return@onEach
 
@@ -46,5 +44,17 @@ class SoundTimerListenerImpl(
     override suspend fun onTimerStop() {
         timerStateListenerJob?.cancel()
         runBlocking { soundFromStateProducer.clear() }
+    }
+
+    @Inject
+    @ContributesBinding(AppGraph::class, TimerStateListener.Factory::class, multibinding = true)
+    class Factory(
+        val factory: (
+            timerApi: TimerApi
+        ) -> SoundTimerListenerImpl
+    ) : TimerStateListener.Factory {
+        override fun invoke(
+            timerApi: TimerApi
+        ) = factory(timerApi)
     }
 }

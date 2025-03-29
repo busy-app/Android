@@ -54,7 +54,7 @@ class RootDecomposeComponentImpl(
             .getState()
             .distinctUntilChangedBy { state ->
                 when (state) {
-                    ControlledTimerState.Finished -> 0
+                    is ControlledTimerState.Finished -> 0
                     ControlledTimerState.NotStarted -> 1
                     is ControlledTimerState.InProgress.Running.LongRest -> 2
                     is ControlledTimerState.InProgress.Running.Rest -> 3
@@ -64,7 +64,7 @@ class RootDecomposeComponentImpl(
             }
             .map {
                 when (it) {
-                    ControlledTimerState.Finished -> {
+                    is ControlledTimerState.Finished -> {
                         RootNavigationConfig.Finish
                     }
 

@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.appblocker.filter.viewmodel.list
 import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.log.LogTagProvider
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +19,7 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class AppBlockerStateBuilder(
     @Assisted private val scope: CoroutineScope,
+    @Assisted private val timerSettingsId: TimerSettingsId,
     private val daoHelper: AppBlockerDaoHelper,
 ) : LogTagProvider {
     override val TAG = "AppBlockerViewModel"
@@ -27,7 +29,7 @@ class AppBlockerStateBuilder(
 
     init {
         scope.launch {
-            appBlockerFilterScreenState.emit(daoHelper.load())
+            appBlockerFilterScreenState.emit(daoHelper.load(timerSettingsId))
         }
     }
 
@@ -38,7 +40,7 @@ class AppBlockerStateBuilder(
         onHide: () -> Unit
     ) {
         scope.launch {
-            daoHelper.save(currentState)
+            daoHelper.save(timerSettingsId, currentState)
             withContext(Dispatchers.Main) {
                 onHide()
             }

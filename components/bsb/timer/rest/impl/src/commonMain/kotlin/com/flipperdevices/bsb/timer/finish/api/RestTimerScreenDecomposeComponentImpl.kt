@@ -95,26 +95,12 @@ class RestTimerScreenDecomposeComponentImpl(
                         stopSessionSheetDecomposeComponent.show()
                     },
                     onPauseClick = {
-                        timerApi.getTimestampState().value
-                            .runningOrNull
-                            ?.let { running -> running.pause?.minus(running.noOffsetStart) }
-                            ?.let { timePassed ->
-                                metricApi.reportEvent(BEvent.TimerPaused(timePassed.inWholeMilliseconds))
-                            }
-
                         timerApi.pause()
                     }
                 )
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
                         onStartClick = {
-                            timerApi.getTimestampState().value
-                                .runningOrNull
-                                ?.let { running -> running.pause?.minus(Clock.System.now())?.absoluteValue }
-                                ?.let { timePausedPassed ->
-                                    metricApi.reportEvent(BEvent.TimerResumed(timePausedPassed.inWholeMilliseconds))
-                                }
-
                             timerApi.resume()
                         }
                     )
@@ -123,7 +109,7 @@ class RestTimerScreenDecomposeComponentImpl(
 
             is ControlledTimerState.InProgress.Await,
             ControlledTimerState.NotStarted,
-            ControlledTimerState.Finished -> Unit
+            is ControlledTimerState.Finished -> Unit
         }
         stopSessionSheetDecomposeComponent.Render(hazeState)
     }
