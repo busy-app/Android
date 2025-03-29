@@ -22,15 +22,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@SingleIn(AppGraph::class)
-@ContributesBinding(AppGraph::class, TimerStateListener::class, multibinding = true)
 class MetricTimerStateListener(
-    private val timerApi: TimerApi,
+    @Assisted private val timerApi: TimerApi,
     private val scope: CoroutineScope,
     private val metricHandler: MetricHandlerImpl
 ) : TimerStateListener {
@@ -58,5 +57,17 @@ class MetricTimerStateListener(
         super.onTimerStop()
         timerStateListenerJob?.cancel()
         timerStateListenerJob = null
+    }
+
+    @Inject
+    @ContributesBinding(AppGraph::class, TimerStateListener.Factory::class, multibinding = true)
+    class Factory(
+        val factory: (
+            timerApi: TimerApi
+        ) -> MetricTimerStateListener
+    ) : TimerStateListener.Factory {
+        override fun invoke(
+            timerApi: TimerApi
+        ) = factory(timerApi)
     }
 }

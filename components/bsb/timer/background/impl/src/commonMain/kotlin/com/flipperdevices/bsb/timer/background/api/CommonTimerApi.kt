@@ -26,14 +26,17 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 class CommonTimerApi(
     private val scope: CoroutineScope,
-    private val compositeListeners: CompositeTimerStateListener,
+    compositeListenersFactory: (TimerApi) -> CompositeTimerStateListener,
 ) : TimerApi, LogTagProvider {
     override val TAG = "CommonTimerApi"
+
+    private val compositeListeners = compositeListenersFactory(this)
 
     private val mutex = Mutex()
     private val timerStateFlow =
         MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
-    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending.NotStarted)
+    private val timerTimestampFlow =
+        MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending.NotStarted)
 
     private var timerJob: TimerLoopJob? = null
     private var stateInvalidateJob: Job? = null

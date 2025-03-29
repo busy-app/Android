@@ -18,18 +18,17 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
-@SingleIn(AppGraph::class)
-@ContributesBinding(AppGraph::class, TimerStateListener::class, multibinding = true)
 class AppBlockerTimerListener(
+    @Assisted private val timerApi: TimerApi,
     private val appBlockerApi: CardAppBlockerApi,
     private val looperFactory: (TimerSettingsId) -> UsageStatsLooper,
     private val scope: CoroutineScope,
-    private val timerApi: TimerApi
 ) : TimerStateListener, LogTagProvider {
     override val TAG = "AppBlockerTimer"
     private val mutex = Mutex()
@@ -82,5 +81,17 @@ class AppBlockerTimerListener(
     private suspend fun stopLoop() = mutex.withLock {
         info { "Try to stop looper $looper" }
         looper?.stopLoop()
+    }
+
+    @Inject
+    @ContributesBinding(AppGraph::class, TimerStateListener.Factory::class, multibinding = true)
+    class Factory(
+        val factory: (
+            timerApi: TimerApi
+        ) -> AppBlockerTimerListener
+    ) : TimerStateListener.Factory {
+        override fun invoke(
+            timerApi: TimerApi
+        ) = factory(timerApi)
     }
 }

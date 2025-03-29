@@ -91,7 +91,7 @@ class WearWearMessageSyncService(
             .distinctUntilChangedBy { state -> state::class }
             .map {
                 when (it) {
-                    ControlledTimerState.Finished -> 10
+                    is ControlledTimerState.Finished -> 10
                     is ControlledTimerState.InProgress.Await -> 10
                     is ControlledTimerState.InProgress.Running.LongRest -> 0
                     is ControlledTimerState.InProgress.Running.Rest -> 0
@@ -115,9 +115,7 @@ class WearWearMessageSyncService(
                         sendTimerTimestampMessage()
                     }
 
-                    AppBlockerCountRequestMessage,
                     TimerSettingsRequestMessage,
-                    is AppBlockerCountMessage,
                     is TimerSettingsMessage -> Unit
 
                     is TimerTimestampMessage -> {

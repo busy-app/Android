@@ -19,10 +19,10 @@ interface DBCardRepository {
     fun getPlatformSpecificSettingFlow(cardId: Long): Flow<DBCardPlatformSpecificSettings?>
 
     @Query("SELECT * FROM cards_platform_settings WHERE card_id == :cardId")
-    fun getPlatformSpecificSetting(cardId: Long): DBCardPlatformSpecificSettings?
+    suspend fun getPlatformSpecificSetting(cardId: Long): DBCardPlatformSpecificSettings?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(platformSpecificSettings: DBCardPlatformSpecificSettings)
+    suspend fun insert(platformSpecificSettings: DBCardPlatformSpecificSettings)
 
     @Transaction
     suspend fun updateBlockedEnabled(
