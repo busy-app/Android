@@ -3,10 +3,11 @@ package com.flipperdevices.bsb.appblocker.filter.viewmodel.list
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
-import com.flipperdevices.bsb.appblocker.filter.model.list.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
+import com.flipperdevices.bsb.appblocker.filter.model.list.fromCategoryId
 import com.flipperdevices.bsb.dao.api.CardAppBlockerApi
 import com.flipperdevices.bsb.dao.model.BlockedAppDetailedState
 import com.flipperdevices.bsb.dao.model.BlockedAppEntity

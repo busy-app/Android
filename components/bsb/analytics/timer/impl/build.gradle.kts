@@ -14,4 +14,5 @@ commonDependencies {
     implementation(projects.components.bsb.timer.background.api)
 
     implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlin.datetime)
 }
