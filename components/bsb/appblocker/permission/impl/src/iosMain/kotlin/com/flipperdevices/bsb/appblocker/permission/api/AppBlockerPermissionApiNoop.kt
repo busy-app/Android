@@ -7,6 +7,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
 @ContributesBinding(AppGraph::class, AppBlockerPermissionApi::class)
-class AppBlockerPermissionApiNoop() : AppBlockerPermissionApi {
+class AppBlockerPermissionApiNoop : AppBlockerPermissionApi {
     override fun isAllPermissionGranted() = flowOf(true)
 }

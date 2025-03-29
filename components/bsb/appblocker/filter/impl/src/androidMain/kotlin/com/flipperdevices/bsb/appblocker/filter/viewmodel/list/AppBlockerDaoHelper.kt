@@ -44,27 +44,28 @@ class AppBlockerDaoHelper(
         val currentState = cardAppBlockerApi.getBlockedAppDetailedState(cardId)
             .first()
 
-
         val checkedAppsSet = when (currentState) {
             BlockedAppDetailedState.All,
             BlockedAppDetailedState.TurnOff -> emptySet()
 
-            is BlockedAppDetailedState.TurnOnWhitelist -> currentState
-                .entities
-                .filterIsInstance<BlockedAppEntity.App>()
-                .map { it.packageId }
-                .toSet()
+            is BlockedAppDetailedState.TurnOnWhitelist ->
+                currentState
+                    .entities
+                    .filterIsInstance<BlockedAppEntity.App>()
+                    .map { it.packageId }
+                    .toSet()
         }
 
         val checkedCategory = when (currentState) {
             BlockedAppDetailedState.All,
             BlockedAppDetailedState.TurnOff -> AppCategory.entries.toSet()
 
-            is BlockedAppDetailedState.TurnOnWhitelist -> currentState
-                .entities
-                .filterIsInstance<BlockedAppEntity.Category>()
-                .map { AppCategory.fromCategoryId(it.categoryId) }
-                .toSet()
+            is BlockedAppDetailedState.TurnOnWhitelist ->
+                currentState
+                    .entities
+                    .filterIsInstance<BlockedAppEntity.Category>()
+                    .map { AppCategory.fromCategoryId(it.categoryId) }
+                    .toSet()
         }
 
         val appInfosByCategories = apps
@@ -77,7 +78,7 @@ class AppBlockerDaoHelper(
                 .mapNotNull {
                     it.toUIApp(
                         isBlocked = isCategoryBlocked ||
-                                checkedAppsSet.contains(it.packageName)
+                            checkedAppsSet.contains(it.packageName)
                     )
                 }
                 .sortedBy { it.appName }

@@ -2,7 +2,6 @@ package com.flipperdevices.bsb.wear.messenger.service
 
 import com.flipperdevices.bsb.dao.api.CardAppBlockerApi
 import com.flipperdevices.bsb.dao.api.TimerSettingsApi
-import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
@@ -89,15 +88,17 @@ class AndroidWearMessageSyncService(
     private fun startSettingsChangeJob(): Job {
         return timerSettingsApi.getTimerSettingsListFlow()
             .flatMapLatest { settingsList ->
-                combine(settingsList.map { settings ->
-                    appBlockerApi.getBlockedAppCount(settings.id)
-                        .map { blockedAppCount ->
-                            WearOSTimerSettings(
-                                instance = settings,
-                                blockedAppCount = blockedAppCount
-                            )
-                        }
-                }) {
+                combine(
+                    settingsList.map { settings ->
+                        appBlockerApi.getBlockedAppCount(settings.id)
+                            .map { blockedAppCount ->
+                                WearOSTimerSettings(
+                                    instance = settings,
+                                    blockedAppCount = blockedAppCount
+                                )
+                            }
+                    }
+                ) {
                     it.toList()
                 }
             }

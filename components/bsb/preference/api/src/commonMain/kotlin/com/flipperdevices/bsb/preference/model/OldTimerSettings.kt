@@ -1,8 +1,8 @@
 package com.flipperdevices.bsb.preference.model
 
+import kotlinx.serialization.Serializable
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
-import kotlinx.serialization.Serializable
 
 @Deprecated(
     "OldTimerSettings doesn't support multicard, so use new timer settings",

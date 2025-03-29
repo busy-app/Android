@@ -1,7 +1,6 @@
 package com.flipperdevices.core.apppackage
 
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import com.flipperdevices.core.di.AppGraph
 import me.tatarka.inject.annotations.Inject
@@ -25,5 +24,4 @@ class AppDetailedInfoProviderImpl(
             categoryId = applicationInfo.category
         )
     }
-
 }

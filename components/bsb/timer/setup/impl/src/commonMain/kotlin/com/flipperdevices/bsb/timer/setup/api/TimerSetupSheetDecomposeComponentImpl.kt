@@ -49,7 +49,9 @@ class TimerSetupSheetDecomposeComponentImpl(
             is CardEditScreenState.Loaded -> if (localState.timerSettings == null) {
                 onBack()
                 return
-            } else localState.timerSettings
+            } else {
+                localState.timerSettings
+            }
         }
 
         TimerSetupModalBottomSheetContent(

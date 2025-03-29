@@ -1,9 +1,9 @@
 package com.flipperdevices.bsb.dao.model
 
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 @JvmInline
 @Serializable

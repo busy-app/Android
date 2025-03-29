@@ -6,12 +6,10 @@ import com.flipperdevices.bsb.dao.model.AppDatabase
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.cinterop.ExperimentalForeignApi
 import me.tatarka.inject.annotations.Inject
-import me.tatarka.inject.annotations.Provides
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 
 @Inject
 @ContributesBinding(AppGraph::class, AppDatabaseBuilder::class)

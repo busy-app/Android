@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.dao.di
 
-import androidx.room.RoomDatabase
 import com.flipperdevices.bsb.dao.model.AppDatabase
 import com.flipperdevices.bsb.preference.api.PreferenceApi
 import com.flipperdevices.core.di.AppGraph

@@ -13,22 +13,22 @@ sealed interface TimerMainNavigationConfig {
     @Serializable
     data class Work(
         val timerSettings: TimerSettings
-    )  : TimerMainNavigationConfig
+    ) : TimerMainNavigationConfig
 
     @Serializable
     data class Rest(
         val timerSettings: TimerSettings
-    )  : TimerMainNavigationConfig
+    ) : TimerMainNavigationConfig
 
     @Serializable
     data class LongRest(
         val timerSettings: TimerSettings
-    )  : TimerMainNavigationConfig
+    ) : TimerMainNavigationConfig
 
     @Serializable
     data class Finished(
         val timerSettings: TimerSettings
-    )  : TimerMainNavigationConfig
+    ) : TimerMainNavigationConfig
 
     @Serializable
     data class PauseAfter(

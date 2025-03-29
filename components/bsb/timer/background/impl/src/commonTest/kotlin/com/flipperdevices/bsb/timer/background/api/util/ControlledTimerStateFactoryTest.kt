@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.timer.background.api.util
 
-
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.util.IterationData

@@ -3,7 +3,6 @@ package com.flipperdevices.bsb.dao.model.cards
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 
-
 object DBCardEntityMapper {
     fun map(entity: DBCardEntity): TimerSettings {
         return TimerSettings(

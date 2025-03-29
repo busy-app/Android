@@ -1,8 +1,8 @@
 package com.flipperdevices.bsb.appblocker.filter.viewmodel.card
 
+import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.card.AppBlockerCardListState
 import com.flipperdevices.bsb.appblocker.filter.model.card.AppIcon
-import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.fromCategoryId
 import com.flipperdevices.bsb.appblocker.filter.model.list.icon
 import com.flipperdevices.bsb.dao.api.CardAppBlockerApi

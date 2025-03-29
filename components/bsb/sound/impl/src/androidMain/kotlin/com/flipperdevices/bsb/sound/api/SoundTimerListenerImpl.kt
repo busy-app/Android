@@ -13,7 +13,6 @@ import kotlinx.coroutines.runBlocking
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
 class SoundTimerListenerImpl(
@@ -46,7 +45,6 @@ class SoundTimerListenerImpl(
         timerStateListenerJob?.cancel()
         runBlocking { soundFromStateProducer.clear() }
     }
-
 
     @Inject
     @ContributesBinding(AppGraph::class, TimerStateListener.Factory::class, multibinding = true)

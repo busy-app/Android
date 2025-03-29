@@ -6,7 +6,6 @@ import androidx.room.RoomDatabase
 import com.flipperdevices.bsb.dao.model.AppDatabase
 import com.flipperdevices.core.di.AppGraph
 import me.tatarka.inject.annotations.Inject
-import me.tatarka.inject.annotations.Provides
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject

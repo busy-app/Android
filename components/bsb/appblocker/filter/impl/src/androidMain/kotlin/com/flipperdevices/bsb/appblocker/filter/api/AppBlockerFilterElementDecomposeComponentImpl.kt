@@ -21,7 +21,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class AppBlockerFilterElementDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     @Assisted timerSettingsId: TimerSettingsId,
-    filterScreenDecomposeComponentFactory: (ComponentContext, TimerSettingsId) -> AppBlockerFilterScreenDecomposeComponent,
+    filterScreenDecomposeComponentFactory:
+    (ComponentContext, TimerSettingsId) -> AppBlockerFilterScreenDecomposeComponent,
     viewModelFactory: (TimerSettingsId) -> AppBlockerCardListViewModel
 ) : AppBlockerFilterElementDecomposeComponent(componentContext) {
     private val filterScreenDecomposeComponent = filterScreenDecomposeComponentFactory(

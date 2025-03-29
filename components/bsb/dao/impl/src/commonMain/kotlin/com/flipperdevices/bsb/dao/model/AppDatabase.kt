@@ -12,7 +12,6 @@ import com.flipperdevices.bsb.dao.model.cards.DBCardRepository
 import com.flipperdevices.bsb.dao.model.converters.DurationConverter
 import com.flipperdevices.bsb.dao.model.stats.DBBlockedAppStat
 
-
 @Database(
     entities = [
         DBCardEntity::class,

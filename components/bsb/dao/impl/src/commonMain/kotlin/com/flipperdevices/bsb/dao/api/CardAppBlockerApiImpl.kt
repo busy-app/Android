@@ -34,16 +34,18 @@ class CardAppBlockerApiImpl(
         return permissionApi.isAllPermissionGranted().flatMapLatest { isPermissionGranted ->
             if (isPermissionGranted) {
                 flowOf(BlockedAppCount.NoPermission)
-            } else getBlockedAppDetailedState(cardId)
-                .map {
-                    when (it) {
-                        BlockedAppDetailedState.All -> BlockedAppCount.All
-                        BlockedAppDetailedState.TurnOff -> BlockedAppCount.TurnOff
-                        is BlockedAppDetailedState.TurnOnWhitelist -> BlockedAppCount.Count(
-                            it.entities.size
-                        )
+            } else {
+                getBlockedAppDetailedState(cardId)
+                    .map {
+                        when (it) {
+                            BlockedAppDetailedState.All -> BlockedAppCount.All
+                            BlockedAppDetailedState.TurnOff -> BlockedAppCount.TurnOff
+                            is BlockedAppDetailedState.TurnOnWhitelist -> BlockedAppCount.Count(
+                                it.entities.size
+                            )
+                        }
                     }
-                }
+            }
         }
     }
 
@@ -62,7 +64,7 @@ class CardAppBlockerApiImpl(
             } else {
                 BlockedAppDetailedState.TurnOnWhitelist(
                     blockedCategories.map { BlockedAppEntity.Category(it.categoryId) } +
-                            blockedApps.map { BlockedAppEntity.App(it.appPackage) }
+                        blockedApps.map { BlockedAppEntity.App(it.appPackage) }
                 )
             }
         }
@@ -133,7 +135,6 @@ class CardAppBlockerApiImpl(
         val categories = database.blockedAppRepository().getBlockedCategories(cardId.id)
             .first()
             .map { it.categoryId }
-
 
         val appPackage = when (appEntity) {
             is BlockedAppEntity.Category -> return categories.contains(appEntity.categoryId)

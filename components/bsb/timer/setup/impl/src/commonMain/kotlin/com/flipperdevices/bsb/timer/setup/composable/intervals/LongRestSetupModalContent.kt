@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ic_long_rest
-import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_long_rest_title
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_long_rest_desc
+import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_long_rest_title
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.dao.model.TimerSettings

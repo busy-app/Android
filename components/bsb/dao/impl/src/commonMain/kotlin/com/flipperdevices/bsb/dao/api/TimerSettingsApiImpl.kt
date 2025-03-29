@@ -4,7 +4,6 @@ import com.flipperdevices.bsb.dao.model.AppDatabase
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.dao.model.cards.DBCardEntityMapper
-import com.flipperdevices.bsb.dao.model.cards.DBCardRepository
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.di.KIProvider
 import com.flipperdevices.core.di.provideDelegate
@@ -34,7 +33,9 @@ class TimerSettingsApiImpl(
         return database.cardRepository().getTimerSettingsFlow(timerSettingsId.id).map {
             if (it != null) {
                 DBCardEntityMapper.map(it)
-            } else null
+            } else {
+                null
+            }
         }
     }
 

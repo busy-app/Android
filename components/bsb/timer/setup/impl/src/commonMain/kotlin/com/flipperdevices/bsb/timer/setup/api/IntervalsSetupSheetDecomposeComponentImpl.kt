@@ -10,9 +10,7 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
-import com.arkivanov.essenty.instancekeeper.getOrCreate
 import com.composables.core.SheetDetent
-import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.setup.composable.intervals.LongRestSetupModalBottomSheetContent
 import com.flipperdevices.bsb.timer.setup.composable.intervals.RestSetupModalBottomSheetContent
@@ -75,7 +73,7 @@ class IntervalsSetupSheetDecomposeComponentImpl(
     @Composable
     override fun Render(modifier: Modifier) {
         val state by timerSetupViewModel.getState().collectAsState()
-        val timerSettings = when(val localState = state) {
+        val timerSettings = when (val localState = state) {
             CardEditScreenState.NotInitialized -> return
             is CardEditScreenState.Loaded -> localState.timerSettings ?: return
         }

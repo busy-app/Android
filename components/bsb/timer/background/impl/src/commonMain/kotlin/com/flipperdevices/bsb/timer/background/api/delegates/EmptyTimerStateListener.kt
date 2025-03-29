@@ -14,7 +14,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class EmptyTimerStateListener : TimerStateListener {
     @Inject
     @ContributesBinding(AppGraph::class, TimerStateListener.Factory::class, multibinding = true)
-    class Factory: TimerStateListener.Factory {
+    class Factory : TimerStateListener.Factory {
         override fun invoke(
             timerApi: TimerApi
         ) = EmptyTimerStateListener()

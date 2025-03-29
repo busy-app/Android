@@ -76,15 +76,15 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
             }.coerceAtMost(timeLeft)
 
             val isNoTimeForWorkLeft = timeLeft <= iterationTypeDuration &&
-                    type == IterationType.WORK
+                type == IterationType.WORK
 
             val isNoTimeForShortRestLeft =
                 timeLeft <= (iterationTypeDuration + intervalsSettings.work) &&
-                        type == IterationType.REST
+                    type == IterationType.REST
 
             val isLongRestNeedMoreTimeThanTimeLeft =
                 timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) &&
-                        type == IterationType.LONG_REST
+                    type == IterationType.LONG_REST
 
             IterationData.Default(
                 startOffset = totalTime - timeLeft,

@@ -68,7 +68,8 @@ class TimerSetupViewModel(
     }
 
     fun setTotalTime(
-        timerSettings: TimerSettings, duration: Duration
+        timerSettings: TimerSettings,
+        duration: Duration
     ) = with(TimerSettingsReducer) {
         viewModelScope.launch {
             timerSettingsApi.insert(

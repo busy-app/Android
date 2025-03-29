@@ -83,7 +83,7 @@ class MetricHandlerImpl(
         )
     }
 
-
+    @Suppress("NestedBlockDepth")
     suspend fun onTimerStateChanged(
         state: ControlledTimerState,
         prevTimerTimestamp: TimerTimestamp?,
@@ -120,7 +120,8 @@ private fun BlockedAppDetailedState.isBlockingEnabled() = when (this) {
 private fun BlockedAppDetailedState.getBlockedCategories() = when (this) {
     BlockedAppDetailedState.All -> listOf("All")
     BlockedAppDetailedState.TurnOff -> emptyList()
-    is BlockedAppDetailedState.TurnOnWhitelist -> entities
-        .filterIsInstance<BlockedAppEntity.Category>()
-        .map { it.categoryId.toString() }
+    is BlockedAppDetailedState.TurnOnWhitelist ->
+        entities
+            .filterIsInstance<BlockedAppEntity.Category>()
+            .map { it.categoryId.toString() }
 }

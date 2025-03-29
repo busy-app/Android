@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.lazy.items
-import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_play
 import busystatusbar.instances.bsb_wear.generated.resources.Res
 import busystatusbar.instances.bsb_wear.generated.resources.bwca_button_start

@@ -1,7 +1,6 @@
 package com.flipperdevices.bsb.timer.setup.api
 
 import com.arkivanov.decompose.ComponentContext
-import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.ui.decompose.ModalDecomposeComponent
 
