@@ -21,7 +21,8 @@ import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_r
 import busystatusbar.components.bsb.timer.setup.impl.generated.resources.ts_bs_rest_title
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
 import com.flipperdevices.bsb.timer.setup.composable.common.TitleInfoComposable
 import com.flipperdevices.ui.options.OptionSwitch
@@ -38,8 +39,8 @@ import kotlin.time.DurationUnit
 fun RestSetupModalBottomSheetContent(
     timerSettings: TimerSettings,
     onSaveClick: () -> Unit,
-    onTimeChange: (Duration) -> Unit,
-    onAutoStartToggle: () -> Unit,
+    onTimeChange: (TimerSettings, Duration) -> Unit,
+    onAutoStartToggle: (TimerSettings) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -73,7 +74,7 @@ fun RestSetupModalBottomSheetContent(
                     step = 5.minutes.inWholeMinutes.toInt()
                 ),
                 initialSelectedItem = timerSettings.intervalsSettings.rest,
-                onItemSelect = { duration -> onTimeChange.invoke(duration) },
+                onItemSelect = { duration -> onTimeChange.invoke(timerSettings, duration) },
                 durationUnit = DurationUnit.MINUTES
             )
         }
@@ -81,7 +82,7 @@ fun RestSetupModalBottomSheetContent(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(Res.string.ts_bs_rest_autostart_title),
             infoText = stringResource(Res.string.ts_bs_rest_autostart_desc),
-            onCheckChange = { onAutoStartToggle.invoke() },
+            onCheckChange = { onAutoStartToggle.invoke(timerSettings) },
             checked = timerSettings.intervalsSettings.autoStartRest
         )
         TimerSaveButtonComposable(onClick = onSaveClick)
@@ -95,10 +96,10 @@ fun RestSetupModalBottomSheetContent(
 private fun RestSetupModalBottomSheetContentPreview() {
     BusyBarThemeInternal {
         RestSetupModalBottomSheetContent(
-            timerSettings = TimerSettings(),
+            timerSettings = TimerSettings(TimerSettingsId(id = -1)),
             onSaveClick = {},
             onAutoStartToggle = {},
-            onTimeChange = {}
+            onTimeChange = { _, _ -> }
         )
     }
 }

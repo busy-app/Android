@@ -5,8 +5,6 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
-import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
-import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
@@ -93,7 +91,7 @@ class WearWearMessageSyncService(
             .distinctUntilChangedBy { state -> state::class }
             .map {
                 when (it) {
-                    ControlledTimerState.Finished -> 10
+                    is ControlledTimerState.Finished -> 10
                     is ControlledTimerState.InProgress.Await -> 10
                     is ControlledTimerState.InProgress.Running.LongRest -> 0
                     is ControlledTimerState.InProgress.Running.Rest -> 0
@@ -117,9 +115,7 @@ class WearWearMessageSyncService(
                         sendTimerTimestampMessage()
                     }
 
-                    AppBlockerCountRequestMessage,
                     TimerSettingsRequestMessage,
-                    is AppBlockerCountMessage,
                     is TimerSettingsMessage -> Unit
 
                     is TimerTimestampMessage -> {

@@ -17,6 +17,7 @@ import busystatusbar.components.bsb.appblocker.card.impl.generated.resources.app
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
 import me.tatarka.inject.annotations.Assisted
@@ -28,6 +29,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class AppBlockerCardContentDecomposeComponentNoop(
     @Assisted componentContext: ComponentContext,
     @Assisted private val onBackParameter: DecomposeOnBackParameter,
+    @Assisted timerSettingsId: TimerSettingsId
 ) : AppBlockerCardContentDecomposeComponent(componentContext) {
     @Composable
     override fun Render(modifier: Modifier) {
@@ -53,12 +55,14 @@ class AppBlockerCardContentDecomposeComponentNoop(
     class Factory(
         private val factory: (
             componentContext: ComponentContext,
-            onBackParameter: DecomposeOnBackParameter
+            onBackParameter: DecomposeOnBackParameter,
+            timerSettingsId: TimerSettingsId
         ) -> AppBlockerCardContentDecomposeComponentNoop
     ) : AppBlockerCardContentDecomposeComponent.Factory {
         override fun invoke(
             componentContext: ComponentContext,
-            onBackParameter: DecomposeOnBackParameter
-        ) = factory(componentContext, onBackParameter)
+            onBackParameter: DecomposeOnBackParameter,
+            timerSettingsId: TimerSettingsId
+        ) = factory(componentContext, onBackParameter, timerSettingsId)
     }
 }

@@ -12,10 +12,15 @@
     <string name="ts_bs_rest_autostart_title">Autostart rest</string>
     <string name="ts_bs_rest_autostart_desc">Rest interval will start automatically, without manual confirmation</string>
 
+    <string name="ts_bs_long_rest_title">Long rest</string>
+    <string name="ts_bs_long_rest_desc">Pick how long you want to rest after completing 3 work intervals</string>
+
     <string name="ts_bs_work_title">Work</string>
     <string name="ts_bs_work_desc">Pick how long you want to work during each interval</string>
     <string name="ts_bs_work_autostart_title">Autostart work</string>
     <string name="ts_bs_work_autostart_desc">Work interval will start automatically, without manual confirmation</string>
+
+
 
     <string name="ts_bs_intervals_title">Intervals</string>
     <string name="ts_bs_intervals_desc">Split total time into work and rest intervals</string>

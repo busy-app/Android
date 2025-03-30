@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.done.api
 
 import com.arkivanov.decompose.ComponentContext
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent
 
 abstract class DoneTimerScreenDecomposeComponent(
@@ -11,6 +12,7 @@ abstract class DoneTimerScreenDecomposeComponent(
         operator fun invoke(
             componentContext: ComponentContext,
             onFinishCallback: OnFinishCallback,
+            timerSettings: TimerSettings,
         ): DoneTimerScreenDecomposeComponent
     }
 
