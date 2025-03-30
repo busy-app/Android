@@ -2,114 +2,83 @@ package com.flipperdevices.bsb.timer.setup.api
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
-import com.arkivanov.decompose.router.slot.SlotNavigation
-import com.arkivanov.decompose.router.slot.activate
-import com.arkivanov.decompose.router.slot.childSlot
-import com.arkivanov.decompose.router.slot.dismiss
-import com.arkivanov.essenty.instancekeeper.getOrCreate
-import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.appblocker.card.api.AppBlockerCardContentDecomposeComponent
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.setup.composable.timer.TimerSetupModalBottomSheetContent
+import com.flipperdevices.bsb.timer.setup.model.CardEditScreenState
 import com.flipperdevices.bsb.timer.setup.viewmodel.TimerSetupViewModel
-import com.flipperdevices.core.di.AppGraph
-import com.flipperdevices.ui.sheet.BModalBottomSheetContent
-import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
-import kotlinx.serialization.builtins.serializer
+import com.flipperdevices.core.ui.lifecycle.viewModelWithFactory
+import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
+import com.flipperdevices.ui.decompose.ModalDecomposeComponent
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
 @Inject
 class TimerSetupSheetDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
+    @Assisted private val timerSettingsId: TimerSettingsId,
+    @Assisted private val onBack: DecomposeOnBackParameter,
     intervalsSetupSheetDecomposeComponentFactory: IntervalsSetupSheetDecomposeComponent.Factory,
-    timerSetupViewModelFactory: () -> TimerSetupViewModel,
+    timerSetupViewModelFactory: (TimerSettingsId) -> TimerSetupViewModel,
     appBlockerCardContentFactory: AppBlockerCardContentDecomposeComponent.Factory,
-) : TimerSetupSheetDecomposeComponent(componentContext) {
-    private val timerSetupViewModel = instanceKeeper.getOrCreate {
-        timerSetupViewModelFactory.invoke()
-    }
+) : ModalDecomposeComponent(componentContext) {
     private val intervalsSetupSheetDecomposeComponent =
         intervalsSetupSheetDecomposeComponentFactory(
-            componentContext = childContext("restSheetDecomposeComponent")
+            childContext("intervalsSetupSheetDecomposeComponent_intervalsSheet"),
+            timerSettingsId
         )
+
+    private val timerSetupViewModel = viewModelWithFactory(timerSettingsId) {
+        timerSetupViewModelFactory(timerSettingsId)
+    }
     private val appBlockerCardContent = appBlockerCardContentFactory(
         componentContext = childContext("intervalsSetupSheetDecomposeComponent_appBlockerCardContent"),
+        timerSettingsId = timerSettingsId,
         onBackParameter = { }
     )
-    private val slot = SlotNavigation<Unit>()
-    private val childSlot = childSlot(
-        source = slot,
-        serializer = Unit.serializer(),
-        childFactory = { configuration, context ->
-            configuration
-        }
-    )
-
-    override fun show() {
-        slot.activate(Unit)
-    }
-
-    fun dismiss() {
-        slot.dismiss()
-    }
 
     @Composable
     override fun Render(modifier: Modifier) {
-        val timerSettings = timerSetupViewModel.state.collectAsState()
-        ModalBottomSheetSlot(
-            slot = childSlot,
-            initialDetent = SheetDetent.FullyExpanded,
-            onDismiss = { slot.dismiss() },
-            content = {
-                BModalBottomSheetContent(
-                    horizontalPadding = 0.dp,
-                    content = {
-                        TimerSetupModalBottomSheetContent(
-                            timerSettings = timerSettings.value,
-                            onTotalTimeChange = { duration ->
-                                timerSetupViewModel.setTotalTime(duration)
-                            },
-                            onSaveClick = {
-                                slot.dismiss()
-                            },
-                            onIntervalsToggle = {
-                                timerSetupViewModel.toggleIntervals()
-                            },
-                            onShowLongRestTimer = {
-                                intervalsSetupSheetDecomposeComponent.showLongRest()
-                            },
-                            onShowWorkTimer = {
-                                intervalsSetupSheetDecomposeComponent.showWork()
-                            },
-                            onShowRestTimer = {
-                                intervalsSetupSheetDecomposeComponent.showRest()
-                            },
-                            appBlockerCardContent = {
-                                appBlockerCardContent.Render(Modifier)
-                            },
-                            onSoundToggle = timerSetupViewModel::onSoundToggle
-                        )
-                    }
-                )
+        val state by timerSetupViewModel.getState().collectAsState()
+        val timerSettings = when (val localState = state) {
+            CardEditScreenState.NotInitialized -> return
+            is CardEditScreenState.Loaded -> if (localState.timerSettings == null) {
+                onBack()
+                return
+            } else {
+                localState.timerSettings
             }
+        }
+
+        TimerSetupModalBottomSheetContent(
+            timerSettings = timerSettings,
+            onTotalTimeChange = { duration ->
+                timerSetupViewModel.setTotalTime(timerSettings, duration)
+            },
+            onSaveClick = {
+                onBack()
+            },
+            onIntervalsToggle = {
+                timerSetupViewModel.toggleIntervals(timerSettings)
+            },
+            onShowLongRestTimer = {
+                intervalsSetupSheetDecomposeComponent.showLongRest()
+            },
+            onShowWorkTimer = {
+                intervalsSetupSheetDecomposeComponent.showWork()
+            },
+            onShowRestTimer = {
+                intervalsSetupSheetDecomposeComponent.showRest()
+            },
+            appBlockerCardContent = {
+                appBlockerCardContent.Render(Modifier)
+            },
+            onSoundToggle = timerSetupViewModel::onSoundToggle
         )
         intervalsSetupSheetDecomposeComponent.Render(Modifier)
-    }
-
-    @Inject
-    @ContributesBinding(AppGraph::class, TimerSetupSheetDecomposeComponent.Factory::class)
-    class Factory(
-        private val factory: (
-            componentContext: ComponentContext
-        ) -> TimerSetupSheetDecomposeComponentImpl
-    ) : TimerSetupSheetDecomposeComponent.Factory {
-        override fun invoke(
-            componentContext: ComponentContext
-        ) = factory(componentContext)
     }
 }

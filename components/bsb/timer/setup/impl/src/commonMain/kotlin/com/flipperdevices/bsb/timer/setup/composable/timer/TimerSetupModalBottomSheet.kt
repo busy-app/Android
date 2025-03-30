@@ -20,7 +20,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
 import com.flipperdevices.bsb.timer.setup.composable.intervals.SoundSetupModalBottomSheetContent
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -35,7 +36,7 @@ fun TimerSetupModalBottomSheetContent(
     onShowWorkTimer: () -> Unit,
     onShowRestTimer: () -> Unit,
     onShowLongRestTimer: () -> Unit,
-    onSoundToggle: () -> Unit,
+    onSoundToggle: (TimerSettings) -> Unit,
     appBlockerCardContent: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -48,7 +49,7 @@ fun TimerSetupModalBottomSheetContent(
             .verticalScroll(rememberScrollState())
     ) {
         TimerNameTitleComposable(
-            name = "BUSY", // todo raw string
+            name = timerSettings.name,
             modifier = Modifier
                 .padding(16.dp)
         )
@@ -82,10 +83,10 @@ fun TimerSetupModalBottomSheetContent(
                 .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(LocalCorruptedPallet.current.transparent.whiteInvert.quinary)
-                .clickable { onSoundToggle.invoke() }
+                .clickable { onSoundToggle(timerSettings) }
                 .padding(12.dp),
             isChecked = timerSettings.soundSettings.alertWhenIntervalEnds,
-            onChange = onSoundToggle,
+            onChange = { onSoundToggle(timerSettings) },
         )
         Spacer(Modifier.height(16.dp))
         TimerSaveButtonComposable(onClick = onSaveClick)
@@ -104,7 +105,7 @@ private fun TimerSetupModalBottomSheetContentPreview() {
             onIntervalsToggle = {},
             onSaveClick = {},
             onTotalTimeChange = {},
-            timerSettings = TimerSettings(),
+            timerSettings = TimerSettings(TimerSettingsId(id = -1)),
             appBlockerCardContent = {},
             onSoundToggle = {}
         )

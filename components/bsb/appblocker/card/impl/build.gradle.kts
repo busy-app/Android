@@ -14,6 +14,8 @@ commonDependencies {
     implementation(projects.components.core.ui.option)
     implementation(projects.components.bsb.core.theme)
 
+    implementation(projects.components.bsb.dao.api)
+
     implementation(projects.components.bsb.appblocker.core.api)
     implementation(projects.components.bsb.appblocker.permission.api)
     implementation(projects.components.bsb.appblocker.filter.api)

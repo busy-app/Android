@@ -2,6 +2,7 @@ package com.flipperdevices.bsbwearable.card.api
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.timer.background.api.TimerApi
@@ -22,12 +23,13 @@ class CardDecomposeComponentImpl(
 
     @Composable
     override fun Render(modifier: Modifier) {
+        val cards by cardStorageApi.settingFlow.collectAsState()
+
         WearScreenComposable(
-            settings = cardStorageApi.settingFlow.collectAsState().value,
-            blockerState = cardStorageApi.appBlockerFlow.collectAsState().value,
+            settingsList = cards,
             onStartClick = onStartClick@{
-                val settings = cardStorageApi.settingFlow.value
-                timerApi.startWith(settings)
+                val card = cards.firstOrNull() ?: return@onStartClick
+                timerApi.startWith(card.instance)
             }
         )
     }

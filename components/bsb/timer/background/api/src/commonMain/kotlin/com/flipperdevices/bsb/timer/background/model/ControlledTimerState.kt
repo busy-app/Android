@@ -1,6 +1,6 @@
 package com.flipperdevices.bsb.timer.background.model
 
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState.InProgress.Running
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
@@ -12,7 +12,9 @@ sealed interface ControlledTimerState {
     data object NotStarted : ControlledTimerState
 
     @Serializable
-    data object Finished : ControlledTimerState
+    data class Finished(
+        val timerSettings: TimerSettings
+    ) : ControlledTimerState
 
     @Serializable
     sealed interface InProgress : ControlledTimerState {
@@ -100,7 +102,7 @@ fun ControlledTimerState.InProgress.Running.toHumanReadableString(): String {
 }
 
 val ControlledTimerState.InProgress.Running.currentUiIteration: Int
-    get() = currentIteration + 1
+    get() = currentIteration
 
 val ControlledTimerState.InProgress.Running.maxUiIterations: Int
     get() = maxIterations

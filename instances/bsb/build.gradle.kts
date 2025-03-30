@@ -77,15 +77,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.components.core.focusDisplay)
-
-            implementation(projects.components.bsb.analytics.metric.api)
-            implementation(projects.components.bsb.timer.syncservice.api)
-            if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
-                implementation(projects.components.bsb.analytics.metric.firebase)
-            } else {
-                implementation(projects.components.bsb.analytics.metric.noop)
-            }
-
+            
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -153,10 +145,24 @@ commonDependencies {
     implementation(projects.components.core.di)
     implementation(projects.components.core.log)
     implementation(projects.components.core.ktx)
+    implementation(projects.components.core.apppackage)
     implementation(projects.components.core.buildKonfig)
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.core.ui.lifecycle)
     implementation(projects.components.bsb.core.theme)
+
+    implementation(projects.components.bsb.analytics.metric.api)
+    implementation(projects.components.bsb.timer.syncservice.api)
+    if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
+        implementation(projects.components.bsb.analytics.metric.firebase)
+    } else {
+        implementation(projects.components.bsb.analytics.metric.noop)
+    }
+
+    implementation(projects.components.bsb.analytics.timer.api)
+    implementation(projects.components.bsb.analytics.timer.impl)
+    implementation(projects.components.bsb.analytics.shake2report.api)
+    implementation(projects.components.bsb.analytics.shake2report.impl)
 
     implementation(projects.components.bsb.root.api)
     implementation(projects.components.bsb.root.impl)
@@ -172,9 +178,6 @@ commonDependencies {
     implementation(projects.components.bsb.sound.api)
     implementation(projects.components.bsb.sound.impl)
 
-    implementation(projects.components.bsb.analytics.shake2report.api)
-    implementation(projects.components.bsb.analytics.shake2report.impl)
-
     implementation(projects.components.bsb.appblocker.core.api)
     implementation(projects.components.bsb.appblocker.core.impl)
     implementation(projects.components.bsb.appblocker.card.api)
@@ -186,6 +189,9 @@ commonDependencies {
     implementation(projects.components.bsb.appblocker.screen)
     implementation(projects.components.bsb.appblocker.stats.api)
     implementation(projects.components.bsb.appblocker.stats.impl)
+
+    implementation(projects.components.bsb.dao.api)
+    implementation(projects.components.bsb.dao.impl)
 
     implementation(projects.components.bsb.auth.main.api)
     implementation(projects.components.bsb.auth.main.impl)

@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.appblocker.card.api
 
 import com.arkivanov.decompose.ComponentContext
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
 import com.flipperdevices.ui.decompose.ElementDecomposeComponent
 
@@ -10,7 +11,8 @@ abstract class AppBlockerCardContentDecomposeComponent(
     fun interface Factory {
         operator fun invoke(
             componentContext: ComponentContext,
-            onBackParameter: DecomposeOnBackParameter
+            onBackParameter: DecomposeOnBackParameter,
+            timerSettingsId: TimerSettingsId
         ): AppBlockerCardContentDecomposeComponent
     }
 }

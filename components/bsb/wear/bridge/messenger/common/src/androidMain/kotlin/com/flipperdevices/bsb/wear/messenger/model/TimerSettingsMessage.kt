@@ -1,15 +1,14 @@
 package com.flipperdevices.bsb.wear.messenger.model
 
-import com.flipperdevices.bsb.preference.model.TimerSettings
 import com.flipperdevices.bsb.wear.messenger.serializer.JsonWearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.JsonWearMessageSerializer
 
-data class TimerSettingsMessage(val instance: TimerSettings) : WearMessage {
+data class TimerSettingsMessage(val instance: List<WearOSTimerSettings>) : WearMessage {
     companion object {
-        val serializer: JsonWearMessageSerializer<TimerSettings>
-            get() = JsonWearMessage<TimerSettings>(
+        val serializer: JsonWearMessageSerializer<List<WearOSTimerSettings>>
+            get() = JsonWearMessage<List<WearOSTimerSettings>>(
                 json = JsonWearMessageSerializer.DEFAULT_JSON,
-                path = "/wearsync/timer_settings"
+                path = "/wearsync/timer_settings_list"
             )
     }
 }
