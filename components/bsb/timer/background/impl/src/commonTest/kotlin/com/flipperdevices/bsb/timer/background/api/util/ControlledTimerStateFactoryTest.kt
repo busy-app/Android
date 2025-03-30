@@ -7,6 +7,7 @@ import com.flipperdevices.bsb.timer.background.util.IterationType
 import com.flipperdevices.bsb.timer.background.util.buildIterationList
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
 class ControlledTimerStateFactoryTest {
@@ -147,6 +148,38 @@ class ControlledTimerStateFactoryTest {
         ).let { settings ->
             val list = settings.buildIterationList().map(IterationData::iterationType)
             assertContentEquals(listOf(IterationType.WORK), list)
+        }
+    }
+
+    @Test
+    fun `GIVEN_no_time_for_last_rest_WHEN_resolved_third_last_rest_THEN_only_one_last_rest`() {
+        TimerSettings(
+            totalTime = 9.hours,
+            intervalsSettings = TimerSettings.IntervalsSettings(
+                isEnabled = true,
+                work = 1.hours,
+                rest = 15.minutes,
+                longRest = 30.minutes
+            )
+        ).let { settings ->
+            val list = settings.buildIterationList().map(IterationData::iterationType)
+            assertContentEquals(
+                expected = listOf(
+                    IterationType.WORK,
+                    IterationType.REST,
+                    IterationType.WORK,
+                    IterationType.REST,
+                    IterationType.WORK,
+                    IterationType.LONG_REST,
+                    IterationType.WORK,
+                    IterationType.REST,
+                    IterationType.WORK,
+                    IterationType.REST,
+                    IterationType.WORK,
+                    IterationType.LONG_REST,
+                ),
+                actual = list
+            )
         }
     }
 }

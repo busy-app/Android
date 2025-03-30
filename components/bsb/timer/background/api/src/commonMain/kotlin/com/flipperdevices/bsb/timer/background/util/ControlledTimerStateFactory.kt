@@ -85,16 +85,26 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
             val isLongRestNeedMoreTimeThanTimeLeft =
                 timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) &&
                     type == IterationType.LONG_REST
+          
+            val resolvedIterationType = when {
+                isNoTimeForWorkLeft
+                    .or(isNoTimeForShortRestLeft)
+                    .or(isLongRestNeedMoreTimeThanTimeLeft) -> IterationType.LONG_REST
+
+                else -> type
+            }
+
+            if (resolvedIterationType == IterationType.LONG_REST &&
+                lastOrNull()?.iterationType == IterationType.LONG_REST
+            ) {
+                timeLeft -= iterationTypeDuration
+                i += 1
+                continue
+            }
 
             IterationData.Default(
                 startOffset = totalTime - timeLeft,
-                iterationType = when {
-                    isNoTimeForWorkLeft
-                        .or(isNoTimeForShortRestLeft)
-                        .or(isLongRestNeedMoreTimeThanTimeLeft) -> IterationType.LONG_REST
-
-                    else -> type
-                },
+                iterationType = resolvedIterationType,
                 duration = when {
                     isNoTimeForShortRestLeft ->
                         iterationTypeDuration
@@ -181,7 +191,11 @@ fun TimerTimestamp.toState(): ControlledTimerState {
     }
 
     val iterationCountLeft = settings.maxIterationCount
-        .minus(iterationsDataLeft.count { data -> data.iterationType == IterationType.WORK })
+        .minus(
+            iterationsDataLeft
+                .filterIndexed { i, _ -> i != 0 }
+                .count { data -> data.iterationType == IterationType.WORK }
+        )
 
     val currentIterationTypeTimeLeft = start
         .plus(currentIterationData.startOffset)
