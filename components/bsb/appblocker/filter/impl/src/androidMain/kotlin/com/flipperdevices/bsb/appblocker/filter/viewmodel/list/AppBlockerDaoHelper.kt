@@ -34,7 +34,7 @@ class AppBlockerDaoHelper(
             packageManager.getInstalledPackages(
                 PackageManager.GET_META_DATA
             ).mapNotNull { it.applicationInfo }
-        }
+        }.filter { it.packageName != context.packageName }
         if (apps.isEmpty()) {
             return AppBlockerFilterScreenState.Loaded(
                 categories = persistentListOf()
@@ -78,7 +78,7 @@ class AppBlockerDaoHelper(
                 .mapNotNull {
                     it.toUIApp(
                         isBlocked = isCategoryBlocked ||
-                            checkedAppsSet.contains(it.packageName)
+                                checkedAppsSet.contains(it.packageName)
                     )
                 }
                 .sortedBy { it.appName }
