@@ -51,7 +51,7 @@ class AndroidWearMessageSyncService(
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
     wearMessageProducerProvider: KIProvider<WearMessageProducer>
 ) : WearMessageSyncService {
-    override val TAG = "TimerForegroundService"
+    override val TAG = "AndroidWearMessageSyncService"
 
     private val timerApi by timerApiProvider
     private val timerSettingsApi by timerSettingsApiProvider

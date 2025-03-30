@@ -142,6 +142,7 @@ class WearWearMessageSyncService(
                 jobs.add(startAndGetClientConnectJob())
                 jobs.add(startAndGetIntervalEndVibratorJob())
             }
+            wearMessageProducer.produce(TimerSettingsRequestMessage)
         }
     }
 

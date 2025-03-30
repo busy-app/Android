@@ -26,6 +26,7 @@ class CardDecomposeComponentImpl(
         val cards by cardStorageApi.settingFlow.collectAsState()
 
         WearScreenComposable(
+            modifier = modifier,
             settingsList = cards,
             onStartClick = onStartClick@{
                 val card = cards.firstOrNull() ?: return@onStartClick
