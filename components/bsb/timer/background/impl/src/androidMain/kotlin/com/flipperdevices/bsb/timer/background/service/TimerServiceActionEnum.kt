@@ -5,4 +5,5 @@ enum class TimerServiceActionEnum(val actionId: String) {
     RESUME("com.flipperdevices.bsb.timer.background.model.RESUME"),
     START("com.flipperdevices.bsb.timer.background.model.START"),
     STOP("com.flipperdevices.bsb.timer.background.model.STOP"),
+    NEXT_STEP("com.flipperdevices.bsb.timer.background.model.NEXT_STEP"),
 }
