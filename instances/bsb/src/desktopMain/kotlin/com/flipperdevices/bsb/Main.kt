@@ -23,10 +23,11 @@ fun main() {
         SupervisorJob() + FlipperDispatchers.default
     )
     // Always create the root component outside Compose on the UI thread
-    val appComponent = DesktopAppComponent::class.create(
+    val appComponent: DesktopAppComponent = DesktopAppComponent::class.create(
         settings,
         applicationScope
     )
+    appComponent.timerSyncService.onCreate()
     val root = runOnUiThread {
         appComponent.rootDecomposeComponentFactory(
             DefaultComponentContext(lifecycle = lifecycle),

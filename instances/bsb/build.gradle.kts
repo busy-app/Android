@@ -62,7 +62,6 @@ kotlin {
 
             implementation(projects.components.bsb.wear.bridge.syncservice.api)
 
-            implementation(projects.components.bsb.timer.syncservice.api)
             if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
                 implementation(projects.components.bsb.wear.bridge.messenger.impl)
                 implementation(projects.components.bsb.wear.bridge.messenger.common)
@@ -78,7 +77,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.components.core.focusDisplay)
-
+            
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -103,7 +102,7 @@ kotlin {
 
             implementation(projects.components.core.ui.timeline)
             implementation(projects.components.bsb.analytics.metric.noop)
-            implementation(projects.components.bsb.timer.syncservice.noop)
+            implementation(projects.components.bsb.timer.syncservice.socket)
         }
         iosMain.dependencies {
             api(libs.decompose)
@@ -153,6 +152,7 @@ commonDependencies {
     implementation(projects.components.bsb.core.theme)
 
     implementation(projects.components.bsb.analytics.metric.api)
+    implementation(projects.components.bsb.timer.syncservice.api)
     if (CURRENT_FLAVOR_TYPE.isGoogleFeatureAvailable) {
         implementation(projects.components.bsb.analytics.metric.firebase)
     } else {

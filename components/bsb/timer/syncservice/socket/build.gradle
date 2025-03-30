@@ -13,12 +13,10 @@ commonDependencies {
     implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.cloudMock)
-
+    implementation("io.ktor:ktor-client-websockets:${libs.versions.ktor.get()}")
     implementation(libs.kotlin.serialization.json)
-    implementation(libs.kotlin.datetime)
-}
-
-dependencies {
-    implementation(platform(libs.firebase.bom))
-    implementation("com.google.firebase:firebase-messaging")
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.negotiation)
+    implementation(libs.ktor.serialization)
 }
