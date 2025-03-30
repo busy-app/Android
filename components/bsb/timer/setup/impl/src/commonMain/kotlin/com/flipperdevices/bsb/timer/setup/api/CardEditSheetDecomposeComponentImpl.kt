@@ -12,6 +12,8 @@ import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.setup.model.TimerSetupScreenConfig
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.log.info
+import com.flipperdevices.core.log.warn
 import com.flipperdevices.ui.decompose.DecomposeComponent
 import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
 import com.flipperdevices.ui.sheet.BModalBottomSheetContent
@@ -37,7 +39,16 @@ class CardEditSheetDecomposeComponentImpl(
     )
 
     override fun show(timerSettingsId: TimerSettingsId) {
-        slot.activate(TimerSetupScreenConfig.Main(timerSettingsId))
+        slot.navigate(
+            transformer = { TimerSetupScreenConfig.Main(timerSettingsId) },
+            onComplete = { newConfiguration, oldConfiguration ->
+                if (newConfiguration == oldConfiguration) {
+                    warn { "Configuration changed from $newConfiguration to $oldConfiguration, so try again" }
+                    slot.dismiss()
+                    show(timerSettingsId)
+                }
+            }
+        )
     }
 
     @Composable
