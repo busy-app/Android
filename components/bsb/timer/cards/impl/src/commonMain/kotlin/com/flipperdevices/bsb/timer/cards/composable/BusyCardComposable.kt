@@ -27,10 +27,11 @@ import busystatusbar.components.bsb.timer.cards.impl.generated.resources.busycar
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_block
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_rest
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_work
-import com.flipperdevices.bsb.appblocker.filter.api.model.BlockedAppCount
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.BlockedAppCount
+import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.ui.cardframe.MiniFrameData
 import com.flipperdevices.ui.cardframe.MiniFrameSection
 import com.flipperdevices.ui.timeline.util.toFormattedTime
@@ -43,7 +44,6 @@ import busystatusbar.components.bsb.timer.common.generated.resources.Res as Comm
 @Composable
 fun BusyCardComposable(
     background: Color,
-    name: String,
     blockerState: BlockedAppCount,
     settings: TimerSettings,
     onClick: () -> Unit,
@@ -67,7 +67,7 @@ fun BusyCardComposable(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = name,
+                    text = settings.name,
                     fontSize = 24.sp,
                     color = LocalCorruptedPallet.current
                         .white
@@ -160,18 +160,17 @@ private fun PreviewBusyCardComposable() {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             BusyCardComposable(
                 background = Color.Red,
-                name = "BUSY",
-                settings = TimerSettings(),
+                settings = TimerSettings(TimerSettingsId(id = -1)),
                 onClick = {},
                 blockerState = BlockedAppCount.TurnOff
             )
 
             BusyCardComposable(
                 background = Color.Blue,
-                name = "Not so Busy!",
                 onClick = {},
                 blockerState = BlockedAppCount.All,
                 settings = TimerSettings(
+                    id = TimerSettingsId(id = -1),
                     intervalsSettings = TimerSettings.IntervalsSettings(isEnabled = true)
                 )
             )

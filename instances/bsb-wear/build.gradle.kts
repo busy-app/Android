@@ -43,7 +43,7 @@ commonDependencies {
     implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.preference.api)
-    implementation(projects.components.bsb.appblocker.filter.api)
+    implementation(projects.components.bsb.dao.api)
     implementation(projects.components.bsb.wear.bridge.messenger.common)
     implementation(projects.components.bsb.wear.bridge.messenger.impl)
     implementation(projects.components.bsb.wear.bridge.syncservice.wear)

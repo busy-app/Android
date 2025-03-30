@@ -22,6 +22,7 @@ commonDependencies {
     implementation(projects.components.bsb.core.files)
 
     implementation(projects.components.bsb.appblocker.core.api)
+    implementation(projects.components.bsb.dao.api)
     implementation(projects.components.bsb.appblocker.permission.api)
 
     implementation(libs.kotlin.immutable)

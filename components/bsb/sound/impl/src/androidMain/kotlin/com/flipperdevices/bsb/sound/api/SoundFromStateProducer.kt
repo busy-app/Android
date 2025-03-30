@@ -1,6 +1,6 @@
 package com.flipperdevices.bsb.sound.api
 
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.sound.helper.Sound
 import com.flipperdevices.bsb.sound.helper.SoundPlayHelper
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState

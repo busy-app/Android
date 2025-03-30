@@ -33,7 +33,8 @@ import busystatusbar.instances.bsb_wear.generated.resources.ic_checkmark
 import busystatusbar.instances.bsb_wear.generated.resources.ic_laptop
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.preference.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettings
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.button.BIconButton
@@ -173,7 +174,7 @@ private fun PreviewAutoPauseWorkScreenComposable() {
     BusyBarThemeInternal {
         AutoPauseScreenComposable(
             state = ControlledTimerState.InProgress.Await(
-                timerSettings = TimerSettings(),
+                timerSettings = TimerSettings(TimerSettingsId(id = -1)),
                 currentIteration = 1,
                 maxIterations = 3,
                 pausedAt = Instant.DISTANT_PAST,
@@ -191,7 +192,7 @@ private fun PreviewAutoPauseRestScreenComposable() {
     BusyBarThemeInternal {
         AutoPauseScreenComposable(
             state = ControlledTimerState.InProgress.Await(
-                timerSettings = TimerSettings(),
+                timerSettings = TimerSettings(TimerSettingsId(id = -1)),
                 currentIteration = 1,
                 maxIterations = 3,
                 pausedAt = Instant.DISTANT_PAST,

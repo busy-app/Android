@@ -37,6 +37,7 @@ include(
 
     ":components:core:di",
     ":components:core:activityholder",
+    ":components:core:apppackage",
     ":components:core:log",
     ":components:core:ktx",
     ":components:core:data",
@@ -62,6 +63,10 @@ include(
     ":components:bsb:core:markdown",
     ":components:bsb:core:files",
 
+
+    ":components:bsb:dao:api",
+    ":components:bsb:dao:impl",
+
     ":components:bsb:root:api",
     ":components:bsb:root:impl",
     ":components:bsb:preference:api",
@@ -79,6 +84,8 @@ include(
 
     ":components:bsb:analytics:shake2report:api",
     ":components:bsb:analytics:shake2report:impl",
+    ":components:bsb:analytics:timer:api",
+    ":components:bsb:analytics:timer:impl",
     ":components:bsb:analytics:metric:api",
     ":components:bsb:analytics:metric:firebase",
     ":components:bsb:analytics:metric:noop",

@@ -1,7 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.producer
 
-import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountMessage
-import com.flipperdevices.bsb.wear.messenger.model.AppBlockerCountRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
@@ -27,16 +25,6 @@ suspend fun WearMessageProducer.produce(message: WearMessage) {
 
         TimerSettingsRequestMessage -> produce(
             message = TimerSettingsRequestMessage.serializer,
-            value = Unit
-        )
-
-        is AppBlockerCountMessage -> produce(
-            message = AppBlockerCountMessage.serializer,
-            value = message.instance
-        )
-
-        AppBlockerCountRequestMessage -> produce(
-            message = AppBlockerCountRequestMessage.serializer,
             value = Unit
         )
     }

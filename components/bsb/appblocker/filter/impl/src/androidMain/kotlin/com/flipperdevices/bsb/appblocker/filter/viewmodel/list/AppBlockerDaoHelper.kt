@@ -3,31 +3,32 @@ package com.flipperdevices.bsb.appblocker.filter.viewmodel.list
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import androidx.room.withTransaction
 import com.flipperdevices.bsb.appblocker.filter.api.model.AppCategory
-import com.flipperdevices.bsb.appblocker.filter.dao.AppFilterDatabase
-import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedApp
-import com.flipperdevices.bsb.appblocker.filter.dao.model.DBBlockedCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.AppBlockerFilterScreenState
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppCategory
 import com.flipperdevices.bsb.appblocker.filter.model.list.UIAppInformation
 import com.flipperdevices.bsb.appblocker.filter.model.list.fromCategoryId
+import com.flipperdevices.bsb.dao.api.CardAppBlockerApi
+import com.flipperdevices.bsb.dao.model.BlockedAppDetailedState
+import com.flipperdevices.bsb.dao.model.BlockedAppEntity
+import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.verbose
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Inject
 
 @Inject
 class AppBlockerDaoHelper(
+    private val cardAppBlockerApi: CardAppBlockerApi,
     private val context: Context,
-    private val database: AppFilterDatabase
 ) : LogTagProvider {
     override val TAG = "AppBlockerDaoHelper"
 
-    suspend fun load(): AppBlockerFilterScreenState.Loaded {
+    suspend fun load(cardId: TimerSettingsId): AppBlockerFilterScreenState.Loaded {
         val packageManager = context.packageManager
         val apps = withContext(Dispatchers.Main) {
             packageManager.getInstalledPackages(
@@ -40,23 +41,39 @@ class AppBlockerDaoHelper(
             )
         }
 
-        val checkedAppsSet = database
-            .appDao()
-            .getCheckedApps()
-            .map { it.appPackage }
-            .toSet()
-        val checkedCategory = database
-            .categoryDao()
-            .getCheckedCategory()
-            .map { it.categoryId }
-            .toSet()
+        val currentState = cardAppBlockerApi.getBlockedAppDetailedState(cardId)
+            .first()
+
+        val checkedAppsSet = when (currentState) {
+            BlockedAppDetailedState.All,
+            BlockedAppDetailedState.TurnOff -> emptySet()
+
+            is BlockedAppDetailedState.TurnOnWhitelist ->
+                currentState
+                    .entities
+                    .filterIsInstance<BlockedAppEntity.App>()
+                    .map { it.packageId }
+                    .toSet()
+        }
+
+        val checkedCategory = when (currentState) {
+            BlockedAppDetailedState.All,
+            BlockedAppDetailedState.TurnOff -> AppCategory.entries.toSet()
+
+            is BlockedAppDetailedState.TurnOnWhitelist ->
+                currentState
+                    .entities
+                    .filterIsInstance<BlockedAppEntity.Category>()
+                    .map { AppCategory.fromCategoryId(it.categoryId) }
+                    .toSet()
+        }
 
         val appInfosByCategories = apps
             .filter { it.name != null }
             .groupBy { it.category }
 
         val categories = AppCategory.entries.map { category ->
-            val isCategoryBlocked = checkedCategory.contains(category.id)
+            val isCategoryBlocked = checkedCategory.contains(category)
             val uiApps = appInfosByCategories.getOrDefault(category.id, emptyList())
                 .mapNotNull {
                     it.toUIApp(
@@ -80,23 +97,24 @@ class AppBlockerDaoHelper(
         )
     }
 
-    suspend fun save(currentState: AppBlockerFilterScreenState.Loaded) {
-        database.withTransaction {
-            database.appDao().dropTable()
-            database.categoryDao().dropTable()
-
-            val blockedCategories = currentState.categories.filter { it.isBlocked }
-
-            blockedCategories.forEach {
-                database.categoryDao().insert(DBBlockedCategory(it.categoryEnum.id))
+    suspend fun save(
+        cardId: TimerSettingsId,
+        currentState: AppBlockerFilterScreenState.Loaded
+    ) {
+        val isBlockedAll = currentState.categories.all { it.isBlocked }
+        val blockedState = if (isBlockedAll) {
+            BlockedAppDetailedState.All
+        } else {
+            val apps = currentState.categories.map { it.apps }.flatten().map {
+                BlockedAppEntity.App(it.packageName)
             }
-
-            currentState.categories.forEach { category ->
-                category.apps.filter { it.isBlocked }.forEach { app ->
-                    database.appDao().insert(DBBlockedApp(app.packageName))
-                }
+            val category = currentState.categories.map {
+                BlockedAppEntity.Category(it.categoryEnum.id)
             }
+            BlockedAppDetailedState.TurnOnWhitelist(apps + category)
         }
+
+        cardAppBlockerApi.updateBlockedApp(cardId, blockedState)
     }
 
     private fun ApplicationInfo.toUIApp(
