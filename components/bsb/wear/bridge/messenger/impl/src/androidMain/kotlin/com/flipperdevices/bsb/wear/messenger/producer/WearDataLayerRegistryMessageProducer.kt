@@ -3,9 +3,11 @@ package com.flipperdevices.bsb.wear.messenger.producer
 import com.flipperdevices.bsb.wear.messenger.api.GmsWearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.ktx.common.pmap
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
+import com.flipperdevices.core.log.warn
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.data.WearDataLayerRegistry
 import kotlinx.coroutines.async
@@ -13,6 +15,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.tasks.await
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -27,26 +30,30 @@ class WearDataLayerRegistryMessageProducer(
 ) : WearMessageProducer, LogTagProvider {
     override val TAG: String = "WearDataLayerRegistryMessageProducer"
 
-    override suspend fun <T> produce(message: WearMessageSerializer<T>, value: T): Unit = supervisorScope {
-        launch {
-            runCatching {
-                val nodes = listOfNotNull(wearConnectionApi.statusFlow.first().nodeOrNull)
-                    .filter { node -> node.isNearby }
-                val byteArray = message.encode(value)
-                nodes.map { node ->
-                    async {
-                        wearDataLayerRegistry.messageClient.sendMessage(
-                            node.id,
-                            message.path,
-                            byteArray
-                        )
-                    }
-                }.awaitAll()
-            }.onFailure { throwable ->
-                error(throwable) { "#produce failed to send message ${throwable.stackTraceToString()}" }
-            }.onSuccess {
-                info { "#produce message sent: ${message.path} $message" }
+    override suspend fun <T> produce(
+        message: WearMessageSerializer<T>,
+        value: T
+    ) {
+        info { "Try to send: ${message.path} $message" }
+        runCatching {
+            val nodes = listOfNotNull(wearConnectionApi.statusFlow.first().nodeOrNull)
+                .filter { node -> node.isNearby }
+            if (nodes.isEmpty()) {
+                error { "Can't send ${message.path} because nodes is empty" }
             }
+            val byteArray = message.encode(value)
+            nodes.pmap { node ->
+                val messageId = wearDataLayerRegistry.messageClient.sendMessage(
+                    node.id,
+                    message.path,
+                    byteArray
+                ).await()
+                info { "Send message ${message.path} with id $messageId" }
+            }
+        }.onFailure { throwable ->
+            error(throwable) { "#produce failed to send message ${throwable.stackTraceToString()}" }
+        }.onSuccess {
+            info { "#produce message sent: ${message.path} $message" }
         }
     }
 }

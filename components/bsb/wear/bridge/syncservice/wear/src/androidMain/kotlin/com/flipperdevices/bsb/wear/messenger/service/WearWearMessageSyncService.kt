@@ -80,7 +80,10 @@ class WearWearMessageSyncService(
     private fun startAndGetClientConnectJob(): Job {
         return wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
-            .onEach { sendTimerTimestampMessage() }
+            .onEach {
+                wearMessageProducer.produce(TimerSettingsRequestMessage)
+                sendTimerTimestampMessage()
+            }
             .launchIn(scope)
     }
 
@@ -142,7 +145,6 @@ class WearWearMessageSyncService(
                 jobs.add(startAndGetClientConnectJob())
                 jobs.add(startAndGetIntervalEndVibratorJob())
             }
-            wearMessageProducer.produce(TimerSettingsRequestMessage)
         }
     }
 
