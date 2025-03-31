@@ -11,6 +11,7 @@ import me.tatarka.inject.annotations.Inject
 @Inject
 class ExtendedNotificationLayoutBuilder :
     BaseNotificationLayoutBuilder(R.layout.notification_expanded) {
+    @Suppress("CyclomaticComplexMethod")
     override fun getLayout(
         context: Context,
         timer: ControlledTimerState.InProgress
@@ -39,16 +40,20 @@ class ExtendedNotificationLayoutBuilder :
                 false -> R.string.timer_notification_btn_pause
             }
         }
-        when(timer) {
-            is ControlledTimerState.InProgress.Await -> when(timer.type) {
+        when (timer) {
+            is ControlledTimerState.InProgress.Await -> when (timer.type) {
                 ControlledTimerState.InProgress.AwaitType.AFTER_REST,
                 ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> {
                     notificationLayout.setOnClickPendingIntent(
                         R.id.btn_text,
-                        TimerBroadcastReceiver.getTimerIntent(context, TimerServiceActionEnum.NEXT_STEP)
+                        TimerBroadcastReceiver.getTimerIntent(
+                            context,
+                            TimerServiceActionEnum.NEXT_STEP
+                        )
                     )
                 }
             }
+
             else -> Unit
         }
         notificationLayout.setTextViewText(R.id.btn_text, context.getString(textId))
