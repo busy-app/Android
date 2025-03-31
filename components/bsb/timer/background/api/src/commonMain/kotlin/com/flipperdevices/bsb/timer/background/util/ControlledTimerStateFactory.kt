@@ -85,7 +85,7 @@ fun TimerSettings.buildIterationList(): List<IterationData> {
             val isLongRestNeedMoreTimeThanTimeLeft =
                 timeLeft <= (iterationTypeDuration + intervalsSettings.longRest) &&
                     type == IterationType.LONG_REST
-          
+
             val resolvedIterationType = when {
                 isNoTimeForWorkLeft
                     .or(isNoTimeForShortRestLeft)
