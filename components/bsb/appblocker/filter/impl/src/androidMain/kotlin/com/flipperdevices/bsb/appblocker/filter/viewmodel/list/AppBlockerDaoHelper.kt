@@ -78,7 +78,7 @@ class AppBlockerDaoHelper(
                 .mapNotNull {
                     it.toUIApp(
                         isBlocked = isCategoryBlocked ||
-                                checkedAppsSet.contains(it.packageName)
+                            checkedAppsSet.contains(it.packageName)
                     )
                 }
                 .sortedBy { it.appName }
