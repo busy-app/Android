@@ -77,7 +77,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.components.core.focusDisplay)
-            
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -147,6 +147,7 @@ commonDependencies {
     implementation(projects.components.core.ktx)
     implementation(projects.components.core.apppackage)
     implementation(projects.components.core.buildKonfig)
+    implementation(projects.components.core.vibrator)
     implementation(projects.components.core.ui.decompose)
     implementation(projects.components.core.ui.lifecycle)
     implementation(projects.components.bsb.core.theme)

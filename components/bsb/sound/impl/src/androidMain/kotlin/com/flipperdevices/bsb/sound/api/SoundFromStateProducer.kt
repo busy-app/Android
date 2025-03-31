@@ -7,10 +7,12 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.info
+import com.flipperdevices.core.vibrator.api.BVibratorApi
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 data class SoundEventSnapshot(
@@ -23,7 +25,8 @@ data class SoundEventSnapshot(
 @Inject
 @SingleIn(AppGraph::class)
 class SoundFromStateProducer(
-    private val soundPlayHelper: SoundPlayHelper
+    private val soundPlayHelper: SoundPlayHelper,
+    private val vibratorApi: BVibratorApi
 ) : LogTagProvider {
     override val TAG = "SoundFromStateProducer"
 
@@ -64,6 +67,14 @@ class SoundFromStateProducer(
             sound
         )
         if (lastSoundEvent != soundEvent) {
+            when (sound) {
+                Sound.REST_COUNTDOWN,
+                Sound.WORK_COUNTDOWN -> {
+                }
+
+                Sound.REST_FINISHED,
+                Sound.WORK_FINISHED -> vibratorApi.vibrateOnce(500.milliseconds)
+            }
             soundPlayHelper.play(sound)
             lastSoundEvent = soundEvent
         } else {
