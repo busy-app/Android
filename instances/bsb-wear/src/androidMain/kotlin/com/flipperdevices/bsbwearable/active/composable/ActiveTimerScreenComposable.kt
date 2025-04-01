@@ -38,6 +38,7 @@ import busystatusbar.instances.bsb_wear.generated.resources.tds_iteration_progre
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -74,17 +75,22 @@ private fun ControlledTimerState.InProgress.Running.getBrush(): Brush {
 @Composable
 private fun ControlledTimerState.InProgress.Running.rememberTimeLeftText(): String {
     return remember(timeLeft) {
-        timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
-            val timeComponentList = listOfNotNull(
-                hours.takeIf { h -> h > 0 },
-                minutes,
-                seconds
-            )
-            timeComponentList.joinToString(
-                separator = ":",
-                prefix = "",
-                transform = { timeComponent -> timeComponent.toFormattedTime() }
-            )
+        when (val localTimeLeft = timeLeft) {
+            is TimerDuration.Finite -> {
+                localTimeLeft.instance.toComponents { days, hours, minutes, seconds, nanoseconds ->
+                    val timeComponentList = listOfNotNull(
+                        hours.takeIf { h -> h > 0 },
+                        minutes,
+                        seconds
+                    )
+                    timeComponentList.joinToString(
+                        separator = ":",
+                        prefix = "",
+                        transform = { timeComponent -> timeComponent.toFormattedTime() }
+                    )
+                }
+            }
+            TimerDuration.Infinite -> "∞"
         }
     }
 }
@@ -232,7 +238,7 @@ private fun ActiveScreenComposablePreview() {
             onStopClick = {},
             timerState = when (i % 3) {
                 0 -> ControlledTimerState.InProgress.Running.Work(
-                    timeLeft = 123.minutes,
+                    timeLeft = TimerDuration(123.minutes),
                     isOnPause = false,
                     timerSettings = TimerSettings(
                         id = TimerSettingsId(id = -1),
@@ -245,7 +251,7 @@ private fun ActiveScreenComposablePreview() {
                 )
 
                 1 -> ControlledTimerState.InProgress.Running.Rest(
-                    timeLeft = 12.minutes,
+                    timeLeft = TimerDuration(12.minutes),
                     isOnPause = false,
                     timerSettings = TimerSettings(
                         id = TimerSettingsId(id = -1),
@@ -258,7 +264,7 @@ private fun ActiveScreenComposablePreview() {
                 )
 
                 else -> ControlledTimerState.InProgress.Running.LongRest(
-                    timeLeft = 3.minutes,
+                    timeLeft = TimerDuration(3.minutes),
                     isOnPause = false,
                     timerSettings = TimerSettings(
                         id = TimerSettingsId(id = -1),

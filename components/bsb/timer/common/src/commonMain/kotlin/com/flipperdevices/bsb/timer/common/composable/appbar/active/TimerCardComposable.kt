@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.ui.autosizetext.AutoSizeText
 import com.flipperdevices.ui.timeline.util.toFormattedTime
@@ -95,6 +96,10 @@ fun TimerCardComposable(
 
 @Composable
 private fun getTimerProgress(timerState: ControlledTimerState.InProgress.Running): Float {
+    val timeLeft = when (val localTimeLeft = timerState.timeLeft) {
+        is TimerDuration.Finite -> localTimeLeft.instance
+        TimerDuration.Infinite -> return 1f
+    }
     val totalDuration = remember(timerState.timerSettings.intervalsSettings) {
         when (timerState) {
             is ControlledTimerState.InProgress.Running.LongRest ->
@@ -107,11 +112,11 @@ private fun getTimerProgress(timerState: ControlledTimerState.InProgress.Running
                 timerState.timerSettings.intervalsSettings.work
         }
     }
-    return remember(timerState.timeLeft, totalDuration) {
+    return remember(timeLeft, totalDuration) {
         when {
-            timerState.timeLeft > totalDuration -> 1f
+            timeLeft > totalDuration -> 1f
             totalDuration.inWholeSeconds == 0L -> 0f
-            else -> timerState.timeLeft.inWholeSeconds / totalDuration.inWholeSeconds.toFloat()
+            else -> timeLeft.inWholeSeconds / totalDuration.inWholeSeconds.toFloat()
         }
     }
 }
@@ -122,18 +127,23 @@ private fun TimerRow(
     modifier: Modifier = Modifier
 ) {
     val text = remember(timerState.timeLeft) {
-        timerState.timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
-            val timeComponentList = listOfNotNull(
-                hours.takeIf { h -> h > 0 },
-                minutes,
-                seconds
-            )
+        when (val localTimeLeft = timerState.timeLeft) {
+            is TimerDuration.Finite -> {
+                localTimeLeft.instance.toComponents { days, hours, minutes, seconds, nanoseconds ->
+                    val timeComponentList = listOfNotNull(
+                        hours.takeIf { h -> h > 0 },
+                        minutes,
+                        seconds
+                    )
 
-            timeComponentList.joinToString(
-                separator = ":",
-                prefix = "",
-                transform = { timeComponent -> timeComponent.toFormattedTime() }
-            )
+                    timeComponentList.joinToString(
+                        separator = ":",
+                        prefix = "",
+                        transform = { timeComponent -> timeComponent.toFormattedTime() }
+                    )
+                }
+            }
+            TimerDuration.Infinite -> "∞"
         }
     }
 

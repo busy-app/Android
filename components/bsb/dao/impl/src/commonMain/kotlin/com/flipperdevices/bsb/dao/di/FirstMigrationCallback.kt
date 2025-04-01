@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.dao.di
 import androidx.room.RoomDatabase
 import androidx.sqlite.SQLiteConnection
 import com.flipperdevices.bsb.dao.model.AppDatabase
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.dao.model.cards.AUTOGENERATE_PRIMARY_ID
@@ -79,7 +80,7 @@ class FirstMigrationCallback(
         } else {
             TimerSettings(
                 id = TimerSettingsId(AUTOGENERATE_PRIMARY_ID),
-                totalTime = oldSettings.totalTime,
+                totalTime = TimerDuration(oldSettings.totalTime),
                 intervalsSettings = TimerSettings.IntervalsSettings(
                     work = oldSettings.intervalsSettings.work,
                     rest = oldSettings.intervalsSettings.rest,

@@ -1,14 +1,16 @@
 package com.flipperdevices.bsb.dao.model.cards
 
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
+import kotlin.time.Duration
 
 object DBCardEntityMapper {
     fun map(entity: DBCardEntity): TimerSettings {
         return TimerSettings(
             id = TimerSettingsId(entity.id),
             name = entity.name,
-            totalTime = entity.totalTime,
+            totalTime = TimerDuration(entity.totalTime),
             intervalsSettings = TimerSettings.IntervalsSettings(
                 work = entity.work,
                 rest = entity.rest,
@@ -27,7 +29,10 @@ object DBCardEntityMapper {
         return DBCardEntity(
             id = settings.id.id,
             name = settings.name,
-            totalTime = settings.totalTime,
+            totalTime = when (val localTotalTime = settings.totalTime) {
+                is TimerDuration.Finite -> localTotalTime.instance
+                TimerDuration.Infinite -> Duration.ZERO
+            },
             work = settings.intervalsSettings.work,
             rest = settings.intervalsSettings.rest,
             longRest = settings.intervalsSettings.longRest,

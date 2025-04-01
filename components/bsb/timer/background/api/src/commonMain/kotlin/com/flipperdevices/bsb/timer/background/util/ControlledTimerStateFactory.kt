@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.timer.background.util
 
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
@@ -20,6 +21,12 @@ sealed interface IterationData {
     val iterationType: IterationType
     val startOffset: Duration
     val duration: Duration
+
+    data object Infinite : IterationData {
+        override val startOffset = 0.seconds
+        override val iterationType = IterationType.WORK
+        override val duration = Duration.INFINITE
+    }
 
     data class Pending(
         override val startOffset: Duration,
@@ -49,6 +56,12 @@ private fun getIterationTypeByIndex(i: Int): IterationType {
 
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 fun TimerSettings.buildIterationList(): List<IterationData> {
+    val totalTime = when (val localTotalTime = totalTime) {
+        is TimerDuration.Finite -> localTotalTime.instance
+        TimerDuration.Infinite -> {
+            return listOf(IterationData.Infinite)
+        }
+    }
     if (!intervalsSettings.isEnabled) {
         return listOf(
             IterationData.Default(
@@ -182,6 +195,16 @@ fun TimerTimestamp.toState(): ControlledTimerState {
                 is IterationData.Pending -> {
                     confirmNextStepClick < start.plus(data.startOffset)
                 }
+
+                is IterationData.Infinite -> {
+                    return ControlledTimerState.InProgress.Running.Work(
+                        timeLeft = TimerDuration.Infinite,
+                        isOnPause = pause != null,
+                        timerSettings = settings,
+                        currentIteration = 0,
+                        maxIterations = 1
+                    )
+                }
             }
         }
     val currentIterationData = iterationsDataLeft.firstOrNull()
@@ -204,7 +227,7 @@ fun TimerTimestamp.toState(): ControlledTimerState {
 
     return when (currentIterationData.iterationType) {
         IterationType.WORK -> ControlledTimerState.InProgress.Running.Work(
-            timeLeft = currentIterationTypeTimeLeft,
+            timeLeft = TimerDuration(currentIterationTypeTimeLeft),
             isOnPause = pause != null,
             timerSettings = settings,
             currentIteration = iterationCountLeft,
@@ -212,7 +235,7 @@ fun TimerTimestamp.toState(): ControlledTimerState {
         )
 
         IterationType.REST -> ControlledTimerState.InProgress.Running.Rest(
-            timeLeft = currentIterationTypeTimeLeft,
+            timeLeft = TimerDuration(currentIterationTypeTimeLeft),
             isOnPause = pause != null,
             timerSettings = settings,
             currentIteration = iterationCountLeft,
@@ -220,7 +243,7 @@ fun TimerTimestamp.toState(): ControlledTimerState {
         )
 
         IterationType.LONG_REST -> ControlledTimerState.InProgress.Running.LongRest(
-            timeLeft = currentIterationTypeTimeLeft,
+            timeLeft = TimerDuration(currentIterationTypeTimeLeft),
             isOnPause = pause != null,
             timerSettings = settings,
             currentIteration = iterationCountLeft,

@@ -1,5 +1,6 @@
 package com.flipperdevices.ui.timeline.util
 
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import kotlin.time.Duration
 
 private const val SINGLE_CHAR_NUMBER_LIMIT = 10
@@ -10,6 +11,13 @@ private const val SINGLE_CHAR_NUMBER_LIMIT = 10
  */
 fun Int.toFormattedTime(): String {
     return if (this < SINGLE_CHAR_NUMBER_LIMIT) "0$this" else "$this"
+}
+
+fun TimerDuration.toFormattedTime(slim: Boolean = true): String {
+    return when (this) {
+        is TimerDuration.Finite -> instance.toFormattedTime(slim)
+        TimerDuration.Infinite -> "∞"
+    }
 }
 
 fun Duration.toFormattedTime(slim: Boolean = true): String {

@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.dao.model
 
+import com.flipperdevices.bsb.dao.serialization.TimerDurationSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
@@ -15,7 +16,8 @@ data class TimerSettings(
     @SerialName("id")
     val id: TimerSettingsId,
     @SerialName("total_time")
-    val totalTime: Duration = 90.minutes,
+    @Serializable(TimerDurationSerializer::class)
+    val totalTime: TimerDuration = TimerDuration(90.minutes),
     @SerialName("intervals_settings")
     val intervalsSettings: IntervalsSettings = IntervalsSettings(),
     @SerialName("sound_settings")

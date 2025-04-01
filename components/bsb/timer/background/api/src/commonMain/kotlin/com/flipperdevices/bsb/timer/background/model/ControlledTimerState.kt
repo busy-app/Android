@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.timer.background.model
 
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState.InProgress.Running
 import kotlinx.datetime.Instant
@@ -24,12 +25,12 @@ sealed interface ControlledTimerState {
 
         @Serializable
         sealed interface Running : InProgress {
-            val timeLeft: Duration
+            val timeLeft: TimerDuration
             val isOnPause: Boolean
 
             @Serializable
             data class Work(
-                override val timeLeft: Duration,
+                override val timeLeft: TimerDuration,
                 override val isOnPause: Boolean,
                 override val timerSettings: TimerSettings,
                 override val currentIteration: Int,
@@ -38,7 +39,7 @@ sealed interface ControlledTimerState {
 
             @Serializable
             data class Rest(
-                override val timeLeft: Duration,
+                override val timeLeft: TimerDuration,
                 override val isOnPause: Boolean,
                 override val timerSettings: TimerSettings,
                 override val currentIteration: Int,
@@ -47,7 +48,7 @@ sealed interface ControlledTimerState {
 
             @Serializable
             data class LongRest(
-                override val timeLeft: Duration,
+                override val timeLeft: TimerDuration,
                 override val isOnPause: Boolean,
                 override val timerSettings: TimerSettings,
                 override val currentIteration: Int,
@@ -91,13 +92,18 @@ private fun Int.fixedTwoDigitValue(): String {
 }
 
 fun ControlledTimerState.InProgress.Running.toHumanReadableString(): String {
-    return timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
-        buildString {
-            if (days > 0) append("${days.fixedTwoDigitValue()}:")
-            if (days > 0 || hours > 0) append("${hours.fixedTwoDigitValue()}:")
-            if (days > 0 || hours > 0 || minutes > 0) append("${minutes.fixedTwoDigitValue()}:")
-            append(seconds.fixedTwoDigitValue())
+    return when (val localTimeLeft = timeLeft) {
+        is TimerDuration.Finite -> {
+            localTimeLeft.instance.toComponents { days, hours, minutes, seconds, nanoseconds ->
+                buildString {
+                    if (days > 0) append("${days.fixedTwoDigitValue()}:")
+                    if (days > 0 || hours > 0) append("${hours.fixedTwoDigitValue()}:")
+                    if (days > 0 || hours > 0 || minutes > 0) append("${minutes.fixedTwoDigitValue()}:")
+                    append(seconds.fixedTwoDigitValue())
+                }
+            }
         }
+        TimerDuration.Infinite -> "∞"
     }
 }
 
@@ -116,9 +122,14 @@ val ControlledTimerState.InProgress.Running.maxTime: Duration
 
 val ControlledTimerState.InProgress.Running.progress: Float
     get() {
-        return when {
-            timeLeft > maxTime -> 1f
-            maxTime.inWholeSeconds == 0L -> 0f
-            else -> timeLeft.inWholeSeconds / maxTime.inWholeSeconds.toFloat()
+        return when (val localTimeLeft = timeLeft) {
+            is TimerDuration.Finite -> {
+                when {
+                    localTimeLeft.instance > maxTime -> 1f
+                    maxTime.inWholeSeconds == 0L -> 0f
+                    else -> localTimeLeft.instance.inWholeSeconds / maxTime.inWholeSeconds.toFloat()
+                }
+            }
+            TimerDuration.Infinite -> 1f
         }
     }

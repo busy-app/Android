@@ -6,6 +6,7 @@ import com.flipperdevices.bsb.analytics.metric.api.model.TimerConfigSnapshot
 import com.flipperdevices.bsb.dao.api.CardAppBlockerApi
 import com.flipperdevices.bsb.dao.model.BlockedAppDetailedState
 import com.flipperdevices.bsb.dao.model.BlockedAppEntity
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
+import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
 @Inject
@@ -31,7 +33,10 @@ class MetricHandlerImpl(
             BEvent.TimerStarted(
                 TimerConfigSnapshot(
                     isIntervalsEnabled = timerSettings.intervalsSettings.isEnabled,
-                    totalTimeMillis = timerSettings.totalTime.inWholeMilliseconds,
+                    totalTimeMillis = when (val localTotalTime = timerSettings.totalTime) {
+                        is TimerDuration.Finite -> localTotalTime.instance.inWholeMilliseconds
+                        TimerDuration.Infinite -> Duration.INFINITE.inWholeMilliseconds
+                    },
                     workTimerMillis = timerSettings.intervalsSettings.work.inWholeMilliseconds,
                     restTimeMillis = timerSettings.intervalsSettings.rest.inWholeMilliseconds,
                     isBlockingEnabled = blockedAppDetailedState.isBlockingEnabled(),
@@ -49,7 +54,10 @@ class MetricHandlerImpl(
             BEvent.TimerCompleted(
                 TimerConfigSnapshot(
                     isIntervalsEnabled = settings.intervalsSettings.isEnabled,
-                    totalTimeMillis = settings.totalTime.inWholeMilliseconds,
+                    totalTimeMillis = when (val localTotalTime = settings.totalTime) {
+                        is TimerDuration.Finite -> localTotalTime.instance.inWholeMilliseconds
+                        TimerDuration.Infinite -> Duration.INFINITE.inWholeMilliseconds
+                    },
                     workTimerMillis = settings.intervalsSettings.work.inWholeMilliseconds,
                     restTimeMillis = settings.intervalsSettings.rest.inWholeMilliseconds,
                     isBlockingEnabled = blockedAppDetailedState.isBlockingEnabled(),
