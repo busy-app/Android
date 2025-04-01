@@ -5,42 +5,32 @@ import com.flipperdevices.bsb.dao.model.TimerSettings
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 
+/**
+ * Some timer configs should be changed when we are changing others
+ * So the [TimerSettings] should be changed via [TimerSettingsReducer]
+ */
 object TimerSettingsReducer {
-
     private fun TimerSettings.onRestChanged(message: Message.Interval.RestChanged): TimerSettings {
-        val totalTime = when (val localTotalTime = totalTime) {
-            is TimerDuration.Finite -> localTotalTime.instance
-            TimerDuration.Infinite -> return this
-        }
-        val newState = copy(
-            intervalsSettings = intervalsSettings.copy(rest = message.value)
+        return copy(
+            intervalsSettings = intervalsSettings
+                .copy(rest = message.value)
         )
-        val iterationDuration = newState
-            .intervalsSettings
-            .work
-            .plus(newState.intervalsSettings.rest)
-        return if (iterationDuration > totalTime) {
-            newState.copy(
-                intervalsSettings = newState.intervalsSettings.copy(
-                    rest = totalTime.minus(newState.intervalsSettings.work)
-                )
-            )
-        } else {
-            newState
-        }
     }
+
     private fun TimerSettings.onLongRestChanged(message: Message.Interval.LongRestChanged): TimerSettings {
         return copy(
             intervalsSettings = intervalsSettings
                 .copy(longRest = message.value)
         )
     }
+
     private fun TimerSettings.onWorkChanged(message: Message.Interval.WorkChanged): TimerSettings {
         return copy(
             intervalsSettings = intervalsSettings
                 .copy(work = message.value)
         )
     }
+
     private fun TimerSettings.onTotalTimeChanged(message: Message.TotalTimeChanged): TimerSettings {
         val newState = copy(totalTime = TimerDuration(message.value))
         return when (val localTotalTime = newState.totalTime) {
@@ -57,11 +47,7 @@ object TimerSettingsReducer {
             }
 
             TimerDuration.Infinite -> {
-                newState.copy(
-                    intervalsSettings = newState
-                        .intervalsSettings
-                        .copy(isEnabled = false)
-                )
+                newState.copy(intervalsSettings = newState.intervalsSettings)
             }
         }
     }
