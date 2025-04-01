@@ -126,7 +126,7 @@ private fun ActiveTimerScreenTitle(
                         )
                     }
 
-                    TimerDuration.Infinite -> "${timerState.maxUiIterations}"
+                    TimerDuration.Infinite -> "${timerState.currentUiIteration}"
                 },
                 fontSize = 14.sp,
                 color = Color(color = 0x4DFFFFFF) // todo

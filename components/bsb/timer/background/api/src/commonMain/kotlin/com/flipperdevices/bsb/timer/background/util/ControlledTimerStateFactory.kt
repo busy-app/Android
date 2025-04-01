@@ -201,7 +201,7 @@ fun TimerTimestamp.toState(): ControlledTimerState {
                         timeLeft = TimerDuration.Infinite,
                         isOnPause = pause != null,
                         timerSettings = settings,
-                        currentIteration = 0,
+                        currentIteration = 1,
                         maxIterations = 1
                     )
                 }

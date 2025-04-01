@@ -16,6 +16,7 @@ import busystatusbar.components.bsb.timer.common.generated.resources.ic_stop
 import busystatusbar.components.bsb.timer.common.generated.resources.ta_skip
 import busystatusbar.components.bsb.timer.common.generated.resources.ta_stop
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.bsb.timer.background.model.maxUiIterations
@@ -36,6 +37,7 @@ fun TimerActiveHeaderComposable(
     modifier: Modifier = Modifier,
 ) {
     val workPhaseText = when {
+        state.timeLeft is TimerDuration.Infinite -> "${state.currentUiIteration}"
         !state.timerSettings.intervalsSettings.isEnabled -> null
         else -> {
             "${state.currentUiIteration}/${state.maxUiIterations}"
