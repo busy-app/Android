@@ -90,6 +90,7 @@ private fun ControlledTimerState.InProgress.Running.rememberTimeLeftText(): Stri
                     )
                 }
             }
+
             TimerDuration.Infinite -> "∞"
         }
     }
@@ -116,11 +117,17 @@ private fun ActiveTimerScreenTitle(
         )
         if (timerState is ControlledTimerState.InProgress.Running.Work) {
             Text(
-                text = stringResource(
-                    Res.string.tds_iteration_progress,
-                    "${timerState.currentUiIteration}",
-                    "${timerState.maxUiIterations}"
-                ),
+                text = when (timerState.timeLeft) {
+                    is TimerDuration.Finite -> {
+                        stringResource(
+                            Res.string.tds_iteration_progress,
+                            "${timerState.currentUiIteration}",
+                            "${timerState.maxUiIterations}"
+                        )
+                    }
+
+                    TimerDuration.Infinite -> "${timerState.maxUiIterations}"
+                },
                 fontSize = 14.sp,
                 color = Color(color = 0x4DFFFFFF) // todo
             )
@@ -188,7 +195,11 @@ internal fun ActiveTimerScreenComposable(
                             background = Color(color = 0x1AFFFFFF), // todo
                             shape = CircleShape,
                             onClick = onSkipClick,
-                            modifier = Modifier.size(34.dp)
+                            modifier = Modifier.size(34.dp),
+                            enabled = when (timerState.timeLeft) {
+                                is TimerDuration.Finite -> true
+                                TimerDuration.Infinite -> false
+                            }
                         )
                     }
                     LinearProgressIndicator(
