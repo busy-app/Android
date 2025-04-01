@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.arkivanov.decompose.defaultComponentContext
 import com.flipperdevices.bsbwearable.composable.WearApp
 import com.flipperdevices.bsbwearable.di.WearAppComponent
@@ -19,6 +20,8 @@ internal class MainActivity : ComponentActivity(), LogTagProvider {
     private var rootDecomposeComponent: RootDecomposeComponent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
