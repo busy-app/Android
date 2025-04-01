@@ -37,7 +37,7 @@ fun TimerActiveHeaderComposable(
     modifier: Modifier = Modifier,
 ) {
     val workPhaseText = when {
-        state.timeLeft is TimerDuration.Infinite -> "${state.currentUiIteration}"
+        state.timerSettings.totalTime is TimerDuration.Infinite -> "${state.currentUiIteration}"
         !state.timerSettings.intervalsSettings.isEnabled -> null
         else -> {
             "${state.currentUiIteration}/${state.maxUiIterations}"

@@ -52,6 +52,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CTRes
 
 @Composable
@@ -74,24 +75,25 @@ private fun ControlledTimerState.InProgress.Running.getBrush(): Brush {
 
 @Composable
 private fun ControlledTimerState.InProgress.Running.rememberTimeLeftText(): String {
-    return remember(timeLeft) {
-        when (val localTimeLeft = timeLeft) {
+    return remember(timeLeft, timePassed) {
+        val time = when (val localTimeLeft = timeLeft) {
             is TimerDuration.Finite -> {
-                localTimeLeft.instance.toComponents { days, hours, minutes, seconds, nanoseconds ->
-                    val timeComponentList = listOfNotNull(
-                        hours.takeIf { h -> h > 0 },
-                        minutes,
-                        seconds
-                    )
-                    timeComponentList.joinToString(
-                        separator = ":",
-                        prefix = "",
-                        transform = { timeComponent -> timeComponent.toFormattedTime() }
-                    )
-                }
+                localTimeLeft.instance
             }
 
-            TimerDuration.Infinite -> "∞"
+            TimerDuration.Infinite -> timePassed
+        }
+        time.toComponents { days, hours, minutes, seconds, nanoseconds ->
+            val timeComponentList = listOfNotNull(
+                hours.takeIf { h -> h > 0 },
+                minutes,
+                seconds
+            )
+            timeComponentList.joinToString(
+                separator = ":",
+                prefix = "",
+                transform = { timeComponent -> timeComponent.toFormattedTime() }
+            )
         }
     }
 }
@@ -202,20 +204,22 @@ internal fun ActiveTimerScreenComposable(
                             }
                         )
                     }
-                    LinearProgressIndicator(
-                        modifier = Modifier.padding(horizontal = 14.dp),
-                        progress = animateFloatAsState(timerState.progress).value,
-                        color = when (timerState) {
-                            is ControlledTimerState.InProgress.Running.LongRest,
-                            is ControlledTimerState.InProgress.Running.Rest -> Color(color = 0xFF00AC34) // todo
-                            is ControlledTimerState.InProgress.Running.Work ->
-                                LocalCorruptedPallet
-                                    .current
-                                    .accent
-                                    .brand
-                                    .primary
-                        }
-                    )
+                    if (timerState.timerSettings.totalTime is TimerDuration.Finite) {
+                        LinearProgressIndicator(
+                            modifier = Modifier.padding(horizontal = 14.dp),
+                            progress = animateFloatAsState(timerState.progress).value,
+                            color = when (timerState) {
+                                is ControlledTimerState.InProgress.Running.LongRest,
+                                is ControlledTimerState.InProgress.Running.Rest -> Color(color = 0xFF00AC34) // todo
+                                is ControlledTimerState.InProgress.Running.Work ->
+                                    LocalCorruptedPallet
+                                        .current
+                                        .accent
+                                        .brand
+                                        .primary
+                            }
+                        )
+                    }
                 }
                 BChipButton(
                     onClick = onPauseClick,
@@ -258,7 +262,8 @@ private fun ActiveScreenComposablePreview() {
                         )
                     ),
                     currentIteration = 0,
-                    maxIterations = 3
+                    maxIterations = 3,
+                    timePassed = 0.seconds
                 )
 
                 1 -> ControlledTimerState.InProgress.Running.Rest(
@@ -271,7 +276,8 @@ private fun ActiveScreenComposablePreview() {
                         )
                     ),
                     currentIteration = 0,
-                    maxIterations = 3
+                    maxIterations = 3,
+                    timePassed = 0.seconds
                 )
 
                 else -> ControlledTimerState.InProgress.Running.LongRest(
@@ -284,7 +290,8 @@ private fun ActiveScreenComposablePreview() {
                         )
                     ),
                     currentIteration = 0,
-                    maxIterations = 3
+                    maxIterations = 3,
+                    timePassed = 0.seconds
                 )
             }
         )

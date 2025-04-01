@@ -26,19 +26,22 @@ sealed interface ControlledTimerState {
         @Serializable
         sealed interface Running : InProgress {
             val timeLeft: TimerDuration
+            val timePassed: Duration
             val isOnPause: Boolean
 
             @Serializable
             data class Work(
+                override val timePassed: Duration,
                 override val timeLeft: TimerDuration,
                 override val isOnPause: Boolean,
                 override val timerSettings: TimerSettings,
                 override val currentIteration: Int,
-                override val maxIterations: Int
+                override val maxIterations: Int,
             ) : Running
 
             @Serializable
             data class Rest(
+                override val timePassed: Duration,
                 override val timeLeft: TimerDuration,
                 override val isOnPause: Boolean,
                 override val timerSettings: TimerSettings,
@@ -48,6 +51,7 @@ sealed interface ControlledTimerState {
 
             @Serializable
             data class LongRest(
+                override val timePassed: Duration,
                 override val timeLeft: TimerDuration,
                 override val isOnPause: Boolean,
                 override val timerSettings: TimerSettings,

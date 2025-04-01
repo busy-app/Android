@@ -91,7 +91,9 @@ fun TimerApi.skip() {
                         )
                     }
 
-                    TimerDuration.Infinite -> state // TODO what to do on skip? Skip infinite iteration? Or nothing?
+                    TimerDuration.Infinite -> {
+                        state
+                    }
                 }
             }
         }

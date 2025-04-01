@@ -4,7 +4,7 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.flow.TickFlow
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.util.toState
+import com.flipperdevices.bsb.timer.background.statefactory.toState
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
 import kotlinx.coroutines.CoroutineScope

@@ -64,6 +64,7 @@ fun TimerCardComposable(
         }
         Column(
             modifier = columnModifier
+                .fillMaxWidth()
                 .background(config.videoBackgroundColor.copy(alpha = 0.8f))
                 .padding(24.dp),
             verticalArrangement = Arrangement.SpaceBetween,
@@ -81,15 +82,17 @@ fun TimerCardComposable(
                 )
             }
 
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .background(config.progressBarBackgroundColor)
-                    .height(6.dp)
-                    .fillMaxWidth(),
-                progress = getTimerProgress(timerState),
-                color = config.progressBarColor,
-                backgroundColor = config.progressBarBackgroundColor
-            )
+            if (timerState.timerSettings.totalTime is TimerDuration.Finite) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .background(config.progressBarBackgroundColor)
+                        .height(6.dp)
+                        .fillMaxWidth(),
+                    progress = getTimerProgress(timerState),
+                    color = config.progressBarColor,
+                    backgroundColor = config.progressBarBackgroundColor
+                )
+            }
         }
     }
 }
@@ -126,24 +129,26 @@ private fun TimerRow(
     timerState: ControlledTimerState.InProgress.Running,
     modifier: Modifier = Modifier
 ) {
-    val text = remember(timerState.timeLeft) {
-        when (val localTimeLeft = timerState.timeLeft) {
+    val text = remember(timerState.timeLeft, timerState.timePassed) {
+        val time = when (val localTimeLeft = timerState.timeLeft) {
             is TimerDuration.Finite -> {
-                localTimeLeft.instance.toComponents { days, hours, minutes, seconds, nanoseconds ->
-                    val timeComponentList = listOfNotNull(
-                        hours.takeIf { h -> h > 0 },
-                        minutes,
-                        seconds
-                    )
-
-                    timeComponentList.joinToString(
-                        separator = ":",
-                        prefix = "",
-                        transform = { timeComponent -> timeComponent.toFormattedTime() }
-                    )
-                }
+                localTimeLeft.instance
             }
-            TimerDuration.Infinite -> "∞"
+
+            TimerDuration.Infinite -> timerState.timePassed
+        }
+        time.toComponents { days, hours, minutes, seconds, nanoseconds ->
+            val timeComponentList = listOfNotNull(
+                hours.takeIf { h -> h > 0 },
+                minutes,
+                seconds
+            )
+
+            timeComponentList.joinToString(
+                separator = ":",
+                prefix = "",
+                transform = { timeComponent -> timeComponent.toFormattedTime() }
+            )
         }
     }
 
