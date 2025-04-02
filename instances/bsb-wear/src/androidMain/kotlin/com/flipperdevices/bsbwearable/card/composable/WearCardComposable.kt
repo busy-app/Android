@@ -56,8 +56,6 @@ private fun calculateBlockerText(blockerState: BlockedAppCount): String? {
     }
 }
 
-private const val DESIGN_CARD_ASPECT_RATIO = 170f / 107f
-
 @Suppress("LongMethod")
 @Composable
 fun WearCardComposable(
@@ -67,7 +65,6 @@ fun WearCardComposable(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(DESIGN_CARD_ASPECT_RATIO)
             .clip(RoundedCornerShape(20.dp))
             .background(LocalCorruptedPallet.current.accent.brand.primary)
             .padding(12.dp),
