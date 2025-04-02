@@ -3,7 +3,6 @@ package com.flipperdevices.bsb.wear.messenger.api
 import com.flipperdevices.bsb.wear.messenger.util.nodesFlow
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.log.wtf
 import com.google.android.gms.wearable.CapabilityClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted

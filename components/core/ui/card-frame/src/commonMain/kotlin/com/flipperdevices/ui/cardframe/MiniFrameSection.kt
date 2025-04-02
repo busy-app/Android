@@ -2,7 +2,6 @@ package com.flipperdevices.ui.cardframe
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,8 +44,8 @@ private fun FrameSectionInnerContent(
     text: String,
     iconSize: Dp,
     fontSize: TextUnit,
+    modifier: Modifier = Modifier,
     paddingBetweenSections: Dp = 4.dp,
-    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
