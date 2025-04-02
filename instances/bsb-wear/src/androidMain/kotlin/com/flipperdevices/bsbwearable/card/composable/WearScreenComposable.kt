@@ -105,8 +105,7 @@ private fun WearScreenContentComposable(
 
         BChipButton(
             modifier = Modifier
-                .padding(top = 5.dp)
-                .fillMaxWidth(fraction = 0.6f),
+                .padding(top = 5.dp),
             onClick = onStartClick,
             text = stringResource(Res.string.bwca_button_start),
             painter = painterResource(CommonRes.drawable.ic_play),
@@ -117,7 +116,7 @@ private fun WearScreenContentComposable(
             spacedBy = 8.dp,
             contentPadding = PaddingValues(
                 vertical = 12.dp,
-                horizontal = 14.dp
+                horizontal = 26.dp
             )
         )
     }

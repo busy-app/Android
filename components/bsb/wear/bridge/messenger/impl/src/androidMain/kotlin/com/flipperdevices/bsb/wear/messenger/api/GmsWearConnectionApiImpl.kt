@@ -24,14 +24,10 @@ class GmsWearConnectionApiImpl(
     override val TAG: String = "WearConnectionApi"
     override val statusFlow = capabilityClient.nodesFlow
         .map { nodes ->
-            when {
-                nodes.isEmpty() -> GmsWearConnectionApi.GmsStatus.Disconnected
-                nodes.size > 1 -> {
-                    wtf { "#statusFlow more than 1 nodes received ${nodes.map { node -> node.displayName }}" }
-                    GmsWearConnectionApi.GmsStatus.Connected(nodes.first())
-                }
-
-                else -> GmsWearConnectionApi.GmsStatus.Connected(nodes.first())
+            if (nodes.isEmpty()) {
+                GmsWearConnectionApi.GmsStatus.Disconnected
+            } else {
+                GmsWearConnectionApi.GmsStatus.Connected(nodes)
             }
         }.stateIn(scope, SharingStarted.Companion.Eagerly, GmsWearConnectionApi.GmsStatus.Disconnected)
 }

@@ -10,6 +10,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, WearMessageProducer::class)
 class WearDataLayerRegistryMessageProducer : WearMessageProducer {
+    override val TAG = "WearDataLayerRegistryMessageProducerNoop"
 
     override suspend fun <T> produce(message: WearMessageSerializer<T>, value: T): Unit = Unit
 }

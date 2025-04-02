@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.wear.messenger.service
 
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
@@ -63,17 +64,19 @@ class WearWearMessageSyncService(
     private val jobs = mutableListOf<Job>()
     private val mutex = Mutex()
 
-    private suspend fun sendTimerTimestampMessage() {
-        val timerTimestamp = timerApi
+    private suspend fun sendTimerTimestampMessage(
+        timerTimestamp: TimerTimestamp? = null
+    ) {
+        val timerTimestampNonNullable = timerTimestamp ?: timerApi
             .getTimestampState()
             .first()
-        val message = TimerTimestampMessage(timerTimestamp)
+        val message = TimerTimestampMessage(timerTimestampNonNullable)
         wearMessageProducer.produce(message)
     }
 
     private fun startAndGetStateChangeJob(): Job {
         return timerApi.getTimestampState()
-            .onEach { sendTimerTimestampMessage() }
+            .onEach { sendTimerTimestampMessage(it) }
             .launchIn(scope)
     }
 

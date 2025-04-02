@@ -2,6 +2,7 @@ package com.flipperdevices.ui.cardframe
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,12 +45,13 @@ private fun FrameSectionInnerContent(
     text: String,
     iconSize: Dp,
     fontSize: TextUnit,
+    paddingBetweenSections: Dp = 4.dp,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        horizontalArrangement = Arrangement.spacedBy(paddingBetweenSections)
     ) {
         Icon(
             painter = painter,
@@ -96,9 +98,15 @@ fun MiniFrameSection(
         vertical = 8.dp,
         horizontal = 12.dp
     ),
+    cornerRadius: Dp = 10.dp,
+    linePadding: PaddingValues = PaddingValues(
+        vertical = 0.dp,
+        horizontal = 8.dp
+    ),
+    paddingBetweenSectionsInside: Dp = 4.dp
 ) {
     Box(
-        modifier = modifier.clip(RoundedCornerShape(10.dp))
+        modifier = modifier.clip(RoundedCornerShape(cornerRadius))
             .background(Color(0xFFFFFF).copy(0.2f))
             .padding(contentPadding),
         contentAlignment = Alignment.Center,
@@ -111,11 +119,12 @@ fun MiniFrameSection(
                     text = data.text,
                     tint = data.tint,
                     iconSize = iconSize,
-                    fontSize = fontSize
+                    fontSize = fontSize,
+                    paddingBetweenSections = paddingBetweenSectionsInside
                 )
                 if (!isLast) {
                     Box(
-                        Modifier.padding(horizontal = 8.dp)
+                        Modifier.padding(linePadding)
                             .width(1.dp)
                             .fillMaxHeight()
                             .background(Color(0xFFFFFF).copy(0.2f))
