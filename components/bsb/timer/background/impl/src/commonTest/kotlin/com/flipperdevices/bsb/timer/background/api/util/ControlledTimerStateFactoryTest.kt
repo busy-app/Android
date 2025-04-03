@@ -156,7 +156,6 @@ class ControlledTimerStateFactoryTest {
         TimerSettings(
             id = TimerSettingsId(id = -1),
             totalTime = 9.hours,
-            id = TimerSettingsId(-1),
             intervalsSettings = TimerSettings.IntervalsSettings(
                 isEnabled = true,
                 work = 1.hours,
