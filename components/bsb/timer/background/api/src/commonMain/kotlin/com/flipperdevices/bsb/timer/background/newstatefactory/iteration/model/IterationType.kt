@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.background.statefactory.model
+package com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model
 
 enum class IterationType {
     WORK,

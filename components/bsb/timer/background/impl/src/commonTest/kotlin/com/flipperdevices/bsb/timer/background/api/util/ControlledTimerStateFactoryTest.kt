@@ -3,9 +3,9 @@ package com.flipperdevices.bsb.timer.background.api.util
 import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
+import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationData
+import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationType
 import com.flipperdevices.bsb.timer.background.statefactory.buildIterationList
-import com.flipperdevices.bsb.timer.background.statefactory.model.IterationData
-import com.flipperdevices.bsb.timer.background.statefactory.model.IterationType
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.time.Duration.Companion.hours

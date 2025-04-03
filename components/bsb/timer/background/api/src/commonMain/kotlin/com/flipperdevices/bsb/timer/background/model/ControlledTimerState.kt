@@ -75,9 +75,6 @@ sealed interface ControlledTimerState {
     }
 }
 
-val ControlledTimerState.InProgress.Running.isLastIteration: Boolean
-    get() = currentIteration == maxIterations
-
 private const val MIN_TWO_DIGIT_VALUE = 10
 
 /**
@@ -112,7 +109,7 @@ fun ControlledTimerState.InProgress.Running.toHumanReadableString(): String {
 }
 
 val ControlledTimerState.InProgress.Running.currentUiIteration: Int
-    get() = currentIteration
+    get() = currentIteration.plus(1)
 
 val ControlledTimerState.InProgress.Running.maxUiIterations: Int
     get() = maxIterations
