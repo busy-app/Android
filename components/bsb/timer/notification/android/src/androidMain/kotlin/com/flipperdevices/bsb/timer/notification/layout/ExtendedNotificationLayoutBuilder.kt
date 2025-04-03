@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.background.notification.layout
+package com.flipperdevices.bsb.timer.notification.layout
 
 import android.content.Context
 import android.widget.RemoteViews
@@ -6,6 +6,8 @@ import com.flipperdevices.bsb.timer.background.impl.R
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.notification.TimerBroadcastReceiver
 import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
+import com.flipperdevices.bsb.timer.notification.android.R
+import com.flipperdevices.bsb.timer.notification.layout.BaseNotificationLayoutBuilder
 import me.tatarka.inject.annotations.Inject
 
 @Inject

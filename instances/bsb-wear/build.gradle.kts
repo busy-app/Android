@@ -41,6 +41,7 @@ commonDependencies {
     implementation(projects.components.bsb.core.theme)
     implementation(projects.components.bsb.core.res)
     implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.timer.background.impl)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.dao.api)

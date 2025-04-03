@@ -1,6 +1,6 @@
-package com.flipperdevices.bsb.timer.background.notification.layout
+package com.flipperdevices.bsb.timer.notification.layout
 
-import com.flipperdevices.bsb.timer.background.impl.R
+import com.flipperdevices.bsb.timer.notification.android.R
 import me.tatarka.inject.annotations.Inject
 
 @Inject

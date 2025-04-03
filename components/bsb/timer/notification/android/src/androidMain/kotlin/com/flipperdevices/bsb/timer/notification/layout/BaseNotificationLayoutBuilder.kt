@@ -1,13 +1,13 @@
-package com.flipperdevices.bsb.timer.background.notification.layout
+package com.flipperdevices.bsb.timer.notification.layout
 
 import android.content.Context
 import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
-import com.flipperdevices.bsb.timer.background.impl.R
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.toHumanReadableString
+import com.flipperdevices.bsb.timer.notification.android.R
 
 abstract class BaseNotificationLayoutBuilder(
     @LayoutRes
