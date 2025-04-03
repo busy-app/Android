@@ -4,8 +4,8 @@ import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl.CoercedIterationBuilder
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl.DefaultIterationBuilder
-import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl.RestrictedIterationBuilder
 import com.flipperdevices.bsb.timer.background.newstatefactory.state.TimerStateFactory
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.minutes
@@ -15,7 +15,7 @@ private fun printIterations(settings: TimerSettings) {
         println(it)
     }
     println("\nDecorated:")
-    RestrictedIterationBuilder(DefaultIterationBuilder()).build(settings, 90.minutes).onEach {
+    CoercedIterationBuilder(DefaultIterationBuilder()).build(settings, 90.minutes).onEach {
         println(it)
     }
 }

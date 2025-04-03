@@ -3,8 +3,8 @@ package com.flipperdevices.bsb.timer.background.newstatefactory.state
 import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl.CoercedIterationBuilder
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl.DefaultIterationBuilder
-import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl.RestrictedIterationBuilder
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationData
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationType
 import kotlinx.datetime.Clock
@@ -36,7 +36,7 @@ object TimerStateFactory {
         val now = timestamp.pause ?: Clock.System.now()
 
         val defaultIterationBuilder = DefaultIterationBuilder()
-        val restrictedIterationBuilder = RestrictedIterationBuilder(defaultIterationBuilder)
+        val coercedIterationBuilder = CoercedIterationBuilder(defaultIterationBuilder)
         val iterations = when (val localTotalTime = timestamp.settings.totalTime) {
             is TimerDuration.Infinite -> {
                 defaultIterationBuilder.build(
@@ -46,7 +46,7 @@ object TimerStateFactory {
             }
 
             is TimerDuration.Finite -> {
-                restrictedIterationBuilder.build(
+                coercedIterationBuilder.build(
                     timestamp.settings,
                     localTotalTime.instance
                 )

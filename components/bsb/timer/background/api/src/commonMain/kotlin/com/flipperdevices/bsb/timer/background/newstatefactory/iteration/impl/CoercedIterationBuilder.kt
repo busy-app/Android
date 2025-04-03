@@ -7,7 +7,7 @@ import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.I
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationType
 import kotlin.time.Duration
 
-class RestrictedIterationBuilder(private val instance: IterationBuilder) : IterationBuilder {
+class CoercedIterationBuilder(private val instance: IterationBuilder) : IterationBuilder {
     override fun build(settings: TimerSettings, duration: Duration): List<IterationData> {
         val iterations = instance.build(settings, duration)
         val lastIteration = iterations.lastOrNull() ?: return iterations
