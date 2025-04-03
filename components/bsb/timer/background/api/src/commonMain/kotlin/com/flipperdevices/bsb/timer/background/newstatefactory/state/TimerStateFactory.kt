@@ -75,7 +75,7 @@ object TimerStateFactory {
             timestamp.settings.totalTime is TimerDuration.Infinite &&
                 !timestamp.settings.intervalsSettings.isEnabled -> TimerDuration.Infinite
 
-            else -> TimerDuration(
+            else -> TimerDuration.Finite(
                 timestamp.start
                     .plus(currentIterationData.startOffset)
                     .plus(currentIterationData.duration)

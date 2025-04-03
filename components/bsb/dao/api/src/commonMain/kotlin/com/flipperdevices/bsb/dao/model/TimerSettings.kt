@@ -17,7 +17,7 @@ data class TimerSettings(
     val id: TimerSettingsId,
     @SerialName("total_time")
     @Serializable(TimerDurationSerializer::class)
-    val totalTime: TimerDuration = TimerDuration(90.minutes),
+    val totalTime: TimerDuration = TimerDuration.Finite(90.minutes),
     @SerialName("intervals_settings")
     val intervalsSettings: IntervalsSettings = IntervalsSettings(),
     @SerialName("sound_settings")

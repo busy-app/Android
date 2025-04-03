@@ -23,7 +23,7 @@ private fun printIterations(settings: TimerSettings) {
 fun main() {
     TimerSettings(
         id = TimerSettingsId(-1),
-        totalTime = TimerDuration(90.minutes),
+        totalTime = TimerDuration.Finite(90.minutes),
         intervalsSettings = TimerSettings.IntervalsSettings(
             work = 30.minutes,
             rest = 10.minutes,

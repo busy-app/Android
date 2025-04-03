@@ -7,7 +7,7 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Same serializer as [kotlinx.serialization.internal.DurationSerializer]
@@ -15,21 +15,22 @@ import kotlin.time.Duration
 object TimerDurationSerializer : KSerializer<TimerDuration> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
         serialName = "TimerDuration",
-        kind = PrimitiveKind.STRING
+        kind = PrimitiveKind.LONG
     )
 
     override fun deserialize(decoder: Decoder): TimerDuration {
-        val rawDate = decoder.decodeString()
-        val duration = Duration.parseIsoString(rawDate)
-        return TimerDuration(duration)
+        val millis = decoder.decodeLong()
+        return when (millis) {
+            -1L -> TimerDuration.Infinite
+            else -> TimerDuration.Finite(millis.milliseconds)
+        }
     }
 
     override fun serialize(encoder: Encoder, value: TimerDuration) {
-        val duration = when (value) {
-            is TimerDuration.Finite -> value.instance
-            TimerDuration.Infinite -> Duration.ZERO
+        val millis = when (value) {
+            is TimerDuration.Finite -> value.instance.inWholeMilliseconds
+            TimerDuration.Infinite -> -1L
         }
-        val rawDate = duration.toIsoString()
-        encoder.encodeString(rawDate)
+        encoder.encodeLong(millis)
     }
 }

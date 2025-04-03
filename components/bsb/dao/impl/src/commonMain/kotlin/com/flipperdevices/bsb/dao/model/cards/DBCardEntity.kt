@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.dao.model.cards
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import kotlin.time.Duration
 
 internal const val AUTOGENERATE_PRIMARY_ID = 0L
@@ -18,7 +19,7 @@ data class DBCardEntity(
     @ColumnInfo("name")
     val name: String,
     @ColumnInfo("time_total")
-    val totalTime: Duration,
+    val totalTime: TimerDuration,
     @ColumnInfo("time_work")
     val work: Duration,
     @ColumnInfo("time_rest")

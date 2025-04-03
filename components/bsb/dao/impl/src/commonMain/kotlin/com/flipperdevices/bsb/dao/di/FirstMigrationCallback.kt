@@ -80,7 +80,7 @@ class FirstMigrationCallback(
         } else {
             TimerSettings(
                 id = TimerSettingsId(AUTOGENERATE_PRIMARY_ID),
-                totalTime = TimerDuration(oldSettings.totalTime),
+                totalTime = TimerDuration.Finite(oldSettings.totalTime),
                 intervalsSettings = TimerSettings.IntervalsSettings(
                     work = oldSettings.intervalsSettings.work,
                     rest = oldSettings.intervalsSettings.rest,

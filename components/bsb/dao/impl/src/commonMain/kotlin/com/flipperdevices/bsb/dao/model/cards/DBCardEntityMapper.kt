@@ -10,7 +10,7 @@ object DBCardEntityMapper {
         return TimerSettings(
             id = TimerSettingsId(entity.id),
             name = entity.name,
-            totalTime = TimerDuration(entity.totalTime),
+            totalTime = entity.totalTime,
             intervalsSettings = TimerSettings.IntervalsSettings(
                 work = entity.work,
                 rest = entity.rest,
@@ -29,10 +29,7 @@ object DBCardEntityMapper {
         return DBCardEntity(
             id = settings.id.id,
             name = settings.name,
-            totalTime = when (val localTotalTime = settings.totalTime) {
-                is TimerDuration.Finite -> localTotalTime.instance
-                TimerDuration.Infinite -> Duration.ZERO
-            },
+            totalTime = settings.totalTime,
             work = settings.intervalsSettings.work,
             rest = settings.intervalsSettings.rest,
             longRest = settings.intervalsSettings.longRest,

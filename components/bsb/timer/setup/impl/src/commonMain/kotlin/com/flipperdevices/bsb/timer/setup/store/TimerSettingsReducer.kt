@@ -32,7 +32,11 @@ object TimerSettingsReducer {
     }
 
     private fun TimerSettings.onTotalTimeChanged(message: Message.TotalTimeChanged): TimerSettings {
-        val newState = copy(totalTime = TimerDuration(message.value))
+        val totalTime = when(message.value) {
+            Duration.ZERO -> TimerDuration.Infinite
+            else -> TimerDuration.Finite(message.value)
+        }
+        val newState = copy(totalTime = totalTime)
         return when (val localTotalTime = newState.totalTime) {
             is TimerDuration.Finite -> {
                 if (localTotalTime.instance < 1.hours) {

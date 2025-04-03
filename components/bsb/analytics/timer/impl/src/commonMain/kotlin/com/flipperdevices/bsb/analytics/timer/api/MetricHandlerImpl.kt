@@ -35,7 +35,7 @@ class MetricHandlerImpl(
                     isIntervalsEnabled = timerSettings.intervalsSettings.isEnabled,
                     totalTimeMillis = when (val localTotalTime = timerSettings.totalTime) {
                         is TimerDuration.Finite -> localTotalTime.instance.inWholeMilliseconds
-                        TimerDuration.Infinite -> Duration.INFINITE.inWholeMilliseconds
+                        TimerDuration.Infinite -> -1
                     },
                     workTimerMillis = timerSettings.intervalsSettings.work.inWholeMilliseconds,
                     restTimeMillis = timerSettings.intervalsSettings.rest.inWholeMilliseconds,
@@ -56,7 +56,7 @@ class MetricHandlerImpl(
                     isIntervalsEnabled = settings.intervalsSettings.isEnabled,
                     totalTimeMillis = when (val localTotalTime = settings.totalTime) {
                         is TimerDuration.Finite -> localTotalTime.instance.inWholeMilliseconds
-                        TimerDuration.Infinite -> Duration.INFINITE.inWholeMilliseconds
+                        TimerDuration.Infinite -> -1
                     },
                     workTimerMillis = settings.intervalsSettings.work.inWholeMilliseconds,
                     restTimeMillis = settings.intervalsSettings.rest.inWholeMilliseconds,

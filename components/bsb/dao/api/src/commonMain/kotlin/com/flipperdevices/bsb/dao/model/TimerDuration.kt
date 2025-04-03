@@ -12,21 +12,5 @@ sealed interface TimerDuration {
     data object Infinite : TimerDuration
 
     @JvmInline
-    value class Finite private constructor(val instance: Duration) : TimerDuration {
-        internal companion object {
-            operator fun invoke(instance: Duration): TimerDuration {
-                return if (instance == Duration.ZERO) {
-                    Infinite
-                } else {
-                    Finite(instance)
-                }
-            }
-        }
-    }
-
-    companion object {
-        operator fun invoke(instance: Duration): TimerDuration {
-            return Finite(instance)
-        }
-    }
+    value class Finite(val instance: Duration) : TimerDuration
 }
