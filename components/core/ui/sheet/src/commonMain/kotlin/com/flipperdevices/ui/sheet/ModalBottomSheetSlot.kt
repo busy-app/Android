@@ -3,6 +3,7 @@ package com.flipperdevices.ui.sheet
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
@@ -12,8 +13,10 @@ import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import com.composables.core.ModalBottomSheet
 import com.composables.core.ModalBottomSheetScope
+import com.composables.core.ModalBottomSheetState
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
@@ -39,12 +42,62 @@ private suspend fun <T> withRetry(block: suspend () -> T): T {
         .first()
 }
 
-@Suppress(
-    "LambdaParameterInRestartableEffect",
-    "CyclomaticComplexMethod",
-    "LongMethod",
-    "ContentSlotReused"
-)
+private fun <C : Any> getLogicEventFlow(
+    instance: C?,
+    modalSheetState: ModalBottomSheetState
+): Flow<LogicEvent<C>> {
+    return snapshotFlow {
+        when {
+            instance == null && modalSheetState.currentDetent == SheetDetent.Companion.FullyExpanded -> {
+                LogicEvent.Close
+            }
+
+            instance != null &&
+                modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
+                modalSheetState.targetDetent != SheetDetent.Companion.FullyExpanded -> {
+                LogicEvent.CloseAndOpen(instance)
+            }
+
+            instance != null && modalSheetState.currentDetent == SheetDetent.Companion.Hidden -> {
+                LogicEvent.Open(instance)
+            }
+
+            else -> LogicEvent.Unhandled
+        }
+    }
+}
+
+private suspend fun <C : Any> handleLogicEvent(
+    logicEvent: LogicEvent<C>,
+    modalSheetState: ModalBottomSheetState,
+    childContent: MutableState<@Composable ModalBottomSheetScope.() -> Unit>,
+    content: @Composable ModalBottomSheetScope.(C) -> Unit
+) {
+    when (logicEvent) {
+        LogicEvent.Close -> {
+            withRetry { modalSheetState.animateTo(SheetDetent.Companion.Hidden) }
+            childContent.value = emptyContent
+            modalSheetState.jumpTo(SheetDetent.Companion.Hidden)
+        }
+
+        is LogicEvent.CloseAndOpen<C> -> {
+            withRetry {
+                modalSheetState.animateTo(SheetDetent.Companion.Hidden)
+                modalSheetState.animateTo(SheetDetent.Companion.FullyExpanded)
+            }
+            childContent.value = { content(logicEvent.instance) }
+        }
+
+        is LogicEvent.Open<C> -> {
+            modalSheetState.animateTo(SheetDetent.Companion.FullyExpanded)
+            childContent.value = { content(logicEvent.instance) }
+        }
+
+        LogicEvent.Unhandled -> Unit
+    }
+}
+
+@Suppress("LambdaParameterInRestartableEffect", "ContentSlotReused")
 @Composable
 fun <C : Any> ModalBottomSheetSlot(
     instance: C?,
@@ -73,55 +126,21 @@ fun <C : Any> ModalBottomSheetSlot(
             }
     }
     LaunchedEffect(instance, modalSheetState, childContent.value) {
-        snapshotFlow {
-            when {
-                instance == null && modalSheetState.currentDetent == SheetDetent.Companion.FullyExpanded -> {
-                    LogicEvent.Close
-                }
-
-                instance != null &&
-                    modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
-                    modalSheetState.targetDetent != SheetDetent.Companion.FullyExpanded -> {
-                    LogicEvent.CloseAndOpen(instance)
-                }
-
-                instance != null && modalSheetState.currentDetent == SheetDetent.Companion.Hidden -> {
-                    LogicEvent.Open(instance)
-                }
-
-                else -> LogicEvent.Unhandled
-            }
-        }.onEach {
-            when (it) {
-                LogicEvent.Close -> {
-                    withRetry { modalSheetState.animateTo(SheetDetent.Companion.Hidden) }
-                    childContent.value = emptyContent
-                    modalSheetState.jumpTo(SheetDetent.Companion.Hidden)
-                }
-
-                is LogicEvent.CloseAndOpen<C> -> {
-                    withRetry {
-                        modalSheetState.animateTo(SheetDetent.Companion.Hidden)
-                        modalSheetState.animateTo(SheetDetent.Companion.FullyExpanded)
-                    }
-                    childContent.value = { content(it.instance) }
-                }
-
-                is LogicEvent.Open<C> -> {
-                    modalSheetState.animateTo(SheetDetent.Companion.FullyExpanded)
-                    childContent.value = { content(it.instance) }
-                }
-
-                LogicEvent.Unhandled -> Unit
-            }
+        getLogicEventFlow(
+            instance = instance,
+            modalSheetState = modalSheetState
+        ).onEach { logicEvent ->
+            handleLogicEvent(
+                logicEvent = logicEvent,
+                modalSheetState = modalSheetState,
+                childContent = childContent,
+                content = content
+            )
         }.collect()
     }
-
     ModalBottomSheet(
         state = modalSheetState,
-        content = {
-            childContent.value.invoke(this)
-        }
+        content = { childContent.value.invoke(this) }
     )
 }
 
