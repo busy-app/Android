@@ -23,4 +23,5 @@
     <!--    Busy-Wear-CArd-->
     <string name="bwca_blocked_all">All</string>
     <string name="bwca_button_start">Start</string>
+    <string name="bwca_nosync">Please run the app on your Android phone first</string>
 </resources>

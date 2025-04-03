@@ -24,7 +24,7 @@ class WearDataLayerRegistryMessageConsumer : WearMessageConsumer, LogTagProvider
     override val messagesFlow: Flow<DecodedWearMessage<*>> = messageChannel.asSharedFlow()
 
     override fun <T> consume(message: WearMessageSerializer<T>, byteArray: ByteArray) {
-        kotlin.runCatching {
+        runCatching {
             val decodedWearMessage = DecodedWearMessage(
                 path = message.path,
                 value = message.decode(byteArray)

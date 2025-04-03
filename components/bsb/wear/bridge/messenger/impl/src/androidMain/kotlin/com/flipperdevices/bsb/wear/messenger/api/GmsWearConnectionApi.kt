@@ -8,9 +8,6 @@ interface GmsWearConnectionApi {
 
     sealed interface GmsStatus {
         data object Disconnected : GmsStatus
-        data class Connected(val node: Node) : GmsStatus
-
-        val nodeOrNull: Node?
-            get() = (this as? Connected)?.node
+        data class Connected(val nodes: List<Node>) : GmsStatus
     }
 }

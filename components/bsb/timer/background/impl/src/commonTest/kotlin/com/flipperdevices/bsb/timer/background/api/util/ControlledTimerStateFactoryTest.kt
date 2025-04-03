@@ -154,6 +154,7 @@ class ControlledTimerStateFactoryTest {
     @Test
     fun `GIVEN_no_time_for_last_rest_WHEN_resolved_third_last_rest_THEN_only_one_last_rest`() {
         TimerSettings(
+            id = TimerSettingsId(id = -1),
             totalTime = 9.hours,
             id = TimerSettingsId(-1),
             intervalsSettings = TimerSettings.IntervalsSettings(
