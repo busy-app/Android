@@ -30,27 +30,25 @@ class WearDataLayerRegistryMessageProducer(
         value: T
     ) {
         info { "Try to send: ${message.path} $message" }
-        runCatching {
-            val statusNode = wearConnectionApi.statusFlow.first()
+        val statusNode = wearConnectionApi.statusFlow.first()
 
-            val nodes = (statusNode as? GmsWearConnectionApi.GmsStatus.Connected)?.nodes
-            if (nodes.isNullOrEmpty()) {
-                error { "Can't send ${message.path} because nodes is empty" }
-                return
-            }
-            val byteArray = message.encode(value)
-            nodes.pmap { node ->
-                runCatching {
-                    wearDataLayerRegistry.messageClient.sendMessage(
-                        node.id,
-                        message.path,
-                        byteArray
-                    ).await()
-                }.onFailure { throwable ->
-                    error(throwable) { "#produce failed to send message to node $node" }
-                }.onSuccess { messageId ->
-                    info { "#produce message sent: ${message.path} with id $messageId to $node" }
-                }
+        val nodes = (statusNode as? GmsWearConnectionApi.GmsStatus.Connected)?.nodes
+        if (nodes.isNullOrEmpty()) {
+            error { "Can't send ${message.path} because nodes is empty" }
+            return
+        }
+        val byteArray = message.encode(value)
+        nodes.pmap { node ->
+            runCatching {
+                wearDataLayerRegistry.messageClient.sendMessage(
+                    node.id,
+                    message.path,
+                    byteArray
+                ).await()
+            }.onFailure { throwable ->
+                error(throwable) { "#produce failed to send message to node $node" }
+            }.onSuccess { messageId ->
+                info { "#produce message sent: ${message.path} with id $messageId to $node" }
             }
         }
     }
