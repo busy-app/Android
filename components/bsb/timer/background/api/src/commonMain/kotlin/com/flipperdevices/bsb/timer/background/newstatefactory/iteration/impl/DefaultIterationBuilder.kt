@@ -35,6 +35,7 @@ class DefaultIterationBuilder : IterationBuilder, LogTagProvider {
         }.coerceAtMost(timeLeft)
     }
 
+    @Suppress("MagicNumber")
     private fun getIterationTypeByIndex(i: Int): IterationType {
         return when {
             i % 2 == 0 -> IterationType.WORK

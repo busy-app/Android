@@ -72,9 +72,9 @@ object TimerStateFactory {
             .count { it.iterationType == IterationType.WORK }
 
         val currentIterationTypeTimeLeft = when {
-            timestamp.settings.totalTime is TimerDuration.Infinite && !timestamp.settings.intervalsSettings.isEnabled -> {
-                TimerDuration.Infinite
-            }
+            timestamp.settings.totalTime is TimerDuration.Infinite &&
+                !timestamp.settings.intervalsSettings.isEnabled -> TimerDuration.Infinite
+
             else -> TimerDuration(
                 timestamp.start
                     .plus(currentIterationData.startOffset)
