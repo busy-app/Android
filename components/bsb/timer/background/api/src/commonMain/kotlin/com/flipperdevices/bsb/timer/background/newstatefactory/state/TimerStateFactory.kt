@@ -58,23 +58,34 @@ object TimerStateFactory {
             confirmNextStepClick = timestamp.confirmNextStepClick,
             iterations = iterations
         ) ?: return ControlledTimerState.Finished(timerSettings = timestamp.settings)
+
         val maxIterationCount = iterations.count { it.iterationType == IterationType.WORK }
-        val currentIterationDataIndex = iterations
-            .indexOf(currentIterationData)
-            .minus(1)
-            .coerceAtLeast(0)
+
         val currentIterationCount = iterations
-            .subList(0, currentIterationDataIndex)
+            .subList(
+                fromIndex = 0,
+                toIndex = iterations
+                    .indexOf(currentIterationData)
+                    .minus(1)
+                    .coerceAtLeast(0)
+            )
             .count { it.iterationType == IterationType.WORK }
 
-        val currentIterationTypeTimeLeft = timestamp.start
-            .plus(currentIterationData.startOffset)
-            .plus(currentIterationData.duration)
-            .minus(now)
+        val currentIterationTypeTimeLeft = when {
+            timestamp.settings.totalTime is TimerDuration.Infinite && !timestamp.settings.intervalsSettings.isEnabled -> {
+                TimerDuration.Infinite
+            }
+            else -> TimerDuration(
+                timestamp.start
+                    .plus(currentIterationData.startOffset)
+                    .plus(currentIterationData.duration)
+                    .minus(now)
+            )
+        }
 
         return when (currentIterationData.iterationType) {
             IterationType.WORK -> ControlledTimerState.InProgress.Running.Work(
-                timeLeft = TimerDuration(currentIterationTypeTimeLeft),
+                timeLeft = currentIterationTypeTimeLeft,
                 isOnPause = timestamp.pause != null,
                 timerSettings = timestamp.settings,
                 currentIteration = currentIterationCount,
@@ -83,7 +94,7 @@ object TimerStateFactory {
             )
 
             IterationType.REST -> ControlledTimerState.InProgress.Running.Rest(
-                timeLeft = TimerDuration(currentIterationTypeTimeLeft),
+                timeLeft = currentIterationTypeTimeLeft,
                 isOnPause = timestamp.pause != null,
                 timerSettings = timestamp.settings,
                 currentIteration = currentIterationCount,
@@ -92,7 +103,7 @@ object TimerStateFactory {
             )
 
             IterationType.LONG_REST -> ControlledTimerState.InProgress.Running.LongRest(
-                timeLeft = TimerDuration(currentIterationTypeTimeLeft),
+                timeLeft = currentIterationTypeTimeLeft,
                 isOnPause = timestamp.pause != null,
                 timerSettings = timestamp.settings,
                 currentIteration = currentIterationCount,

@@ -27,7 +27,8 @@ fun main() {
         intervalsSettings = TimerSettings.IntervalsSettings(
             work = 30.minutes,
             rest = 10.minutes,
-            longRest = 30.minutes
+            longRest = 30.minutes,
+            isEnabled = false
         )
     ).run(::printIterations)
     println("\nInfinite:")
@@ -37,7 +38,8 @@ fun main() {
         intervalsSettings = TimerSettings.IntervalsSettings(
             work = 30.minutes,
             rest = 10.minutes,
-            longRest = 30.minutes
+            longRest = 30.minutes,
+            isEnabled = false
         )
     ).run(::printIterations)
 

@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl
 
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.IterationBuilder
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationData
@@ -49,6 +50,19 @@ class DefaultIterationBuilder : IterationBuilder, LogTagProvider {
     }
 
     override fun build(settings: TimerSettings, duration: Duration): List<IterationData> {
+        if (!settings.intervalsSettings.isEnabled) {
+            return listOf(
+                IterationData.Default(
+                    startOffset = 0.seconds,
+                    duration = when (val localTotalTime = settings.totalTime) {
+                        is TimerDuration.Finite -> localTotalTime.instance
+                        TimerDuration.Infinite -> Duration.INFINITE
+                    },
+                    iterationType = IterationType.WORK
+                )
+            )
+        }
+
         var totalTimePassed = 0.seconds
         var iterationIndex = 0
 
