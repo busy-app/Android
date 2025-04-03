@@ -3,7 +3,6 @@ package com.flipperdevices.bsb.wear.messenger.api
 import com.flipperdevices.bsb.wear.messenger.util.nodesFlow
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.log.wtf
 import com.google.android.gms.wearable.CapabilityClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,14 +23,10 @@ class GmsWearConnectionApiImpl(
     override val TAG: String = "WearConnectionApi"
     override val statusFlow = capabilityClient.nodesFlow
         .map { nodes ->
-            when {
-                nodes.isEmpty() -> GmsWearConnectionApi.GmsStatus.Disconnected
-                nodes.size > 1 -> {
-                    wtf { "#statusFlow more than 1 nodes received ${nodes.map { node -> node.displayName }}" }
-                    GmsWearConnectionApi.GmsStatus.Connected(nodes.first())
-                }
-
-                else -> GmsWearConnectionApi.GmsStatus.Connected(nodes.first())
+            if (nodes.isEmpty()) {
+                GmsWearConnectionApi.GmsStatus.Disconnected
+            } else {
+                GmsWearConnectionApi.GmsStatus.Connected(nodes)
             }
         }.stateIn(scope, SharingStarted.Companion.Eagerly, GmsWearConnectionApi.GmsStatus.Disconnected)
 }

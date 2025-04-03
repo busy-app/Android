@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.wear)
     implementation(libs.wear.gms)
 
+    implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.wear.foundation)
     implementation(libs.compose.wear.material)

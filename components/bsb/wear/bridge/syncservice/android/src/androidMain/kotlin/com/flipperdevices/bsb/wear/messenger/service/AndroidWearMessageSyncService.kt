@@ -3,6 +3,7 @@ package com.flipperdevices.bsb.wear.messenger.service
 import com.flipperdevices.bsb.dao.api.CardAppBlockerApi
 import com.flipperdevices.bsb.dao.api.TimerSettingsApi
 import com.flipperdevices.bsb.timer.background.api.TimerApi
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
@@ -51,7 +52,7 @@ class AndroidWearMessageSyncService(
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
     wearMessageProducerProvider: KIProvider<WearMessageProducer>
 ) : WearMessageSyncService {
-    override val TAG = "TimerForegroundService"
+    override val TAG = "AndroidWearMessageSyncService"
 
     private val timerApi by timerApiProvider
     private val timerSettingsApi by timerSettingsApiProvider
@@ -65,9 +66,11 @@ class AndroidWearMessageSyncService(
     private val jobs = mutableListOf<Job>()
     private val mutex = Mutex()
 
-    private suspend fun sendTimerTimestampMessage() {
-        val timerTimestamp = timerApi.getTimestampState().first()
-        val message = TimerTimestampMessage(timerTimestamp)
+    private suspend fun sendTimerTimestampMessage(
+        timerTimestamp: TimerTimestamp? = null
+    ) {
+        val timerTimestampNonNull = timerTimestamp ?: timerApi.getTimestampState().first()
+        val message = TimerTimestampMessage(timerTimestampNonNull)
         wearMessageProducer.produce(message)
     }
 
@@ -109,7 +112,7 @@ class AndroidWearMessageSyncService(
 
     private fun startStateChangeJob(): Job {
         return timerApi.getTimestampState()
-            .onEach { sendTimerTimestampMessage() }
+            .onEach { sendTimerTimestampMessage(it) }
             .launchIn(scope)
     }
 

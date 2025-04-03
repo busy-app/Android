@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/pic_splashscreen_logo"
-            android:gravity="center" />
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/ic_launcher_background" />
+        </shape>
+    </item>
+    <item
+        android:width="@dimen/splash_screen_icon_size"
+        android:height="@dimen/splash_screen_icon_size"
+        android:drawable="@drawable/pic_splash_screen_logo"
+        android:gravity="center" />
 </layer-list>

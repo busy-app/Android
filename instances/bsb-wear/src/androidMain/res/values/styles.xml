@@ -4,7 +4,13 @@
 
     </style>
 
-    <style name="BSBTheme.SplashTheme" parent="BSBTheme">
-        <item name="android:windowBackground">@drawable/splash_screen</item>
+    <style name="BSBTheme.SplashTheme" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background to black -->
+        <item name="windowSplashScreenBackground">@android:color/black</item>
+        <!-- Use windowSplashScreenAnimatedIcon to add a drawable or an animated
+             drawable. -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen</item>
+        <!-- Set the theme of the Activity that follows your splash screen. -->
+        <item name="postSplashScreenTheme">@style/BSBTheme</item>
     </style>
 </resources>
