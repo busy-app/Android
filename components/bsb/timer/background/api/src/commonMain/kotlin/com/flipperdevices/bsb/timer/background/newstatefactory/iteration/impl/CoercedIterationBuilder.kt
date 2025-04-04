@@ -18,7 +18,7 @@ class CoercedIterationBuilder(private val instance: IterationBuilder) : Iteratio
         val totalTime = (settings.totalTime as? TimerDuration.Finite)
             ?.instance
             ?: return iterations
-        if (totalDuration <= totalTime) return iterations
+        if (totalDuration < totalTime) return iterations
         return when (lastIteration.iterationType) {
             IterationType.Default.REST -> {
                 (iterations - lastIteration) + IterationData.Default(

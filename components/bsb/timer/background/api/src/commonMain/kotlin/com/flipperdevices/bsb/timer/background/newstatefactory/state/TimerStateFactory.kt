@@ -167,7 +167,14 @@ object TimerStateFactory {
                 fromIndex = 0,
                 toIndex = iterations
                     .indexOf(currentIterationData)
-                    .minus(1)
+                    .plus(
+                        other = when {
+                            currentIterationData.iterationType == IterationType.Await.WAIT_AFTER_WORK -> 0
+                            currentIterationData.iterationType != IterationType.Default.WORK -> -1
+                            currentIterationData.iterationType == IterationType.Default.WORK -> 1
+                            else -> 0
+                        }
+                    )
                     .coerceAtLeast(0)
             )
             .count { it.iterationType == IterationType.Default.WORK }

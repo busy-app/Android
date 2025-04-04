@@ -109,7 +109,7 @@ fun ControlledTimerState.InProgress.Running.toHumanReadableString(): String {
 }
 
 val ControlledTimerState.InProgress.currentUiIteration: Int
-    get() = currentIteration.plus(1)
+    get() = currentIteration
 
 val ControlledTimerState.InProgress.maxUiIterations: Int
     get() = maxIterations

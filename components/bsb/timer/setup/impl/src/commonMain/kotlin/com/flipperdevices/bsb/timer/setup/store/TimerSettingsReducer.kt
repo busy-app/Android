@@ -3,7 +3,6 @@ package com.flipperdevices.bsb.timer.setup.store
 import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
 
 /**
  * Some timer configs should be changed when we are changing others
