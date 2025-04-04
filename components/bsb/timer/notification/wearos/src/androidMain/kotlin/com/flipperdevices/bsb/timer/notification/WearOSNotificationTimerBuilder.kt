@@ -34,7 +34,9 @@ class WearOSNotificationTimerBuilder(
             .build()
 
         val ongoingActivity = OngoingActivity.Builder(
-            context, ONGOING_NOTIFICATION_ID, baseNotification
+            context,
+            ONGOING_NOTIFICATION_ID,
+            baseNotification
         ).setStaticIcon(R.drawable.ic_notification_wearos_busy_logo)
             .setTouchIntent(
                 PendingIntent.getActivity(
@@ -48,7 +50,6 @@ class WearOSNotificationTimerBuilder(
             .build()
 
         ongoingActivity.apply(context)
-
 
         return baseNotification.build()
     }
@@ -76,7 +77,9 @@ class WearOSNotificationTimerBuilder(
             .build()
 
         val ongoingActivity = OngoingActivity.Builder(
-            context, ONGOING_NOTIFICATION_ID, baseNotification
+            context,
+            ONGOING_NOTIFICATION_ID,
+            baseNotification
         ).setStaticIcon(R.drawable.ic_notification_wearos_busy_logo)
             .setTouchIntent(
                 PendingIntent.getActivity(
@@ -126,5 +129,4 @@ private fun getDescription(context: Context, timer: ControlledTimerState.InProgr
                 R.string.timer_notification_status_busy,
                 timer.toHumanReadableString()
             )
-
     }

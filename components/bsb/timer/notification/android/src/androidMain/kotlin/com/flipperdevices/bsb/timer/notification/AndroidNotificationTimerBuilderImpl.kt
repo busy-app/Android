@@ -52,5 +52,4 @@ class AndroidNotificationTimerBuilderImpl(
 
         return notificationBuilder.build()
     }
-
 }
