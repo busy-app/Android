@@ -17,7 +17,7 @@ class TimerDurationConverter {
     @TypeConverter
     fun toLong(value: TimerDuration?): Long? {
         return when (value) {
-            is TimerDuration.Finite -> value.instance.inWholeSeconds
+            is TimerDuration.Finite -> value.instance.inWholeMilliseconds
             TimerDuration.Infinite -> -1
             null -> null
         }

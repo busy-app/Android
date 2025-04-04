@@ -36,24 +36,7 @@ object TimerSettingsReducer {
             Duration.ZERO -> TimerDuration.Infinite
             else -> TimerDuration.Finite(message.value)
         }
-        val newState = copy(totalTime = totalTime)
-        return when (val localTotalTime = newState.totalTime) {
-            is TimerDuration.Finite -> {
-                if (localTotalTime.instance < 1.hours) {
-                    newState.copy(
-                        intervalsSettings = newState
-                            .intervalsSettings
-                            .copy(isEnabled = false)
-                    )
-                } else {
-                    newState
-                }
-            }
-
-            TimerDuration.Infinite -> {
-                newState.copy(intervalsSettings = newState.intervalsSettings)
-            }
-        }
+        return copy(totalTime = totalTime)
     }
 
     @Suppress("LongMethod")
