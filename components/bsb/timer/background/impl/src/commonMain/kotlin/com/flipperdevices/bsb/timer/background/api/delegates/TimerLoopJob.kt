@@ -3,7 +3,7 @@ package com.flipperdevices.bsb.timer.background.api.delegates
 import com.flipperdevices.bsb.timer.background.flow.TickFlow
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.newstatefactory.state.TimerStateFactory
+import com.flipperdevices.bsb.timer.background.statefactory.TimerStateFactory
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
 import kotlinx.coroutines.CoroutineScope
@@ -18,11 +18,12 @@ import kotlinx.coroutines.sync.Mutex
 
 class TimerLoopJob(
     scope: CoroutineScope,
-    private val initialTimerTimestamp: TimerTimestamp
+    private val initialTimerTimestamp: TimerTimestamp,
+    private val timerStateFactory: TimerStateFactory
 ) : LogTagProvider {
     override val TAG = "TimerLoopJob"
 
-    private val timerStateFlow = MutableStateFlow(TimerStateFactory.create(initialTimerTimestamp))
+    private val timerStateFlow = MutableStateFlow(timerStateFactory.create(initialTimerTimestamp))
     private val mutex = Mutex()
 
     internal fun getInternalState(): StateFlow<ControlledTimerState> = timerStateFlow.asStateFlow()
@@ -31,7 +32,7 @@ class TimerLoopJob(
         .filter { initialTimerTimestamp.runningOrNull?.pause == null }
         .onEach {
             withLock(mutex, "update") {
-                timerStateFlow.emit(TimerStateFactory.create(initialTimerTimestamp))
+                timerStateFlow.emit(timerStateFactory.create(initialTimerTimestamp))
             }
         }.launchIn(scope)
 

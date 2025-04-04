@@ -1,10 +1,10 @@
-package com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl
+package com.flipperdevices.bsb.timer.background.api.statefactory.iteration.impl
 
 import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
-import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.IterationBuilder
-import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationData
-import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationType
+import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.IterationBuilder
+import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.model.IterationData
+import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.model.IterationType
 import kotlin.time.Duration
 
 class CoercedIterationBuilder(private val instance: IterationBuilder) : IterationBuilder {

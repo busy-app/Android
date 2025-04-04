@@ -1,16 +1,24 @@
-package com.flipperdevices.bsb.timer.background.newstatefactory.state
+package com.flipperdevices.bsb.timer.background.api.statefactory.state
 
 import com.flipperdevices.bsb.dao.model.TimerDuration
+import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.impl.CoercedIterationBuilder
+import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.impl.DefaultIterationBuilder
+import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.model.IterationData
+import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.model.IterationType
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl.CoercedIterationBuilder
-import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.impl.DefaultIterationBuilder
-import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationData
-import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationType
+import com.flipperdevices.bsb.timer.background.statefactory.TimerStateFactory
+import com.flipperdevices.core.di.AppGraph
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import me.tatarka.inject.annotations.Inject
+import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
-object TimerStateFactory {
+@Inject
+@SingleIn(AppGraph::class)
+@ContributesBinding(AppGraph::class, TimerStateFactory::class)
+class TimerStateFactoryImpl : TimerStateFactory {
 
     private fun getCurrentIteration(
         now: Instant,
@@ -142,7 +150,7 @@ object TimerStateFactory {
         }
     }
 
-    fun create(timestamp: TimerTimestamp): ControlledTimerState {
+    override fun create(timestamp: TimerTimestamp): ControlledTimerState {
         if (timestamp !is TimerTimestamp.Running) {
             return ControlledTimerState.NotStarted
         }
