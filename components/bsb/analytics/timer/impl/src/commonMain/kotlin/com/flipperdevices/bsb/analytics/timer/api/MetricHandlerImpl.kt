@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Clock
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
-import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
 @Inject

@@ -32,7 +32,7 @@ object TimerSettingsReducer {
     }
 
     private fun TimerSettings.onTotalTimeChanged(message: Message.TotalTimeChanged): TimerSettings {
-        val totalTime = when(message.value) {
+        val totalTime = when (message.value) {
             Duration.ZERO -> TimerDuration.Infinite
             else -> TimerDuration.Finite(message.value)
         }

@@ -9,6 +9,7 @@ import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.I
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationType
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlin.time.Duration.Companion.seconds
 
 object TimerStateFactory {
 
@@ -29,15 +30,13 @@ object TimerStateFactory {
         }
     }
 
-    fun create(timestamp: TimerTimestamp): ControlledTimerState {
-        if (timestamp !is TimerTimestamp.Running) {
-            return ControlledTimerState.NotStarted
-        }
-        val now = timestamp.pause ?: Clock.System.now()
-
+    private fun getIterations(
+        timestamp: TimerTimestamp.Running,
+        now: Instant
+    ): List<IterationData> {
         val defaultIterationBuilder = DefaultIterationBuilder()
         val coercedIterationBuilder = CoercedIterationBuilder(defaultIterationBuilder)
-        val iterations = when (val localTotalTime = timestamp.settings.totalTime) {
+        return when (val localTotalTime = timestamp.settings.totalTime) {
             is TimerDuration.Infinite -> {
                 defaultIterationBuilder.build(
                     timestamp.settings,
@@ -52,6 +51,97 @@ object TimerStateFactory {
                 )
             }
         }
+    }
+
+    private fun getCurrentIterationTypeTimeLeft(
+        timestamp: TimerTimestamp.Running,
+        now: Instant,
+        currentIterationData: IterationData
+    ): TimerDuration {
+        return when {
+            timestamp.settings.totalTime is TimerDuration.Infinite &&
+                !timestamp.settings.intervalsSettings.isEnabled -> TimerDuration.Infinite
+
+            else -> TimerDuration.Finite(
+                timestamp.start
+                    .plus(currentIterationData.startOffset)
+                    .plus(
+                        when (currentIterationData) {
+                            is IterationData.Default -> currentIterationData.duration
+                            is IterationData.Pending -> 0.seconds
+                        }
+                    )
+                    .minus(now)
+            )
+        }
+    }
+
+    @Suppress("LongParameterList")
+    private fun getControlledTimerState(
+        currentIterationData: IterationData,
+        currentIterationTypeTimeLeft: TimerDuration,
+        timestamp: TimerTimestamp.Running,
+        currentIterationCount: Int,
+        maxIterationCount: Int,
+        now: Instant
+    ): ControlledTimerState.InProgress {
+        return when (currentIterationData.iterationType) {
+            IterationType.Default.WORK -> ControlledTimerState.InProgress.Running.Work(
+                timeLeft = currentIterationTypeTimeLeft,
+                isOnPause = timestamp.pause != null,
+                timerSettings = timestamp.settings,
+                currentIteration = currentIterationCount,
+                maxIterations = maxIterationCount,
+                timePassed = now.minus(timestamp.start)
+            )
+
+            IterationType.Default.REST -> ControlledTimerState.InProgress.Running.Rest(
+                timeLeft = currentIterationTypeTimeLeft,
+                isOnPause = timestamp.pause != null,
+                timerSettings = timestamp.settings,
+                currentIteration = currentIterationCount,
+                maxIterations = maxIterationCount,
+                timePassed = now.minus(timestamp.start)
+            )
+
+            IterationType.Default.LONG_REST -> ControlledTimerState.InProgress.Running.LongRest(
+                timeLeft = currentIterationTypeTimeLeft,
+                isOnPause = timestamp.pause != null,
+                timerSettings = timestamp.settings,
+                currentIteration = currentIterationCount,
+                maxIterations = maxIterationCount,
+                timePassed = now.minus(timestamp.start)
+            )
+
+            IterationType.Await.WAIT_AFTER_REST -> ControlledTimerState.InProgress.Await(
+                timerSettings = timestamp.settings,
+                currentIteration = currentIterationCount,
+                maxIterations = maxIterationCount,
+                pausedAt = timestamp.start.plus(currentIterationData.startOffset),
+                type = ControlledTimerState.InProgress.AwaitType.AFTER_REST
+            )
+
+            IterationType.Await.WAIT_AFTER_WORK -> ControlledTimerState.InProgress.Await(
+                timerSettings = timestamp.settings,
+                currentIteration = currentIterationCount,
+                maxIterations = maxIterationCount,
+                pausedAt = timestamp.start.plus(currentIterationData.startOffset),
+                type = ControlledTimerState.InProgress.AwaitType.AFTER_WORK
+            )
+        }
+    }
+
+    fun create(timestamp: TimerTimestamp): ControlledTimerState {
+        if (timestamp !is TimerTimestamp.Running) {
+            return ControlledTimerState.NotStarted
+        }
+        val now = timestamp.pause ?: Clock.System.now()
+
+        val iterations = getIterations(
+            timestamp = timestamp,
+            now = now
+        )
+
         val currentIterationData = getCurrentIteration(
             now = now,
             start = timestamp.start,
@@ -59,7 +149,7 @@ object TimerStateFactory {
             iterations = iterations
         ) ?: return ControlledTimerState.Finished(timerSettings = timestamp.settings)
 
-        val maxIterationCount = iterations.count { it.iterationType == IterationType.WORK }
+        val maxIterationCount = iterations.count { it.iterationType == IterationType.Default.WORK }
 
         val currentIterationCount = iterations
             .subList(
@@ -69,63 +159,21 @@ object TimerStateFactory {
                     .minus(1)
                     .coerceAtLeast(0)
             )
-            .count { it.iterationType == IterationType.WORK }
+            .count { it.iterationType == IterationType.Default.WORK }
 
-        val currentIterationTypeTimeLeft = when {
-            timestamp.settings.totalTime is TimerDuration.Infinite &&
-                !timestamp.settings.intervalsSettings.isEnabled -> TimerDuration.Infinite
+        val currentIterationTypeTimeLeft = getCurrentIterationTypeTimeLeft(
+            timestamp = timestamp,
+            now = now,
+            currentIterationData = currentIterationData
+        )
 
-            else -> TimerDuration.Finite(
-                timestamp.start
-                    .plus(currentIterationData.startOffset)
-                    .plus(currentIterationData.duration)
-                    .minus(now)
-            )
-        }
-
-        return when (currentIterationData.iterationType) {
-            IterationType.WORK -> ControlledTimerState.InProgress.Running.Work(
-                timeLeft = currentIterationTypeTimeLeft,
-                isOnPause = timestamp.pause != null,
-                timerSettings = timestamp.settings,
-                currentIteration = currentIterationCount,
-                maxIterations = maxIterationCount,
-                timePassed = now.minus(timestamp.start)
-            )
-
-            IterationType.REST -> ControlledTimerState.InProgress.Running.Rest(
-                timeLeft = currentIterationTypeTimeLeft,
-                isOnPause = timestamp.pause != null,
-                timerSettings = timestamp.settings,
-                currentIteration = currentIterationCount,
-                maxIterations = maxIterationCount,
-                timePassed = now.minus(timestamp.start)
-            )
-
-            IterationType.LONG_REST -> ControlledTimerState.InProgress.Running.LongRest(
-                timeLeft = currentIterationTypeTimeLeft,
-                isOnPause = timestamp.pause != null,
-                timerSettings = timestamp.settings,
-                currentIteration = currentIterationCount,
-                maxIterations = maxIterationCount,
-                timePassed = now.minus(timestamp.start)
-            )
-
-            IterationType.WAIT_AFTER_REST -> ControlledTimerState.InProgress.Await(
-                timerSettings = timestamp.settings,
-                currentIteration = currentIterationCount,
-                maxIterations = maxIterationCount,
-                pausedAt = timestamp.start.plus(currentIterationData.startOffset),
-                type = ControlledTimerState.InProgress.AwaitType.AFTER_REST
-            )
-
-            IterationType.WAIT_AFTER_WORK -> ControlledTimerState.InProgress.Await(
-                timerSettings = timestamp.settings,
-                currentIteration = currentIterationCount,
-                maxIterations = maxIterationCount,
-                pausedAt = timestamp.start.plus(currentIterationData.startOffset),
-                type = ControlledTimerState.InProgress.AwaitType.AFTER_WORK
-            )
-        }
+        return getControlledTimerState(
+            currentIterationData = currentIterationData,
+            currentIterationTypeTimeLeft = currentIterationTypeTimeLeft,
+            timestamp = timestamp,
+            currentIterationCount = currentIterationCount,
+            maxIterationCount = maxIterationCount,
+            now = now
+        )
     }
 }

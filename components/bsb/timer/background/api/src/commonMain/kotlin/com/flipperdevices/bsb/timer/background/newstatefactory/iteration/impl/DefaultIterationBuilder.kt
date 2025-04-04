@@ -6,8 +6,6 @@ import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.Iterati
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationData
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationType
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.log.error
-import com.flipperdevices.core.log.wtf
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.INFINITE
 import kotlin.time.Duration.Companion.seconds
@@ -17,36 +15,54 @@ class DefaultIterationBuilder : IterationBuilder, LogTagProvider {
 
     private fun getIterationTypeDuration(
         intervalsSettings: TimerSettings.IntervalsSettings,
-        type: IterationType,
+        type: IterationType.Default,
         timeLeft: Duration
     ): Duration {
         return when (type) {
-            IterationType.WORK -> intervalsSettings.work
-            IterationType.REST -> intervalsSettings.rest
-            IterationType.LONG_REST -> intervalsSettings.longRest
-
-            IterationType.WAIT_AFTER_REST,
-            IterationType.WAIT_AFTER_WORK -> {
-                wtf {
-                    "#buildIterationList wait iteration appeared inside getIterationTypeByIndex"
-                }
-                0.seconds
-            }
+            IterationType.Default.WORK -> intervalsSettings.work
+            IterationType.Default.REST -> intervalsSettings.rest
+            IterationType.Default.LONG_REST -> intervalsSettings.longRest
         }.coerceAtMost(timeLeft)
     }
 
     @Suppress("MagicNumber")
-    private fun getIterationTypeByIndex(i: Int): IterationType {
+    private fun getIterationTypeByIndex(i: Int): IterationType.Default {
         return when {
-            i % 2 == 0 -> IterationType.WORK
-            i % 3 == 2 -> IterationType.LONG_REST
-            i % 2 == 1 -> IterationType.REST
-            else -> {
-                error {
-                    "#buildIterationList could not calculate next IterationType for index $i"
-                }
-                IterationType.WORK
+            i % 2 == 0 -> IterationType.Default.WORK
+            i % 3 == 2 -> IterationType.Default.LONG_REST
+            i % 2 == 1 -> IterationType.Default.REST
+            else -> IterationType.Default.REST
+        }
+    }
+
+    private fun getPendingIteration(
+        settings: TimerSettings,
+        lastIterationType: IterationType?,
+        totalTimePassed: Duration
+    ): IterationData.Pending? {
+        return when {
+            !settings.intervalsSettings.autoStartRest && lastIterationType == IterationType.Default.WORK -> {
+                IterationData.Pending(
+                    startOffset = totalTimePassed,
+                    iterationType = IterationType.Await.WAIT_AFTER_WORK
+                )
             }
+
+            !settings.intervalsSettings.autoStartWork && lastIterationType == IterationType.Default.REST -> {
+                IterationData.Pending(
+                    startOffset = totalTimePassed,
+                    iterationType = IterationType.Await.WAIT_AFTER_REST
+                )
+            }
+
+            !settings.intervalsSettings.autoStartWork && lastIterationType == IterationType.Default.LONG_REST -> {
+                IterationData.Pending(
+                    startOffset = totalTimePassed,
+                    iterationType = IterationType.Await.WAIT_AFTER_REST
+                )
+            }
+
+            else -> null
         }
     }
 
@@ -59,7 +75,7 @@ class DefaultIterationBuilder : IterationBuilder, LogTagProvider {
                         is TimerDuration.Finite -> localTotalTime.instance
                         TimerDuration.Infinite -> Duration.INFINITE
                     },
-                    iterationType = IterationType.WORK
+                    iterationType = IterationType.Default.WORK
                 )
             )
         }
@@ -76,30 +92,15 @@ class DefaultIterationBuilder : IterationBuilder, LogTagProvider {
                     timeLeft = INFINITE
                 )
 
-                val lastIterationType = lastOrNull()?.iterationType
+                val lastIterationType = filterIsInstance<IterationData.Default>()
+                    .lastOrNull()
+                    ?.iterationType
 
-                val awaitIterationType = when {
-                    !settings.intervalsSettings.autoStartRest && lastIterationType == IterationType.WORK -> {
-                        IterationType.WAIT_AFTER_WORK
-                    }
-
-                    !settings.intervalsSettings.autoStartWork && lastIterationType == IterationType.REST -> {
-                        IterationType.WAIT_AFTER_REST
-                    }
-
-                    !settings.intervalsSettings.autoStartWork && lastIterationType == IterationType.LONG_REST -> {
-                        IterationType.WAIT_AFTER_REST
-                    }
-
-                    else -> null
-                }
-                if (awaitIterationType != null) {
-                    IterationData.Pending(
-                        startOffset = totalTimePassed,
-                        duration = INFINITE,
-                        iterationType = awaitIterationType
-                    ).run(::add)
-                }
+                getPendingIteration(
+                    settings = settings,
+                    lastIterationType = lastIterationType,
+                    totalTimePassed = totalTimePassed
+                )?.run(::add)
 
                 IterationData.Default(
                     startOffset = totalTimePassed,

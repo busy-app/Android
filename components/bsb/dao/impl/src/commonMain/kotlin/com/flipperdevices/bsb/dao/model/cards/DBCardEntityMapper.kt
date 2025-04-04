@@ -1,9 +1,7 @@
 package com.flipperdevices.bsb.dao.model.cards
 
-import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
-import kotlin.time.Duration
 
 object DBCardEntityMapper {
     fun map(entity: DBCardEntity): TimerSettings {

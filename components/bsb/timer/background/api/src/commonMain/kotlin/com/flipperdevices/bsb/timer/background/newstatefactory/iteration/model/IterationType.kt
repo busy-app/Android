@@ -1,11 +1,14 @@
 package com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model
 
-enum class IterationType {
-    WORK,
-    REST,
-    LONG_REST,
-    WAIT_AFTER_WORK,
-    WAIT_AFTER_REST;
+sealed interface IterationType {
+    enum class Default : IterationType {
+        WORK,
+        REST,
+        LONG_REST,
+    }
 
-    companion object
+    enum class Await : IterationType {
+        WAIT_AFTER_WORK,
+        WAIT_AFTER_REST
+    }
 }

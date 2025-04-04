@@ -10,42 +10,42 @@ import kotlin.time.Duration
 class CoercedIterationBuilder(private val instance: IterationBuilder) : IterationBuilder {
     override fun build(settings: TimerSettings, duration: Duration): List<IterationData> {
         val iterations = instance.build(settings, duration)
-        val lastIteration = iterations.lastOrNull() ?: return iterations
+        val lastIteration = iterations
+            .filterIsInstance<IterationData.Default>()
+            .lastOrNull()
+            ?: return iterations
         val totalDuration = lastIteration.duration.plus(lastIteration.startOffset)
         val totalTime = (settings.totalTime as? TimerDuration.Finite)
             ?.instance
             ?: return iterations
         if (totalDuration <= totalTime) return iterations
         return when (lastIteration.iterationType) {
-            IterationType.REST -> {
+            IterationType.Default.REST -> {
                 (iterations - lastIteration) + IterationData.Default(
                     startOffset = lastIteration.startOffset,
                     duration = lastIteration.duration,
-                    iterationType = IterationType.LONG_REST
+                    iterationType = IterationType.Default.LONG_REST
                 )
             }
 
-            IterationType.WORK -> {
+            IterationType.Default.WORK -> {
                 buildList {
                     addAll(iterations)
                     if (!settings.intervalsSettings.autoStartRest) {
-                        IterationData.Default(
+                        IterationData.Pending(
                             startOffset = lastIteration.startOffset + lastIteration.duration,
-                            duration = Duration.INFINITE,
-                            iterationType = IterationType.WAIT_AFTER_WORK
+                            iterationType = IterationType.Await.WAIT_AFTER_WORK
                         ).run(::add)
                     }
                     IterationData.Default(
                         startOffset = lastIteration.startOffset + lastIteration.duration,
                         duration = settings.intervalsSettings.longRest,
-                        iterationType = IterationType.LONG_REST
+                        iterationType = IterationType.Default.LONG_REST
                     ).run(::add)
                 }
             }
 
-            IterationType.LONG_REST,
-            IterationType.WAIT_AFTER_REST,
-            IterationType.WAIT_AFTER_WORK -> iterations
+            IterationType.Default.LONG_REST -> iterations
         }
     }
 }

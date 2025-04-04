@@ -2,7 +2,6 @@ package com.flipperdevices.bsb.dao.model.converters
 
 import androidx.room.TypeConverter
 import com.flipperdevices.bsb.dao.model.TimerDuration
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 class TimerDurationConverter {
@@ -12,7 +11,6 @@ class TimerDurationConverter {
             -1L -> TimerDuration.Infinite
             null -> null
             else -> TimerDuration.Finite(value.milliseconds)
-
         }
     }
 
