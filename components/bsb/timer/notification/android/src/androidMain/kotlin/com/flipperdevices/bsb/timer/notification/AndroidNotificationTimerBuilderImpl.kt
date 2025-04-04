@@ -22,6 +22,7 @@ class AndroidNotificationTimerBuilderImpl(
     override fun buildStartUpNotification(
         context: Context
     ) = commonNotificationTimerBuilder.buildStartUpNotification(context)
+        .build()
 
     override fun buildNotification(
         context: Context,

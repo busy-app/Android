@@ -24,7 +24,34 @@ class WearOSNotificationTimerBuilder(
 
     override fun buildStartUpNotification(
         context: Context
-    ) = commonNotificationTimerBuilder.buildStartUpNotification(context)
+    ): Notification {
+        val baseNotification = commonNotificationTimerBuilder.buildStartUpNotification(context)
+            .setSmallIcon(R.drawable.ic_notification_wearos_busy_logo)
+
+        val ongoingActivityStatus = Status.Builder()
+            // Sets the text used across various surfaces.
+            .addTemplate(context.getString(CommonR.string.timer_notification_desc_empty))
+            .build()
+
+        val ongoingActivity = OngoingActivity.Builder(
+            context, ONGOING_NOTIFICATION_ID, baseNotification
+        ).setStaticIcon(R.drawable.ic_notification_wearos_busy_logo)
+            .setTouchIntent(
+                PendingIntent.getActivity(
+                    context,
+                    0,
+                    Intent(context, platformDependencies.splashScreenActivity.java),
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+            )
+            .setStatus(ongoingActivityStatus)
+            .build()
+
+        ongoingActivity.apply(context)
+
+
+        return baseNotification.build()
+    }
 
     override fun buildNotification(
         context: Context,

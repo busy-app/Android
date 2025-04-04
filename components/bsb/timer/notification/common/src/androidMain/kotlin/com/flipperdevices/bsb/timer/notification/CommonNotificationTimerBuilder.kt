@@ -19,11 +19,10 @@ class CommonNotificationTimerBuilder(
 ) {
     fun buildStartUpNotification(
         context: Context
-    ): Notification {
+    ): NotificationCompat.Builder {
         return createBaseNotification(context)
             .setContentTitle(context.getString(R.string.timer_notification_title))
             .setContentText(context.getString(R.string.timer_notification_desc_empty))
-            .build()
     }
 
     fun createBaseNotification(
