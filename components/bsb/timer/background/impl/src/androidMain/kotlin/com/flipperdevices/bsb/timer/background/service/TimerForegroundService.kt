@@ -10,6 +10,7 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.notification.TimerBroadcastReceiver
 import com.flipperdevices.bsb.timer.background.util.confirmNextStep
 import com.flipperdevices.bsb.timer.background.util.pause
 import com.flipperdevices.bsb.timer.background.util.resume
@@ -44,7 +45,8 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
             .onEach { state ->
                 val notification = notificationBuilder.buildNotification(
                     this@TimerForegroundService,
-                    state
+                    state,
+                    TimerBroadcastReceiver.getTimerIntents(this@TimerForegroundService)
                 )
                 if (notification == null) {
                     notificationManager.cancel(NOTIFICATION_ID)

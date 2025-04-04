@@ -7,6 +7,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.toHumanReadableString
+import com.flipperdevices.bsb.timer.notification.TimerPendingIntents
 import com.flipperdevices.bsb.timer.notification.android.R
 
 abstract class BaseNotificationLayoutBuilder(
@@ -15,7 +16,8 @@ abstract class BaseNotificationLayoutBuilder(
 ) {
     open fun getLayout(
         context: Context,
-        timer: ControlledTimerState.InProgress
+        timer: ControlledTimerState.InProgress,
+        intents: TimerPendingIntents
     ): RemoteViews {
         val notificationLayout = RemoteViews(
             context.packageName,

@@ -1,7 +1,11 @@
 plugins {
     id("flipper.multiplatform")
     id("flipper.multiplatform-dependencies")
+    id("flipper.anvil-multiplatform")
 }
 
 androidDependencies {
+    implementation(projects.components.core.di)
+
+    implementation(libs.androidx.core)
 }

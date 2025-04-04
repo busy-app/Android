@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.background.notification
+package com.flipperdevices.bsb.timer.notification
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -7,28 +7,20 @@ import android.content.Intent
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.flipperdevices.bsb.timer.background.impl.R
-import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.notification.layout.CompactNotificationLayoutBuilder
-import com.flipperdevices.bsb.timer.background.notification.layout.ExtendedNotificationLayoutBuilder
+import com.flipperdevices.bsb.timer.notification.common.R
 import com.flipperdevices.core.di.AndroidPlatformDependencies
-import com.flipperdevices.core.log.LogTagProvider
 import me.tatarka.inject.annotations.Inject
 
 private const val TIMER_NOTIFICATION_CHANNEL = "timer_notification_channel"
 
 @Inject
-class NotificationTimerBuilder(
-    private val platformDependencies: AndroidPlatformDependencies,
-    private val compactNotificationLayoutBuilder: CompactNotificationLayoutBuilder,
-    private val expandedNotificationLayoutBuilder: ExtendedNotificationLayoutBuilder
-) : LogTagProvider {
-    override val TAG = "NotificationTimerBuilder"
-
+class CommonNotificationTimerBuilder(
+    private val platformDependencies: AndroidPlatformDependencies
+) {
     fun buildStartUpNotification(
         context: Context
     ): Notification {
-        return createBase(context)
+        return createBaseNotification(context)
             .setContentTitle(context.getString(R.string.timer_notification_title))
             .setContentText(context.getString(R.string.timer_notification_desc_empty))
             .setLocalOnly(true)
@@ -36,33 +28,7 @@ class NotificationTimerBuilder(
             .build()
     }
 
-    fun buildNotification(
-        context: Context,
-        timer: ControlledTimerState
-    ): Notification? {
-        if (timer !is ControlledTimerState.InProgress) {
-            return null
-        }
-
-        val notificationBuilder = createBase(context)
-
-        notificationBuilder.setCustomContentView(
-            compactNotificationLayoutBuilder.getLayout(
-                context,
-                timer
-            )
-        )
-        notificationBuilder.setCustomBigContentView(
-            expandedNotificationLayoutBuilder.getLayout(
-                context,
-                timer
-            )
-        )
-
-        return notificationBuilder.build()
-    }
-
-    private fun createBase(
+    fun createBaseNotification(
         context: Context
     ): NotificationCompat.Builder {
         createChannelIfNotYet(context)

@@ -11,6 +11,7 @@ interface NotificationTimerBuilder {
 
     fun buildNotification(
         context: Context,
-        timer: ControlledTimerState
+        timer: ControlledTimerState,
+        timerPendingIntents: TimerPendingIntents
     ): Notification?
 }
