@@ -253,7 +253,7 @@ private fun ActiveScreenComposablePreview() {
             onStopClick = {},
             timerState = when (i % 3) {
                 0 -> ControlledTimerState.InProgress.Running.Work(
-                    timeLeft = TimerDuration(123.minutes),
+                    timeLeft = TimerDuration.Finite(123.minutes),
                     isOnPause = false,
                     timerSettings = TimerSettings(
                         id = TimerSettingsId(id = -1),
@@ -267,7 +267,7 @@ private fun ActiveScreenComposablePreview() {
                 )
 
                 1 -> ControlledTimerState.InProgress.Running.Rest(
-                    timeLeft = TimerDuration(12.minutes),
+                    timeLeft = TimerDuration.Finite(12.minutes),
                     isOnPause = false,
                     timerSettings = TimerSettings(
                         id = TimerSettingsId(id = -1),
@@ -281,7 +281,7 @@ private fun ActiveScreenComposablePreview() {
                 )
 
                 else -> ControlledTimerState.InProgress.Running.LongRest(
-                    timeLeft = TimerDuration(3.minutes),
+                    timeLeft = TimerDuration.Finite(3.minutes),
                     isOnPause = false,
                     timerSettings = TimerSettings(
                         id = TimerSettingsId(id = -1),

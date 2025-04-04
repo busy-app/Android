@@ -1,13 +1,12 @@
-package com.flipperdevices.bsb.timer.background.api.statefactory.state
+package com.flipperdevices.bsb.timer.statefactory
 
 import com.flipperdevices.bsb.dao.model.TimerDuration
-import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.impl.CoercedIterationBuilder
-import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.impl.DefaultIterationBuilder
-import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.model.IterationData
-import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.model.IterationType
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.statefactory.TimerStateFactory
+import com.flipperdevices.bsb.timer.statefactory.iteration.impl.CoercedIterationBuilder
+import com.flipperdevices.bsb.timer.statefactory.iteration.impl.DefaultIterationBuilder
+import com.flipperdevices.bsb.timer.statefactory.iteration.model.IterationData
+import com.flipperdevices.bsb.timer.statefactory.iteration.model.IterationType
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant

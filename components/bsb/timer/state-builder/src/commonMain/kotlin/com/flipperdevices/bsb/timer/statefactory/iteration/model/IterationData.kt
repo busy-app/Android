@@ -1,4 +1,4 @@
-package com.flipperdevices.bsb.timer.background.api.statefactory.iteration.model
+package com.flipperdevices.bsb.timer.statefactory.iteration.model
 
 import kotlin.time.Duration
 

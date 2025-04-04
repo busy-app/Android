@@ -4,7 +4,7 @@ import com.flipperdevices.bsb.timer.background.api.delegates.CompositeTimerState
 import com.flipperdevices.bsb.timer.background.api.delegates.TimerLoopJob
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.statefactory.TimerStateFactory
+import com.flipperdevices.bsb.timer.statefactory.TimerStateFactory
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider

@@ -1,7 +1,7 @@
-package com.flipperdevices.bsb.timer.background.api.statefactory.iteration
+package com.flipperdevices.bsb.timer.statefactory.iteration
 
 import com.flipperdevices.bsb.dao.model.TimerSettings
-import com.flipperdevices.bsb.timer.background.api.statefactory.iteration.model.IterationData
+import com.flipperdevices.bsb.timer.statefactory.iteration.model.IterationData
 import kotlin.time.Duration
 
 interface IterationBuilder {

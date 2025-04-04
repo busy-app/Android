@@ -4,7 +4,7 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.flow.TickFlow
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.statefactory.toState
+import com.flipperdevices.bsb.timer.statefactory.TimerStateFactory
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +24,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 class WearTimerApi(
     scope: CoroutineScope,
+    timerStateFactory: TimerStateFactory
 ) : TimerApi, LogTagProvider {
     override val TAG: String = "WearTimerApi"
     private val timerTimestampStateFlow = MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending.NotStarted)
@@ -39,7 +40,7 @@ class WearTimerApi(
     private val state = combine(
         flow = timerTimestampStateFlow,
         flow2 = TickFlow(),
-        transform = { timerTimestamp, tick -> timerTimestamp.toState() }
+        transform = { timerTimestamp, tick -> timerStateFactory.create(timerTimestamp) }
     ).stateIn(scope, SharingStarted.Companion.Eagerly, ControlledTimerState.NotStarted)
 
     override fun getState(): StateFlow<ControlledTimerState> = state
