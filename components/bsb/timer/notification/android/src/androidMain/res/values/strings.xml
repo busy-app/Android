@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="timer_notification_btn_play">Start</string>
+    <string name="timer_notification_btn_play_after_rest">Start BUSY</string>
+    <string name="timer_notification_btn_play_after_busy">Start rest</string>
+    <string name="timer_notification_btn_pause">Pause</string>
+</resources>

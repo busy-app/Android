@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.encodeToString
@@ -42,8 +43,10 @@ class AndroidTimerApi(
 ) : TimerApi, ServiceConnection, LogTagProvider {
     override val TAG = "AndroidTimerApi"
 
-    private val timerStateFlow = MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
-    private val timerTimestampFlow = MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending.NotStarted)
+    private val timerStateFlow =
+        MutableStateFlow<ControlledTimerState>(ControlledTimerState.NotStarted)
+    private val timerTimestampFlow =
+        MutableStateFlow<TimerTimestamp>(TimerTimestamp.Pending.NotStarted)
 
     private val mutex = Mutex()
     private var binderListenerJob: Job? = null
@@ -76,7 +79,13 @@ class AndroidTimerApi(
     }
 
     private fun stopTimer() {
-        timerTimestampFlow.value = TimerTimestamp.Pending.Finished
+        timerTimestampFlow.update {
+            if (it !is TimerTimestamp.Pending) {
+                it
+            } else {
+                TimerTimestamp.Pending.Finished
+            }
+        }
         val intent = Intent(context, TimerForegroundService::class.java)
         intent.setAction(TimerServiceActionEnum.STOP.actionId)
         context.startService(intent)

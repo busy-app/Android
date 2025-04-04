@@ -146,8 +146,10 @@ class AndroidWearMessageSyncService(
                             .getTimestampState()
                             .first()
                         if (old.lastSync > message.instance.lastSync) {
-                            sendTimerTimestampMessage()
+                            info { "Received older timestamp state, so refresh on wearos" }
+                            sendTimerTimestampMessage(old)
                         } else if (old.lastSync < message.instance.lastSync) {
+                            info { "Received newer timestamp, so start timer state on android" }
                             timerApi.setTimestampState(message.instance)
                         }
                     }

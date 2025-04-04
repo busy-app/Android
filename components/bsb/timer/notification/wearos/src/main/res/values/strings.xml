@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="timer_notification_status_rest">Rest %1$s</string>
+    <string name="timer_notification_status_long_rest">Long rest %1$s</string>
+    <string name="timer_notification_status_busy">Busy %1$s</string>
+</resources>

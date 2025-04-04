@@ -1,13 +1,15 @@
-package com.flipperdevices.bsb.timer.background.notification.layout
+package com.flipperdevices.bsb.timer.notification.layout
 
 import android.content.Context
 import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
-import com.flipperdevices.bsb.timer.background.impl.R
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.toHumanReadableString
+import com.flipperdevices.bsb.timer.notification.TimerPendingIntents
+import com.flipperdevices.bsb.timer.notification.android.R
+import com.flipperdevices.bsb.timer.notification.common.R as CommonR
 
 abstract class BaseNotificationLayoutBuilder(
     @LayoutRes
@@ -15,7 +17,8 @@ abstract class BaseNotificationLayoutBuilder(
 ) {
     open fun getLayout(
         context: Context,
-        timer: ControlledTimerState.InProgress
+        timer: ControlledTimerState.InProgress,
+        intents: TimerPendingIntents
     ): RemoteViews {
         val notificationLayout = RemoteViews(
             context.packageName,
@@ -73,10 +76,10 @@ abstract class BaseNotificationLayoutBuilder(
 
         val text = when (timer.type) {
             ControlledTimerState.InProgress.AwaitType.AFTER_REST -> context.getString(
-                R.string.timer_notification_after_rest
+                CommonR.string.timer_notification_after_rest
             )
             ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> context.getString(
-                R.string.timer_notification_after_busy,
+                CommonR.string.timer_notification_after_busy,
                 timer.currentIteration,
                 timer.maxIterations
             )

@@ -1,11 +1,10 @@
-package com.flipperdevices.bsb.timer.background.notification.layout
+package com.flipperdevices.bsb.timer.notification.layout
 
 import android.content.Context
 import android.widget.RemoteViews
-import com.flipperdevices.bsb.timer.background.impl.R
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.notification.TimerBroadcastReceiver
-import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
+import com.flipperdevices.bsb.timer.notification.TimerPendingIntents
+import com.flipperdevices.bsb.timer.notification.android.R
 import me.tatarka.inject.annotations.Inject
 
 @Inject
@@ -14,9 +13,10 @@ class ExtendedNotificationLayoutBuilder :
     @Suppress("CyclomaticComplexMethod")
     override fun getLayout(
         context: Context,
-        timer: ControlledTimerState.InProgress
+        timer: ControlledTimerState.InProgress,
+        intents: TimerPendingIntents
     ): RemoteViews {
-        val notificationLayout = super.getLayout(context, timer)
+        val notificationLayout = super.getLayout(context, timer, intents)
 
         val isOnPause = when (timer) {
             is ControlledTimerState.InProgress.Await -> true
@@ -46,10 +46,7 @@ class ExtendedNotificationLayoutBuilder :
                 ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> {
                     notificationLayout.setOnClickPendingIntent(
                         R.id.btn_text,
-                        TimerBroadcastReceiver.getTimerIntent(
-                            context,
-                            TimerServiceActionEnum.NEXT_STEP
-                        )
+                        intents.nextStep
                     )
                 }
             }
@@ -58,14 +55,14 @@ class ExtendedNotificationLayoutBuilder :
         }
         notificationLayout.setTextViewText(R.id.btn_text, context.getString(textId))
 
-        val action = when (isOnPause) {
-            true -> TimerServiceActionEnum.RESUME
-            false -> TimerServiceActionEnum.PAUSE
+        val intent = when (isOnPause) {
+            true -> intents.resume
+            false -> intents.pause
         }
 
         notificationLayout.setOnClickPendingIntent(
             R.id.btn,
-            TimerBroadcastReceiver.getTimerIntent(context, action)
+            intent
         )
 
         return notificationLayout

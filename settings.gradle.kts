@@ -154,6 +154,10 @@ include(
     ":components:bsb:timer:syncservice:firebase",
     ":components:bsb:timer:syncservice:noop",
     ":components:bsb:timer:syncservice:socket",
+    ":components:bsb:timer:notification:api",
+    ":components:bsb:timer:notification:android",
+    ":components:bsb:timer:notification:wearos",
+    ":components:bsb:timer:notification:common",
 
     ":components:bsb:wear:bridge:messenger:api",
     ":components:bsb:wear:bridge:messenger:impl",
