@@ -68,16 +68,19 @@ class DefaultIterationBuilder : IterationBuilder, LogTagProvider {
 
     override fun build(settings: TimerSettings, duration: Duration): List<IterationData> {
         if (!settings.intervalsSettings.isEnabled) {
-            return listOf(
-                IterationData.Default(
+            val iterationData = when (val localTotalTime = settings.totalTime) {
+                is TimerDuration.Finite -> IterationData.Default(
                     startOffset = 0.seconds,
-                    duration = when (val localTotalTime = settings.totalTime) {
-                        is TimerDuration.Finite -> localTotalTime.instance
-                        TimerDuration.Infinite -> Duration.INFINITE
-                    },
+                    duration = localTotalTime.instance,
                     iterationType = IterationType.Default.WORK
                 )
-            )
+
+                TimerDuration.Infinite -> IterationData.Infinite(
+                    startOffset = 0.seconds,
+                    iterationType = IterationType.Default.WORK
+                )
+            }
+            return listOf(iterationData)
         }
 
         var totalTimePassed = 0.seconds

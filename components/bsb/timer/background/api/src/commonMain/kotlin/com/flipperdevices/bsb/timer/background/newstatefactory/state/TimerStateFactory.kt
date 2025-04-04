@@ -9,7 +9,6 @@ import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.I
 import com.flipperdevices.bsb.timer.background.newstatefactory.iteration.model.IterationType
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlin.time.Duration.Companion.seconds
 
 object TimerStateFactory {
 
@@ -27,6 +26,8 @@ object TimerStateFactory {
             is IterationData.Pending -> {
                 confirmNextStepClick < start.plus(data.startOffset)
             }
+
+            is IterationData.Infinite -> true
         }
     }
 
@@ -62,17 +63,27 @@ object TimerStateFactory {
             timestamp.settings.totalTime is TimerDuration.Infinite &&
                 !timestamp.settings.intervalsSettings.isEnabled -> TimerDuration.Infinite
 
-            else -> TimerDuration.Finite(
-                timestamp.start
-                    .plus(currentIterationData.startOffset)
-                    .plus(
-                        when (currentIterationData) {
-                            is IterationData.Default -> currentIterationData.duration
-                            is IterationData.Pending -> 0.seconds
-                        }
-                    )
-                    .minus(now)
-            )
+            else -> {
+                when (currentIterationData) {
+                    is IterationData.Default -> {
+                        TimerDuration.Finite(
+                            timestamp.start
+                                .plus(currentIterationData.startOffset)
+                                .plus(currentIterationData.duration)
+                                .minus(now)
+                        )
+                    }
+
+                    is IterationData.Infinite -> TimerDuration.Infinite
+                    is IterationData.Pending -> {
+                        TimerDuration.Finite(
+                            timestamp.start
+                                .plus(currentIterationData.startOffset)
+                                .minus(now)
+                        )
+                    }
+                }
+            }
         }
     }
 

@@ -13,7 +13,12 @@ sealed interface IterationData {
 
     data class Default(
         override val startOffset: Duration,
-        val duration: Duration,
-        override val iterationType: IterationType.Default
+        override val iterationType: IterationType.Default,
+        val duration: Duration
+    ) : IterationData
+
+    data class Infinite(
+        override val startOffset: Duration,
+        override val iterationType: IterationType,
     ) : IterationData
 }

@@ -10,6 +10,8 @@ import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.currentUiIteration
+import com.flipperdevices.bsb.timer.background.model.maxUiIterations
 import com.flipperdevices.bsb.timer.background.util.confirmNextStep
 import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.delayedstart.composable.DelayedStartComposableContent
@@ -42,8 +44,8 @@ class DelayedStartScreenDecomposeComponentImpl(
                 DelayedStartComposableContent(
                     typeEndDelay = typeEndDelay,
                     timerSettings = state.timerSettings,
-                    currentIteration = state.currentIteration,
-                    maxIteration = state.maxIterations,
+                    currentIteration = state.currentUiIteration,
+                    maxIteration = state.maxUiIterations,
                     onStartClick = {
                         timerApi.confirmNextStep()
                     },
