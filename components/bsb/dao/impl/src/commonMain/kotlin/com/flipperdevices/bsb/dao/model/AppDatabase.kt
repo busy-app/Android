@@ -10,6 +10,7 @@ import com.flipperdevices.bsb.dao.model.cards.DBCardEntity
 import com.flipperdevices.bsb.dao.model.cards.DBCardPlatformSpecificSettings
 import com.flipperdevices.bsb.dao.model.cards.DBCardRepository
 import com.flipperdevices.bsb.dao.model.converters.DurationConverter
+import com.flipperdevices.bsb.dao.model.converters.TimerDurationConverter
 import com.flipperdevices.bsb.dao.model.stats.DBBlockedAppStat
 
 @Database(
@@ -24,7 +25,7 @@ import com.flipperdevices.bsb.dao.model.stats.DBBlockedAppStat
     version = 1,
     exportSchema = true
 )
-@TypeConverters(DurationConverter::class)
+@TypeConverters(DurationConverter::class, TimerDurationConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cardRepository(): DBCardRepository
     abstract fun blockedAppRepository(): DBBlockedAppRepository

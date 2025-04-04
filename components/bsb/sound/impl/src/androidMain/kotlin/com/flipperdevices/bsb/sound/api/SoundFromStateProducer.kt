@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.sound.api
 
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.sound.helper.Sound
 import com.flipperdevices.bsb.sound.helper.SoundPlayHelper
@@ -40,20 +41,24 @@ class SoundFromStateProducer(
         ) {
             return@withLock
         }
+        val timeLeft = when (val localTimeLeft = state.timeLeft) {
+            is TimerDuration.Finite -> localTimeLeft.instance
+            TimerDuration.Infinite -> return@withLock
+        }
 
-        if (state.timeLeft >= 4.seconds) {
+        if (timeLeft >= 4.seconds) {
             return@withLock
         }
 
         val sound = when (state) {
             is ControlledTimerState.InProgress.Running.LongRest,
-            is ControlledTimerState.InProgress.Running.Rest -> if (state.timeLeft < 1.seconds) {
+            is ControlledTimerState.InProgress.Running.Rest -> if (timeLeft < 1.seconds) {
                 Sound.REST_FINISHED
             } else {
                 Sound.REST_COUNTDOWN
             }
 
-            is ControlledTimerState.InProgress.Running.Work -> if (state.timeLeft < 1.seconds) {
+            is ControlledTimerState.InProgress.Running.Work -> if (timeLeft < 1.seconds) {
                 Sound.WORK_FINISHED
             } else {
                 Sound.WORK_COUNTDOWN
@@ -61,7 +66,7 @@ class SoundFromStateProducer(
         }
 
         val soundEvent = SoundEventSnapshot(
-            durationSec = state.timeLeft.inWholeSeconds,
+            durationSec = timeLeft.inWholeSeconds,
             state.currentIteration,
             state.timerSettings,
             sound

@@ -33,6 +33,7 @@ import busystatusbar.components.bsb.timer.delayed_start.impl.generated.resources
 import busystatusbar.components.bsb.timer.delayed_start.impl.generated.resources.tds_title_rest_done
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent
@@ -82,11 +83,22 @@ fun DelayedStartComposableContent(
             Text(
                 text = when (typeEndDelay) {
                     DelayedStartScreenDecomposeComponent.TypeEndDelay.WORK -> {
-                        stringResource(
-                            Res.string.tds_title_busy_done,
-                            "${timerSettings.name}",
-                            "$currentIteration/$maxIteration"
-                        )
+                        when (timerSettings.totalTime) {
+                            is TimerDuration.Finite -> {
+                                stringResource(
+                                    Res.string.tds_title_busy_done,
+                                    "${timerSettings.name}",
+                                    "$currentIteration/$maxIteration"
+                                )
+                            }
+                            TimerDuration.Infinite -> {
+                                stringResource(
+                                    Res.string.tds_title_busy_done,
+                                    "${timerSettings.name}",
+                                    "$currentIteration"
+                                )
+                            }
+                        }
                     }
 
                     DelayedStartScreenDecomposeComponent.TypeEndDelay.REST -> {

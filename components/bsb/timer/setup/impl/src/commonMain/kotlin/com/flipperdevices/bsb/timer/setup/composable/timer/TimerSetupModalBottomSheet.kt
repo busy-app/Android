@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.setup.composable.common.TimerSaveButtonComposable
@@ -55,7 +56,10 @@ fun TimerSetupModalBottomSheetContent(
         )
         TotalTimeTimerPickerComposable(
             onTotalTimeChange = onTotalTimeChange,
-            initialTime = timerSettings.totalTime
+            initialTime = when (val localTotalTime = timerSettings.totalTime) {
+                is TimerDuration.Finite -> localTotalTime.instance
+                TimerDuration.Infinite -> Duration.ZERO
+            }
         )
         Spacer(Modifier.height(16.dp))
         TimerIntervalsOptionsComposable(

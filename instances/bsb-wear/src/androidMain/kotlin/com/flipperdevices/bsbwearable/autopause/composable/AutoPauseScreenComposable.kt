@@ -36,6 +36,7 @@ import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.button.BIconButton
 import kotlinx.datetime.Instant
@@ -148,7 +149,7 @@ internal fun AutoPauseScreenComposable(
             ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> stringResource(
                 Res.string.bwau_after_work_title,
                 state.timerSettings.name,
-                "${state.currentIteration}",
+                "${state.currentUiIteration}",
                 "${state.maxIterations}"
             )
 
