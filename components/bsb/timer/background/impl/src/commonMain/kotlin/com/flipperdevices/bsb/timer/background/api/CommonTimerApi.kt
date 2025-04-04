@@ -16,9 +16,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
@@ -88,7 +90,13 @@ class CommonTimerApi(
     private suspend fun stopSelf() {
         withLock(mutex, "stop") {
             withContext(NonCancellable) {
-                timerTimestampFlow.value = TimerTimestamp.Pending.Finished
+                timerTimestampFlow.update {
+                    if (it is TimerTimestamp.Pending) {
+                        it
+                    } else {
+                        TimerTimestamp.Pending.Finished
+                    }
+                }
                 stateInvalidateJob?.cancel()
                 timerJob?.cancelAndJoin()
                 timerJob = null
