@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import me.tatarka.inject.annotations.Inject
@@ -38,7 +39,7 @@ class WearTimerApi(
 
     private val state = combine(
         flow = timerTimestampStateFlow,
-        flow2 = TickFlow(),
+        flow2 = TickFlow().shareIn(scope, SharingStarted.Eagerly, 1),
         transform = { timerTimestamp, tick -> timerTimestamp.toState() }
     ).stateIn(scope, SharingStarted.Companion.Eagerly, ControlledTimerState.NotStarted)
 
