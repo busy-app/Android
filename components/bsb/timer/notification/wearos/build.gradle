@@ -1,10 +1,19 @@
 plugins {
     id("flipper.multiplatform")
     id("flipper.multiplatform-dependencies")
+    id("flipper.anvil-multiplatform")
 }
 
 androidDependencies {
     implementation(projects.components.bsb.timer.notification.api)
 
+    implementation(projects.components.core.di)
+    implementation(projects.components.core.log)
+
+    implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.timer.notification.common)
+
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.annotation)
+    implementation(libs.appcompat)
 }

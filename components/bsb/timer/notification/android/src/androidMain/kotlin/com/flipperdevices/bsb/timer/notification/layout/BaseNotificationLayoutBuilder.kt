@@ -9,6 +9,7 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.toHumanReadableString
 import com.flipperdevices.bsb.timer.notification.TimerPendingIntents
 import com.flipperdevices.bsb.timer.notification.android.R
+import com.flipperdevices.bsb.timer.notification.common.R as CommonR
 
 abstract class BaseNotificationLayoutBuilder(
     @LayoutRes
@@ -75,10 +76,10 @@ abstract class BaseNotificationLayoutBuilder(
 
         val text = when (timer.type) {
             ControlledTimerState.InProgress.AwaitType.AFTER_REST -> context.getString(
-                R.string.timer_notification_after_rest
+                CommonR.string.timer_notification_after_rest
             )
             ControlledTimerState.InProgress.AwaitType.AFTER_WORK -> context.getString(
-                R.string.timer_notification_after_busy,
+                CommonR.string.timer_notification_after_busy,
                 timer.currentIteration,
                 timer.maxIterations
             )

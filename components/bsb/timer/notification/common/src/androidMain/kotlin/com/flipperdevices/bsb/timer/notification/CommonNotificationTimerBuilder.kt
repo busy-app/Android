@@ -23,8 +23,6 @@ class CommonNotificationTimerBuilder(
         return createBaseNotification(context)
             .setContentTitle(context.getString(R.string.timer_notification_title))
             .setContentText(context.getString(R.string.timer_notification_desc_empty))
-            .setLocalOnly(true)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .build()
     }
 
@@ -46,6 +44,9 @@ class CommonNotificationTimerBuilder(
                     PendingIntent.FLAG_IMMUTABLE
                 )
             )
+            .setOngoing(true)
+            .setLocalOnly(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
     }
 
     private fun createChannelIfNotYet(context: Context) {
