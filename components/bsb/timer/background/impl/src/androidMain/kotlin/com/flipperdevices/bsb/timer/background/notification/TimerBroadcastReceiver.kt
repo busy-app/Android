@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import com.flipperdevices.bsb.timer.background.service.TimerForegroundService
 import com.flipperdevices.bsb.timer.background.service.TimerServiceActionEnum
+import com.flipperdevices.bsb.timer.notification.TimerPendingIntents
 import com.flipperdevices.core.ktx.android.toFullString
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.info
@@ -25,7 +26,7 @@ class TimerBroadcastReceiver : BroadcastReceiver(), LogTagProvider {
 
     companion object {
         @SuppressLint("UnspecifiedImmutableFlag", "ObsoleteSdkInt")
-        fun getTimerIntent(
+        private fun getTimerIntent(
             context: Context,
             serviceActionEnum: TimerServiceActionEnum
         ): PendingIntent {
@@ -38,5 +39,13 @@ class TimerBroadcastReceiver : BroadcastReceiver(), LogTagProvider {
                 PendingIntent.getBroadcast(context, 0, intent, 0)
             }
         }
+
+        fun getTimerIntents(
+            context: Context,
+        ): TimerPendingIntents = TimerPendingIntents(
+            nextStep = getTimerIntent(context, TimerServiceActionEnum.NEXT_STEP),
+            resume = getTimerIntent(context, TimerServiceActionEnum.RESUME),
+            pause = getTimerIntent(context, TimerServiceActionEnum.PAUSE)
+        )
     }
 }

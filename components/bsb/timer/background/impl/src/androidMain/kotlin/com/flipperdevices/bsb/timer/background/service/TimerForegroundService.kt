@@ -10,9 +10,11 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.background.notification.TimerBroadcastReceiver
 import com.flipperdevices.bsb.timer.background.util.confirmNextStep
 import com.flipperdevices.bsb.timer.background.util.pause
 import com.flipperdevices.bsb.timer.background.util.resume
+import com.flipperdevices.bsb.timer.notification.ONGOING_NOTIFICATION_ID
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.android.toFullString
 import com.flipperdevices.core.log.LogTagProvider
@@ -26,8 +28,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
 internal const val EXTRA_KEY_TIMER_STATE = "timer_state"
-
-private const val NOTIFICATION_ID = 100
 
 class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateListener {
     override val TAG = "TimerForegroundService"
@@ -44,12 +44,13 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
             .onEach { state ->
                 val notification = notificationBuilder.buildNotification(
                     this@TimerForegroundService,
-                    state
+                    state,
+                    TimerBroadcastReceiver.getTimerIntents(this@TimerForegroundService)
                 )
                 if (notification == null) {
-                    notificationManager.cancel(NOTIFICATION_ID)
+                    notificationManager.cancel(ONGOING_NOTIFICATION_ID)
                 } else {
-                    notificationManager.notify(NOTIFICATION_ID, notification)
+                    notificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
                 }
             }.launchIn(lifecycleScope + Dispatchers.Main)
     }
@@ -61,7 +62,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
         delegate.addListener(this)
 
         startForeground(
-            NOTIFICATION_ID,
+            ONGOING_NOTIFICATION_ID,
             notificationBuilder.buildStartUpNotification(applicationContext)
         )
     }
@@ -115,7 +116,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
 
     private fun stopServiceInternal() {
         stopForeground(STOP_FOREGROUND_REMOVE)
-        notificationManager.cancel(NOTIFICATION_ID)
+        notificationManager.cancel(ONGOING_NOTIFICATION_ID)
         stopSelf()
     }
 

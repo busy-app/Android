@@ -1,0 +1,8 @@
+plugins {
+    id("flipper.multiplatform")
+    id("flipper.multiplatform-dependencies")
+}
+
+androidDependencies {
+    implementation(projects.components.bsb.timer.background.api)
+}
