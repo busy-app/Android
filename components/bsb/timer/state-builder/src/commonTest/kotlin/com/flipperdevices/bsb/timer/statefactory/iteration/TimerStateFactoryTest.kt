@@ -30,7 +30,7 @@ class TimerStateFactoryTest {
             TimerTimestamp.Running(
                 lastSync = Instant.fromEpochSeconds(0),
                 start = timeProvider.now().minus(15.minutes * 15),
-                confirmNextStepClick = Instant.DISTANT_FUTURE,
+                confirmNextStepClick = Instant.fromEpochSeconds(Long.MAX_VALUE),
                 settings = TimerSettings(
                     id = TimerSettingsId(-1L),
                     totalTime = TimerDuration.Infinite,
@@ -80,7 +80,7 @@ class TimerStateFactoryTest {
             TimerTimestamp.Running(
                 lastSync = Instant.fromEpochSeconds(0),
                 start = timeProvider.now().minus(15.minutes * 14),
-                confirmNextStepClick = Instant.DISTANT_FUTURE,
+                confirmNextStepClick = Instant.fromEpochSeconds(Long.MAX_VALUE),
                 settings = TimerSettings(
                     id = TimerSettingsId(-1L),
                     totalTime = TimerDuration.Finite(15.minutes * 10),
