@@ -21,15 +21,11 @@ class CoercedIterationBuilder(private val instance: IterationBuilder) : Iteratio
         if (totalDuration < totalTime) return iterations
         return when (lastIteration.iterationType) {
             IterationType.Default.REST -> {
-                if (settings.intervalsSettings.isEnabled) {
-                    (iterations - lastIteration) + IterationData.Default(
-                        startOffset = lastIteration.startOffset,
-                        duration = lastIteration.duration,
-                        iterationType = IterationType.Default.LONG_REST
-                    )
-                } else {
-                    iterations
-                }
+                (iterations - lastIteration) + IterationData.Default(
+                    startOffset = lastIteration.startOffset,
+                    duration = lastIteration.duration,
+                    iterationType = IterationType.Default.LONG_REST
+                )
             }
 
             IterationType.Default.WORK -> {

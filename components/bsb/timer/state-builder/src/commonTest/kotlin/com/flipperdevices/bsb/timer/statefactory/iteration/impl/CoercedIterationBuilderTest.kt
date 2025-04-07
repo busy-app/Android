@@ -6,6 +6,7 @@ import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.statefactory.iteration.model.IterationData
 import com.flipperdevices.bsb.timer.statefactory.iteration.model.IterationType
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -220,5 +221,149 @@ class CoercedIterationBuilderTest {
             duration = 12.minutes
         )
         assertEquals(defaultIterations, coercedIterations)
+    }
+
+    @Test
+    fun GIVEN_finite_with_no_time_and_work_WHEN_build_THEN_return_wait_after_work() {
+        val coercedIterationBuilder = CoercedIterationBuilder { _, _ ->
+            listOf(
+                IterationData.Default(
+                    startOffset = 0.seconds,
+                    iterationType = IterationType.Default.WORK,
+                    15.minutes
+                )
+            )
+        }
+        val coercedIterations = coercedIterationBuilder.build(
+            TimerSettings(
+                id = TimerSettingsId(-1L),
+                totalTime = TimerDuration.Finite(15.minutes),
+                intervalsSettings = TimerSettings.IntervalsSettings(
+                    isEnabled = false,
+                    work = 15.minutes,
+                    rest = 15.minutes,
+                    longRest = 15.minutes,
+                    autoStartRest = false
+                ),
+            ),
+            duration = 15.minutes
+        )
+        val expected = listOf(
+            IterationData.Default(
+                startOffset = 0.seconds,
+                iterationType = IterationType.Default.WORK,
+                15.minutes
+            ),
+            IterationData.Pending(
+                startOffset = 15.minutes,
+                iterationType = IterationType.Await.WAIT_AFTER_WORK,
+            )
+        )
+        assertContentEquals(expected, coercedIterations)
+    }
+
+    @Test
+    fun GIVEN_finite_less_total_duration_WHEN_build_THEN_return_iterations() {
+        val coercedIterationBuilder = CoercedIterationBuilder { _, _ ->
+            listOf(
+                IterationData.Default(
+                    startOffset = 0.seconds,
+                    iterationType = IterationType.Default.WORK,
+                    1.minutes
+                )
+            )
+        }
+        val coercedIterations = coercedIterationBuilder.build(
+            TimerSettings(
+                id = TimerSettingsId(-1L),
+                totalTime = TimerDuration.Finite(15.minutes),
+                intervalsSettings = TimerSettings.IntervalsSettings(
+                    isEnabled = false,
+                    work = 15.minutes,
+                    rest = 15.minutes,
+                    longRest = 15.minutes,
+                    autoStartRest = false
+                ),
+            ),
+            duration = 15.minutes
+        )
+        val expected = listOf(
+            IterationData.Default(
+                startOffset = 0.seconds,
+                iterationType = IterationType.Default.WORK,
+                1.minutes
+            ),
+        )
+        assertEquals(expected, coercedIterations)
+    }
+
+    @Test
+    fun GIVEN_finite_last_long_rest_WHEN_build_THEN_return_iterations() {
+        val coercedIterationBuilder = CoercedIterationBuilder { _, _ ->
+            listOf(
+                IterationData.Default(
+                    startOffset = 0.seconds,
+                    iterationType = IterationType.Default.LONG_REST,
+                    15.minutes
+                )
+            )
+        }
+        val coercedIterations = coercedIterationBuilder.build(
+            TimerSettings(
+                id = TimerSettingsId(-1L),
+                totalTime = TimerDuration.Finite(15.minutes),
+                intervalsSettings = TimerSettings.IntervalsSettings(
+                    isEnabled = false,
+                    work = 15.minutes,
+                    rest = 15.minutes,
+                    longRest = 15.minutes,
+                    autoStartRest = false
+                ),
+            ),
+            duration = 15.minutes
+        )
+        val expected = listOf(
+            IterationData.Default(
+                startOffset = 0.seconds,
+                iterationType = IterationType.Default.LONG_REST,
+                15.minutes
+            ),
+        )
+        assertEquals(expected, coercedIterations)
+    }
+
+    @Test
+    fun GIVEN_finite_last_rest_WHEN_build_THEN_return_iterations() {
+        val coercedIterationBuilder = CoercedIterationBuilder { _, _ ->
+            listOf(
+                IterationData.Default(
+                    startOffset = 0.seconds,
+                    iterationType = IterationType.Default.LONG_REST,
+                    15.minutes
+                )
+            )
+        }
+        val coercedIterations = coercedIterationBuilder.build(
+            TimerSettings(
+                id = TimerSettingsId(-1L),
+                totalTime = TimerDuration.Finite(15.minutes),
+                intervalsSettings = TimerSettings.IntervalsSettings(
+                    isEnabled = false,
+                    work = 15.minutes,
+                    rest = 15.minutes,
+                    longRest = 15.minutes,
+                    autoStartRest = false
+                ),
+            ),
+            duration = 15.minutes
+        )
+        val expected = listOf(
+            IterationData.Default(
+                startOffset = 0.seconds,
+                iterationType = IterationType.Default.LONG_REST,
+                15.minutes
+            ),
+        )
+        assertEquals(expected, coercedIterations)
     }
 }
