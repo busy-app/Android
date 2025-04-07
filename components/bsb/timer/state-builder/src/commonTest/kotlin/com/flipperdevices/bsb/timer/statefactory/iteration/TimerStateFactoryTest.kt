@@ -6,7 +6,7 @@ import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.statefactory.TimerStateFactoryImpl
-import kotlinx.datetime.Clock
+import com.flipperdevices.bsb.timer.statefactory.iteration.datetime.TimeProvider
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertIs
@@ -14,20 +14,22 @@ import kotlin.time.Duration.Companion.minutes
 
 class TimerStateFactoryTest {
 
+    private val timeProvider: TimeProvider = TimeProvider { Instant.fromEpochSeconds(12345678) }
+
     @Test
     fun GIVEN_not_started_WHEN_build_THEN_not_started() {
-        val timerStateFactory = TimerStateFactoryImpl()
+        val timerStateFactory = TimerStateFactoryImpl(timeProvider)
         val actual = timerStateFactory.create(TimerTimestamp.Pending.Finished)
         assertIs<ControlledTimerState.NotStarted>(actual)
     }
 
     @Test
     fun GIVEN_not_confirmed_a_lot_time_passed_WHEN_build_THEN_still_work() {
-        val timerStateFactory = TimerStateFactoryImpl()
+        val timerStateFactory = TimerStateFactoryImpl(timeProvider)
         val actual = timerStateFactory.create(
             TimerTimestamp.Running(
-                lastSync = Instant.DISTANT_PAST,
-                start = Clock.System.now().minus(15.minutes * 14),
+                lastSync = Instant.fromEpochSeconds(0),
+                start = timeProvider.now().minus(15.minutes * 15),
                 confirmNextStepClick = Instant.DISTANT_FUTURE,
                 settings = TimerSettings(
                     id = TimerSettingsId(-1L),
@@ -48,12 +50,12 @@ class TimerStateFactoryTest {
 
     @Test
     fun GIVEN_confirmed_and_time_passed_WHEN_build_THEN_still_await() {
-        val timerStateFactory = TimerStateFactoryImpl()
+        val timerStateFactory = TimerStateFactoryImpl(timeProvider)
         val actual = timerStateFactory.create(
             TimerTimestamp.Running(
-                lastSync = Instant.DISTANT_PAST,
-                start = Clock.System.now().minus(15.minutes * 14),
-                confirmNextStepClick = Instant.DISTANT_PAST,
+                lastSync = Instant.fromEpochSeconds(0),
+                start = timeProvider.now().minus(15.minutes * 14),
+                confirmNextStepClick = Instant.fromEpochSeconds(0),
                 settings = TimerSettings(
                     id = TimerSettingsId(-1L),
                     totalTime = TimerDuration.Infinite,
@@ -73,11 +75,11 @@ class TimerStateFactoryTest {
 
     @Test
     fun GIVEN_all_passed_WHEN_build_THEN_finished() {
-        val timerStateFactory = TimerStateFactoryImpl()
+        val timerStateFactory = TimerStateFactoryImpl(timeProvider)
         val actual = timerStateFactory.create(
             TimerTimestamp.Running(
-                lastSync = Instant.DISTANT_PAST,
-                start = Clock.System.now().minus(15.minutes * 14),
+                lastSync = Instant.fromEpochSeconds(0),
+                start = timeProvider.now().minus(15.minutes * 14),
                 confirmNextStepClick = Instant.DISTANT_FUTURE,
                 settings = TimerSettings(
                     id = TimerSettingsId(-1L),

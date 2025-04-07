@@ -3,12 +3,12 @@ package com.flipperdevices.bsb.timer.statefactory
 import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.statefactory.iteration.datetime.TimeProvider
 import com.flipperdevices.bsb.timer.statefactory.iteration.impl.CoercedIterationBuilder
 import com.flipperdevices.bsb.timer.statefactory.iteration.impl.DefaultIterationBuilder
 import com.flipperdevices.bsb.timer.statefactory.iteration.model.IterationData
 import com.flipperdevices.bsb.timer.statefactory.iteration.model.IterationType
 import com.flipperdevices.core.di.AppGraph
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -17,7 +17,9 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, TimerStateFactory::class)
-class TimerStateFactoryImpl : TimerStateFactory {
+class TimerStateFactoryImpl(
+    private val timeProvider: TimeProvider
+) : TimerStateFactory {
 
     private fun getCurrentIteration(
         now: Instant,
@@ -153,7 +155,7 @@ class TimerStateFactoryImpl : TimerStateFactory {
         if (timestamp !is TimerTimestamp.Running) {
             return ControlledTimerState.NotStarted
         }
-        val now = timestamp.pause ?: Clock.System.now()
+        val now = timestamp.pause ?: timeProvider.now()
 
         val iterations = getIterations(
             timestamp = timestamp,
