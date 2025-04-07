@@ -21,11 +21,15 @@ class CoercedIterationBuilder(private val instance: IterationBuilder) : Iteratio
         if (totalDuration < totalTime) return iterations
         return when (lastIteration.iterationType) {
             IterationType.Default.REST -> {
-                (iterations - lastIteration) + IterationData.Default(
-                    startOffset = lastIteration.startOffset,
-                    duration = lastIteration.duration,
-                    iterationType = IterationType.Default.LONG_REST
-                )
+                if (settings.intervalsSettings.isEnabled) {
+                    (iterations - lastIteration) + IterationData.Default(
+                        startOffset = lastIteration.startOffset,
+                        duration = lastIteration.duration,
+                        iterationType = IterationType.Default.LONG_REST
+                    )
+                } else {
+                    iterations
+                }
             }
 
             IterationType.Default.WORK -> {
@@ -37,11 +41,13 @@ class CoercedIterationBuilder(private val instance: IterationBuilder) : Iteratio
                             iterationType = IterationType.Await.WAIT_AFTER_WORK
                         ).run(::add)
                     }
-                    IterationData.Default(
-                        startOffset = lastIteration.startOffset + lastIteration.duration,
-                        duration = settings.intervalsSettings.longRest,
-                        iterationType = IterationType.Default.LONG_REST
-                    ).run(::add)
+                    if (settings.intervalsSettings.isEnabled) {
+                        IterationData.Default(
+                            startOffset = lastIteration.startOffset + lastIteration.duration,
+                            duration = settings.intervalsSettings.longRest,
+                            iterationType = IterationType.Default.LONG_REST
+                        ).run(::add)
+                    }
                 }
             }
 

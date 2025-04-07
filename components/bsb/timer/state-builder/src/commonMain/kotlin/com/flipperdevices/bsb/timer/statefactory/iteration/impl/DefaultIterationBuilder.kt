@@ -30,7 +30,6 @@ class DefaultIterationBuilder : IterationBuilder, LogTagProvider {
         return when {
             i % 2 == 0 -> IterationType.Default.WORK
             i % 3 == 2 -> IterationType.Default.LONG_REST
-            i % 2 == 1 -> IterationType.Default.REST
             else -> IterationType.Default.REST
         }
     }
@@ -55,7 +54,7 @@ class DefaultIterationBuilder : IterationBuilder, LogTagProvider {
                 )
             }
 
-            !settings.intervalsSettings.autoStartWork && lastIterationType == IterationType.Default.LONG_REST -> {
+            !settings.intervalsSettings.autoStartRest && lastIterationType == IterationType.Default.LONG_REST -> {
                 IterationData.Pending(
                     startOffset = totalTimePassed,
                     iterationType = IterationType.Await.WAIT_AFTER_REST
