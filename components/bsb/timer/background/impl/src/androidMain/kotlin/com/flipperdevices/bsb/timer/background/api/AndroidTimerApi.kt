@@ -54,6 +54,7 @@ class AndroidTimerApi(
     override fun setTimestampState(state: TimerTimestamp) {
         info { "Request start timer via android service timer api" }
         if (state is TimerTimestamp.Pending) {
+            timerTimestampFlow.update { state }
             stopTimer()
             return
         }
