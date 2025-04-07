@@ -15,7 +15,7 @@ sealed interface TimerTimestamp {
 
     @Serializable
     @SerialName("PENDING")
-    class Pending private constructor(
+    data class Pending private constructor(
         @SerialName("last_sync")
         override val lastSync: Instant
     ) : TimerTimestamp {
