@@ -41,6 +41,7 @@ commonDependencies {
     implementation(projects.components.bsb.core.theme)
     implementation(projects.components.bsb.core.res)
     implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.timer.stateBuilder)
     implementation(projects.components.bsb.timer.background.impl)
     implementation(projects.components.bsb.timer.notification.api)
     implementation(projects.components.bsb.timer.notification.common)

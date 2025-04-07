@@ -237,6 +237,7 @@ commonDependencies {
     implementation(projects.components.bsb.timer.rest.impl)
     implementation(projects.components.bsb.timer.cards.api)
     implementation(projects.components.bsb.timer.cards.impl)
+    implementation(projects.components.bsb.timer.stateBuilder)
     implementation(projects.components.bsb.timer.notification.api)
     implementation(projects.components.bsb.timer.notification.common)
     implementation(projects.components.bsb.timer.notification.android)

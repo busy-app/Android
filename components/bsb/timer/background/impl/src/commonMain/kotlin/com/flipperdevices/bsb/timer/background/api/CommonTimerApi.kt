@@ -4,6 +4,7 @@ import com.flipperdevices.bsb.timer.background.api.delegates.CompositeTimerState
 import com.flipperdevices.bsb.timer.background.api.delegates.TimerLoopJob
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
+import com.flipperdevices.bsb.timer.statefactory.TimerStateFactory
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
@@ -27,6 +28,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 class CommonTimerApi(
     private val scope: CoroutineScope,
+    private val timerStateFactory: TimerStateFactory,
     compositeListenersFactory: (TimerApi) -> CompositeTimerStateListener,
 ) : TimerApi, LogTagProvider {
     override val TAG = "CommonTimerApi"
@@ -60,7 +62,11 @@ class CommonTimerApi(
                 stateInvalidateJob?.cancelAndJoin()
                 timerJob?.cancelAndJoin()
                 timerTimestampFlow.emit(state)
-                val timer = TimerLoopJob(scope, state)
+                val timer = TimerLoopJob(
+                    scope = scope,
+                    initialTimerTimestamp = state,
+                    timerStateFactory = timerStateFactory
+                )
                 timerJob = timer
                 compositeListeners.onTimerStart(state.settings)
                 stateInvalidateJob = timer.getInternalState()

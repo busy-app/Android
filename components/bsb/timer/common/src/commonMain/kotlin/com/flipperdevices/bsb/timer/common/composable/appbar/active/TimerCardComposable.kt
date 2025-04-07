@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.ui.autosizetext.AutoSizeText
 import com.flipperdevices.ui.timeline.util.toFormattedTime
@@ -63,6 +64,7 @@ fun TimerCardComposable(
         }
         Column(
             modifier = columnModifier
+                .fillMaxWidth()
                 .background(config.videoBackgroundColor.copy(alpha = 0.8f))
                 .padding(24.dp),
             verticalArrangement = Arrangement.SpaceBetween,
@@ -80,21 +82,27 @@ fun TimerCardComposable(
                 )
             }
 
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .background(config.progressBarBackgroundColor)
-                    .height(6.dp)
-                    .fillMaxWidth(),
-                progress = getTimerProgress(timerState),
-                color = config.progressBarColor,
-                backgroundColor = config.progressBarBackgroundColor
-            )
+            if (timerState.timerSettings.totalTime is TimerDuration.Finite) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .background(config.progressBarBackgroundColor)
+                        .height(6.dp)
+                        .fillMaxWidth(),
+                    progress = getTimerProgress(timerState),
+                    color = config.progressBarColor,
+                    backgroundColor = config.progressBarBackgroundColor
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun getTimerProgress(timerState: ControlledTimerState.InProgress.Running): Float {
+    val timeLeft = when (val localTimeLeft = timerState.timeLeft) {
+        is TimerDuration.Finite -> localTimeLeft.instance
+        TimerDuration.Infinite -> return 1f
+    }
     val totalDuration = remember(timerState.timerSettings.intervalsSettings) {
         when (timerState) {
             is ControlledTimerState.InProgress.Running.LongRest ->
@@ -107,11 +115,11 @@ private fun getTimerProgress(timerState: ControlledTimerState.InProgress.Running
                 timerState.timerSettings.intervalsSettings.work
         }
     }
-    return remember(timerState.timeLeft, totalDuration) {
+    return remember(timeLeft, totalDuration) {
         when {
-            timerState.timeLeft > totalDuration -> 1f
+            timeLeft > totalDuration -> 1f
             totalDuration.inWholeSeconds == 0L -> 0f
-            else -> timerState.timeLeft.inWholeSeconds / totalDuration.inWholeSeconds.toFloat()
+            else -> timeLeft.inWholeSeconds / totalDuration.inWholeSeconds.toFloat()
         }
     }
 }
@@ -121,8 +129,15 @@ private fun TimerRow(
     timerState: ControlledTimerState.InProgress.Running,
     modifier: Modifier = Modifier
 ) {
-    val text = remember(timerState.timeLeft) {
-        timerState.timeLeft.toComponents { days, hours, minutes, seconds, nanoseconds ->
+    val text = remember(timerState.timeLeft, timerState.timePassed) {
+        val time = when (val localTimeLeft = timerState.timeLeft) {
+            is TimerDuration.Finite -> {
+                localTimeLeft.instance
+            }
+
+            TimerDuration.Infinite -> timerState.timePassed
+        }
+        time.toComponents { days, hours, minutes, seconds, nanoseconds ->
             val timeComponentList = listOfNotNull(
                 hours.takeIf { h -> h > 0 },
                 minutes,

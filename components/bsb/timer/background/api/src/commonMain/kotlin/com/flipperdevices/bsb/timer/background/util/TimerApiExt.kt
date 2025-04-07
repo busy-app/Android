@@ -1,5 +1,6 @@
 package com.flipperdevices.bsb.timer.background.util
 
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
@@ -82,11 +83,18 @@ fun TimerApi.skip() {
             is TimerTimestamp.Running -> {
                 val startedState = getState().value as? ControlledTimerState.InProgress.Running
                 startedState ?: return@updateState state
+                when (val localTimeLeft = startedState.timeLeft) {
+                    is TimerDuration.Finite -> {
+                        state.copy(
+                            start = state.start.minus(localTimeLeft.instance),
+                            lastSync = Clock.System.now()
+                        )
+                    }
 
-                state.copy(
-                    start = state.start.minus(startedState.timeLeft),
-                    lastSync = Clock.System.now()
-                )
+                    TimerDuration.Infinite -> {
+                        state
+                    }
+                }
             }
         }
     }

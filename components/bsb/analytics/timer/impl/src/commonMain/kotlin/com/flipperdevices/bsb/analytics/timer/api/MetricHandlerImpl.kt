@@ -6,6 +6,7 @@ import com.flipperdevices.bsb.analytics.metric.api.model.TimerConfigSnapshot
 import com.flipperdevices.bsb.dao.api.CardAppBlockerApi
 import com.flipperdevices.bsb.dao.model.BlockedAppDetailedState
 import com.flipperdevices.bsb.dao.model.BlockedAppEntity
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
@@ -31,7 +32,10 @@ class MetricHandlerImpl(
             BEvent.TimerStarted(
                 TimerConfigSnapshot(
                     isIntervalsEnabled = timerSettings.intervalsSettings.isEnabled,
-                    totalTimeMillis = timerSettings.totalTime.inWholeMilliseconds,
+                    totalTimeMillis = when (val localTotalTime = timerSettings.totalTime) {
+                        is TimerDuration.Finite -> localTotalTime.instance.inWholeMilliseconds
+                        TimerDuration.Infinite -> -1
+                    },
                     workTimerMillis = timerSettings.intervalsSettings.work.inWholeMilliseconds,
                     restTimeMillis = timerSettings.intervalsSettings.rest.inWholeMilliseconds,
                     isBlockingEnabled = blockedAppDetailedState.isBlockingEnabled(),
@@ -49,7 +53,10 @@ class MetricHandlerImpl(
             BEvent.TimerCompleted(
                 TimerConfigSnapshot(
                     isIntervalsEnabled = settings.intervalsSettings.isEnabled,
-                    totalTimeMillis = settings.totalTime.inWholeMilliseconds,
+                    totalTimeMillis = when (val localTotalTime = settings.totalTime) {
+                        is TimerDuration.Finite -> localTotalTime.instance.inWholeMilliseconds
+                        TimerDuration.Infinite -> -1
+                    },
                     workTimerMillis = settings.intervalsSettings.work.inWholeMilliseconds,
                     restTimeMillis = settings.intervalsSettings.rest.inWholeMilliseconds,
                     isBlockingEnabled = blockedAppDetailedState.isBlockingEnabled(),

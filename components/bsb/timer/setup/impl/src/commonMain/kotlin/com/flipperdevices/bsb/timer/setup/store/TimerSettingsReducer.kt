@@ -1,60 +1,60 @@
 package com.flipperdevices.bsb.timer.setup.store
 
+import com.flipperdevices.bsb.dao.model.TimerDuration
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
 
+/**
+ * Some timer configs should be changed when we are changing others
+ * So the [TimerSettings] should be changed via [TimerSettingsReducer]
+ */
 object TimerSettingsReducer {
+    private fun TimerSettings.onRestChanged(message: Message.Interval.RestChanged): TimerSettings {
+        return copy(
+            intervalsSettings = intervalsSettings
+                .copy(rest = message.value)
+        )
+    }
 
+    private fun TimerSettings.onLongRestChanged(message: Message.Interval.LongRestChanged): TimerSettings {
+        return copy(
+            intervalsSettings = intervalsSettings
+                .copy(longRest = message.value)
+        )
+    }
+
+    private fun TimerSettings.onWorkChanged(message: Message.Interval.WorkChanged): TimerSettings {
+        return copy(
+            intervalsSettings = intervalsSettings
+                .copy(work = message.value)
+        )
+    }
+
+    private fun TimerSettings.onTotalTimeChanged(message: Message.TotalTimeChanged): TimerSettings {
+        val totalTime = when (message.value) {
+            Duration.ZERO -> TimerDuration.Infinite
+            else -> TimerDuration.Finite(message.value)
+        }
+        return copy(totalTime = totalTime)
+    }
+
+    @Suppress("LongMethod")
     fun TimerSettings.reduce(message: Message): TimerSettings {
         return when (message) {
             is Message.Interval.LongRestChanged -> {
-                copy(
-                    intervalsSettings = intervalsSettings
-                        .copy(longRest = message.value)
-                )
+                onLongRestChanged(message)
             }
 
             is Message.Interval.RestChanged -> {
-                copy(
-                    intervalsSettings = intervalsSettings
-                        .copy(rest = message.value)
-                ).let { newState ->
-                    val iterationDuration = newState
-                        .intervalsSettings
-                        .work
-                        .plus(newState.intervalsSettings.rest)
-                    if (iterationDuration > newState.totalTime) {
-                        newState.copy(
-                            intervalsSettings = newState.intervalsSettings.copy(
-                                rest = newState.totalTime.minus(newState.intervalsSettings.work)
-                            )
-                        )
-                    } else {
-                        newState
-                    }
-                }
+                onRestChanged(message)
             }
 
             is Message.Interval.WorkChanged -> {
-                copy(
-                    intervalsSettings = intervalsSettings
-                        .copy(work = message.value)
-                )
+                onWorkChanged(message)
             }
 
             is Message.TotalTimeChanged -> {
-                copy(totalTime = message.value).let { newState ->
-                    if (newState.totalTime < 1.hours) {
-                        newState.copy(
-                            intervalsSettings = newState
-                                .intervalsSettings
-                                .copy(isEnabled = false)
-                        )
-                    } else {
-                        newState
-                    }
-                }
+                onTotalTimeChanged(message)
             }
         }
     }
