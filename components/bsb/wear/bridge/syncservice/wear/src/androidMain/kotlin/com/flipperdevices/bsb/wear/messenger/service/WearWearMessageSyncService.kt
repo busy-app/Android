@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.wear.messenger.service
 
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
+import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
@@ -63,24 +64,29 @@ class WearWearMessageSyncService(
     private val jobs = mutableListOf<Job>()
     private val mutex = Mutex()
 
-    private suspend fun sendTimerTimestampMessage() {
-        val timerTimestamp = timerApi
+    private suspend fun sendTimerTimestampMessage(
+        timerTimestamp: TimerTimestamp? = null
+    ) {
+        val timerTimestampNonNullable = timerTimestamp ?: timerApi
             .getTimestampState()
             .first()
-        val message = TimerTimestampMessage(timerTimestamp)
+        val message = TimerTimestampMessage(timerTimestampNonNullable)
         wearMessageProducer.produce(message)
     }
 
     private fun startAndGetStateChangeJob(): Job {
         return timerApi.getTimestampState()
-            .onEach { sendTimerTimestampMessage() }
+            .onEach { sendTimerTimestampMessage(it) }
             .launchIn(scope)
     }
 
     private fun startAndGetClientConnectJob(): Job {
         return wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
-            .onEach { sendTimerTimestampMessage() }
+            .onEach {
+                wearMessageProducer.produce(TimerSettingsRequestMessage)
+                sendTimerTimestampMessage()
+            }
             .launchIn(scope)
     }
 
@@ -123,8 +129,10 @@ class WearWearMessageSyncService(
                             .getTimestampState()
                             .first()
                         if (old.lastSync > message.instance.lastSync) {
-                            sendTimerTimestampMessage()
+                            info { "Received older timestamp state, so refresh on android" }
+                            sendTimerTimestampMessage(old)
                         } else if (old.lastSync < message.instance.lastSync) {
+                            info { "Received newer timestamp, so start timer state on wearos" }
                             timerApi.setTimestampState(message.instance)
                         }
                     }

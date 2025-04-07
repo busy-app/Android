@@ -14,6 +14,7 @@ commonDependencies {
     implementation(projects.components.bsb.cloudMock)
     implementation(projects.components.bsb.dao.api)
     implementation(projects.components.bsb.timer.background.api)
+    implementation(projects.components.bsb.timer.notification.api)
     implementation(projects.components.bsb.timer.stateBuilder)
     implementation(projects.components.bsb.liveactivity.api)
     implementation(projects.components.bsb.appblocker.filter.api)

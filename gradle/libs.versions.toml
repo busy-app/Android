@@ -49,6 +49,7 @@ wear = "1.3.0" # https://developer.android.com/jetpack/androidx/releases/wear
 wear-gms = "19.0.0" # https://mvnrepository.com/artifact/com.google.android.gms/play-services-wearable?repo=google
 wear-interaction-phone = "1.1.0" # https://developer.android.com/jetpack/androidx/releases/wear
 wear-interaction-remote = "1.1.0" # https://developer.android.com/jetpack/androidx/releases/wear
+wear-ongoing = "1.0.0"
 compose-wear = "1.4.1" # https://developer.android.com/jetpack/androidx/releases/wear-compose
 compose-wear-preview = "1.0.0" # https://mvnrepository.com/artifact/androidx.wear/wear-tooling-preview
 haze = "1.5.2"
@@ -147,6 +148,7 @@ wear = { module = "androidx.wear:wear", version.ref = "wear" }
 wear-gms = { module = "com.google.android.gms:play-services-wearable", version.ref = "wear-gms" }
 wear-interaction-phone = { module = "androidx.wear:wear-phone-interactions", version.ref = "wear-interaction-phone" }
 wear-interaction-remote = { module = "androidx.wear:wear-remote-interactions", version.ref = "wear-interaction-remote" }
+wear-ongoing = { module = "androidx.wear:wear-ongoing", version.ref = "wear-ongoing" }
 # wear - ui
 compose-wear-material = { module = "androidx.wear.compose:compose-material", version.ref = "compose-wear" }
 compose-wear-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "compose-wear" }

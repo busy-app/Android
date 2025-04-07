@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class TimerLoopJob(
     scope: CoroutineScope,
@@ -31,7 +32,7 @@ class TimerLoopJob(
     private val job = TickFlow()
         .filter { initialTimerTimestamp.runningOrNull?.pause == null }
         .onEach {
-            withLock(mutex, "update") {
+            mutex.withLock {
                 timerStateFlow.emit(timerStateFactory.create(initialTimerTimestamp))
             }
         }.launchIn(scope)

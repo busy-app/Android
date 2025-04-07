@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -56,8 +54,6 @@ private fun calculateBlockerText(blockerState: BlockedAppCount): String? {
     }
 }
 
-private const val DESIGN_CARD_ASPECT_RATIO = 170f / 107f
-
 @Suppress("LongMethod")
 @Composable
 fun WearCardComposable(
@@ -67,7 +63,6 @@ fun WearCardComposable(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(DESIGN_CARD_ASPECT_RATIO)
             .clip(RoundedCornerShape(20.dp))
             .background(LocalCorruptedPallet.current.accent.brand.primary)
             .padding(12.dp),
@@ -79,7 +74,7 @@ fun WearCardComposable(
             color = LocalCorruptedPallet.current.white.onColor,
             fontWeight = FontWeight.W500
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.weight(1f))
 
         Column {
             Text(
@@ -88,7 +83,6 @@ fun WearCardComposable(
                 color = LocalCorruptedPallet.current.white.onColor,
                 fontWeight = FontWeight.W500
             )
-            Spacer(Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -97,7 +91,7 @@ fun WearCardComposable(
                 if (settings.instance.intervalsSettings.isEnabled) {
                     MiniFrameSection(
                         MiniFrameData(
-                            text = settings.instance.intervalsSettings.work.toFormattedTime(slim = false),
+                            text = settings.instance.intervalsSettings.work.toFormattedTime(slim = true),
                             painter = painterResource(CommonTimerRes.drawable.ic_work),
                             tint = LocalCorruptedPallet.current
                                 .transparent
@@ -114,7 +108,13 @@ fun WearCardComposable(
                         ),
                         iconSize = 16.dp,
                         fontSize = 11.sp,
-                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)
+                        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp),
+                        cornerRadius = 8.dp,
+                        linePadding = PaddingValues(
+                            vertical = 2.dp,
+                            horizontal = 4.dp
+                        ),
+                        paddingBetweenSectionsInside = 1.dp
                     )
                 }
                 calculateBlockerText(settings.blockedAppCount)?.let { blockedText ->
@@ -127,6 +127,7 @@ fun WearCardComposable(
                                 .whiteInvert
                                 .primary
                         ),
+                        modifier = Modifier.padding(start = 2.dp),
                         iconSize = 16.dp,
                         fontSize = 11.sp,
                         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp)

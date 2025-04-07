@@ -42,6 +42,10 @@ commonDependencies {
     implementation(projects.components.bsb.core.res)
     implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.timer.stateBuilder)
+    implementation(projects.components.bsb.timer.background.impl)
+    implementation(projects.components.bsb.timer.notification.api)
+    implementation(projects.components.bsb.timer.notification.common)
+    implementation(projects.components.bsb.timer.notification.wearos)
     implementation(projects.components.bsb.timer.common)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.dao.api)
@@ -73,6 +77,7 @@ dependencies {
     implementation(libs.wear)
     implementation(libs.wear.gms)
 
+    implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.wear.foundation)
     implementation(libs.compose.wear.material)

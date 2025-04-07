@@ -32,7 +32,7 @@ class WearListenerService : WearableListenerService(), LogTagProvider {
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
         info { "#onMessageReceived ${messageEvent.path}" }
-        receivePingMessage(messageEvent)
+        receiveMessage(messageEvent)
     }
 
     @Suppress("CyclomaticComplexMethod")
@@ -48,7 +48,7 @@ class WearListenerService : WearableListenerService(), LogTagProvider {
         }
     }
 
-    private fun receivePingMessage(messageEvent: MessageEvent) = runCatching {
+    private fun receiveMessage(messageEvent: MessageEvent) = runCatching {
         val message = messageEvent.toMessage() ?: return@runCatching
         wearMessageConsumer.consume(
             message = message,
