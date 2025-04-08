@@ -83,8 +83,8 @@ dependencies {
     implementation(libs.wear)
     implementation(libs.wear.gms)
     implementation(libs.constraintlayout)
-    debugImplementation(compose.preview)
-    debugImplementation(libs.compose.wear.preview)
+    implementation(compose.preview)
+    implementation(libs.compose.wear.preview)
 
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.activity.compose)
