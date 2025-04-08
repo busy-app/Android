@@ -14,7 +14,6 @@ import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
 import com.flipperdevices.bsb.wear.messenger.producer.DataClientMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.WearDataLayerRegistryMessageProducer
-import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.di.KIProvider

@@ -8,7 +8,7 @@ import com.flipperdevices.core.log.error
 import com.google.android.gms.wearable.DataItem
 
 @Suppress("CyclomaticComplexMethod")
- fun DataItem.toMessage() = when (uri.path) {
+fun DataItem.toMessage() = when (uri.path) {
     TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
     TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer
 

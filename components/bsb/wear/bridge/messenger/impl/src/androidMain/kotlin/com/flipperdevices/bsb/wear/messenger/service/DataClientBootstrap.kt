@@ -1,7 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.service
 
-import android.content.Context
-import android.content.Intent
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.util.toMessage
 import com.flipperdevices.core.di.AppGraph

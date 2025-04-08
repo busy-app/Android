@@ -11,7 +11,6 @@ import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
-import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
 import com.google.android.gms.wearable.DataItem
 import com.google.android.gms.wearable.MessageEvent
@@ -38,7 +37,6 @@ class WearListenerService : WearableListenerService(), LogTagProvider {
         info { "#onMessageReceived ${messageEvent.path}" }
         receiveMessage(messageEvent)
     }
-
 
     @Suppress("CyclomaticComplexMethod")
     private fun MessageEvent.toMessage() = when (this.path) {
