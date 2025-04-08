@@ -47,6 +47,7 @@ import kotlin.time.Duration.Companion.seconds
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, WearMessageSyncService::class)
+@Suppress("LongParameterList")
 class AndroidWearMessageSyncService(
     timerApiProvider: KIProvider<TimerApi>,
     timerSettingsApiProvider: KIProvider<TimerSettingsApi>,
