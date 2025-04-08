@@ -1,6 +1,5 @@
 package com.flipperdevices.bsbwearable.di
 
-import com.flipperdevices.bsb.wear.messenger.service.DataClientBootstrap
 import com.flipperdevices.bsb.wear.messenger.service.WearMessageSyncService
 import com.flipperdevices.bsbwearable.root.api.RootDecomposeComponent
 import com.russhwolf.settings.ObservableSettings
@@ -16,5 +15,4 @@ interface AppComponent {
 
     val rootDecomposeComponentFactory: RootDecomposeComponent.Factory
     val wearMessageSyncService: WearMessageSyncService
-    val dataClientBootstrap: DataClientBootstrap
 }

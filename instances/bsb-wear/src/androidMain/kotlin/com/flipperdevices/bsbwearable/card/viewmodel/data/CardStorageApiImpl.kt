@@ -2,7 +2,9 @@ package com.flipperdevices.bsbwearable.card.viewmodel.data
 
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
+import com.flipperdevices.bsb.wear.messenger.krate.CloudWearOSTimerSettingsKrate
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
+import com.flipperdevices.bsbwearable.card.viewmodel.krate.ComposedTimerSettingsKrate
 import com.flipperdevices.bsbwearable.card.viewmodel.krate.StorageTimerSettingsKrate
 import com.flipperdevices.core.di.AppGraph
 import com.russhwolf.settings.ObservableSettings
@@ -22,17 +24,21 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class CardStorageApiImpl(
     scope: CoroutineScope,
     wearMessageConsumer: WearMessageConsumer,
-    settings: ObservableSettings
+    settings: ObservableSettings,
+    cloudWearOSTimerSettingsKrate: CloudWearOSTimerSettingsKrate
 ) : CardStorageApi {
-    private val storageTimerSettingsKrate = StorageTimerSettingsKrate(settings)
+    private val timerSettingsKrate = ComposedTimerSettingsKrate(
+        dataClientTimerSettingsKrate = cloudWearOSTimerSettingsKrate,
+        storageTimerSettingsKrate = StorageTimerSettingsKrate(settings)
+    )
 
-    override val settingFlow = storageTimerSettingsKrate.stateFlow(scope)
+    override val settingFlow = timerSettingsKrate.stateFlow(scope)
 
     init {
         wearMessageConsumer.bMessageFlow
             .filterIsInstance<TimerSettingsMessage>()
             .onEach { timerSettingsMessage ->
-                storageTimerSettingsKrate.update {
+                timerSettingsKrate.update {
                     timerSettingsMessage.instance.toImmutableList()
                 }
             }.launchIn(scope)

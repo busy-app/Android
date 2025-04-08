@@ -18,11 +18,11 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @OptIn(ExperimentalHorologistApi::class)
 @Inject
 @SingleIn(AppGraph::class)
-@ContributesBinding(AppGraph::class, WearDataLayerRegistryMessageProducer::class)
+@ContributesBinding(AppGraph::class, WearMessageProducer::class)
 class WearDataLayerRegistryMessageProducerImpl(
     private val wearDataLayerRegistry: WearDataLayerRegistry,
     private val wearConnectionApi: GmsWearConnectionApi,
-) : WearDataLayerRegistryMessageProducer, LogTagProvider {
+) : WearMessageProducer, LogTagProvider {
     override val TAG: String = "WearDataLayerRegistryMessageProducer"
 
     override suspend fun <T> produce(

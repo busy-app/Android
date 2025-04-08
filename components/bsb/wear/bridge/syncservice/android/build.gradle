@@ -26,4 +26,6 @@ androidDependencies {
     implementation(libs.kotlin.coroutines.gplayservices)
     implementation(libs.androidx.lifecycle)
     implementation(libs.kotlin.datetime)
+    implementation(libs.kotlin.immutable)
+    implementation(libs.klibs.kstorage)
 }

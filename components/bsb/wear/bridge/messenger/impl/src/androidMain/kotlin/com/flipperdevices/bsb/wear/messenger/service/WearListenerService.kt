@@ -5,13 +5,12 @@ import com.flipperdevices.bsb.wear.messenger.di.WearDataLayerModule
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
-import com.flipperdevices.bsb.wear.messenger.util.toMessage
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
+import com.google.android.gms.wearable.DataEvent
 import com.google.android.gms.wearable.DataEventBuffer
-import com.google.android.gms.wearable.DataItem
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
 import kotlinx.coroutines.CoroutineScope
@@ -38,6 +37,18 @@ class WearListenerService : WearableListenerService(), LogTagProvider {
     }
 
     @Suppress("CyclomaticComplexMethod")
+    private fun DataEvent.toMessage() = when (this.dataItem.uri.path) {
+        TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
+        TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer
+
+        TimerSettingsMessage.serializer.path -> TimerSettingsMessage.serializer
+        else -> {
+            error { "#toMessage could not handle wear message ${this.dataItem.uri.path}" }
+            null
+        }
+    }
+
+    @Suppress("CyclomaticComplexMethod")
     private fun MessageEvent.toMessage() = when (this.path) {
         TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
         TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer
@@ -49,11 +60,13 @@ class WearListenerService : WearableListenerService(), LogTagProvider {
         }
     }
 
-    fun onDataItems(dataItems: List<DataItem>) {
-        dataItems.onEach { dataItem ->
-            val message = dataItem.toMessage() ?: return@onEach
-            val byteArray = dataItem.data ?: run {
-                error { "#onDataChanged got empty data for ${dataItem.uri}" }
+    override fun onDataChanged(events: DataEventBuffer) {
+        super.onDataChanged(events)
+
+        events.onEach { event ->
+            val message = event.toMessage() ?: return@onEach
+            val byteArray = event.dataItem.data ?: run {
+                error { "#onDataChanged got empty data for ${event.dataItem.uri}" }
                 return@onEach
             }
             runCatching {
@@ -63,12 +76,6 @@ class WearListenerService : WearableListenerService(), LogTagProvider {
                 )
             }.onFailure { error(it) { "#onDataChanged could not consume message" } }
         }
-    }
-
-    override fun onDataChanged(events: DataEventBuffer) {
-        super.onDataChanged(events)
-        val dataItems = events.map { it.dataItem }
-        onDataItems(dataItems)
     }
 
     private fun receiveMessage(messageEvent: MessageEvent) = runCatching {

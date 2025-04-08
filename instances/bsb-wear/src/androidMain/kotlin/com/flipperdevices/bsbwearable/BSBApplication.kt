@@ -36,7 +36,6 @@ internal class BSBApplication : Application() {
 
         Timber.plant(Timber.DebugTree())
         wearAppComponent.wearMessageSyncService.onCreate()
-        wearAppComponent.dataClientBootstrap.onCreate()
     }
 
     override fun onTerminate() {

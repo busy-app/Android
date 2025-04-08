@@ -7,12 +7,12 @@ import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
+import com.flipperdevices.bsb.wear.messenger.krate.CloudWearOSTimerSettingsKrate
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
-import com.flipperdevices.bsb.wear.messenger.producer.DataClientMessageProducer
-import com.flipperdevices.bsb.wear.messenger.producer.WearDataLayerRegistryMessageProducer
+import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.di.KIProvider
@@ -20,6 +20,7 @@ import com.flipperdevices.core.di.provideDelegate
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.ktx.common.pmap
 import com.flipperdevices.core.log.info
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -44,15 +45,14 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, WearMessageSyncService::class)
-@Suppress("LongParameterList")
 class AndroidWearMessageSyncService(
     timerApiProvider: KIProvider<TimerApi>,
     timerSettingsApiProvider: KIProvider<TimerSettingsApi>,
     appBlockerApiProvider: KIProvider<CardAppBlockerApi>,
     wearConnectionApiProvider: KIProvider<WearConnectionApi>,
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
-    wearDataLayerRegistryMessageProducerProvider: KIProvider<WearDataLayerRegistryMessageProducer>,
-    dataClientMessageProducerProvider: KIProvider<DataClientMessageProducer>,
+    wearMessageProducerProvider: KIProvider<WearMessageProducer>,
+    private val cloudWearOSTimerSettingsKrateProvider: KIProvider<CloudWearOSTimerSettingsKrate>
 ) : WearMessageSyncService {
     override val TAG = "AndroidWearMessageSyncService"
 
@@ -62,8 +62,7 @@ class AndroidWearMessageSyncService(
     private val wearConnectionApi by wearConnectionApiProvider
 
     private val wearMessageConsumer by wearMessageConsumerProvider
-    private val wearDataLayerRegistryMessageProducer by wearDataLayerRegistryMessageProducerProvider
-    private val dataClientMessageProducer by dataClientMessageProducerProvider
+    private val wearMessageProducer by wearMessageProducerProvider
 
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
     private val jobs = mutableListOf<Job>()
@@ -74,7 +73,7 @@ class AndroidWearMessageSyncService(
     ) {
         val timerTimestampNonNull = timerTimestamp ?: timerApi.getTimestampState().first()
         val message = TimerTimestampMessage(timerTimestampNonNull)
-        wearDataLayerRegistryMessageProducer.produce(message)
+        wearMessageProducer.produce(message)
     }
 
     private suspend fun sendTimerSettingsMessage(
@@ -87,8 +86,9 @@ class AndroidWearMessageSyncService(
                     blockedAppCount = appBlockerApi.getBlockedAppCount(settings.id).first()
                 )
             }
+        cloudWearOSTimerSettingsKrateProvider.invoke().save(settings.toImmutableList())
         val message = TimerSettingsMessage(settings)
-        dataClientMessageProducer.produce(message)
+        wearMessageProducer.produce(message)
     }
 
     private fun startSettingsChangeJob(): Job {
@@ -109,9 +109,7 @@ class AndroidWearMessageSyncService(
                 }
             }
             .onEach {
-                sendTimerSettingsMessage(
-                    timerSettingsList = it
-                )
+                sendTimerSettingsMessage(timerSettingsList = it)
             }.launchIn(scope)
     }
 

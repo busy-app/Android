@@ -2,12 +2,16 @@ package com.flipperdevices.bsbwearable.card.viewmodel.krate
 
 import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
 import com.flipperdevices.bsb.wear.messenger.serializer.JsonWearMessageSerializer
+import com.google.android.gms.wearable.DataClient
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.coroutines.toFlowSettings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import ru.astrainteractive.klibs.kstorage.suspend.flow.FlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.suspend.impl.DefaultFlowMutableKrate
@@ -36,3 +40,4 @@ class StorageTimerSettingsKrate(
         settings.putString(KEY, string)
     }
 )
+

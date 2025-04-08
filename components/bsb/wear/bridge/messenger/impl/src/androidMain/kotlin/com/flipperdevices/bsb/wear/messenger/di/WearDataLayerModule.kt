@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.wear.messenger.di
 
 import android.content.Context
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
+import com.flipperdevices.bsb.wear.messenger.krate.CloudWearOSTimerSettingsKrate
 import com.flipperdevices.core.di.AppGraph
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.ChannelClient
@@ -58,5 +59,4 @@ interface WearDataLayerModule {
     }
 
     val wearMessageConsumer: WearMessageConsumer
-    val dataClient: DataClient
 }
