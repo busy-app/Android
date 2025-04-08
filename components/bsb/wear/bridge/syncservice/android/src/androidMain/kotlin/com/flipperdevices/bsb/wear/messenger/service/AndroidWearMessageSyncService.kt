@@ -80,7 +80,6 @@ class AndroidWearMessageSyncService(
     }
 
     private suspend fun sendTimerSettingsMessage(
-        wearMessageProducer: WearMessageProducer,
         timerSettingsList: List<WearOSTimerSettings>? = null
     ) {
         val settings = timerSettingsList ?: timerSettingsApi.getTimerSettingsListFlow().first()
@@ -91,7 +90,7 @@ class AndroidWearMessageSyncService(
                 )
             }
         val message = TimerSettingsMessage(settings)
-        wearMessageProducer.produce(message)
+        dataClientMessageProducer.produce(message)
     }
 
     private fun startSettingsChangeJob(): Job {
@@ -113,7 +112,6 @@ class AndroidWearMessageSyncService(
             }
             .onEach {
                 sendTimerSettingsMessage(
-                    wearMessageProducer = wearDataLayerRegistryMessageProducer,
                     timerSettingsList = it
                 )
             }.launchIn(scope)
@@ -130,7 +128,7 @@ class AndroidWearMessageSyncService(
             .filterIsInstance<WearConnectionApi.Status.Connected>()
             .onEach {
                 sendTimerTimestampMessage()
-                sendTimerSettingsMessage(dataClientMessageProducer)
+                sendTimerSettingsMessage()
             }.launchIn(scope)
     }
 
@@ -145,7 +143,7 @@ class AndroidWearMessageSyncService(
                     }
 
                     TimerSettingsRequestMessage -> {
-                        sendTimerSettingsMessage(dataClientMessageProducer)
+                        sendTimerSettingsMessage()
                     }
 
                     is TimerSettingsMessage -> Unit

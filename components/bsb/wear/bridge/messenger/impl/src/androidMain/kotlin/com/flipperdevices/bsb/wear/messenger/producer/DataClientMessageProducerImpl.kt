@@ -28,6 +28,7 @@ class DataClientMessageProducerImpl(
         val byteArray = message.encode(value)
         val request = PutDataRequest.create(message.path).apply {
             data = byteArray
+            setUrgent()
         }
         runCatching {
             dataClient.putDataItem(request).await()

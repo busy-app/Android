@@ -58,4 +58,5 @@ interface WearDataLayerModule {
     }
 
     val wearMessageConsumer: WearMessageConsumer
+    val dataClient: DataClient
 }

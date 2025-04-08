@@ -18,8 +18,12 @@ import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.di.KIProvider
 import com.flipperdevices.core.di.provideDelegate
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
+import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
 import com.flipperdevices.core.vibrator.api.BVibratorApi
+import com.google.android.gms.wearable.DataClient
+import com.google.android.gms.wearable.DataEvent
+import com.google.android.gms.wearable.DataItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -37,6 +41,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.tasks.await
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
@@ -52,6 +57,7 @@ class WearWearMessageSyncService(
     wearDataLayerRegistryMessageProducerProvider: KIProvider<WearDataLayerRegistryMessageProducer>,
     dataClientMessageProducerProvider: KIProvider<DataClientMessageProducer>,
     vibratorProvider: KIProvider<BVibratorApi>,
+    dataClientProvider: KIProvider<DataClient>
 ) : WearMessageSyncService {
     override val TAG = "WearWearMessageSyncService"
 
@@ -62,6 +68,7 @@ class WearWearMessageSyncService(
     private val wearDataLayerRegistryMessageProducer by wearDataLayerRegistryMessageProducerProvider
     private val dataClientMessageProducer by dataClientMessageProducerProvider
     private val vibrator by vibratorProvider
+    private val dataClient by dataClientProvider
 
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
     private val jobs = mutableListOf<Job>()
@@ -141,6 +148,18 @@ class WearWearMessageSyncService(
                     }
                 }
             }.launchIn(scope)
+    }
+
+    private fun DataItem.toMessage() = when (uri.path) {
+        TimerTimestampRequestMessage.serializer.path -> TimerTimestampRequestMessage.serializer
+        TimerTimestampMessage.Companion.serializer.path -> TimerTimestampMessage.Companion.serializer
+
+        TimerSettingsMessage.serializer.path -> TimerSettingsMessage.serializer
+        TimerSettingsRequestMessage.serializer.path -> TimerSettingsRequestMessage.serializer
+        else -> {
+            error { "#toMessage could not handle wear message ${uri.path}" }
+            null
+        }
     }
 
     override fun onCreate() {
