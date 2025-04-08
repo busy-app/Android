@@ -6,6 +6,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -19,24 +20,17 @@ class ComposedTimerSettingsKrate(
     factory = { persistentListOf() },
     loader = {
         channelFlow {
-            val emitCheck = MutableStateFlow<Boolean>(false)
+            // We don't want to load old local storage when already have newer cloud settings
+            val hasDataClientEmit = MutableStateFlow(false)
             dataClientTimerSettingsKrate.flow
                 .onEach {
-                    if (emitCheck.first()) {
-                        emitCheck.emit(false)
-                        return@onEach
-                    }
+                    hasDataClientEmit.emit(true)
                     send(it)
                 }.launchIn(this)
 
             storageTimerSettingsKrate.flow
-                .onEach {
-                    if (emitCheck.first()) {
-                        emitCheck.emit(false)
-                        return@onEach
-                    }
-                    send(it)
-                }.launchIn(this)
+                .filter { !hasDataClientEmit.first() }
+                .onEach { send(it) }.launchIn(this)
         }
     },
     saver = saver@{ value ->
