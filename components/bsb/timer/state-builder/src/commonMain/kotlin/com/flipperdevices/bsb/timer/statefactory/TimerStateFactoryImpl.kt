@@ -179,7 +179,7 @@ class TimerStateFactoryImpl(
                     .plus(
                         other = when {
                             currentIterationData.iterationType == IterationType.Await.WAIT_AFTER_WORK -> 0
-                            currentIterationData.iterationType != IterationType.Default.WORK -> -1
+                            currentIterationData.iterationType != IterationType.Default.WORK -> 0
                             currentIterationData.iterationType == IterationType.Default.WORK -> 1
                             else -> 0
                         }
