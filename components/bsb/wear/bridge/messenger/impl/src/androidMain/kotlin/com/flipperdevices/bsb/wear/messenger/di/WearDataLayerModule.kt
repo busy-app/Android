@@ -5,6 +5,7 @@ import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.core.di.AppGraph
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.ChannelClient
+import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.Wearable
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.data.WearDataLayerRegistry
@@ -45,6 +46,15 @@ interface WearDataLayerModule {
         coroutineScope: CoroutineScope
     ): CapabilityClient {
         return Wearable.getCapabilityClient(context)
+    }
+
+    @Provides
+    @SingleIn(AppGraph::class)
+    fun provideDataClient(
+        context: Context,
+        coroutineScope: CoroutineScope
+    ): DataClient {
+        return Wearable.getDataClient(context)
     }
 
     val wearMessageConsumer: WearMessageConsumer
