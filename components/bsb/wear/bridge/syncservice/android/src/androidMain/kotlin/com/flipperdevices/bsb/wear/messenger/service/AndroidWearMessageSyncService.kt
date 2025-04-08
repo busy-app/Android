@@ -8,7 +8,6 @@ import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.krate.CloudWearOSTimerSettingsKrate
-import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
@@ -90,8 +89,6 @@ class AndroidWearMessageSyncService(
                 )
             }
         cloudWearOSTimerSettingsKrateProvider.invoke().save(settings.toImmutableList())
-        val message = TimerSettingsMessage(settings)
-        wearMessageProducer.produce(message)
     }
 
     private fun startSettingsChangeJob(): Job {
@@ -140,8 +137,6 @@ class AndroidWearMessageSyncService(
                     TimerTimestampRequestMessage -> {
                         sendTimerTimestampMessage()
                     }
-
-                    is TimerSettingsMessage -> Unit
 
                     is TimerTimestampMessage -> {
                         val old = timerApi

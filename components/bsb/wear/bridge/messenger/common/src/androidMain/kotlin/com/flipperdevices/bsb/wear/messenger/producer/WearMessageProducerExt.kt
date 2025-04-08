@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.producer
 
-import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearMessage
@@ -16,11 +15,6 @@ suspend fun WearMessageProducer.produce(message: WearMessage) {
 
         is TimerTimestampMessage -> produce(
             message = TimerTimestampMessage.serializer,
-            value = message.instance
-        )
-
-        is TimerSettingsMessage -> produce(
-            message = TimerSettingsMessage.serializer,
             value = message.instance
         )
     }
