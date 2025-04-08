@@ -9,6 +9,8 @@ import com.flipperdevices.core.log.info
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataItem
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import me.tatarka.inject.annotations.Inject
@@ -41,6 +43,12 @@ class DataClientBootstrap(
                     )
                 }.onFailure { error(it) { "#onDataChanged could not consume message" } }
             }
+
+            dataItems.map(DataItem::getUri)
+                .distinct()
+                .map(dataClient::deleteDataItems)
+                .map { task -> async { task.await() } }
+                .awaitAll()
         }
     }
 }

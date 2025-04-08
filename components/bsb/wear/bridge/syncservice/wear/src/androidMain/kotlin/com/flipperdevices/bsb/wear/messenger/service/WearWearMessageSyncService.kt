@@ -7,10 +7,8 @@ import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
-import com.flipperdevices.bsb.wear.messenger.producer.DataClientMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.WearDataLayerRegistryMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.bsb.wear.messenger.util.overflowChunked
@@ -50,7 +48,6 @@ class WearWearMessageSyncService(
     wearConnectionApiProvider: KIProvider<WearConnectionApi>,
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
     wearDataLayerRegistryMessageProducerProvider: KIProvider<WearDataLayerRegistryMessageProducer>,
-    dataClientMessageProducerProvider: KIProvider<DataClientMessageProducer>,
     vibratorProvider: KIProvider<BVibratorApi>,
 ) : WearMessageSyncService {
     override val TAG = "WearWearMessageSyncService"
@@ -60,7 +57,6 @@ class WearWearMessageSyncService(
 
     private val wearMessageConsumer by wearMessageConsumerProvider
     private val wearDataLayerRegistryMessageProducer by wearDataLayerRegistryMessageProducerProvider
-    private val dataClientMessageProducer by dataClientMessageProducerProvider
     private val vibrator by vibratorProvider
 
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
@@ -86,10 +82,7 @@ class WearWearMessageSyncService(
     private fun startAndGetClientConnectJob(): Job {
         return wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
-            .onEach {
-                dataClientMessageProducer.produce(TimerSettingsRequestMessage)
-                sendTimerTimestampMessage()
-            }
+            .onEach { sendTimerTimestampMessage() }
             .launchIn(scope)
     }
 
@@ -124,7 +117,6 @@ class WearWearMessageSyncService(
                         sendTimerTimestampMessage()
                     }
 
-                    TimerSettingsRequestMessage,
                     is TimerSettingsMessage -> Unit
 
                     is TimerTimestampMessage -> {
