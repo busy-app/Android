@@ -12,6 +12,8 @@ import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
+import com.flipperdevices.bsb.wear.messenger.producer.DataClientMessageProducer
+import com.flipperdevices.bsb.wear.messenger.producer.WearDataLayerRegistryMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.core.di.AppGraph
@@ -44,13 +46,15 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, WearMessageSyncService::class)
+@Suppress("LongParameterList")
 class AndroidWearMessageSyncService(
     timerApiProvider: KIProvider<TimerApi>,
     timerSettingsApiProvider: KIProvider<TimerSettingsApi>,
     appBlockerApiProvider: KIProvider<CardAppBlockerApi>,
     wearConnectionApiProvider: KIProvider<WearConnectionApi>,
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
-    wearMessageProducerProvider: KIProvider<WearMessageProducer>
+    wearDataLayerRegistryMessageProducerProvider: KIProvider<WearDataLayerRegistryMessageProducer>,
+    dataClientMessageProducerProvider: KIProvider<DataClientMessageProducer>,
 ) : WearMessageSyncService {
     override val TAG = "AndroidWearMessageSyncService"
 
@@ -60,7 +64,8 @@ class AndroidWearMessageSyncService(
     private val wearConnectionApi by wearConnectionApiProvider
 
     private val wearMessageConsumer by wearMessageConsumerProvider
-    private val wearMessageProducer by wearMessageProducerProvider
+    private val wearDataLayerRegistryMessageProducer by wearDataLayerRegistryMessageProducerProvider
+    private val dataClientMessageProducer by dataClientMessageProducerProvider
 
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
     private val jobs = mutableListOf<Job>()
@@ -71,10 +76,11 @@ class AndroidWearMessageSyncService(
     ) {
         val timerTimestampNonNull = timerTimestamp ?: timerApi.getTimestampState().first()
         val message = TimerTimestampMessage(timerTimestampNonNull)
-        wearMessageProducer.produce(message)
+        wearDataLayerRegistryMessageProducer.produce(message)
     }
 
     private suspend fun sendTimerSettingsMessage(
+        wearMessageProducer: WearMessageProducer,
         timerSettingsList: List<WearOSTimerSettings>? = null
     ) {
         val settings = timerSettingsList ?: timerSettingsApi.getTimerSettingsListFlow().first()
@@ -106,7 +112,10 @@ class AndroidWearMessageSyncService(
                 }
             }
             .onEach {
-                sendTimerSettingsMessage(timerSettingsList = it)
+                sendTimerSettingsMessage(
+                    wearMessageProducer = wearDataLayerRegistryMessageProducer,
+                    timerSettingsList = it
+                )
             }.launchIn(scope)
     }
 
@@ -121,7 +130,7 @@ class AndroidWearMessageSyncService(
             .filterIsInstance<WearConnectionApi.Status.Connected>()
             .onEach {
                 sendTimerTimestampMessage()
-                sendTimerSettingsMessage()
+                sendTimerSettingsMessage(dataClientMessageProducer)
             }.launchIn(scope)
     }
 
@@ -136,7 +145,7 @@ class AndroidWearMessageSyncService(
                     }
 
                     TimerSettingsRequestMessage -> {
-                        sendTimerSettingsMessage()
+                        sendTimerSettingsMessage(dataClientMessageProducer)
                     }
 
                     is TimerSettingsMessage -> Unit

@@ -14,10 +14,10 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
 @Inject
 @SingleIn(AppGraph::class)
-@ContributesBinding(AppGraph::class, WearMessageProducer::class)
-class DataClientMessageProducer(
+@ContributesBinding(AppGraph::class, DataClientMessageProducer::class)
+class DataClientMessageProducerImpl(
     private val dataClient: DataClient
-) : WearMessageProducer, LogTagProvider {
+) : DataClientMessageProducer, LogTagProvider {
     override val TAG: String = "DataClientMessageProducer"
 
     override suspend fun <T> produce(

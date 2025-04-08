@@ -10,7 +10,8 @@ import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
-import com.flipperdevices.bsb.wear.messenger.producer.WearMessageProducer
+import com.flipperdevices.bsb.wear.messenger.producer.DataClientMessageProducer
+import com.flipperdevices.bsb.wear.messenger.producer.WearDataLayerRegistryMessageProducer
 import com.flipperdevices.bsb.wear.messenger.producer.produce
 import com.flipperdevices.bsb.wear.messenger.util.overflowChunked
 import com.flipperdevices.core.di.AppGraph
@@ -48,7 +49,8 @@ class WearWearMessageSyncService(
     timerApiProvider: KIProvider<TimerApi>,
     wearConnectionApiProvider: KIProvider<WearConnectionApi>,
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
-    wearMessageProducerProvider: KIProvider<WearMessageProducer>,
+    wearDataLayerRegistryMessageProducerProvider: KIProvider<WearDataLayerRegistryMessageProducer>,
+    dataClientMessageProducerProvider: KIProvider<DataClientMessageProducer>,
     vibratorProvider: KIProvider<BVibratorApi>,
 ) : WearMessageSyncService {
     override val TAG = "WearWearMessageSyncService"
@@ -57,7 +59,8 @@ class WearWearMessageSyncService(
     private val wearConnectionApi by wearConnectionApiProvider
 
     private val wearMessageConsumer by wearMessageConsumerProvider
-    private val wearMessageProducer by wearMessageProducerProvider
+    private val wearDataLayerRegistryMessageProducer by wearDataLayerRegistryMessageProducerProvider
+    private val dataClientMessageProducer by dataClientMessageProducerProvider
     private val vibrator by vibratorProvider
 
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
@@ -71,7 +74,7 @@ class WearWearMessageSyncService(
             .getTimestampState()
             .first()
         val message = TimerTimestampMessage(timerTimestampNonNullable)
-        wearMessageProducer.produce(message)
+        wearDataLayerRegistryMessageProducer.produce(message)
     }
 
     private fun startAndGetStateChangeJob(): Job {
@@ -84,7 +87,7 @@ class WearWearMessageSyncService(
         return wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
             .onEach {
-                wearMessageProducer.produce(TimerSettingsRequestMessage)
+                dataClientMessageProducer.produce(TimerSettingsRequestMessage)
                 sendTimerTimestampMessage()
             }
             .launchIn(scope)
