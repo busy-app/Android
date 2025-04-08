@@ -2,13 +2,10 @@ package com.flipperdevices.bsbwearable.autopause.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -16,11 +13,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.tooling.preview.devices.WearDevices
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_stop
 import busystatusbar.instances.bsb_wear.generated.resources.Res
 import busystatusbar.instances.bsb_wear.generated.resources.bwau_after_rest_action
@@ -39,10 +37,10 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.button.BIconButton
+import com.google.android.horologist.compose.layout.fillMaxRectangle
 import kotlinx.datetime.Instant
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CTRes
 
 @Suppress("LongMethod")
@@ -56,23 +54,9 @@ private fun AutoPauseScreenComposable(
     onStopClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        Color(color = 0xFF000000),
-                        Color(color = 0xFF0E1448),
-                    )
-                )
-            )
-    )
-
     Column(
         modifier = modifier
-            .padding(vertical = 14.dp)
-            .fillMaxSize(),
+            .fillMaxRectangle(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -89,12 +73,12 @@ private fun AutoPauseScreenComposable(
             )
             Text(
                 text = title,
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 color = LocalCorruptedPallet.current.white.onColor,
             )
             Text(
                 text = desc,
-                fontSize = 12.sp,
+                fontSize = 10.sp,
                 color = Color(color = 0x80FFFFFF) // todo
             )
         }
@@ -116,8 +100,7 @@ private fun AutoPauseScreenComposable(
                 painter = null,
                 contentColor = LocalCorruptedPallet.current.black.onColor,
                 background = LocalCorruptedPallet.current.white.onColor,
-                fontSize = 16.sp,
-                iconSize = 12.dp,
+                fontSize = 12.sp,
                 spacedBy = 8.dp,
                 contentPadding = PaddingValues(
                     vertical = 10.dp,
@@ -169,7 +152,9 @@ internal fun AutoPauseScreenComposable(
     )
 }
 
-@Preview
+@Preview(
+    device = WearDevices.SMALL_ROUND
+)
 @Composable
 private fun PreviewAutoPauseWorkScreenComposable() {
     BusyBarThemeInternal {
@@ -187,7 +172,9 @@ private fun PreviewAutoPauseWorkScreenComposable() {
     }
 }
 
-@Preview
+@Preview(
+    device = WearDevices.SMALL_ROUND
+)
 @Composable
 private fun PreviewAutoPauseRestScreenComposable() {
     BusyBarThemeInternal {

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -62,7 +61,7 @@ private fun WearScreenEmptyComposable(
         modifier = modifier
             .fillMaxSize()
             .background(Color(color = 0xFF000000)) // todo
-            .safeDrawingPadding(),
+            .fillMaxRectangle(),
         contentAlignment = Alignment.Center
     ) {
         Text(
