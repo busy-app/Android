@@ -35,6 +35,8 @@ commonDependencies {
     implementation(projects.components.core.ui.cardFrame)
     implementation(projects.components.core.ui.picker)
     implementation(projects.components.core.ui.timeline)
+    implementation(projects.components.core.ui.text)
+    implementation(projects.components.core.ui.autosizetext)
     implementation(projects.components.core.activityholder)
     implementation(projects.components.bsb.deeplink.api)
     implementation(projects.components.bsb.deeplink.impl)
@@ -80,6 +82,8 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.wear)
     implementation(libs.wear.gms)
+    debugImplementation(compose.preview)
+    debugImplementation(libs.compose.wear.preview)
 
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.activity.compose)

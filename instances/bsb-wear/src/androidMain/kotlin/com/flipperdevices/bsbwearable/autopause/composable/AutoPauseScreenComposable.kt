@@ -19,8 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.tooling.preview.devices.WearDevices
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_stop
 import busystatusbar.instances.bsb_wear.generated.resources.Res
 import busystatusbar.instances.bsb_wear.generated.resources.bwau_after_rest_action
@@ -42,7 +44,6 @@ import com.flipperdevices.ui.button.BIconButton
 import kotlinx.datetime.Instant
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CTRes
 
 @Suppress("LongMethod")
@@ -56,19 +57,6 @@ private fun AutoPauseScreenComposable(
     onStopClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        Color(color = 0xFF000000),
-                        Color(color = 0xFF0E1448),
-                    )
-                )
-            )
-    )
-
     Column(
         modifier = modifier
             .padding(vertical = 14.dp)
@@ -169,7 +157,9 @@ internal fun AutoPauseScreenComposable(
     )
 }
 
-@Preview
+@Preview(
+    device = WearDevices.SMALL_ROUND
+)
 @Composable
 private fun PreviewAutoPauseWorkScreenComposable() {
     BusyBarThemeInternal {
@@ -187,7 +177,10 @@ private fun PreviewAutoPauseWorkScreenComposable() {
     }
 }
 
-@Preview
+
+@Preview(
+    device = WearDevices.SMALL_ROUND
+)
 @Composable
 private fun PreviewAutoPauseRestScreenComposable() {
     BusyBarThemeInternal {

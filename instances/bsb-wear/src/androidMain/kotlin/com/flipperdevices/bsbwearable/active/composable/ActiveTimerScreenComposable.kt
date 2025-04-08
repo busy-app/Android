@@ -1,5 +1,6 @@
 package com.flipperdevices.bsbwearable.active.composable
 
+import BaselineText
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,12 +23,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.tooling.preview.devices.WearDevices
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_next
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_pause
 import busystatusbar.components.bsb.timer.common.generated.resources.ic_stop
@@ -45,33 +51,15 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.bsb.timer.background.model.maxUiIterations
 import com.flipperdevices.bsb.timer.background.model.progress
+import com.flipperdevices.ui.autosizetext.AutoSizeText
 import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.button.BIconButton
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import busystatusbar.components.bsb.timer.common.generated.resources.Res as CTRes
-
-@Composable
-private fun ControlledTimerState.InProgress.Running.getBrush(): Brush {
-    return Brush.verticalGradient(
-        colors = when (this) {
-            is ControlledTimerState.InProgress.Running.Work -> listOf(
-                Color(color = 0xFF900606), // todo
-                Color(color = 0xFF430303),
-            )
-
-            is ControlledTimerState.InProgress.Running.LongRest,
-            is ControlledTimerState.InProgress.Running.Rest -> listOf(
-                Color(color = 0xFF416605), // todo
-                Color(color = 0xFF0D1500),
-            )
-        }
-    )
-}
 
 @Composable
 private fun ControlledTimerState.InProgress.Running.rememberTimeLeftText(): String {
@@ -108,14 +96,20 @@ private fun ActiveTimerScreenTitle(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = when (timerState) {
-                is ControlledTimerState.InProgress.Running.LongRest -> stringResource(Res.string.bwt_long_rest)
-                is ControlledTimerState.InProgress.Running.Rest -> stringResource(Res.string.bwt_rest)
-                is ControlledTimerState.InProgress.Running.Work -> timerState.timerSettings.name
-            },
+        val text = when (timerState) {
+            is ControlledTimerState.InProgress.Running.LongRest -> stringResource(Res.string.bwt_long_rest)
+            is ControlledTimerState.InProgress.Running.Rest -> stringResource(Res.string.bwt_rest)
+            is ControlledTimerState.InProgress.Running.Work -> timerState.timerSettings.name
+        }
+
+        BaselineText(
+            modifier = Modifier
+                .background(timerState.getStatusColor(), RoundedCornerShape(160.dp))
+                .padding(start = 10.dp, end = 10.dp, top = 2.dp, bottom = 1.dp),
+            text = text,
             fontSize = 20.sp,
-            color = LocalCorruptedPallet.current.white.onColor
+            color = LocalCorruptedPallet.current.white.onColor,
+            fontFamily = LocalBusyBarFonts.current.pragmatica
         )
         if (timerState is ControlledTimerState.InProgress.Running.Work) {
             Text(
@@ -131,6 +125,7 @@ private fun ActiveTimerScreenTitle(
                     TimerDuration.Infinite -> "${timerState.currentUiIteration}"
                 },
                 fontSize = 14.sp,
+                fontFamily = LocalBusyBarFonts.current.pragmatica,
                 color = Color(color = 0x4DFFFFFF) // todo
             )
         }
@@ -155,7 +150,6 @@ internal fun ActiveTimerScreenComposable(
             Box(
                 modifier = modifier
                     .fillMaxSize()
-                    .background(timerState.getBrush())
             )
             Column(
                 modifier = Modifier
@@ -178,23 +172,23 @@ internal fun ActiveTimerScreenComposable(
                     ) {
                         BIconButton(
                             painter = painterResource(CTRes.drawable.ic_stop),
-                            background = Color(color = 0x1AFFFFFF), // todo
+                            background = Color(color = 0x1AFFFFFF),
                             shape = CircleShape,
                             onClick = onStopClick,
-                            modifier = Modifier.size(34.dp)
+                            modifier = Modifier.size(34.dp),
                         )
-                        Text(
+                        AutoSizeText(
+                            modifier = Modifier.weight(1f)
+                                .padding(horizontal = 4.dp),
                             text = timerState.rememberTimeLeftText(),
-                            style = TextStyle(
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.W500,
-                                fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
-                                color = LocalCorruptedPallet.current.white.invert
-                            )
+                            fontWeight = FontWeight.W500,
+                            fontFamily = LocalBusyBarFonts.current.jetbrainsMono,
+                            color = LocalCorruptedPallet.current.white.invert,
+                            maxLines = 1
                         )
                         BIconButton(
                             painter = painterResource(CTRes.drawable.ic_next),
-                            background = Color(color = 0x1AFFFFFF), // todo
+                            background = Color(color = 0x1AFFFFFF),
                             shape = CircleShape,
                             onClick = onSkipClick,
                             modifier = Modifier.size(34.dp),
@@ -208,16 +202,7 @@ internal fun ActiveTimerScreenComposable(
                         LinearProgressIndicator(
                             modifier = Modifier.padding(horizontal = 14.dp),
                             progress = animateFloatAsState(timerState.progress).value,
-                            color = when (timerState) {
-                                is ControlledTimerState.InProgress.Running.LongRest,
-                                is ControlledTimerState.InProgress.Running.Rest -> Color(color = 0xFF00AC34) // todo
-                                is ControlledTimerState.InProgress.Running.Work ->
-                                    LocalCorruptedPallet
-                                        .current
-                                        .accent
-                                        .brand
-                                        .primary
-                            }
+                            color = timerState.getStatusColor()
                         )
                     }
                 }
@@ -225,7 +210,8 @@ internal fun ActiveTimerScreenComposable(
                     onClick = onPauseClick,
                     text = stringResource(Res.string.bwt_pause),
                     painter = painterResource(CTRes.drawable.ic_pause),
-                    contentColor = Color(color = 0x80FFFFFF), // todo
+                    contentColor = Color(color = 0x80FFFFFF),
+                    background = Color(color = 0x1AFFFFFF),
                     modifier = Modifier,
                     fontSize = 16.sp,
                     iconSize = 12.dp,
@@ -240,7 +226,23 @@ internal fun ActiveTimerScreenComposable(
     }
 }
 
-@Preview
+@Composable
+private fun ControlledTimerState.InProgress.Running.getStatusColor(): Color {
+    return when (this) {
+        is ControlledTimerState.InProgress.Running.LongRest,
+        is ControlledTimerState.InProgress.Running.Rest -> Color(color = 0xFF00AC34) // todo
+        is ControlledTimerState.InProgress.Running.Work ->
+            LocalCorruptedPallet
+                .current
+                .accent
+                .brand
+                .primary
+    }
+}
+
+@Preview(
+    device = WearDevices.SMALL_ROUND
+)
 @Composable
 private fun ActiveScreenComposablePreview() {
     var i by remember { mutableIntStateOf(0) }

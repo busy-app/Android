@@ -62,7 +62,7 @@ private fun WearScreenEmptyComposable(
         modifier = modifier
             .fillMaxSize()
             .background(Color(color = 0xFF000000)) // todo
-            .safeDrawingPadding(),
+            .fillMaxRectangle(),
         contentAlignment = Alignment.Center
     ) {
         Text(

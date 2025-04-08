@@ -44,14 +44,6 @@ internal fun FinishScreenComposable(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        Color(color = 0xFF000000),
-                        Color(color = 0xFF0E1448),
-                    )
-                )
-            )
     )
 
     Column(
