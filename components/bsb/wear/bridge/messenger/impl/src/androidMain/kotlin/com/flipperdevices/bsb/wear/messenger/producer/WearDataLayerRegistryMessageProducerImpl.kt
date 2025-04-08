@@ -19,7 +19,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, WearMessageProducer::class)
-class WearDataLayerRegistryMessageProducer(
+class WearDataLayerRegistryMessageProducerImpl(
     private val wearDataLayerRegistry: WearDataLayerRegistry,
     private val wearConnectionApi: GmsWearConnectionApi,
 ) : WearMessageProducer, LogTagProvider {

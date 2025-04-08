@@ -18,4 +18,6 @@ androidDependencies {
 
     implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlin.coroutines)
+    implementation(libs.klibs.kstorage)
+    implementation(libs.kotlin.immutable)
 }

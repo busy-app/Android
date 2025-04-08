@@ -20,4 +20,5 @@ androidDependencies {
     implementation(libs.google.horologist.datalayer.watch)
     implementation(libs.google.horologist.datalayer.phone)
     implementation(libs.kotlin.coroutines.gplayservices)
+    implementation(libs.kotlin.immutable)
 }

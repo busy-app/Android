@@ -7,8 +7,7 @@ import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.api.WearConnectionApi
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
-import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
-import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsRequestMessage
+import com.flipperdevices.bsb.wear.messenger.krate.CloudWearOSTimerSettingsKrate
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampMessage
 import com.flipperdevices.bsb.wear.messenger.model.TimerTimestampRequestMessage
 import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
@@ -20,6 +19,7 @@ import com.flipperdevices.core.di.provideDelegate
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.ktx.common.pmap
 import com.flipperdevices.core.log.info
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -28,6 +28,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -40,17 +41,20 @@ import kotlinx.coroutines.sync.withLock
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
+import kotlin.time.Duration.Companion.seconds
 
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, WearMessageSyncService::class)
+@Suppress("LongParameterList")
 class AndroidWearMessageSyncService(
     timerApiProvider: KIProvider<TimerApi>,
     timerSettingsApiProvider: KIProvider<TimerSettingsApi>,
     appBlockerApiProvider: KIProvider<CardAppBlockerApi>,
     wearConnectionApiProvider: KIProvider<WearConnectionApi>,
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
-    wearMessageProducerProvider: KIProvider<WearMessageProducer>
+    wearMessageProducerProvider: KIProvider<WearMessageProducer>,
+    private val cloudWearOSTimerSettingsKrateProvider: KIProvider<CloudWearOSTimerSettingsKrate>
 ) : WearMessageSyncService {
     override val TAG = "AndroidWearMessageSyncService"
 
@@ -84,8 +88,7 @@ class AndroidWearMessageSyncService(
                     blockedAppCount = appBlockerApi.getBlockedAppCount(settings.id).first()
                 )
             }
-        val message = TimerSettingsMessage(settings)
-        wearMessageProducer.produce(message)
+        cloudWearOSTimerSettingsKrateProvider.invoke().save(settings.toImmutableList())
     }
 
     private fun startSettingsChangeJob(): Job {
@@ -105,9 +108,9 @@ class AndroidWearMessageSyncService(
                     it.toList()
                 }
             }
-            .onEach {
-                sendTimerSettingsMessage(timerSettingsList = it)
-            }.launchIn(scope)
+            .debounce(timeout = 1.seconds)
+            .onEach { sendTimerSettingsMessage(it) }
+            .launchIn(scope)
     }
 
     private fun startStateChangeJob(): Job {
@@ -134,12 +137,6 @@ class AndroidWearMessageSyncService(
                     TimerTimestampRequestMessage -> {
                         sendTimerTimestampMessage()
                     }
-
-                    TimerSettingsRequestMessage -> {
-                        sendTimerSettingsMessage()
-                    }
-
-                    is TimerSettingsMessage -> Unit
 
                     is TimerTimestampMessage -> {
                         val old = timerApi
