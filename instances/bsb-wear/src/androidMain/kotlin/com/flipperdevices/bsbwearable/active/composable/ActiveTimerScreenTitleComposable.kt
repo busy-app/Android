@@ -25,7 +25,6 @@ import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.bsb.timer.background.model.maxUiIterations
 import org.jetbrains.compose.resources.stringResource
 
-
 @Composable
 fun ActiveTimerScreenTitleComposable(
     timerState: ControlledTimerState.InProgress.Running,

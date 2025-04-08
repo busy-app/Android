@@ -16,8 +16,6 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-
-@Suppress("LongMethod")
 @Composable
 internal fun ActiveTimerScreenComposable(
     timerState: ControlledTimerState,
@@ -42,9 +40,6 @@ internal fun ActiveTimerScreenComposable(
         }
     }
 }
-
-
-
 
 @Preview(
     device = WearDevices.SMALL_ROUND

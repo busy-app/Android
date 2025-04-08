@@ -1,7 +1,6 @@
 package com.flipperdevices.bsbwearable.active.composable
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +40,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
+@Suppress("LongMethod")
 fun ActiveTimerScreenContentComposable(
     timerState: ControlledTimerState.InProgress.Running,
     onPauseClick: () -> Unit,
@@ -168,7 +168,6 @@ private fun TimerLineComposable(
         }
     }
 }
-
 
 @Composable
 private fun ControlledTimerState.InProgress.Running.getStatusColor(): Color {
