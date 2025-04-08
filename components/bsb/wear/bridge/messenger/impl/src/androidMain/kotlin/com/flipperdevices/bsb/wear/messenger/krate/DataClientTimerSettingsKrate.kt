@@ -19,7 +19,6 @@ import ru.astrainteractive.klibs.kstorage.suspend.flow.FlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.suspend.impl.DefaultFlowMutableKrate
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 
-
 @Inject
 @ContributesBinding(AppGraph::class, CloudWearOSTimerSettingsKrate::class)
 class DataClientTimerSettingsKrate(

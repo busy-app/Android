@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.wear.messenger.model
 
-import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.wear.messenger.serializer.JsonWearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.JsonWearMessageSerializer
 

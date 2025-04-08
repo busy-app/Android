@@ -1,7 +1,6 @@
 package com.flipperdevices.bsbwearable.card.viewmodel.krate
 
 import com.flipperdevices.bsb.wear.messenger.krate.CloudWearOSTimerSettingsKrate
-import com.flipperdevices.bsb.wear.messenger.krate.DataClientTimerSettingsKrate
 import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -25,7 +24,7 @@ class ComposedTimerSettingsKrate(
                 .onEach {
                     if (emitCheck.first()) {
                         emitCheck.emit(false)
-                         return@onEach
+                        return@onEach
                     }
                     send(it)
                 }.launchIn(this)

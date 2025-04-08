@@ -23,4 +23,3 @@ fun DataClient.dataItemsFlow(): Flow<List<DataItem>> = callbackFlow {
         removeListener(listener)
     }
 }
-
