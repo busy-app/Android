@@ -54,6 +54,7 @@ commonDependencies {
     implementation(projects.components.bsb.wear.bridge.syncservice.wear)
 
     implementation(libs.settings)
+    implementation(libs.settings.coroutines)
     implementation(libs.timber)
 
     implementation(libs.kotlin.inject.runtime)
@@ -69,6 +70,9 @@ commonDependencies {
 
     implementation(libs.compose.haze)
     implementation(libs.compose.haze.materials)
+
+    implementation(libs.klibs.kstorage)
+    implementation(libs.kotlin.serialization.json)
 }
 
 dependencies {

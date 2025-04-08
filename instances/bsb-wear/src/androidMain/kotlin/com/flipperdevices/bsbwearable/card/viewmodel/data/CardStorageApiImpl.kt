@@ -3,17 +3,16 @@ package com.flipperdevices.bsbwearable.card.viewmodel.data
 import com.flipperdevices.bsb.wear.messenger.consumer.WearMessageConsumer
 import com.flipperdevices.bsb.wear.messenger.consumer.bMessageFlow
 import com.flipperdevices.bsb.wear.messenger.model.TimerSettingsMessage
-import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
+import com.flipperdevices.bsbwearable.card.viewmodel.krate.StorageTimerSettingsKrate
 import com.flipperdevices.core.di.AppGraph
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
+import com.russhwolf.settings.ObservableSettings
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import me.tatarka.inject.annotations.Inject
+import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 
@@ -23,18 +22,19 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class CardStorageApiImpl(
     scope: CoroutineScope,
     wearMessageConsumer: WearMessageConsumer,
+    settings: ObservableSettings
 ) : CardStorageApi {
-    private val settingsMutableFlow = MutableStateFlow(
-        persistentListOf<WearOSTimerSettings>()
-    )
+    private val storageTimerSettingsKrate = StorageTimerSettingsKrate(settings)
 
-    override val settingFlow = settingsMutableFlow.asStateFlow()
+    override val settingFlow = storageTimerSettingsKrate.stateFlow(scope)
 
     init {
         wearMessageConsumer.bMessageFlow
             .filterIsInstance<TimerSettingsMessage>()
             .onEach { timerSettingsMessage ->
-                settingsMutableFlow.emit(timerSettingsMessage.instance.toPersistentList())
+                storageTimerSettingsKrate.update {
+                    timerSettingsMessage.instance.toImmutableList()
+                }
             }.launchIn(scope)
     }
 }

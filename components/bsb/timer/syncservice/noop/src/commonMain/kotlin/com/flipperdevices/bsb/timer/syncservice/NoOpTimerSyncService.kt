@@ -8,6 +8,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, TimerSyncService::class)
-interface NoOpTimerSyncService : TimerSyncService {
+class NoOpTimerSyncService : TimerSyncService {
     override fun onCreate() = Unit
 }
