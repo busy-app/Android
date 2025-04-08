@@ -4,8 +4,6 @@ import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
 import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettingsMessage
 import com.flipperdevices.bsb.wear.messenger.util.dataItemsFlow
 import com.flipperdevices.core.di.AppGraph
-import com.flipperdevices.core.log.TaggedLogger
-import com.flipperdevices.core.log.info
 import com.google.android.gms.wearable.DataClient
 import com.google.android.gms.wearable.DataItem
 import com.google.android.gms.wearable.PutDataRequest
@@ -13,7 +11,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import me.tatarka.inject.annotations.Inject
 import ru.astrainteractive.klibs.kstorage.suspend.flow.FlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.suspend.impl.DefaultFlowMutableKrate
@@ -28,7 +25,6 @@ class DataClientTimerSettingsKrate(
         factory = { persistentListOf() },
         loader = {
             dataClient.dataItemsFlow()
-                .onEach { TaggedLogger("MAKEEVRSERG").info { "Got ${it.size} messages" } }
                 .map { dataItem -> dataItem.filter { it.uri.path == WearOSTimerSettingsMessage.serializer.path } }
                 .map { dataItem ->
                     dataItem
