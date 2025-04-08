@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.wear)
     implementation(libs.wear.gms)
+    implementation(libs.constraintlayout)
     debugImplementation(compose.preview)
     debugImplementation(libs.compose.wear.preview)
 

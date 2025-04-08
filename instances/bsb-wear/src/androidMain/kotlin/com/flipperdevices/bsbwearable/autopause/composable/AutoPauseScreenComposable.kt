@@ -41,6 +41,7 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.ui.button.BChipButton
 import com.flipperdevices.ui.button.BIconButton
+import com.google.android.horologist.compose.layout.fillMaxRectangle
 import kotlinx.datetime.Instant
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -59,8 +60,7 @@ private fun AutoPauseScreenComposable(
 ) {
     Column(
         modifier = modifier
-            .padding(vertical = 14.dp)
-            .fillMaxSize(),
+            .fillMaxRectangle(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -77,12 +77,12 @@ private fun AutoPauseScreenComposable(
             )
             Text(
                 text = title,
-                fontSize = 20.sp,
+                fontSize = 16.sp,
                 color = LocalCorruptedPallet.current.white.onColor,
             )
             Text(
                 text = desc,
-                fontSize = 12.sp,
+                fontSize = 10.sp,
                 color = Color(color = 0x80FFFFFF) // todo
             )
         }
@@ -104,8 +104,7 @@ private fun AutoPauseScreenComposable(
                 painter = null,
                 contentColor = LocalCorruptedPallet.current.black.onColor,
                 background = LocalCorruptedPallet.current.white.onColor,
-                fontSize = 16.sp,
-                iconSize = 12.dp,
+                fontSize = 12.sp,
                 spacedBy = 8.dp,
                 contentPadding = PaddingValues(
                     vertical = 10.dp,
