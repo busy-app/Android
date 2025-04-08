@@ -29,6 +29,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -41,6 +42,7 @@ import kotlinx.coroutines.sync.withLock
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
+import kotlin.time.Duration.Companion.seconds
 
 @Inject
 @SingleIn(AppGraph::class)
@@ -108,9 +110,9 @@ class AndroidWearMessageSyncService(
                     it.toList()
                 }
             }
-            .onEach {
-                sendTimerSettingsMessage(timerSettingsList = it)
-            }.launchIn(scope)
+            .debounce(timeout = 1.seconds)
+            .onEach { sendTimerSettingsMessage(it) }
+            .launchIn(scope)
     }
 
     private fun startStateChangeJob(): Job {
