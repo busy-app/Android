@@ -1,0 +1,19 @@
+plugins {
+    id("flipper.multiplatform")
+    id("flipper.multiplatform-dependencies")
+    id("flipper.anvil-multiplatform")
+}
+
+commonDependencies {
+    implementation(projects.components.core.di)
+    implementation(projects.components.core.log)
+    implementation(libs.kotlin.datetime)
+    implementation(libs.kotlin.coroutines)
+    implementation(libs.kotlin.coroutines.gplayservices)
+}
+
+androidDependencies {
+    implementation(projects.components.core.trustedClock.api)
+
+    implementation(libs.gms.time)
+}

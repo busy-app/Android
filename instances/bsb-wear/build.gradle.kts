@@ -38,6 +38,7 @@ commonDependencies {
     implementation(projects.components.core.ui.text)
     implementation(projects.components.core.ui.autosizetext)
     implementation(projects.components.core.activityholder)
+    implementation(projects.components.core.trustedClock.api)
     implementation(projects.components.bsb.deeplink.api)
     implementation(projects.components.bsb.deeplink.impl)
     implementation(projects.components.bsb.core.theme)
@@ -99,6 +100,8 @@ dependencies {
 
     implementation(libs.google.horologist.datalayer)
     implementation(libs.google.horologist.datalayer.watch)
+
+    implementation(projects.components.core.trustedClock.google)
 }
 
 dependencies {

@@ -69,14 +69,17 @@ kotlin {
                 implementation(libs.google.horologist.datalayer)
                 implementation(libs.google.horologist.datalayer.phone)
                 implementation(projects.components.bsb.timer.syncservice.firebase)
+                implementation(projects.components.core.trustedClock.google)
             } else {
                 implementation(projects.components.bsb.wear.bridge.syncservice.api)
                 implementation(projects.components.bsb.wear.bridge.syncservice.noop)
                 implementation(projects.components.bsb.timer.syncservice.noop)
+                implementation(projects.components.core.trustedClock.kotlinx)
             }
         }
         commonMain.dependencies {
             implementation(projects.components.core.focusDisplay)
+            implementation(projects.components.core.trustedClock.api)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -103,6 +106,7 @@ kotlin {
             implementation(projects.components.core.ui.timeline)
             implementation(projects.components.bsb.analytics.metric.noop)
             implementation(projects.components.bsb.timer.syncservice.socket)
+            implementation(projects.components.core.trustedClock.kotlinx)
         }
         iosMain.dependencies {
             api(libs.decompose)
@@ -113,6 +117,7 @@ kotlin {
             implementation(libs.settings.observable)
             implementation(projects.components.bsb.analytics.metric.noop)
             implementation(projects.components.bsb.timer.syncservice.noop)
+            implementation(projects.components.core.trustedClock.kotlinx)
         }
     }
 }

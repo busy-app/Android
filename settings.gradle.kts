@@ -57,6 +57,9 @@ include(
     ":components:core:ui:video",
     ":components:core:ui:autosizetext",
     ":components:core:ui:text",
+    ":components:core:trusted-clock:api",
+    ":components:core:trusted-clock:google",
+    ":components:core:trusted-clock:kotlinx",
 
     ":components:bsb:core:theme",
     ":components:bsb:core:res",

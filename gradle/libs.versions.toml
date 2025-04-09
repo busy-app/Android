@@ -55,6 +55,7 @@ compose-wear-preview = "1.0.0" # https://mvnrepository.com/artifact/androidx.wea
 haze = "1.5.2"
 sentry-runtime = "8.6.0" # https://github.com/getsentry/sentry-java/releases
 sentry-gradle = "5.3.0" # https://github.com/getsentry/sentry-android-gradle-plugin/releases
+gms-time = "16.0.1" # https://developers.google.com/location-context/time
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -149,6 +150,7 @@ wear-gms = { module = "com.google.android.gms:play-services-wearable", version.r
 wear-interaction-phone = { module = "androidx.wear:wear-phone-interactions", version.ref = "wear-interaction-phone" }
 wear-interaction-remote = { module = "androidx.wear:wear-remote-interactions", version.ref = "wear-interaction-remote" }
 wear-ongoing = { module = "androidx.wear:wear-ongoing", version.ref = "wear-ongoing" }
+
 # wear - ui
 compose-wear-material = { module = "androidx.wear.compose:compose-material", version.ref = "compose-wear" }
 compose-wear-foundation = { module = "androidx.wear.compose:compose-foundation", version.ref = "compose-wear" }
@@ -157,6 +159,7 @@ horologist-layout = { module = "com.google.android.horologist:horologist-compose
 google-horologist-datalayer = { module = "com.google.android.horologist:horologist-datalayer", version.ref = "horologist" }
 google-horologist-datalayer-watch = { module = "com.google.android.horologist:horologist-datalayer-watch", version.ref = "horologist" }
 google-horologist-datalayer-phone = { module = "com.google.android.horologist:horologist-datalayer-phone", version.ref = "horologist" }
+gms-time = { module = "com.google.android.gms:play-services-time", version.ref = "gms-time" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

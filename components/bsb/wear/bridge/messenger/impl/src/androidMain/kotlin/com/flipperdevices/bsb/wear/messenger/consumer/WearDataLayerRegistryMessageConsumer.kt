@@ -4,7 +4,6 @@ import com.flipperdevices.bsb.wear.messenger.serializer.DecodedWearMessage
 import com.flipperdevices.bsb.wear.messenger.serializer.WearMessageSerializer
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn

@@ -15,9 +15,9 @@ import com.flipperdevices.bsb.timer.background.service.TimerServiceBinder
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
+import com.flipperdevices.core.trustedclock.TrustedClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -43,6 +43,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class AndroidTimerApi(
     private val scope: CoroutineScope,
     private val context: Context,
+    override val trustedClock: TrustedClock
 ) : TimerApi, ServiceConnection, LogTagProvider {
     override val TAG = "AndroidTimerApi"
 

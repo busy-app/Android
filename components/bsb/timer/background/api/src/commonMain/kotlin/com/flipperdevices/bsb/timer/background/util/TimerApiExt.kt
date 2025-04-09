@@ -5,7 +5,6 @@ import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.seconds
 
 private fun TimerApi.updateState(
@@ -22,8 +21,8 @@ fun TimerApi.pause() {
             is TimerTimestamp.Running -> {
                 if (state.pause == null) {
                     state.copy(
-                        pause = Clock.System.now(),
-                        lastSync = Clock.System.now()
+                        pause = trustedClock.now(),
+                        lastSync = trustedClock.now()
                     )
                 } else {
                     state
@@ -40,9 +39,9 @@ fun TimerApi.confirmNextStep() {
             is TimerTimestamp.Pending -> state
             is TimerTimestamp.Running -> {
                 state.copy(
-                    confirmNextStepClick = Clock.System.now().plus(1.seconds),
-                    start = state.start.plus(Clock.System.now().minus(awaitState.pausedAt)),
-                    lastSync = Clock.System.now()
+                    confirmNextStepClick = trustedClock.now().plus(1.seconds),
+                    start = state.start.plus(trustedClock.now().minus(awaitState.pausedAt)),
+                    lastSync = trustedClock.now()
                 )
             }
         }
@@ -55,12 +54,12 @@ fun TimerApi.resume() {
             is TimerTimestamp.Pending -> state
             is TimerTimestamp.Running -> {
                 if (state.pause != null) {
-                    val diff = Clock.System.now() - state.pause
+                    val diff = trustedClock.now() - state.pause
                     state.copy(
                         pause = null,
                         start = state.start.plus(diff),
                         confirmNextStepClick = state.confirmNextStepClick.plus(diff),
-                        lastSync = Clock.System.now()
+                        lastSync = trustedClock.now()
                     )
                 } else {
                     state
@@ -87,7 +86,7 @@ fun TimerApi.skip() {
                     is TimerDuration.Finite -> {
                         state.copy(
                             start = state.start.minus(localTimeLeft.instance),
-                            lastSync = Clock.System.now()
+                            lastSync = trustedClock.now()
                         )
                     }
 
@@ -104,7 +103,9 @@ fun TimerApi.startWith(settings: TimerSettings) {
     setTimestampState(
         state = TimerTimestamp.Running(
             settings = settings,
-            lastSync = Clock.System.now()
+            lastSync = trustedClock.now(),
+            start = trustedClock.now(),
+            noOffsetStart = trustedClock.now()
         ),
     )
 }
