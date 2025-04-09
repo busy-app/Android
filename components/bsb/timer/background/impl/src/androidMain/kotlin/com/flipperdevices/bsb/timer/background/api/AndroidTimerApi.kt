@@ -15,9 +15,11 @@ import com.flipperdevices.bsb.timer.background.service.TimerServiceBinder
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
+import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +28,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.encodeToString
@@ -62,11 +65,12 @@ class AndroidTimerApi(
 
         val intent = Intent(context, TimerForegroundService::class.java)
         intent.setAction(TimerServiceActionEnum.START.actionId)
-        runBlocking { timerTimestampFlow.emit(state) }
+
         intent.putExtra(EXTRA_KEY_TIMER_STATE, Json.encodeToString(state))
         context.startService(intent)
-        runBlocking {
+        scope.launch(Dispatchers.IO) {
             withLock(mutex) {
+                timerTimestampFlow.emit(state)
                 if (binderListenerJob == null) {
                     val bindSuccessful = context.bindService(
                         Intent(context, TimerForegroundService::class.java),
@@ -108,7 +112,7 @@ class AndroidTimerApi(
             error { "Try to connect with $name failed because binder is not TimerServiceBinder" }
             return
         }
-        runBlocking {
+        scope.launch {
             withLock(mutex) {
                 binderListenerJob = getJob(timerBinder)
             }
