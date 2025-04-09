@@ -8,7 +8,6 @@ import com.flipperdevices.bsb.timer.statefactory.TimerStateFactory
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
-import com.flipperdevices.core.trustedclock.TrustedClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
@@ -30,7 +29,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class CommonTimerApi(
     private val scope: CoroutineScope,
     private val timerStateFactory: TimerStateFactory,
-    override val trustedClock: TrustedClock,
     compositeListenersFactory: (TimerApi) -> CompositeTimerStateListener,
 ) : TimerApi, LogTagProvider {
     override val TAG = "CommonTimerApi"

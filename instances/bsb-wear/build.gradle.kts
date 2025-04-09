@@ -50,6 +50,7 @@ commonDependencies {
     implementation(projects.components.bsb.timer.notification.common)
     implementation(projects.components.bsb.timer.notification.wearos)
     implementation(projects.components.bsb.timer.common)
+    implementation(projects.components.bsb.timer.controller)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.dao.api)
     implementation(projects.components.bsb.wear.bridge.messenger.common)

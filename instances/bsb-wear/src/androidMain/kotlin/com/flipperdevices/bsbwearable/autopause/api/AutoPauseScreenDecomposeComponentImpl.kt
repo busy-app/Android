@@ -7,8 +7,7 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.util.confirmNextStep
-import com.flipperdevices.bsb.timer.background.util.stop
+import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsbwearable.autopause.composable.AutoPauseScreenComposable
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +19,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class AutoPauseScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val timerApi: TimerApi,
+    private val timerControllerApiFactory: TimerControllerApi.Factory,
 ) : AutoPauseScreenDecomposeComponent(componentContext) {
 
     private fun getTimerState(): StateFlow<ControlledTimerState> {
@@ -34,10 +34,10 @@ class AutoPauseScreenDecomposeComponentImpl(
                 AutoPauseScreenComposable(
                     state = timerState,
                     onButtonClick = {
-                        timerApi.confirmNextStep()
+                        timerControllerApiFactory(timerApi).confirmNextStep()
                     },
                     onStopClick = {
-                        timerApi.stop()
+                        timerControllerApiFactory(timerApi).stop()
                     },
                 )
             }

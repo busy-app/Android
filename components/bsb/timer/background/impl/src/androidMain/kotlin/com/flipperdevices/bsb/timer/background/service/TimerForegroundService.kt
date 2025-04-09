@@ -11,9 +11,6 @@ import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.notification.TimerBroadcastReceiver
-import com.flipperdevices.bsb.timer.background.util.confirmNextStep
-import com.flipperdevices.bsb.timer.background.util.pause
-import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.notification.ONGOING_NOTIFICATION_ID
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.android.toFullString
@@ -91,14 +88,14 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                 }
 
                 TimerServiceActionEnum.RESUME.actionId -> {
-                    delegate.resume()
+                    serviceDIComponent.timerControllerApiFactory(delegate).resume()
                 }
 
                 TimerServiceActionEnum.PAUSE.actionId -> {
-                    delegate.pause()
+                    serviceDIComponent.timerControllerApiFactory(delegate).pause()
                 }
                 TimerServiceActionEnum.NEXT_STEP.actionId -> {
-                    delegate.confirmNextStep()
+                    serviceDIComponent.timerControllerApiFactory(delegate).confirmNextStep()
                 }
             }
         } else {

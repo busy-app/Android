@@ -12,8 +12,7 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.currentUiIteration
 import com.flipperdevices.bsb.timer.background.model.maxUiIterations
-import com.flipperdevices.bsb.timer.background.util.confirmNextStep
-import com.flipperdevices.bsb.timer.background.util.stop
+import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsb.timer.delayedstart.composable.DelayedStartComposableContent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -28,7 +27,8 @@ class DelayedStartScreenDecomposeComponentImpl(
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
     @Assisted private val typeEndDelay: TypeEndDelay,
-    private val metricApi: MetricApi
+    private val metricApi: MetricApi,
+    private val timerControllerApiFactory: TimerControllerApi.Factory
 ) : DelayedStartScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
@@ -47,7 +47,7 @@ class DelayedStartScreenDecomposeComponentImpl(
                     currentIteration = state.currentUiIteration,
                     maxIteration = state.maxUiIterations,
                     onStartClick = {
-                        timerApi.confirmNextStep()
+                        timerControllerApiFactory(timerApi).confirmNextStep()
                     },
                     onFinishClick = {
                         timerApi.getTimestampState().value
@@ -57,7 +57,7 @@ class DelayedStartScreenDecomposeComponentImpl(
                                 metricApi.reportEvent(BEvent.TimerAborted(timePassed.inWholeMilliseconds))
                             }
 
-                        timerApi.stop()
+                        timerControllerApiFactory(timerApi).stop()
                     },
                 )
             }

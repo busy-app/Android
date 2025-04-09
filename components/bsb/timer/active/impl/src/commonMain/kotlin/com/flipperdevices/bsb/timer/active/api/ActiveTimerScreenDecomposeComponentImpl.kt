@@ -14,10 +14,6 @@ import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.composable.TimerBusyComposableScreen
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.util.pause
-import com.flipperdevices.bsb.timer.background.util.resume
-import com.flipperdevices.bsb.timer.background.util.skip
-import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.stop.StopSessionSheetDecomposeComponentImpl
 import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
@@ -29,6 +25,7 @@ import kotlinx.datetime.Clock
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 
 @Inject
 class ActiveTimerScreenDecomposeComponentImpl(
@@ -40,7 +37,8 @@ class ActiveTimerScreenDecomposeComponentImpl(
         onConfirm: () -> Unit
     ) -> StopSessionSheetDecomposeComponentImpl,
     focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
-    private val metricApi: MetricApi
+    private val metricApi: MetricApi,
+    private val timerControllerApiFactory: TimerControllerApi.Factory
 ) : ActiveTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
@@ -58,7 +56,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
                     metricApi.reportEvent(BEvent.TimerAborted(timePassed.inWholeMilliseconds))
                 }
 
-            timerApi.stop()
+            timerControllerApiFactory(timerApi).stop()
         }
     )
 
@@ -85,10 +83,10 @@ class ActiveTimerScreenDecomposeComponentImpl(
                                 metricApi.reportEvent(BEvent.TimerSkipped(timePassed.inWholeMilliseconds))
                             }
 
-                        timerApi.skip()
+                        timerControllerApiFactory(timerApi).skip()
                     },
                     onPauseClick = {
-                        timerApi.pause()
+                        timerControllerApiFactory(timerApi).pause()
                     },
                     onBack = {
                         stopSessionSheetDecomposeComponent.show()
@@ -97,7 +95,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
                         onStartClick = {
-                            timerApi.resume()
+                            timerControllerApiFactory(timerApi).resume()
                         }
                     )
                 }

@@ -162,6 +162,7 @@ include(
     ":components:bsb:timer:notification:android",
     ":components:bsb:timer:notification:wearos",
     ":components:bsb:timer:notification:common",
+    ":components:bsb:timer:controller",
 
     ":components:bsb:wear:bridge:messenger:api",
     ":components:bsb:wear:bridge:messenger:impl",

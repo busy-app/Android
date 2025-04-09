@@ -41,7 +41,6 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class AndroidTimerApi(
     private val scope: CoroutineScope,
     private val context: Context,
-    override val trustedClock: TrustedClock
 ) : TimerApi, ServiceConnection, LogTagProvider {
     override val TAG = "AndroidTimerApi"
 
