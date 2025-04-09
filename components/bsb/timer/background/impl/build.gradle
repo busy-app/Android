@@ -32,7 +32,6 @@ androidDependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle)
     implementation(libs.kotlin.serialization.json)
-    implementation("com.google.android.gms:play-services-time:16.0.1")
 }
 
 commonTestDependencies {

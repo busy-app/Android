@@ -19,7 +19,6 @@ import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
 import com.flipperdevices.core.trustedclock.TrustedClock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +30,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -69,7 +67,7 @@ class AndroidTimerApi(
 
         intent.putExtra(EXTRA_KEY_TIMER_STATE, Json.encodeToString(state))
         context.startService(intent)
-        scope.launch(Dispatchers.IO) {
+        scope.launch {
             withLock(mutex) {
                 if (binderListenerJob == null) {
                     val bindSuccessful = context.bindService(
