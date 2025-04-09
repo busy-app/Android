@@ -39,7 +39,17 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
     private val binder = TimerServiceBinder(delegate)
     private val notificationManager by lazy { getSystemService(NotificationManager::class.java) }
 
-    init {
+    override fun onCreate() {
+        info { "onCreate" }
+        super.onCreate()
+
+        delegate.addListener(this)
+
+        startForeground(
+            ONGOING_NOTIFICATION_ID,
+            notificationBuilder.buildStartUpNotification(applicationContext)
+        )
+
         delegate.getState()
             .onEach { state ->
                 val notification = notificationBuilder.buildNotification(
@@ -55,18 +65,6 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                     }
                 }
             }.launchIn(lifecycleScope + Dispatchers.IO)
-    }
-
-    override fun onCreate() {
-        info { "onCreate" }
-        super.onCreate()
-
-        delegate.addListener(this)
-
-        startForeground(
-            ONGOING_NOTIFICATION_ID,
-            notificationBuilder.buildStartUpNotification(applicationContext)
-        )
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
