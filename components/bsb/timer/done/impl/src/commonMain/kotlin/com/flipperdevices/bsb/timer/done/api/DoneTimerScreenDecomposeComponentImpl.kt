@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
-import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsb.timer.done.composable.DoneComposableContent
 import com.flipperdevices.core.di.AppGraph
@@ -23,8 +22,7 @@ class DoneTimerScreenDecomposeComponentImpl(
     @Assisted private val onFinishCallback: OnFinishCallback,
     @Assisted private val timerSettings: TimerSettings,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
-    private val timerApi: TimerApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory
+    private val timerControllerApi: TimerControllerApi
 ) : DoneTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
@@ -37,7 +35,7 @@ class DoneTimerScreenDecomposeComponentImpl(
             },
             onRestartClick = {
                 coroutineScope.launch {
-                    timerControllerApiFactory(timerApi).startWith(timerSettings)
+                    timerControllerApi.startWith(timerSettings)
                 }
             }
         )

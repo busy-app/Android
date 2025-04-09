@@ -10,5 +10,5 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesTo
 interface ServiceDIComponent {
     val commonTimerApi: CommonTimerApi
     val notificationBuilder: NotificationTimerBuilder
-    val timerControllerApiFactory: TimerControllerApi.Factory
+    val timerControllerApi: TimerControllerApi
 }

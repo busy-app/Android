@@ -35,7 +35,7 @@ class RestTimerScreenDecomposeComponentImpl(
     @Assisted private val breakType: BreakType,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory,
+    private val timerControllerApi: TimerControllerApi,
     focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
     stopSessionSheetDecomposeComponentFactory: (
         componentContext: ComponentContext,
@@ -59,7 +59,7 @@ class RestTimerScreenDecomposeComponentImpl(
                     metricApi.reportEvent(BEvent.TimerAborted(timePassed.inWholeMilliseconds))
                 }
 
-            timerControllerApiFactory(timerApi).stop()
+            timerControllerApi.stop()
         }
     )
 
@@ -82,7 +82,7 @@ class RestTimerScreenDecomposeComponentImpl(
                                 metricApi.reportEvent(BEvent.TimerSkipped(timePassed.inWholeMilliseconds))
                             }
 
-                        timerControllerApiFactory(timerApi).skip()
+                        timerControllerApi.skip()
                     },
                     state = state,
                     statusType = when (breakType) {
@@ -93,13 +93,13 @@ class RestTimerScreenDecomposeComponentImpl(
                         stopSessionSheetDecomposeComponent.show()
                     },
                     onPauseClick = {
-                        timerControllerApiFactory(timerApi).pause()
+                        timerControllerApi.pause()
                     }
                 )
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
                         onStartClick = {
-                            timerControllerApiFactory(timerApi).resume()
+                            timerControllerApi.resume()
                         }
                     )
                 }

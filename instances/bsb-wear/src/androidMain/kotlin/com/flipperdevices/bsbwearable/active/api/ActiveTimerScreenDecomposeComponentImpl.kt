@@ -24,7 +24,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     stopSessionDecomposeComponentFactory: StopSessionDecomposeComponent.Factory,
     private val timerApi: TimerApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory,
+    private val timerControllerApi: TimerControllerApi,
     focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
 ) : ActiveTimerScreenDecomposeComponent(componentContext) {
     private val stopSessionDecomposeComponentFactory = stopSessionDecomposeComponentFactory.invoke(
@@ -44,17 +44,17 @@ class ActiveTimerScreenDecomposeComponentImpl(
                 stopSessionDecomposeComponentFactory.show()
             },
             onSkipClick = {
-                timerControllerApiFactory(timerApi).skip()
+                timerControllerApi.skip()
             },
             onPauseClick = {
-                timerControllerApiFactory(timerApi).pause()
+                timerControllerApi.pause()
             }
         )
 
         if ((timerState as? ControlledTimerState.InProgress.Running)?.isOnPause == true) {
             PauseWearOverlayComposable(
                 onResumeClick = {
-                    timerControllerApiFactory(timerApi).resume()
+                    timerControllerApi.resume()
                 }
             )
         }

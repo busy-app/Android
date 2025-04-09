@@ -22,7 +22,6 @@ import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.root.api.LocalRootNavigation
 import com.flipperdevices.bsb.root.model.RootNavigationConfig
-import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.cards.composable.BusyCardComposable
 import com.flipperdevices.bsb.timer.cards.viewmodel.CardsViewModel
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
@@ -47,8 +46,7 @@ class CardsDecomposeComponentImpl(
     private val cardsViewModelFactory: KIProvider<CardsViewModel>,
     cardEditSheetDecomposeComponentFactory: CardEditSheetDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
-    private val timerApi: TimerApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory
+    private val timerControllerApi: TimerControllerApi
 ) : CardsDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
     private val timerSetupSheetDecomposeComponent = cardEditSheetDecomposeComponentFactory(
@@ -89,7 +87,7 @@ class CardsDecomposeComponentImpl(
                     state = ButtonTimerState.START,
                     onClick = {
                         cards.firstOrNull()?.let {
-                            timerControllerApiFactory(timerApi).startWith(it.settings)
+                            timerControllerApi.startWith(it.settings)
                         }
                     }
                 )

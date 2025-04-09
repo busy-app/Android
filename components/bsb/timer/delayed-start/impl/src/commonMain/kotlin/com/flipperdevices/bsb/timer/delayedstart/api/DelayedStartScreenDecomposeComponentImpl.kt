@@ -28,7 +28,7 @@ class DelayedStartScreenDecomposeComponentImpl(
     private val timerApi: TimerApi,
     @Assisted private val typeEndDelay: TypeEndDelay,
     private val metricApi: MetricApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory
+    private val timerControllerApi: TimerControllerApi
 ) : DelayedStartScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
@@ -47,7 +47,7 @@ class DelayedStartScreenDecomposeComponentImpl(
                     currentIteration = state.currentUiIteration,
                     maxIteration = state.maxUiIterations,
                     onStartClick = {
-                        timerControllerApiFactory(timerApi).confirmNextStep()
+                        timerControllerApi.confirmNextStep()
                     },
                     onFinishClick = {
                         timerApi.getTimestampState().value
@@ -57,7 +57,7 @@ class DelayedStartScreenDecomposeComponentImpl(
                                 metricApi.reportEvent(BEvent.TimerAborted(timePassed.inWholeMilliseconds))
                             }
 
-                        timerControllerApiFactory(timerApi).stop()
+                        timerControllerApi.stop()
                     },
                 )
             }

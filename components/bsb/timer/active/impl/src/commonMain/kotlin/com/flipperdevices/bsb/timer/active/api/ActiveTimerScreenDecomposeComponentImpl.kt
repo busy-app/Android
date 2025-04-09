@@ -39,7 +39,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
     ) -> StopSessionSheetDecomposeComponentImpl,
     focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
     private val metricApi: MetricApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory
+    private val timerControllerApi: TimerControllerApi
 ) : ActiveTimerScreenDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
 
@@ -57,7 +57,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
                     metricApi.reportEvent(BEvent.TimerAborted(timePassed.inWholeMilliseconds))
                 }
 
-            timerControllerApiFactory(timerApi).stop()
+            timerControllerApi.stop()
         }
     )
 
@@ -84,10 +84,10 @@ class ActiveTimerScreenDecomposeComponentImpl(
                                 metricApi.reportEvent(BEvent.TimerSkipped(timePassed.inWholeMilliseconds))
                             }
 
-                        timerControllerApiFactory(timerApi).skip()
+                        timerControllerApi.skip()
                     },
                     onPauseClick = {
-                        timerControllerApiFactory(timerApi).pause()
+                        timerControllerApi.pause()
                     },
                     onBack = {
                         stopSessionSheetDecomposeComponent.show()
@@ -96,7 +96,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
                         onStartClick = {
-                            timerControllerApiFactory(timerApi).resume()
+                            timerControllerApi.resume()
                         }
                     )
                 }

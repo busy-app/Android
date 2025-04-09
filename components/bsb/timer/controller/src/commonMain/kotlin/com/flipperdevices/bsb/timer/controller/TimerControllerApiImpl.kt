@@ -7,14 +7,16 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.trustedclock.TrustedClock
-import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
+import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 import kotlin.time.Duration.Companion.seconds
 
 @Inject
+@ContributesBinding(AppGraph::class, TimerControllerApi::class)
+@SingleIn(AppGraph::class)
 class TimerControllerApiImpl(
-    @Assisted private val timerApi: TimerApi,
+    private val timerApi: TimerApi,
     private val trustedClock: TrustedClock
 ) : TimerControllerApi {
     override fun updateState(block: (TimerTimestamp) -> TimerTimestamp) {
@@ -119,17 +121,5 @@ class TimerControllerApiImpl(
                 noOffsetStart = trustedClock.now()
             ),
         )
-    }
-
-    @Inject
-    @ContributesBinding(AppGraph::class, TimerControllerApi.Factory::class)
-    class Factory(
-        private val factory: (
-            timerApi: TimerApi
-        ) -> TimerControllerApiImpl
-    ) : TimerControllerApi.Factory {
-        override fun invoke(
-            timerApi: TimerApi
-        ) = factory(timerApi)
     }
 }

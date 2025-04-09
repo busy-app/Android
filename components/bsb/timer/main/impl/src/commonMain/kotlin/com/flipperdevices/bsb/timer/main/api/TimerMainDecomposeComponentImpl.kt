@@ -35,7 +35,7 @@ class TimerMainDecomposeComponentImpl(
     private val delayedStartScreenDecomposeComponentFactory: DelayedStartScreenDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory
+    private val timerControllerApi: TimerControllerApi
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     StatusBarIconStyleProvider by iconStyleProvider,
     ComponentContext by componentContext {
@@ -114,7 +114,7 @@ class TimerMainDecomposeComponentImpl(
         is TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             onFinishCallback = {
-                timerControllerApiFactory(timerApi).stop()
+                timerControllerApi.stop()
                 navigation.replaceAll(TimerMainNavigationConfig.Main)
             },
             timerSettings = config.timerSettings

@@ -19,7 +19,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class AutoPauseScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val timerApi: TimerApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory,
+    private val timerControllerApi: TimerControllerApi,
 ) : AutoPauseScreenDecomposeComponent(componentContext) {
 
     private fun getTimerState(): StateFlow<ControlledTimerState> {
@@ -34,10 +34,10 @@ class AutoPauseScreenDecomposeComponentImpl(
                 AutoPauseScreenComposable(
                     state = timerState,
                     onButtonClick = {
-                        timerControllerApiFactory(timerApi).confirmNextStep()
+                        timerControllerApi.confirmNextStep()
                     },
                     onStopClick = {
-                        timerControllerApiFactory(timerApi).stop()
+                        timerControllerApi.stop()
                     },
                 )
             }

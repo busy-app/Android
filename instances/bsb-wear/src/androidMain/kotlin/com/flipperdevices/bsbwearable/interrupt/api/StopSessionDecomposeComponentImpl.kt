@@ -9,7 +9,6 @@ import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
 import com.arkivanov.decompose.router.slot.dismiss
-import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsbwearable.interrupt.composable.ConfirmStopOverlayComposable
 import com.flipperdevices.core.di.AppGraph
@@ -21,8 +20,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 @Inject
 class StopSessionDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
-    private val timerApi: TimerApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory,
+    private val timerControllerApi: TimerControllerApi,
 ) : StopSessionDecomposeComponent(componentContext) {
 
     private val slot = SlotNavigation<Unit>()
@@ -44,7 +42,7 @@ class StopSessionDecomposeComponentImpl(
         child.child?.instance?.let {
             ConfirmStopOverlayComposable(
                 onStopClick = {
-                    timerControllerApiFactory(timerApi).stop()
+                    timerControllerApi.stop()
                 },
                 onDismiss = { slot.dismiss() }
             )

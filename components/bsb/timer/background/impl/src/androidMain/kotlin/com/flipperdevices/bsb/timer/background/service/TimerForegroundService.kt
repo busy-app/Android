@@ -88,14 +88,14 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                 }
 
                 TimerServiceActionEnum.RESUME.actionId -> {
-                    serviceDIComponent.timerControllerApiFactory(delegate).resume()
+                    serviceDIComponent.timerControllerApi.resume()
                 }
 
                 TimerServiceActionEnum.PAUSE.actionId -> {
-                    serviceDIComponent.timerControllerApiFactory(delegate).pause()
+                    serviceDIComponent.timerControllerApi.pause()
                 }
                 TimerServiceActionEnum.NEXT_STEP.actionId -> {
-                    serviceDIComponent.timerControllerApiFactory(delegate).confirmNextStep()
+                    serviceDIComponent.timerControllerApi.confirmNextStep()
                 }
             }
         } else {

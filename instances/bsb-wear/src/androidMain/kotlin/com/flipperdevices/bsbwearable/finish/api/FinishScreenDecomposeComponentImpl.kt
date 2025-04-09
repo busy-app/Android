@@ -20,7 +20,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class FinishScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val timerApi: TimerApi,
-    private val timerControllerApiFactory: TimerControllerApi.Factory,
+    private val timerControllerApi: TimerControllerApi,
 ) : FinishScreenDecomposeComponent(componentContext) {
 
     private fun getTimerState(): StateFlow<ControlledTimerState> {
@@ -36,10 +36,10 @@ class FinishScreenDecomposeComponentImpl(
                     onReloadClick = onReloadClick@{
                         val runningState = timerApi.getTimestampState().value as? TimerTimestamp.Running
                         runningState ?: return@onReloadClick
-                        timerControllerApiFactory(timerApi).startWith(runningState.settings)
+                        timerControllerApi.startWith(runningState.settings)
                     },
                     onButtonClick = {
-                        timerControllerApiFactory(timerApi).stop()
+                        timerControllerApi.stop()
                     }
                 )
             }
