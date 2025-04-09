@@ -85,14 +85,10 @@ class AndroidTimerApi(
 
     private fun stopTimer() {
         timerTimestampFlow.update {
-            when (it) {
-                is TimerTimestamp.Pending -> {
-                    it
-                }
-
-                else -> {
-                    TimerTimestamp.Pending.Finished
-                }
+            if (it is TimerTimestamp.Pending) {
+                it
+            } else {
+                TimerTimestamp.Pending.Finished
             }
         }
         val intent = Intent(context, TimerForegroundService::class.java)
