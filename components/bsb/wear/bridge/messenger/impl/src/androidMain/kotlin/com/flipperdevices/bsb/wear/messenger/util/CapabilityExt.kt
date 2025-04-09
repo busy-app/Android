@@ -2,6 +2,7 @@ package com.flipperdevices.bsb.wear.messenger.util
 
 import com.flipperdevices.core.log.TaggedLogger
 import com.flipperdevices.core.log.error
+import com.flipperdevices.core.log.info
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wearable.CapabilityClient
 import com.google.android.gms.wearable.Node
@@ -36,9 +37,8 @@ val CapabilityClient.nodesFlow: Flow<List<Node>>
             logger.error(e) { "#nodesFlow could not find wearable api while enabling" }
         } catch (e: Throwable) {
             logger.error(e) { "#nodesFlow unhandled exception during enable" }
-        } finally {
-            close()
         }
+
 
         awaitClose {
             runBlocking {
