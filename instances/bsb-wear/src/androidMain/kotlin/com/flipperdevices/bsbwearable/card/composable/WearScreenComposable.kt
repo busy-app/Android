@@ -2,9 +2,9 @@ package com.flipperdevices.bsbwearable.card.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +25,7 @@ import com.flipperdevices.bsb.dao.model.BlockedAppCount
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.wear.messenger.model.WearOSTimerSettings
+import com.flipperdevices.bsbwearable.core.ComposableWearOsScalingLazyColumn
 import com.flipperdevices.ui.button.BChipButton
 import com.google.android.horologist.compose.layout.fillMaxRectangle
 import kotlinx.collections.immutable.ImmutableList
@@ -78,33 +79,38 @@ private fun WearScreenContentComposable(
     onStartClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    ComposableWearOsScalingLazyColumn(
         modifier = modifier
             .fillMaxRectangle(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        WearCardComposable(
-            modifier = Modifier
-                .weight(1f),
-            settings = timerSettings
-        )
-
-        BChipButton(
-            modifier = Modifier
-                .padding(top = 5.dp),
-            onClick = onStartClick,
-            text = stringResource(Res.string.bwca_button_start),
-            painter = painterResource(CommonRes.drawable.ic_play),
-            contentColor = LocalCorruptedPallet.current.black.onColor,
-            background = LocalCorruptedPallet.current.white.onColor,
-            fontSize = 16.sp,
-            iconSize = 12.dp,
-            spacedBy = 8.dp,
-            contentPadding = PaddingValues(
-                vertical = 12.dp,
-                horizontal = 26.dp
+        item {
+            WearCardComposable(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                settings = timerSettings
             )
-        )
+        }
+
+        item {
+            BChipButton(
+                modifier = Modifier
+                    .padding(top = 5.dp),
+                onClick = onStartClick,
+                text = stringResource(Res.string.bwca_button_start),
+                painter = painterResource(CommonRes.drawable.ic_play),
+                contentColor = LocalCorruptedPallet.current.black.onColor,
+                background = LocalCorruptedPallet.current.white.onColor,
+                fontSize = 16.sp,
+                iconSize = 12.dp,
+                spacedBy = 8.dp,
+                contentPadding = PaddingValues(
+                    vertical = 12.dp,
+                    horizontal = 26.dp
+                ),
+                maxLines = Int.MAX_VALUE
+            )
+        }
     }
 }
 

@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -106,6 +107,7 @@ fun BChipButton(
     dashedBorderColor: Color? = null,
     enabled: Boolean = true,
     fontSize: TextUnit = 24.sp,
+    maxLines: Int = 1,
     iconSize: Dp = 18.dp,
     spacedBy: Dp = 12.dp,
     contentPadding: PaddingValues = PaddingValues(
@@ -144,13 +146,14 @@ fun BChipButton(
                     if (text != null) {
                         BaselineText(
                             text = text,
-                            maxLines = 1,
+                            maxLines = maxLines,
                             textAlign = TextAlign.Start,
                             color = animatedContentColor,
                             fontSize = fontSize,
                             lineHeight = fontSize,
                             fontWeight = FontWeight.W500,
                             fontFamily = LocalBusyBarFonts.current.pragmatica,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }

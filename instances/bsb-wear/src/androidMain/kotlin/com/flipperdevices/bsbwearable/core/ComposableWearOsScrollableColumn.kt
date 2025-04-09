@@ -26,7 +26,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun ComposableWearOsScrollableColumn(
     modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
+    verticalArrangement: Arrangement.Vertical = Arrangement.Center,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     ComposableWearOsScalingLazyColumn(
         modifier = modifier,
@@ -36,8 +38,8 @@ fun ComposableWearOsScrollableColumn(
             Column(
                 modifier = Modifier.fillMaxRectangle(),
                 content = content,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                horizontalAlignment = horizontalAlignment,
+                verticalArrangement = verticalArrangement
             )
         })
     }
@@ -46,10 +48,14 @@ fun ComposableWearOsScrollableColumn(
 @Composable
 fun ComposableWearOsScalingLazyColumn(
     modifier: Modifier = Modifier,
+    verticalArrangement: Arrangement.Vertical = Arrangement.Center,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     autoCentering: AutoCenteringParams? = AutoCenteringParams(),
     content: ScalingLazyListScope.() -> Unit
 ) {
-    val scalingLazyListState = rememberScalingLazyListState()
+    val scalingLazyListState = rememberScalingLazyListState(
+        initialCenterItemIndex = 0,
+    )
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
 
@@ -68,10 +74,10 @@ fun ComposableWearOsScalingLazyColumn(
                 .focusRequester(focusRequester)
                 .focusable(),
             state = scalingLazyListState,
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = horizontalAlignment,
+            verticalArrangement = verticalArrangement,
             content = content,
-            autoCentering = autoCentering
+            autoCentering = autoCentering,
         )
     }
 

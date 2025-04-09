@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.compose.wear.foundation)
     implementation(libs.compose.wear.material)
     implementation(libs.horologist.layout)
+    implementation(libs.horologist.material)
     implementation(libs.decompose)
     implementation(libs.essenty.lifecycle.coroutines)
     implementation(libs.decompose.composeExtension)
