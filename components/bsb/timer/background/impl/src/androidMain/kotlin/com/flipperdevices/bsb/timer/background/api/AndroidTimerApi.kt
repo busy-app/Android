@@ -56,8 +56,8 @@ class AndroidTimerApi(
 
     override fun setTimestampState(state: TimerTimestamp) {
         info { "Request start timer via android service timer api" }
+        timerTimestampFlow.update { state }
         if (state is TimerTimestamp.Pending) {
-            timerTimestampFlow.update { state }
             stopTimer()
             return
         }
@@ -70,7 +70,6 @@ class AndroidTimerApi(
         context.startService(intent)
         scope.launch(Dispatchers.IO) {
             withLock(mutex) {
-                timerTimestampFlow.emit(state)
                 if (binderListenerJob == null) {
                     val bindSuccessful = context.bindService(
                         Intent(context, TimerForegroundService::class.java),

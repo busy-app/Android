@@ -47,12 +47,14 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                     state,
                     TimerBroadcastReceiver.getTimerIntents(this@TimerForegroundService)
                 )
-                if (notification == null) {
-                    notificationManager.cancel(ONGOING_NOTIFICATION_ID)
-                } else {
-                    notificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
+                withContext(Dispatchers.Main) {
+                    if (notification == null) {
+                        notificationManager.cancel(ONGOING_NOTIFICATION_ID)
+                    } else {
+                        notificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
+                    }
                 }
-            }.launchIn(lifecycleScope + Dispatchers.Main)
+            }.launchIn(lifecycleScope + Dispatchers.IO)
     }
 
     override fun onCreate() {
