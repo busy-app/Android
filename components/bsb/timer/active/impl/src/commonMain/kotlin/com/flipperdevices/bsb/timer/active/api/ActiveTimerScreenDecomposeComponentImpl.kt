@@ -16,6 +16,7 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.stop.StopSessionSheetDecomposeComponentImpl
+import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
@@ -25,9 +26,9 @@ import kotlinx.datetime.Clock
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 
 @Inject
+@Suppress("LongParameterList")
 class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
