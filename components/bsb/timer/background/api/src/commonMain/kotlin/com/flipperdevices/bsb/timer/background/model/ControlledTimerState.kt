@@ -93,18 +93,17 @@ private fun Int.fixedTwoDigitValue(): String {
 }
 
 fun ControlledTimerState.InProgress.Running.toHumanReadableString(): String {
-    return when (val localTimeLeft = timeLeft) {
-        is TimerDuration.Finite -> {
-            localTimeLeft.instance.toComponents { days, hours, minutes, seconds, nanoseconds ->
-                buildString {
-                    if (days > 0) append("${days.fixedTwoDigitValue()}:")
-                    if (days > 0 || hours > 0) append("${hours.fixedTwoDigitValue()}:")
-                    if (days > 0 || hours > 0 || minutes > 0) append("${minutes.fixedTwoDigitValue()}:")
-                    append(seconds.fixedTwoDigitValue())
-                }
-            }
+    val duration = when (val localTimeLeft = timeLeft) {
+        is TimerDuration.Finite -> localTimeLeft.instance
+        TimerDuration.Infinite -> timePassed
+    }
+    return duration.toComponents { days, hours, minutes, seconds, nanoseconds ->
+        buildString {
+            if (days > 0) append("${days.fixedTwoDigitValue()}:")
+            if (days > 0 || hours > 0) append("${hours.fixedTwoDigitValue()}:")
+            if (days > 0 || hours > 0 || minutes > 0) append("${minutes.fixedTwoDigitValue()}:")
+            append(seconds.fixedTwoDigitValue())
         }
-        TimerDuration.Infinite -> "∞"
     }
 }
 
