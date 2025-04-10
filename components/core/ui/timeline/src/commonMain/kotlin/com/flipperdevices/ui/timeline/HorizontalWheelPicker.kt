@@ -157,10 +157,15 @@ fun BoxWithConstraintsScope.HorizontalWheelPicker(
             .toLong(initialSelectedItem.minus(firstDuration))
             .coerceAtLeast(0L)
             .toInt(),
-        transform = { value -> durationUnit.toDuration(value).plus(firstDuration).toFormattedTime() },
+        transform = { value ->
+            durationUnit.toDuration(value).plus(firstDuration).toFormattedTime()
+        },
         lineStyle = lineStyle,
         onItemSelect = { value ->
-            onItemSelect.invoke(durationUnit.toDuration(value).plus(firstDuration))
+            val duration = durationUnit.toDuration(value).plus(firstDuration)
+            if (durationUnit.toLong(duration) % progression.step == 0L) {
+                onItemSelect.invoke(duration)
+            }
         },
     )
 }
