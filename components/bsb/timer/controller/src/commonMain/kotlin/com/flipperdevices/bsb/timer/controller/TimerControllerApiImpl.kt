@@ -6,19 +6,27 @@ import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.ktx.common.throttleFirst
+import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.trustedclock.TrustedClock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.datetime.Instant
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 @Inject
 @ContributesBinding(AppGraph::class, TimerControllerApi::class)
 @SingleIn(AppGraph::class)
 class TimerControllerApiImpl(
+    private val scope: CoroutineScope,
     private val timerApi: TimerApi,
     private val trustedClock: TrustedClock
-) : TimerControllerApi {
+) : TimerControllerApi, LogTagProvider {
+    override val TAG: String = "TimerControllerApi"
+
     override fun updateState(block: (TimerTimestamp) -> TimerTimestamp) {
         val newState = block.invoke(timerApi.getTimestampState().value)
         timerApi.setTimestampState(newState)
@@ -87,7 +95,17 @@ class TimerControllerApiImpl(
         }
     }
 
-    override fun skip() {
+    /**
+     * Fix last milliseconds of current Instant
+     */
+    private fun Instant.truncate(): Instant {
+        val millis = toEpochMilliseconds()
+        val diff = MILLISECONDS_IN_SECOND - (millis % MILLISECONDS_IN_SECOND)
+        val instant = this + diff.milliseconds
+        return instant
+    }
+
+    private val skipThrottle = throttleFirst<Unit>(scope) {
         updateState { state ->
             when (state) {
                 is TimerTimestamp.Pending -> state
@@ -98,7 +116,7 @@ class TimerControllerApiImpl(
                     when (val localTimeLeft = startedState.timeLeft) {
                         is TimerDuration.Finite -> {
                             state.copy(
-                                start = state.start.minus(localTimeLeft.instance),
+                                start = state.start.minus(localTimeLeft.instance).truncate(),
                                 lastSync = trustedClock.now()
                             )
                         }
@@ -112,6 +130,10 @@ class TimerControllerApiImpl(
         }
     }
 
+    override fun skip() {
+        skipThrottle.invoke(Unit)
+    }
+
     override fun startWith(settings: TimerSettings) {
         timerApi.setTimestampState(
             state = TimerTimestamp.Running(
@@ -121,5 +143,9 @@ class TimerControllerApiImpl(
                 noOffsetStart = trustedClock.now()
             ),
         )
+    }
+
+    companion object {
+        private val MILLISECONDS_IN_SECOND = 1.seconds.inWholeMilliseconds
     }
 }
