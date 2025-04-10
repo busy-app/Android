@@ -1,10 +1,9 @@
 package com.flipperdevices.bsb.dao.model.cards
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,7 +20,7 @@ interface DBCardRepository {
     @Query("SELECT * FROM cards_platform_settings WHERE card_id == :cardId")
     suspend fun getPlatformSpecificSetting(cardId: Long): DBCardPlatformSpecificSettings?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insert(platformSpecificSettings: DBCardPlatformSpecificSettings)
 
     @Transaction
@@ -52,6 +51,6 @@ interface DBCardRepository {
         insert(newSettings)
     }
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insertOrUpdate(settings: DBCardEntity): Long
 }

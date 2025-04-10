@@ -1,10 +1,9 @@
 package com.flipperdevices.bsb.dao.model.blocked
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import com.flipperdevices.bsb.dao.model.BlockedAppEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -46,13 +45,13 @@ interface DBBlockedAppRepository {
         }
     }
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insert(category: DBBlockedCategory)
 
     @Query("DELETE FROM blocked_category WHERE card_id == :cardId")
     suspend fun dropCategory(cardId: Long)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     suspend fun insert(app: DBBlockedApp)
 
     @Query("DELETE FROM blocked_apps WHERE card_id == :cardId")
