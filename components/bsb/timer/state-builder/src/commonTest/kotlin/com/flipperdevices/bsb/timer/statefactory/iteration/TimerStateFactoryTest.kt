@@ -6,7 +6,7 @@ import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.statefactory.TimerStateFactoryImpl
-import com.flipperdevices.bsb.timer.statefactory.iteration.datetime.TimeProvider
+import com.flipperdevices.core.trustedclock.TrustedClock
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertIs
@@ -14,7 +14,7 @@ import kotlin.time.Duration.Companion.minutes
 
 class TimerStateFactoryTest {
 
-    private val timeProvider: TimeProvider = TimeProvider { Instant.fromEpochSeconds(12345678) }
+    private val timeProvider: TrustedClock = TrustedClock { Instant.fromEpochSeconds(12345678) }
 
     @Test
     fun GIVEN_not_started_WHEN_build_THEN_not_started() {
@@ -30,6 +30,7 @@ class TimerStateFactoryTest {
             TimerTimestamp.Running(
                 lastSync = Instant.fromEpochSeconds(0),
                 start = timeProvider.now().minus(15.minutes * 15),
+                noOffsetStart = timeProvider.now(),
                 confirmNextStepClick = Instant.fromEpochSeconds(Long.MAX_VALUE),
                 settings = TimerSettings(
                     id = TimerSettingsId(-1L),
@@ -55,6 +56,7 @@ class TimerStateFactoryTest {
             TimerTimestamp.Running(
                 lastSync = Instant.fromEpochSeconds(0),
                 start = timeProvider.now().minus(15.minutes * 14),
+                noOffsetStart = timeProvider.now(),
                 confirmNextStepClick = Instant.fromEpochSeconds(0),
                 settings = TimerSettings(
                     id = TimerSettingsId(-1L),
@@ -80,6 +82,7 @@ class TimerStateFactoryTest {
             TimerTimestamp.Running(
                 lastSync = Instant.fromEpochSeconds(0),
                 start = timeProvider.now().minus(15.minutes * 14),
+                noOffsetStart = timeProvider.now(),
                 confirmNextStepClick = Instant.fromEpochSeconds(Long.MAX_VALUE),
                 settings = TimerSettings(
                     id = TimerSettingsId(-1L),

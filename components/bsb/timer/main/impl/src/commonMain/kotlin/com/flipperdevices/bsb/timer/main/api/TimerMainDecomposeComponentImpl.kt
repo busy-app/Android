@@ -8,8 +8,8 @@ import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.active.api.ActiveTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.cards.api.CardsDecomposeComponent
+import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsb.timer.delayedstart.api.DelayedStartScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.done.api.DoneTimerScreenDecomposeComponent
 import com.flipperdevices.bsb.timer.finish.api.RestTimerScreenDecomposeComponent
@@ -35,6 +35,7 @@ class TimerMainDecomposeComponentImpl(
     private val delayedStartScreenDecomposeComponentFactory: DelayedStartScreenDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
+    private val timerControllerApi: TimerControllerApi
 ) : TimerMainDecomposeComponent<TimerMainNavigationConfig>(),
     StatusBarIconStyleProvider by iconStyleProvider,
     ComponentContext by componentContext {
@@ -113,7 +114,7 @@ class TimerMainDecomposeComponentImpl(
         is TimerMainNavigationConfig.Finished -> doneTimerScreenDecomposeComponentFactory.invoke(
             componentContext = componentContext,
             onFinishCallback = {
-                timerApi.stop()
+                timerControllerApi.stop()
                 navigation.replaceAll(TimerMainNavigationConfig.Main)
             },
             timerSettings = config.timerSettings

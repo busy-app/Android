@@ -18,11 +18,14 @@ import com.flipperdevices.bsbwearable.composable.SwipeToDismissBox
 import com.flipperdevices.bsbwearable.finish.api.FinishScreenDecomposeComponent
 import com.flipperdevices.bsbwearable.root.api.model.RootNavigationConfig
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.ui.decompose.DecomposeComponent
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -89,8 +92,12 @@ class RootDecomposeComponentImpl(
                     }
                 }
             }
-            .onEach { navigation.replaceAll(it) }
-            .launchIn(coroutineScope())
+            .onEach {
+                withContext(Dispatchers.Main) {
+                    navigation.replaceAll(it)
+                }
+            }
+            .launchIn(coroutineScope(FlipperDispatchers.default))
     }
 
     private fun child(

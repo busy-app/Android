@@ -42,9 +42,9 @@ sealed interface TimerTimestamp {
         @SerialName("settings")
         val settings: TimerSettings,
         @SerialName("start")
-        val start: Instant = Clock.System.now(),
+        val start: Instant,
         @SerialName("no_offset_start")
-        val noOffsetStart: Instant = Clock.System.now(),
+        val noOffsetStart: Instant,
         @SerialName("pause")
         val pause: Instant? = null,
         @SerialName("confirm_next_step_click")

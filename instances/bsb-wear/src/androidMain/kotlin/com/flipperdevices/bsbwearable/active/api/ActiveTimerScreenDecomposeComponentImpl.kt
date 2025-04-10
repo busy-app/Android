@@ -8,9 +8,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.util.pause
-import com.flipperdevices.bsb.timer.background.util.resume
-import com.flipperdevices.bsb.timer.background.util.skip
+import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
 import com.flipperdevices.bsbwearable.active.composable.ActiveTimerScreenComposable
 import com.flipperdevices.bsbwearable.interrupt.api.StopSessionDecomposeComponent
@@ -26,7 +24,7 @@ class ActiveTimerScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     stopSessionDecomposeComponentFactory: StopSessionDecomposeComponent.Factory,
     private val timerApi: TimerApi,
-
+    private val timerControllerApi: TimerControllerApi,
     focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
 ) : ActiveTimerScreenDecomposeComponent(componentContext) {
     private val stopSessionDecomposeComponentFactory = stopSessionDecomposeComponentFactory.invoke(
@@ -46,17 +44,17 @@ class ActiveTimerScreenDecomposeComponentImpl(
                 stopSessionDecomposeComponentFactory.show()
             },
             onSkipClick = {
-                timerApi.skip()
+                timerControllerApi.skip()
             },
             onPauseClick = {
-                timerApi.pause()
+                timerControllerApi.pause()
             }
         )
 
         if ((timerState as? ControlledTimerState.InProgress.Running)?.isOnPause == true) {
             PauseWearOverlayComposable(
                 onResumeClick = {
-                    timerApi.resume()
+                    timerControllerApi.resume()
                 }
             )
         }

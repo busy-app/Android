@@ -38,6 +38,7 @@ commonDependencies {
     implementation(projects.components.core.ui.text)
     implementation(projects.components.core.ui.autosizetext)
     implementation(projects.components.core.activityholder)
+    implementation(projects.components.core.trustedClock.api)
     implementation(projects.components.bsb.deeplink.api)
     implementation(projects.components.bsb.deeplink.impl)
     implementation(projects.components.bsb.core.theme)
@@ -49,6 +50,7 @@ commonDependencies {
     implementation(projects.components.bsb.timer.notification.common)
     implementation(projects.components.bsb.timer.notification.wearos)
     implementation(projects.components.bsb.timer.common)
+    implementation(projects.components.bsb.timer.controller)
     implementation(projects.components.bsb.preference.api)
     implementation(projects.components.bsb.dao.api)
     implementation(projects.components.bsb.wear.bridge.messenger.common)
@@ -100,6 +102,8 @@ dependencies {
 
     implementation(libs.google.horologist.datalayer)
     implementation(libs.google.horologist.datalayer.watch)
+
+    implementation(projects.components.core.trustedClock.google)
 }
 
 dependencies {

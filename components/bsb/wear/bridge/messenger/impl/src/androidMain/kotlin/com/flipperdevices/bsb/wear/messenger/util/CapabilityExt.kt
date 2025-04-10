@@ -36,8 +36,6 @@ val CapabilityClient.nodesFlow: Flow<List<Node>>
             logger.error(e) { "#nodesFlow could not find wearable api while enabling" }
         } catch (e: Throwable) {
             logger.error(e) { "#nodesFlow unhandled exception during enable" }
-        } finally {
-            close()
         }
 
         awaitClose {

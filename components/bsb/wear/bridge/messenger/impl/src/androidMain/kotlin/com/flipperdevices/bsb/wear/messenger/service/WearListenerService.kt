@@ -10,14 +10,9 @@ import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 
 class WearListenerService : WearableListenerService(), LogTagProvider {
     override val TAG: String = "StatusListenerService"
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     private val wearMessengerComponent by lazy {
         ComponentHolder.component<WearDataLayerModule>()
@@ -60,6 +55,5 @@ class WearListenerService : WearableListenerService(), LogTagProvider {
     override fun onDestroy() {
         super.onDestroy()
         info { "#onDestroy DataLayerListenerService" }
-        scope.cancel()
     }
 }

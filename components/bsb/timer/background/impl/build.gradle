@@ -10,12 +10,14 @@ commonDependencies {
     implementation(projects.components.core.ktx)
     implementation(projects.components.core.log)
     implementation(projects.components.core.data)
+    implementation(projects.components.core.trustedClock.api)
 
     implementation(projects.components.bsb.cloudMock)
     implementation(projects.components.bsb.dao.api)
     implementation(projects.components.bsb.timer.background.api)
     implementation(projects.components.bsb.timer.notification.api)
     implementation(projects.components.bsb.timer.stateBuilder)
+    implementation(projects.components.bsb.timer.controller)
     implementation(projects.components.bsb.liveactivity.api)
     implementation(projects.components.bsb.appblocker.filter.api)
 

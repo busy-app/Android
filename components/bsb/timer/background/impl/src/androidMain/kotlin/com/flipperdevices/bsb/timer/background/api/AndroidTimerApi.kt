@@ -26,9 +26,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -53,8 +53,8 @@ class AndroidTimerApi(
 
     override fun setTimestampState(state: TimerTimestamp) {
         info { "Request start timer via android service timer api" }
+        timerTimestampFlow.update { state }
         if (state is TimerTimestamp.Pending) {
-            timerTimestampFlow.update { state }
             stopTimer()
             return
         }
@@ -62,10 +62,10 @@ class AndroidTimerApi(
 
         val intent = Intent(context, TimerForegroundService::class.java)
         intent.setAction(TimerServiceActionEnum.START.actionId)
-        runBlocking { timerTimestampFlow.emit(state) }
+
         intent.putExtra(EXTRA_KEY_TIMER_STATE, Json.encodeToString(state))
         context.startService(intent)
-        runBlocking {
+        scope.launch {
             withLock(mutex) {
                 if (binderListenerJob == null) {
                     val bindSuccessful = context.bindService(
@@ -81,14 +81,10 @@ class AndroidTimerApi(
 
     private fun stopTimer() {
         timerTimestampFlow.update {
-            when (it) {
-                is TimerTimestamp.Pending -> {
-                    it
-                }
-
-                else -> {
-                    TimerTimestamp.Pending.Finished
-                }
+            if (it is TimerTimestamp.Pending) {
+                it
+            } else {
+                TimerTimestamp.Pending.Finished
             }
         }
         val intent = Intent(context, TimerForegroundService::class.java)
@@ -108,7 +104,7 @@ class AndroidTimerApi(
             error { "Try to connect with $name failed because binder is not TimerServiceBinder" }
             return
         }
-        runBlocking {
+        scope.launch {
             withLock(mutex) {
                 binderListenerJob = getJob(timerBinder)
             }

@@ -11,9 +11,6 @@ import com.flipperdevices.bsb.timer.background.api.TimerStateListener
 import com.flipperdevices.bsb.timer.background.di.ServiceDIComponent
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.background.notification.TimerBroadcastReceiver
-import com.flipperdevices.bsb.timer.background.util.confirmNextStep
-import com.flipperdevices.bsb.timer.background.util.pause
-import com.flipperdevices.bsb.timer.background.util.resume
 import com.flipperdevices.bsb.timer.notification.ONGOING_NOTIFICATION_ID
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.android.toFullString
@@ -39,22 +36,6 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
     private val binder = TimerServiceBinder(delegate)
     private val notificationManager by lazy { getSystemService(NotificationManager::class.java) }
 
-    init {
-        delegate.getState()
-            .onEach { state ->
-                val notification = notificationBuilder.buildNotification(
-                    this@TimerForegroundService,
-                    state,
-                    TimerBroadcastReceiver.getTimerIntents(this@TimerForegroundService)
-                )
-                if (notification == null) {
-                    notificationManager.cancel(ONGOING_NOTIFICATION_ID)
-                } else {
-                    notificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
-                }
-            }.launchIn(lifecycleScope + Dispatchers.Main)
-    }
-
     override fun onCreate() {
         info { "onCreate" }
         super.onCreate()
@@ -65,6 +46,22 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
             ONGOING_NOTIFICATION_ID,
             notificationBuilder.buildStartUpNotification(applicationContext)
         )
+
+        delegate.getState()
+            .onEach { state ->
+                val notification = notificationBuilder.buildNotification(
+                    this@TimerForegroundService,
+                    state,
+                    TimerBroadcastReceiver.getTimerIntents(this@TimerForegroundService)
+                )
+                withContext(Dispatchers.Main) {
+                    if (notification == null) {
+                        notificationManager.cancel(ONGOING_NOTIFICATION_ID)
+                    } else {
+                        notificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
+                    }
+                }
+            }.launchIn(lifecycleScope + Dispatchers.IO)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -91,14 +88,14 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                 }
 
                 TimerServiceActionEnum.RESUME.actionId -> {
-                    delegate.resume()
+                    serviceDIComponent.timerControllerApi.resume()
                 }
 
                 TimerServiceActionEnum.PAUSE.actionId -> {
-                    delegate.pause()
+                    serviceDIComponent.timerControllerApi.pause()
                 }
                 TimerServiceActionEnum.NEXT_STEP.actionId -> {
-                    delegate.confirmNextStep()
+                    serviceDIComponent.timerControllerApi.confirmNextStep()
                 }
             }
         } else {

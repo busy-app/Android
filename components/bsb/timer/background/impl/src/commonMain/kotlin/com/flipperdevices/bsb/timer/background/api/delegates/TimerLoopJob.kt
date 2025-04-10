@@ -14,8 +14,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.time.Duration.Companion.milliseconds
 
 class TimerLoopJob(
     scope: CoroutineScope,
@@ -29,11 +31,18 @@ class TimerLoopJob(
 
     internal fun getInternalState(): StateFlow<ControlledTimerState> = timerStateFlow.asStateFlow()
 
-    private val job = TickFlow()
+    private val job = TickFlow(duration = 50.milliseconds)
         .filter { initialTimerTimestamp.runningOrNull?.pause == null }
         .onEach {
             mutex.withLock {
-                timerStateFlow.emit(timerStateFactory.create(initialTimerTimestamp))
+                timerStateFlow.update { oldState ->
+                    val newState = timerStateFactory.create(initialTimerTimestamp)
+                    if (newState == oldState) {
+                        oldState
+                    } else {
+                        newState
+                    }
+                }
             }
         }.launchIn(scope)
 

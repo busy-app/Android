@@ -8,8 +8,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
-import com.flipperdevices.bsb.timer.background.util.startWith
-import com.flipperdevices.bsb.timer.background.util.stop
+import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsbwearable.finish.composable.FinishScreenComposable
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +20,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
 class FinishScreenDecomposeComponentImpl(
     @Assisted componentContext: ComponentContext,
     private val timerApi: TimerApi,
+    private val timerControllerApi: TimerControllerApi,
 ) : FinishScreenDecomposeComponent(componentContext) {
 
     private fun getTimerState(): StateFlow<ControlledTimerState> {
@@ -36,10 +36,10 @@ class FinishScreenDecomposeComponentImpl(
                     onReloadClick = onReloadClick@{
                         val runningState = timerApi.getTimestampState().value as? TimerTimestamp.Running
                         runningState ?: return@onReloadClick
-                        timerApi.startWith(runningState.settings)
+                        timerControllerApi.startWith(runningState.settings)
                     },
                     onButtonClick = {
-                        timerApi.stop()
+                        timerControllerApi.stop()
                     }
                 )
             }

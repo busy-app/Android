@@ -13,13 +13,10 @@ import com.flipperdevices.bsb.analytics.metric.api.model.BEvent
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.background.api.TimerApi
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
-import com.flipperdevices.bsb.timer.background.util.pause
-import com.flipperdevices.bsb.timer.background.util.resume
-import com.flipperdevices.bsb.timer.background.util.skip
-import com.flipperdevices.bsb.timer.background.util.stop
 import com.flipperdevices.bsb.timer.common.composable.appbar.PauseFullScreenOverlayComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.StatusType
 import com.flipperdevices.bsb.timer.common.composable.appbar.stop.StopSessionSheetDecomposeComponentImpl
+import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsb.timer.finish.composable.TimerRestComposableScreen
 import com.flipperdevices.bsb.timer.focusdisplay.api.FocusDisplayDecomposeComponent
 import com.flipperdevices.core.di.AppGraph
@@ -38,6 +35,7 @@ class RestTimerScreenDecomposeComponentImpl(
     @Assisted private val breakType: BreakType,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
     private val timerApi: TimerApi,
+    private val timerControllerApi: TimerControllerApi,
     focusDisplayDecomposeComponentFactory: FocusDisplayDecomposeComponent.Factory,
     stopSessionSheetDecomposeComponentFactory: (
         componentContext: ComponentContext,
@@ -61,7 +59,7 @@ class RestTimerScreenDecomposeComponentImpl(
                     metricApi.reportEvent(BEvent.TimerAborted(timePassed.inWholeMilliseconds))
                 }
 
-            timerApi.stop()
+            timerControllerApi.stop()
         }
     )
 
@@ -84,7 +82,7 @@ class RestTimerScreenDecomposeComponentImpl(
                                 metricApi.reportEvent(BEvent.TimerSkipped(timePassed.inWholeMilliseconds))
                             }
 
-                        timerApi.skip()
+                        timerControllerApi.skip()
                     },
                     state = state,
                     statusType = when (breakType) {
@@ -95,13 +93,13 @@ class RestTimerScreenDecomposeComponentImpl(
                         stopSessionSheetDecomposeComponent.show()
                     },
                     onPauseClick = {
-                        timerApi.pause()
+                        timerControllerApi.pause()
                     }
                 )
                 if (state.isOnPause) {
                     PauseFullScreenOverlayComposable(
                         onStartClick = {
-                            timerApi.resume()
+                            timerControllerApi.resume()
                         }
                     )
                 }

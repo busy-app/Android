@@ -22,12 +22,11 @@ import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.root.api.LocalRootNavigation
 import com.flipperdevices.bsb.root.model.RootNavigationConfig
-import com.flipperdevices.bsb.timer.background.api.TimerApi
-import com.flipperdevices.bsb.timer.background.util.startWith
 import com.flipperdevices.bsb.timer.cards.composable.BusyCardComposable
 import com.flipperdevices.bsb.timer.cards.viewmodel.CardsViewModel
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
+import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsb.timer.setup.api.CardEditSheetDecomposeComponent
 import com.flipperdevices.core.buildkonfig.BuildKonfig
 import com.flipperdevices.core.di.AppGraph
@@ -47,7 +46,7 @@ class CardsDecomposeComponentImpl(
     private val cardsViewModelFactory: KIProvider<CardsViewModel>,
     cardEditSheetDecomposeComponentFactory: CardEditSheetDecomposeComponent.Factory,
     iconStyleProvider: ThemeStatusBarIconStyleProvider,
-    private val timerApi: TimerApi,
+    private val timerControllerApi: TimerControllerApi
 ) : CardsDecomposeComponent(componentContext),
     StatusBarIconStyleProvider by iconStyleProvider {
     private val timerSetupSheetDecomposeComponent = cardEditSheetDecomposeComponentFactory(
@@ -87,7 +86,9 @@ class CardsDecomposeComponentImpl(
                 ButtonTimerComposable(
                     state = ButtonTimerState.START,
                     onClick = {
-                        cards.firstOrNull()?.let { timerApi.startWith(it.settings) }
+                        cards.firstOrNull()?.let {
+                            timerControllerApi.startWith(it.settings)
+                        }
                     }
                 )
 

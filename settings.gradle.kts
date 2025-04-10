@@ -57,6 +57,9 @@ include(
     ":components:core:ui:video",
     ":components:core:ui:autosizetext",
     ":components:core:ui:text",
+    ":components:core:trusted-clock:api",
+    ":components:core:trusted-clock:google",
+    ":components:core:trusted-clock:kotlinx",
 
     ":components:bsb:core:theme",
     ":components:bsb:core:res",
@@ -159,6 +162,7 @@ include(
     ":components:bsb:timer:notification:android",
     ":components:bsb:timer:notification:wearos",
     ":components:bsb:timer:notification:common",
+    ":components:bsb:timer:controller",
 
     ":components:bsb:wear:bridge:messenger:api",
     ":components:bsb:wear:bridge:messenger:impl",
