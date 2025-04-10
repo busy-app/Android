@@ -46,7 +46,7 @@ fun TimerActiveComposableScreen(
         TimerActiveHeaderComposable(
             state = state,
             onBack = onBack,
-            onSkip = onSkip,
+            onSkip = onSkip.takeIf { state.timerSettings.intervalsSettings.isEnabled },
             statusType = config.statusType
         )
 
