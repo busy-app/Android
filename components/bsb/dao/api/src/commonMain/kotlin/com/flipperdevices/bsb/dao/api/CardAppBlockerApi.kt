@@ -7,6 +7,8 @@ import com.flipperdevices.bsb.dao.model.TimerSettingsId
 import kotlinx.coroutines.flow.Flow
 
 interface CardAppBlockerApi {
+    fun getCardUpdateFlow(): Flow<TimerSettingsId>
+
     fun getBlockedAppCount(cardId: TimerSettingsId): Flow<BlockedAppCount>
 
     fun getBlockedAppDetailedState(cardId: TimerSettingsId): Flow<BlockedAppDetailedState>

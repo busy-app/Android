@@ -25,10 +25,9 @@ fun PlaceableDetectableRow(
             items.add(Item(placeable, xPosition))
             xPosition += placeable.width
         }
-
         layout(
-            width = items.last().let { it.xPosition + it.placeable.width },
-            height = items.maxOf { it.placeable.height }
+            width = items.lastOrNull()?.let { it.xPosition + it.placeable.width } ?: 0,
+            height = items.maxOfOrNull { it.placeable.height } ?: 0
         ) {
             items.forEach {
                 it.placeable.place(it.xPosition, 0)

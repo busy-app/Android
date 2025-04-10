@@ -12,6 +12,8 @@ import com.flipperdevices.core.di.KIProvider
 import com.flipperdevices.core.di.provideDelegate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -29,10 +31,16 @@ class CardAppBlockerApiImpl(
 ) : CardAppBlockerApi {
     private val database by databaseProvider
 
+    private val cardUpdateSharedFlow = MutableSharedFlow<TimerSettingsId>()
+
+    override fun getCardUpdateFlow(): Flow<TimerSettingsId> {
+        return cardUpdateSharedFlow.asSharedFlow()
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getBlockedAppCount(cardId: TimerSettingsId): Flow<BlockedAppCount> {
         return permissionApi.isAllPermissionGranted().flatMapLatest { isPermissionGranted ->
-            if (isPermissionGranted) {
+            if (!isPermissionGranted) {
                 flowOf(BlockedAppCount.NoPermission)
             } else {
                 getBlockedAppDetailedState(cardId)
@@ -81,6 +89,7 @@ class CardAppBlockerApiImpl(
 
     override suspend fun setEnabled(cardId: TimerSettingsId, isEnabled: Boolean) {
         database.cardRepository().updateBlockedEnabled(cardId.id, isEnabled)
+        cardUpdateSharedFlow.emit(cardId)
     }
 
     override suspend fun updateBlockedApp(
@@ -110,6 +119,7 @@ class CardAppBlockerApiImpl(
                 blockedAppState.entities
             )
         }
+        cardUpdateSharedFlow.emit(cardId)
     }
 
     override suspend fun isBlocked(cardId: TimerSettingsId, appEntity: BlockedAppEntity): Boolean {
