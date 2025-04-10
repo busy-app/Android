@@ -72,7 +72,7 @@ class CardAppBlockerApiImpl(
             } else {
                 BlockedAppDetailedState.TurnOnWhitelist(
                     blockedCategories.map { BlockedAppEntity.Category(it.categoryId) } +
-                            blockedApps.map { BlockedAppEntity.App(it.appPackage) }
+                        blockedApps.map { BlockedAppEntity.App(it.appPackage) }
                 )
             }
         }
