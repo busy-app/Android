@@ -9,7 +9,7 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * [TickFlow] is used to tick every [duration]
  */
-class TickFlow(duration: Duration = 1.seconds) : Flow<Unit> by flow(
+class TickFlow(duration: Duration) : Flow<Unit> by flow(
     block = {
         while (true) {
             emit(Unit)

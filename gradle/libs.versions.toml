@@ -56,6 +56,7 @@ haze = "1.5.2"
 sentry-runtime = "8.6.0" # https://github.com/getsentry/sentry-java/releases
 sentry-gradle = "5.3.0" # https://github.com/getsentry/sentry-android-gradle-plugin/releases
 gms-time = "16.0.1" # https://developers.google.com/location-context/time
+truetime = "4.0.0.alpha" # https://github.com/instacart/truetime-android
 
 [libraries]
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -161,6 +162,7 @@ google-horologist-datalayer = { module = "com.google.android.horologist:horologi
 google-horologist-datalayer-watch = { module = "com.google.android.horologist:horologist-datalayer-watch", version.ref = "horologist" }
 google-horologist-datalayer-phone = { module = "com.google.android.horologist:horologist-datalayer-phone", version.ref = "horologist" }
 gms-time = { module = "com.google.android.gms:play-services-time", version.ref = "gms-time" }
+truetime = { module = "com.github.instacart:truetime-android", version.ref = "truetime" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

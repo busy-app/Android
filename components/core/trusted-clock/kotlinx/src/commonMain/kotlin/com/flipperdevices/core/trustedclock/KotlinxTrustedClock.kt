@@ -11,6 +11,8 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, TrustedClock::class)
 class KotlinxTrustedClock : TrustedClock {
+    override fun initialize() = Unit
+
     override fun now(): Instant {
         return Clock.System.now()
     }

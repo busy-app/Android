@@ -27,6 +27,7 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
@@ -59,6 +60,7 @@ include(
     ":components:core:ui:text",
     ":components:core:trusted-clock:api",
     ":components:core:trusted-clock:google",
+    ":components:core:trusted-clock:truetime",
     ":components:core:trusted-clock:kotlinx",
 
     ":components:bsb:core:theme",

@@ -103,7 +103,7 @@ dependencies {
     implementation(libs.google.horologist.datalayer)
     implementation(libs.google.horologist.datalayer.watch)
 
-    implementation(projects.components.core.trustedClock.google)
+    implementation(projects.components.core.trustedClock.truetime)
 }
 
 dependencies {

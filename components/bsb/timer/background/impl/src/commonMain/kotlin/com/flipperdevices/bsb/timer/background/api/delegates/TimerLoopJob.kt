@@ -31,7 +31,7 @@ class TimerLoopJob(
 
     internal fun getInternalState(): StateFlow<ControlledTimerState> = timerStateFlow.asStateFlow()
 
-    private val job = TickFlow(duration = 50.milliseconds)
+    private val job = TickFlow(duration = 20.milliseconds)
         .filter { initialTimerTimestamp.runningOrNull?.pause == null }
         .onEach {
             mutex.withLock {
