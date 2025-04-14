@@ -8,6 +8,8 @@ import com.instacart.truetime.time.TrueTimeParameters
 import java.net.InetAddress
 import java.util.Date
 
+private const val VERBOSE_LOGGING_NTP = false
+
 class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
     override val TAG = "TrueTimeLoggerListener"
 
@@ -16,7 +18,7 @@ class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
     }
 
     override fun initializeFailed(e: Exception) {
-        error(e) { "Failed" }
+        error(e) { "#initializeFailed" }
     }
 
     override fun initializeSuccess(ntpResult: LongArray) {
@@ -28,7 +30,9 @@ class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
     }
 
     override fun nextInitializeIn(delayInMillis: Long) {
-        info { "#nextInitializeIn $delayInMillis" }
+        if (VERBOSE_LOGGING_NTP) {
+            info { "#nextInitializeIn $delayInMillis" }
+        }
     }
 
     override fun resolvedNtpHostToIPs(ntpHost: String, ipList: List<InetAddress>) {
@@ -36,15 +40,21 @@ class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
     }
 
     override fun returningDeviceTime() {
-        info { "#returningDeviceTime" }
+        if (VERBOSE_LOGGING_NTP) {
+            info { "#returningDeviceTime" }
+        }
     }
 
     override fun returningTrueTime(trueTime: Date) {
-        info { "#returningTrueTime $trueTime" }
+        if (VERBOSE_LOGGING_NTP) {
+            info { "#returningTrueTime $trueTime" }
+        }
     }
 
     override fun sntpRequest(address: InetAddress) {
-        info { "#sntpRequest $address" }
+        if (VERBOSE_LOGGING_NTP) {
+            info { "#sntpRequest $address" }
+        }
     }
 
     override fun sntpRequestFailed(e: Exception) {
@@ -56,11 +66,15 @@ class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
     }
 
     override fun sntpRequestSuccessful(address: InetAddress) {
-        info { "#sntpRequestSuccessful $address" }
+        if (VERBOSE_LOGGING_NTP) {
+            info { "#sntpRequestSuccessful $address" }
+        }
     }
 
     override fun storingTrueTime(ntpResult: LongArray) {
-        info { "#storingTrueTime $ntpResult" }
+        if (VERBOSE_LOGGING_NTP) {
+            info { "#storingTrueTime $ntpResult" }
+        }
     }
 
     override fun syncDispatcherException(t: Throwable) {

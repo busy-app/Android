@@ -11,10 +11,12 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration.Companion.milliseconds
@@ -27,14 +29,13 @@ class TimerLoopJob(
     override val TAG = "TimerLoopJob"
 
     private val timerStateFlow = MutableStateFlow(timerStateFactory.create(initialTimerTimestamp))
-    private val mutex = Mutex()
 
     internal fun getInternalState(): StateFlow<ControlledTimerState> = timerStateFlow.asStateFlow()
 
-    private val job = TickFlow(duration = 20.milliseconds)
-        .filter { initialTimerTimestamp.runningOrNull?.pause == null }
-        .onEach {
-            mutex.withLock {
+    private val job = scope.launch {
+        TickFlow(duration = 20.milliseconds)
+            .filter { initialTimerTimestamp.runningOrNull?.pause == null }
+            .collectLatest {
                 timerStateFlow.update { oldState ->
                     val newState = timerStateFactory.create(initialTimerTimestamp)
                     if (newState == oldState) {
@@ -44,7 +45,7 @@ class TimerLoopJob(
                     }
                 }
             }
-        }.launchIn(scope)
+    }
 
     suspend fun cancelAndJoin() {
         job.cancelAndJoin()
