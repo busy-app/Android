@@ -14,7 +14,10 @@ import kotlin.time.Duration.Companion.minutes
 
 class TimerStateFactoryTest {
 
-    private val timeProvider: TrustedClock = TrustedClock { Instant.fromEpochSeconds(12345678) }
+    private val timeProvider: TrustedClock = object : TrustedClock {
+        override fun initialize() = Unit
+        override fun now() = Instant.fromEpochSeconds(12345678)
+    }
 
     @Test
     fun GIVEN_not_started_WHEN_build_THEN_not_started() {
