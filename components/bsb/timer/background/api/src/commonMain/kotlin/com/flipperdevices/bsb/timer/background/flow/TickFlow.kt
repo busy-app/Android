@@ -4,7 +4,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * [TickFlow] is used to tick every [duration]

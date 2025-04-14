@@ -4,7 +4,6 @@ import com.flipperdevices.bsb.timer.background.flow.TickFlow
 import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.bsb.timer.background.model.TimerTimestamp
 import com.flipperdevices.bsb.timer.statefactory.TimerStateFactory
-import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelAndJoin
@@ -13,12 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration.Companion.milliseconds
 
 class TimerLoopJob(

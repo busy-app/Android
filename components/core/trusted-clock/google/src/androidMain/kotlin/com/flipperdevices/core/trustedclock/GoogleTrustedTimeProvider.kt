@@ -10,12 +10,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.time.TrustedTime
 import com.google.android.gms.time.TrustedTimeClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.tasks.await
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toKotlinInstant

@@ -1,15 +1,11 @@
 package com.flipperdevices.core.trustedclock
 
-import android.content.Context
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.info
 import com.flipperdevices.core.log.warn
-import com.instacart.truetime.TrueTimeEventListener
 import com.instacart.truetime.time.TrueTimeImpl
 import com.instacart.truetime.time.TrueTimeParameters
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toKotlinInstant
@@ -20,7 +16,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 @Inject
 @SingleIn(AppGraph::class)
 @ContributesBinding(AppGraph::class, TrustedClock::class)
-class TrueTimeProvider: TrustedClock, LogTagProvider {
+class TrueTimeProvider : TrustedClock, LogTagProvider {
     override val TAG: String = "TrueTimeProvider"
 
     private var trueTime = TrueTimeImpl(
@@ -29,9 +25,6 @@ class TrueTimeProvider: TrustedClock, LogTagProvider {
             .buildParams(),
         listener = TrueTimeLoggerListener()
     )
-
-
-
 
     override fun initialize() {
         info { "Create task on trusted time api initialize" }

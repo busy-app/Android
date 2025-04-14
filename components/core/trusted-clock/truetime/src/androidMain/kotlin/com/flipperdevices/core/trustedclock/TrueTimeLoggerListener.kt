@@ -12,6 +12,7 @@ import kotlin.time.Duration
 
 private const val VERBOSE_LOGGING_NTP = false
 
+@Suppress("TooManyFunctions")
 class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
     override val TAG = "TrueTimeLoggerListener"
 
