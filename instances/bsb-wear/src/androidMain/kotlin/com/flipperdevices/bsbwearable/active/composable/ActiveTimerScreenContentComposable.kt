@@ -53,6 +53,7 @@ fun ActiveTimerScreenContentComposable(
             .fillMaxSize()
             .padding(horizontal = 8.dp)
             .padding(vertical = 14.dp)
+            .padding(top = 14.dp)
     ) {
         val (header, timerLine, button) = createRefs()
 
