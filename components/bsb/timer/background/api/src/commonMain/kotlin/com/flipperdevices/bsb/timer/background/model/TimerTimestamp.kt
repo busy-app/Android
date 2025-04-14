@@ -15,16 +15,19 @@ sealed interface TimerTimestamp {
 
     @Serializable
     @SerialName("PENDING")
-    data class Pending private constructor(
-        @SerialName("last_sync")
-        override val lastSync: Instant
-    ) : TimerTimestamp {
-        companion object {
-            val NotStarted: Pending
-                get() = Pending(Instant.DISTANT_PAST)
-            val Finished: Pending
-                get() = Pending(Clock.System.now())
+    sealed interface Pending : TimerTimestamp {
+        @Serializable
+        @SerialName("NotStarted")
+        data object NotStarted : Pending {
+            override val lastSync = Instant.DISTANT_PAST
         }
+
+        @Serializable
+        @SerialName("Finished")
+        data class Finished(
+            @SerialName("last_sync")
+            override val lastSync: Instant
+        ) : Pending
     }
 
     /**
