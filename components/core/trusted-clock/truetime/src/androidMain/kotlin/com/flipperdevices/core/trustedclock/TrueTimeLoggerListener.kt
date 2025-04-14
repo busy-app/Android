@@ -4,9 +4,11 @@ import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
 import com.instacart.truetime.TrueTimeEventListener
+import com.instacart.truetime.sntp.SntpResult
 import com.instacart.truetime.time.TrueTimeParameters
 import java.net.InetAddress
 import java.util.Date
+import kotlin.time.Duration
 
 private const val VERBOSE_LOGGING_NTP = false
 
@@ -21,7 +23,7 @@ class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
         error(e) { "#initializeFailed" }
     }
 
-    override fun initializeSuccess(ntpResult: LongArray) {
+    override fun initializeSuccess(ntpResult: SntpResult) {
         info { "Initialize success: $ntpResult" }
     }
 
@@ -29,9 +31,9 @@ class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
         info { "#lastSntpRequestAttempt $ipHost" }
     }
 
-    override fun nextInitializeIn(delayInMillis: Long) {
+    override fun nextInitializeIn(delay: Duration) {
         if (VERBOSE_LOGGING_NTP) {
-            info { "#nextInitializeIn $delayInMillis" }
+            info { "#nextInitializeIn $delay" }
         }
     }
 
@@ -71,7 +73,7 @@ class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
         }
     }
 
-    override fun storingTrueTime(ntpResult: LongArray) {
+    override fun storingTrueTime(ntpResult: SntpResult) {
         if (VERBOSE_LOGGING_NTP) {
             info { "#storingTrueTime $ntpResult" }
         }
@@ -79,5 +81,9 @@ class TrueTimeLoggerListener : TrueTimeEventListener, LogTagProvider {
 
     override fun syncDispatcherException(t: Throwable) {
         error(t) { "#syncDispatcherException" }
+    }
+
+    override fun invalidateCacheOnRebootDetection() {
+        info { "#invalidateCacheOnRebootDetection" }
     }
 }

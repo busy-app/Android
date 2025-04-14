@@ -14,6 +14,7 @@ import com.flipperdevices.bsb.timer.background.notification.TimerBroadcastReceiv
 import com.flipperdevices.bsb.timer.notification.ONGOING_NOTIFICATION_ID
 import com.flipperdevices.core.di.ComponentHolder
 import com.flipperdevices.core.ktx.android.toFullString
+import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
@@ -46,7 +47,7 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
             notificationBuilder.buildStartUpNotification(applicationContext)
         )
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(FlipperDispatchers.default) {
             delegate.getState()
                 .collectLatest { state ->
                     val notification = notificationBuilder.buildNotification(
