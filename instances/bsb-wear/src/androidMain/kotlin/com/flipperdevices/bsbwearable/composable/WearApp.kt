@@ -8,6 +8,7 @@ import com.flipperdevices.bsb.core.theme.BusyBarTheme
 import com.flipperdevices.bsb.core.theme.LocalPallet
 import com.flipperdevices.bsbwearable.di.WearAppComponent
 import com.flipperdevices.bsbwearable.root.api.RootDecomposeComponent
+import com.google.android.horologist.compose.layout.AppScaffold
 
 @Composable
 @Suppress("UnusedParameter")
@@ -17,10 +18,12 @@ internal fun WearApp(
     modifier: Modifier = Modifier
 ) {
     BusyBarTheme(darkMode = true) {
-        rootComponent.Render(
-            modifier
-                .fillMaxSize()
-                .background(LocalPallet.current.black.onColor)
-        )
+        AppScaffold {
+            rootComponent.Render(
+                modifier
+                    .fillMaxSize()
+                    .background(LocalPallet.current.black.onColor)
+            )
+        }
     }
 }
