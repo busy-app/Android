@@ -15,8 +15,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -69,19 +68,21 @@ class CommonTimerApi(
                 )
                 timerJob = timer
                 compositeListeners.onTimerStart(state.settings)
-                stateInvalidateJob = timer.getInternalState()
-                    .onEach { internalState ->
-                        timerStateFlow.emit(internalState)
-                        when (internalState) {
-                            ControlledTimerState.NotStarted -> {
-                                stopSelf()
-                            }
+                stateInvalidateJob = scope.launch {
+                    timer.getInternalState()
+                        .collectLatest { internalState ->
+                            timerStateFlow.emit(internalState)
+                            when (internalState) {
+                                ControlledTimerState.NotStarted -> {
+                                    stopSelf()
+                                }
 
-                            is ControlledTimerState.InProgress.Await,
-                            is ControlledTimerState.InProgress.Running,
-                            is ControlledTimerState.Finished -> Unit
+                                is ControlledTimerState.InProgress.Await,
+                                is ControlledTimerState.InProgress.Running,
+                                is ControlledTimerState.Finished -> Unit
+                            }
                         }
-                    }.launchIn(scope)
+                }
             }
         }
     }

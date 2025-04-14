@@ -27,6 +27,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterIsInstance
@@ -113,19 +114,18 @@ class AndroidWearMessageSyncService(
             .launchIn(scope)
     }
 
-    private fun startStateChangeJob(): Job {
-        return timerApi.getTimestampState()
-            .onEach { sendTimerTimestampMessage(it) }
-            .launchIn(scope)
+    private fun startStateChangeJob(): Job = scope.launch {
+        timerApi.getTimestampState()
+            .collectLatest { sendTimerTimestampMessage(it) }
     }
 
-    private fun startClientConnectJob(): Job {
-        return wearConnectionApi.statusFlow
+    private fun startClientConnectJob(): Job = scope.launch {
+        wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
-            .onEach {
+            .collectLatest {
                 sendTimerTimestampMessage()
                 sendTimerSettingsMessage()
-            }.launchIn(scope)
+            }
     }
 
     private fun startMessageJob(): Job {
