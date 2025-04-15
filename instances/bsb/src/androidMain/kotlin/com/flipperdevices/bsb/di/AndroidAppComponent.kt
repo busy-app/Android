@@ -8,6 +8,7 @@ import com.flipperdevices.bsb.timer.syncservice.TimerSyncService
 import com.flipperdevices.bsb.wear.messenger.service.WearMessageSyncService
 import com.flipperdevices.core.di.AndroidPlatformDependencies
 import com.flipperdevices.core.di.AppGraph
+import com.flipperdevices.core.trustedclock.TrustedClock
 import com.russhwolf.settings.ObservableSettings
 import kotlinx.coroutines.CoroutineScope
 import me.tatarka.inject.annotations.Provides
@@ -26,4 +27,5 @@ abstract class AndroidAppComponent(
     abstract val shake2ReportApi: Shake2ReportApi
     abstract val wearMessageSyncService: WearMessageSyncService
     abstract val timerSyncService: TimerSyncService
+    abstract val trustedClock: TrustedClock
 }

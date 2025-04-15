@@ -69,7 +69,7 @@ kotlin {
                 implementation(libs.google.horologist.datalayer)
                 implementation(libs.google.horologist.datalayer.phone)
                 implementation(projects.components.bsb.timer.syncservice.firebase)
-                implementation(projects.components.core.trustedClock.google)
+                implementation(projects.components.core.trustedClock.truetime)
             } else {
                 implementation(projects.components.bsb.wear.bridge.syncservice.api)
                 implementation(projects.components.bsb.wear.bridge.syncservice.noop)

@@ -2,6 +2,8 @@ package com.flipperdevices.core.trustedclock
 
 import kotlinx.datetime.Instant
 
-fun interface TrustedClock {
+interface TrustedClock {
+    fun initialize()
+
     fun now(): Instant
 }

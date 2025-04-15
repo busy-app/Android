@@ -17,9 +17,9 @@ import com.flipperdevices.bsb.timer.main.model.TimerMainNavigationConfig
 import com.flipperdevices.core.di.AppGraph
 import com.flipperdevices.ui.decompose.DecomposeComponent
 import com.flipperdevices.ui.decompose.statusbar.StatusBarIconStyleProvider
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
@@ -75,20 +75,21 @@ class TimerMainDecomposeComponentImpl(
     }
 
     init {
-        @Suppress("MagicNumber")
-        timerApi.getState()
-            .distinctUntilChangedBy { state ->
-                when (state) {
-                    is ControlledTimerState.Finished -> 0
-                    ControlledTimerState.NotStarted -> 1
-                    is ControlledTimerState.InProgress.Running.LongRest -> 2
-                    is ControlledTimerState.InProgress.Running.Rest -> 3
-                    is ControlledTimerState.InProgress.Running.Work -> 4
-                    is ControlledTimerState.InProgress.Await -> 5
+        coroutineScope().launch {
+            @Suppress("MagicNumber")
+            timerApi.getState()
+                .distinctUntilChangedBy { state ->
+                    when (state) {
+                        is ControlledTimerState.Finished -> 0
+                        ControlledTimerState.NotStarted -> 1
+                        is ControlledTimerState.InProgress.Running.LongRest -> 2
+                        is ControlledTimerState.InProgress.Running.Rest -> 3
+                        is ControlledTimerState.InProgress.Running.Work -> 4
+                        is ControlledTimerState.InProgress.Await -> 5
+                    }
                 }
-            }
-            .onEach { state -> navigation.replaceAll(state.getScreen()) }
-            .launchIn(coroutineScope())
+                .collectLatest { state -> navigation.replaceAll(state.getScreen()) }
+        }
     }
 
     override val stack = childStack(

@@ -7,8 +7,8 @@ import com.flipperdevices.bsb.timer.background.model.ControlledTimerState
 import com.flipperdevices.core.di.AppGraph
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
@@ -28,17 +28,19 @@ class SoundTimerListenerImpl(
             return
         }
         runBlocking { soundFromStateProducer.clear() }
-        timerStateListenerJob = timerApi.getState().onEach { internalState ->
-            return@onEach when (internalState) {
-                is ControlledTimerState.Finished,
-                ControlledTimerState.NotStarted,
-                is ControlledTimerState.InProgress.Await -> return@onEach
+        timerStateListenerJob = scope.launch {
+            timerApi.getState().collectLatest { internalState ->
+                return@collectLatest when (internalState) {
+                    is ControlledTimerState.Finished,
+                    ControlledTimerState.NotStarted,
+                    is ControlledTimerState.InProgress.Await -> return@collectLatest
 
-                is ControlledTimerState.InProgress.Running -> {
-                    soundFromStateProducer.tryPlaySound(internalState)
+                    is ControlledTimerState.InProgress.Running -> {
+                        soundFromStateProducer.tryPlaySound(internalState)
+                    }
                 }
             }
-        }.launchIn(scope)
+        }
     }
 
     override suspend fun onTimerStop() {

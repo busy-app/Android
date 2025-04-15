@@ -24,6 +24,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
@@ -72,19 +73,15 @@ class WearWearMessageSyncService(
         wearMessageProducer.produce(message)
     }
 
-    private fun startAndGetStateChangeJob(): Job {
-        return timerApi.getTimestampState()
-            .onEach { sendTimerTimestampMessage(it) }
-            .launchIn(scope)
+    private fun startAndGetStateChangeJob(): Job = scope.launch {
+        timerApi.getTimestampState()
+            .collectLatest { sendTimerTimestampMessage(it) }
     }
 
-    private fun startAndGetClientConnectJob(): Job {
-        return wearConnectionApi.statusFlow
+    private fun startAndGetClientConnectJob(): Job = scope.launch {
+        wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
-            .onEach {
-                sendTimerTimestampMessage()
-            }
-            .launchIn(scope)
+            .collectLatest { sendTimerTimestampMessage() }
     }
 
     @Suppress("MagicNumber")
