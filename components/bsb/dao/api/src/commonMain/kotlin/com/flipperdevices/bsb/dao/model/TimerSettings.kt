@@ -1,49 +1,92 @@
 package com.flipperdevices.bsb.dao.model
 
-import com.flipperdevices.bsb.dao.serialization.TimerDurationSerializer
+import com.flipperdevices.bsb.dao.model.CardSettings.TimerSettings
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 
 @JvmInline
 @Serializable
-value class TimerSettingsId(val id: Long)
+value class CardSettingsId(val id: Long)
 
 @Serializable
-data class TimerSettings(
-    @SerialName("id")
-    val id: TimerSettingsId,
-    @SerialName("total_time")
-    @Serializable(TimerDurationSerializer::class)
-    val totalTime: TimerDuration = TimerDuration.Finite(90.minutes),
-    @SerialName("intervals_settings")
-    val intervalsSettings: IntervalsSettings = IntervalsSettings(),
-    @SerialName("sound_settings")
-    val soundSettings: SoundSettings = SoundSettings(),
-    @SerialName("name")
-    val name: String = "BUSY",
+data class CardSettings(
+    @SerialName("card_id")
+    val id: CardSettingsId,
+    @SerialName("title")
+    val title: String,
+    @SerialName("timer_settings")
+    val timerSettings: TimerSettings
 ) {
     @Serializable
-    data class IntervalsSettings(
-        @SerialName("work")
-        val work: Duration = 25.minutes,
-        @SerialName("rest")
-        val rest: Duration = 5.minutes,
-        @SerialName("long_rest")
-        val longRest: Duration = 15.minutes,
-        @SerialName("auto_start_work")
-        val autoStartWork: Boolean = true,
-        @SerialName("auto_start_rest")
-        val autoStartRest: Boolean = true,
-        @SerialName("is_enabled")
-        val isEnabled: Boolean = false
-    )
+    sealed interface TimerSettings {
+        @Serializable
+        @SerialName("SIMPLE")
+        data class Simple(
+            @SerialName("total_time_ms")
+            val totalTimeMs: Long
+        ) : TimerSettings
 
-    @Serializable
+        @Serializable
+        @SerialName("INTERVAL")
+        data class Interval(
+            @SerialName("interval_work_ms")
+            val workMs: Long,
+            @SerialName("interval_rest_ms")
+            val restMs: Long,
+            @SerialName("interval_cycles_count")
+            val cycles: Int,
+            @SerialName("is_autostart_enabled")
+            val isAutostartEnabled: Boolean
+        ) : TimerSettings
+
+        @Serializable
+        @SerialName("INFINITE")
+        data object Infinite : TimerSettings
+    }
+}
+
+data class AndroidCardSettings(
+    val id: CardSettingsId,
+    val sound: SoundSettings
+) {
     data class SoundSettings(
-        @SerialName("alert_when_interval_ends")
         val alertWhenIntervalEnds: Boolean = true
     )
 }
+
+data class RunningTimerState(
+    val cardId: CardSettingsId,
+    val stateTimestampMs: Long,
+    val isPaused: Boolean,
+    val timerModeState: TimerModeState
+) {
+    sealed interface TimerModeState {
+        data class Simple(
+            val timeLeftMs: Long
+        ) : TimerModeState
+
+        data class Infinite(
+            val timePassedMs: Long
+        ) : TimerModeState
+
+        data class Interval(
+            val intervalSettings: RunningTimerIntervalSettings,
+            val currentInterval: Int,
+            val timeLeftMs: Long
+        ) : TimerModeState
+    }
+}
+
+
+@Serializable
+data class RunningTimerIntervalSettings(
+    @SerialName("interval_work_ms")
+    val workMs: Long,
+    @SerialName("interval_rest_ms")
+    val restMs: Long,
+    @SerialName("interval_cycles_count")
+    val cycles: Int,
+    @SerialName("is_autostart_enabled")
+    val isAutostartEnabled: Boolean
+)
