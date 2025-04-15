@@ -105,10 +105,12 @@ class AppBlockerDaoHelper(
         val blockedState = if (isBlockedAll) {
             BlockedAppDetailedState.All
         } else {
-            val apps = currentState.categories.map { it.apps }.flatten().map {
-                BlockedAppEntity.App(it.packageName)
-            }
-            val category = currentState.categories.map {
+            val apps = currentState.categories.map { it.apps }.flatten()
+                .filter { it.isBlocked }
+                .map {
+                    BlockedAppEntity.App(it.packageName)
+                }
+            val category = currentState.categories.filter { it.isBlocked }.map {
                 BlockedAppEntity.Category(it.categoryEnum.id)
             }
             BlockedAppDetailedState.TurnOnWhitelist(apps + category)
