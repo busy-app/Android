@@ -1,59 +1,36 @@
 package com.flipperdevices.bsb.timer.background.model
 
-import com.flipperdevices.bsb.dao.model.TimerSettings
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
+import com.flipperdevices.bsb.dao.model.CardSettingsId
 
-@Serializable
-@SerialName("TIMER_TIMESTAMP")
-sealed interface TimerTimestamp {
-    @SerialName("last_sync")
-    val lastSync: Instant
+/**
+ * Object that can be used to calculate the current state of the timer
+ *
+ * Most often created in response to user actions
+ *
+ * Synchronised between clients
+ */
+data class RunningTimerState(
+    val cardId: CardSettingsId,
+    val stateTimestampMs: Long,
+    val timerModeState: TimerModeState
+) {
+    sealed interface TimerModeState {
+        data object Finished : TimerModeState
 
-    @Serializable
-    @SerialName("PENDING")
-    data class Pending private constructor(
-        @SerialName("last_sync")
-        override val lastSync: Instant
-    ) : TimerTimestamp {
-        companion object {
-            val NotStarted: Pending
-                get() = Pending(Instant.DISTANT_PAST)
-            val Finished: Pending
-                get() = Pending(Clock.System.now())
-        }
+        data class Simple(
+            val timeLeftMs: Long,
+            val isPaused: Boolean,
+        ) : TimerModeState
+
+        data class Infinite(
+            val timePassedMs: Long,
+            val isPaused: Boolean,
+        ) : TimerModeState
+
+        data class Interval(
+            val currentInterval: Int,
+            val timeLeftMs: Long,
+            val isPaused: Boolean,
+        ) : TimerModeState
     }
-
-    /**
-     * [TimerTimestamp] shared synchronization model for timer
-     * @param settings timer settings to determine new state
-     * @param start time when timer was started
-     * @param noOffsetStart is real time of when timer started. Shouldn't be changed after timer start
-     * @param pause time when pause was clicked
-     * @param confirmNextStepClick time when next step was clicked after autopause
-     * @param lastSync time when sync of this item was received on device
-     */
-    @Serializable
-    @SerialName("RUNNING")
-    data class Running(
-        @SerialName("settings")
-        val settings: TimerSettings,
-        @SerialName("start")
-        val start: Instant,
-        @SerialName("no_offset_start")
-        val noOffsetStart: Instant,
-        @SerialName("pause")
-        val pause: Instant? = null,
-        @SerialName("confirm_next_step_click")
-        val confirmNextStepClick: Instant = Instant.DISTANT_PAST,
-        @SerialName("last_sync")
-        override val lastSync: Instant
-    ) : TimerTimestamp
-
-    @Transient
-    val runningOrNull: Running?
-        get() = this as? Running
 }

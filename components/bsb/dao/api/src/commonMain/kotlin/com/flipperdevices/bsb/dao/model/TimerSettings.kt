@@ -1,6 +1,5 @@
 package com.flipperdevices.bsb.dao.model
 
-import com.flipperdevices.bsb.dao.model.CardSettings.TimerSettings
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
@@ -54,39 +53,3 @@ data class AndroidCardSettings(
         val alertWhenIntervalEnds: Boolean = true
     )
 }
-
-data class RunningTimerState(
-    val cardId: CardSettingsId,
-    val stateTimestampMs: Long,
-    val isPaused: Boolean,
-    val timerModeState: TimerModeState
-) {
-    sealed interface TimerModeState {
-        data class Simple(
-            val timeLeftMs: Long
-        ) : TimerModeState
-
-        data class Infinite(
-            val timePassedMs: Long
-        ) : TimerModeState
-
-        data class Interval(
-            val intervalSettings: RunningTimerIntervalSettings,
-            val currentInterval: Int,
-            val timeLeftMs: Long
-        ) : TimerModeState
-    }
-}
-
-
-@Serializable
-data class RunningTimerIntervalSettings(
-    @SerialName("interval_work_ms")
-    val workMs: Long,
-    @SerialName("interval_rest_ms")
-    val restMs: Long,
-    @SerialName("interval_cycles_count")
-    val cycles: Int,
-    @SerialName("is_autostart_enabled")
-    val isAutostartEnabled: Boolean
-)
