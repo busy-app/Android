@@ -1,7 +1,6 @@
 package com.flipperdevices.bsb.timer.background.model
 
 import com.flipperdevices.bsb.dao.model.TimerSettings
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
