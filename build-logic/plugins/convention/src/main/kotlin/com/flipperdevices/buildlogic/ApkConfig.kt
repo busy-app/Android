@@ -3,6 +3,7 @@ package com.flipperdevices.buildlogic
 import com.flipperdevices.buildlogic.model.FlavorType
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+import java.util.Properties
 
 object ApkConfig {
     const val APPLICATION_ID = "com.flipperdevices.busybar"
@@ -20,6 +21,12 @@ object ApkConfig {
         get() = requireProperty("flipper.major_version")
             .plus(".")
             .plus(VERSION_CODE)
+
+    val Project.DISABLE_NATIVE: Boolean
+        get() = secretProp("flipper.disable_native")
+            .getOrNull()
+            ?.toBooleanStrictOrNull()
+            ?: false
 
     val Project.CURRENT_FLAVOR_TYPE: FlavorType
         get() {
@@ -47,3 +54,10 @@ internal fun Project.requireProperty(key: String): String {
         ?: throw GradleException("Could not find required property $key")
 }
 
+internal fun Project.secretProp(key: String): Result<String> = runCatching {
+    val properties = Properties().apply {
+        val secretPropsFile = rootProject.file("local.properties")
+        load(secretPropsFile.reader())
+    }
+    properties[key]?.toString() ?: throw GradleException("Required property $key not defined!")
+}

@@ -1,5 +1,6 @@
 import com.flipperdevices.buildlogic.ApkConfig
 import com.flipperdevices.buildlogic.ApkConfig.CURRENT_FLAVOR_TYPE
+import com.flipperdevices.buildlogic.ApkConfig.DISABLE_NATIVE
 import com.flipperdevices.buildlogic.ApkConfig.VERSION_NAME
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
@@ -29,23 +30,24 @@ android {
 kotlin {
     androidTarget()
     jvm("desktop")
+    if (!DISABLE_NATIVE) {
+        val xcFramework = XCFramework()
+        listOf(
+            iosX64(),
+            iosArm64(),
+            iosSimulatorArm64()
+        ).forEach { iosTarget ->
+            iosTarget.binaries.framework {
+                baseName = "ComposeApp"
+                isStatic = true
 
-    val xcFramework = XCFramework()
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
+                xcFramework.add(this)
 
-            xcFramework.add(this)
-
-            export(libs.decompose)
-            export(libs.essenty.lifecycle)
-            export(libs.settings)
-            // TODO revert back export(projects.components.bsb.appblocker.api)
+                export(libs.decompose)
+                export(libs.essenty.lifecycle)
+                export(libs.settings)
+                // TODO revert back export(projects.components.bsb.appblocker.api)
+            }
         }
     }
 
@@ -108,7 +110,8 @@ kotlin {
             implementation(projects.components.bsb.timer.syncservice.socket)
             implementation(projects.components.core.trustedClock.kotlinx)
         }
-        iosMain.dependencies {
+
+        findByName("iosMain")?.dependencies {
             api(libs.decompose)
             api(libs.essenty.lifecycle)
             api(libs.settings)
@@ -256,15 +259,19 @@ dependencies {
 
     add("kspCommonMainMetadata", libs.kotlin.inject.ksp)
     add("kspAndroid", libs.kotlin.inject.ksp)
-    add("kspIosArm64", libs.kotlin.inject.ksp)
-    add("kspIosX64", libs.kotlin.inject.ksp)
-    add("kspIosSimulatorArm64", libs.kotlin.inject.ksp)
+    if (!DISABLE_NATIVE) {
+        add("kspIosArm64", libs.kotlin.inject.ksp)
+        add("kspIosX64", libs.kotlin.inject.ksp)
+        add("kspIosSimulatorArm64", libs.kotlin.inject.ksp)
+    }
     add("kspDesktop", libs.kotlin.inject.ksp)
 
     add("kspCommonMainMetadata", libs.kotlin.inject.anvil.ksp)
     add("kspAndroid", libs.kotlin.inject.anvil.ksp)
-    add("kspIosArm64", libs.kotlin.inject.anvil.ksp)
-    add("kspIosX64", libs.kotlin.inject.anvil.ksp)
-    add("kspIosSimulatorArm64", libs.kotlin.inject.anvil.ksp)
+    if (!DISABLE_NATIVE) {
+        add("kspIosArm64", libs.kotlin.inject.anvil.ksp)
+        add("kspIosX64", libs.kotlin.inject.anvil.ksp)
+        add("kspIosSimulatorArm64", libs.kotlin.inject.anvil.ksp)
+    }
     add("kspDesktop", libs.kotlin.inject.anvil.ksp)
 }

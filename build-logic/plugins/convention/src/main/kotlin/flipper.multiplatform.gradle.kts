@@ -1,4 +1,5 @@
 import com.android.build.gradle.BaseExtension
+import com.flipperdevices.buildlogic.ApkConfig.DISABLE_NATIVE
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
@@ -23,9 +24,12 @@ kotlin {
     androidTarget()
     jvm("desktop")
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    if (!DISABLE_NATIVE) {
+        sourceSets.create("iosMain").dependsOn(sourceSets.commonMain.get())
+        sourceSets.create("iosX64Main").dependsOn(sourceSets.commonMain.get())
+        sourceSets.create("iosArm64Main").dependsOn(sourceSets.commonMain.get())
+        sourceSets.create("iosSimulatorArm64Main").dependsOn(sourceSets.commonMain.get())
+    }
 
     applyDefaultHierarchyTemplate {
         common {
@@ -34,6 +38,12 @@ kotlin {
                 withJvm()
             }
         }
+    }
+    if (DISABLE_NATIVE) {
+        sourceSets.create("iosMain")
+        sourceSets.create("iosX64Main")
+        sourceSets.create("iosArm64Main")
+        sourceSets.create("iosSimulatorArm64Main")
     }
 }
 
