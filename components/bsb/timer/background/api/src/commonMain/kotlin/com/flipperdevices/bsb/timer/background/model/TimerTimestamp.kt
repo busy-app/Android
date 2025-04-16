@@ -1,7 +1,6 @@
 package com.flipperdevices.bsb.timer.background.model
 
 import com.flipperdevices.bsb.dao.model.TimerSettings
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -15,16 +14,19 @@ sealed interface TimerTimestamp {
 
     @Serializable
     @SerialName("PENDING")
-    data class Pending private constructor(
-        @SerialName("last_sync")
-        override val lastSync: Instant
-    ) : TimerTimestamp {
-        companion object {
-            val NotStarted: Pending
-                get() = Pending(Instant.DISTANT_PAST)
-            val Finished: Pending
-                get() = Pending(Clock.System.now())
+    sealed interface Pending : TimerTimestamp {
+        @Serializable
+        @SerialName("NotStarted")
+        data object NotStarted : Pending {
+            override val lastSync = Instant.DISTANT_PAST
         }
+
+        @Serializable
+        @SerialName("Finished")
+        data class Finished(
+            @SerialName("last_sync")
+            override val lastSync: Instant
+        ) : Pending
     }
 
     /**

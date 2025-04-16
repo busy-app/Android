@@ -80,12 +80,20 @@ class TimerForegroundService : LifecycleService(), LogTagProvider, TimerStateLis
                         delegate.setTimestampState(timerState)
                     } else {
                         error { "Not found timer start" }
-                        delegate.setTimestampState(TimerTimestamp.Pending.Finished)
+                        delegate.setTimestampState(
+                            TimerTimestamp.Pending.Finished(
+                                lastSync = serviceDIComponent.trustedClock.now()
+                            )
+                        )
                     }
                 }
 
                 TimerServiceActionEnum.STOP.actionId -> {
-                    delegate.setTimestampState(TimerTimestamp.Pending.Finished)
+                    delegate.setTimestampState(
+                        TimerTimestamp.Pending.Finished(
+                            lastSync = serviceDIComponent.trustedClock.now()
+                        )
+                    )
                     stopServiceInternal()
                 }
 

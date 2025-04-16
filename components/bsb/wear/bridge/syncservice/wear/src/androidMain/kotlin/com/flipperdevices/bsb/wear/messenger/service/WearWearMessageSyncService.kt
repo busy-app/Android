@@ -16,6 +16,7 @@ import com.flipperdevices.core.di.KIProvider
 import com.flipperdevices.core.di.provideDelegate
 import com.flipperdevices.core.ktx.common.FlipperDispatchers
 import com.flipperdevices.core.log.info
+import com.flipperdevices.core.log.warn
 import com.flipperdevices.core.vibrator.api.BVibratorApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -119,13 +120,14 @@ class WearWearMessageSyncService(
                         val old = timerApi
                             .getTimestampState()
                             .first()
+
                         if (old.lastSync > message.instance.lastSync) {
-                            info { "Received older timestamp state, so refresh on android" }
-                            sendTimerTimestampMessage(old)
+                            warn { "Received older timestamp state ${old.lastSync} > ${message.instance.lastSync}" }
                         } else if (old.lastSync < message.instance.lastSync) {
-                            info { "Received newer timestamp, so start timer state on wearos" }
-                            timerApi.setTimestampState(message.instance)
+                            info { "Received newer timestamp state ${old.lastSync} < ${message.instance.lastSync}" }
                         }
+
+                        timerApi.setTimestampState(message.instance)
                     }
                 }
             }.launchIn(scope)

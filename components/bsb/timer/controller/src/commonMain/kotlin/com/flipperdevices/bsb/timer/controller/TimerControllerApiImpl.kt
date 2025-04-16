@@ -91,7 +91,7 @@ class TimerControllerApiImpl(
 
     override fun stop() {
         updateState {
-            TimerTimestamp.Pending.Finished
+            TimerTimestamp.Pending.Finished(trustedClock.now())
         }
     }
 

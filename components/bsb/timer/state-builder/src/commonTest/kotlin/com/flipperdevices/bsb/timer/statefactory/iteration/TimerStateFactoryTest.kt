@@ -22,7 +22,11 @@ class TimerStateFactoryTest {
     @Test
     fun GIVEN_not_started_WHEN_build_THEN_not_started() {
         val timerStateFactory = TimerStateFactoryImpl(timeProvider)
-        val actual = timerStateFactory.create(TimerTimestamp.Pending.Finished)
+        val actual = timerStateFactory.create(
+            TimerTimestamp.Pending.Finished(
+                Instant.fromEpochSeconds(12345678)
+            )
+        )
         assertIs<ControlledTimerState.NotStarted>(actual)
     }
 

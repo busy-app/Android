@@ -17,6 +17,7 @@ import com.flipperdevices.core.ktx.common.withLock
 import com.flipperdevices.core.log.LogTagProvider
 import com.flipperdevices.core.log.error
 import com.flipperdevices.core.log.info
+import com.flipperdevices.core.trustedclock.TrustedClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -40,6 +41,7 @@ import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
 class AndroidTimerApi(
     private val scope: CoroutineScope,
     private val context: Context,
+    private val trustedClock: TrustedClock
 ) : TimerApi, ServiceConnection, LogTagProvider {
     override val TAG = "AndroidTimerApi"
 
@@ -84,7 +86,7 @@ class AndroidTimerApi(
             if (it is TimerTimestamp.Pending) {
                 it
             } else {
-                TimerTimestamp.Pending.Finished
+                TimerTimestamp.Pending.Finished(trustedClock.now())
             }
         }
         val intent = Intent(context, TimerForegroundService::class.java)
