@@ -20,13 +20,14 @@ import busystatusbar.components.bsb.timer.cards.impl.generated.resources.ic_thre
 import com.flipperdevices.bsb.timer.cards.model.LayoutOffsetData
 import com.flipperdevices.bsb.timer.cards.model.PagerData
 import com.flipperdevices.ui.video.BSBVideoPlayer
+import kotlinx.collections.immutable.ImmutableList
 
 private const val SQUARE_RATIO = 1f / 1f
 
 @Composable
 internal fun CardsVideoComposable(
     pagerState: PagerState,
-    items: List<PagerData>,
+    items: ImmutableList<PagerData>,
     layoutOffsetDataState: MutableState<LayoutOffsetData>
 ) {
     val localDensity: Density = LocalDensity.current

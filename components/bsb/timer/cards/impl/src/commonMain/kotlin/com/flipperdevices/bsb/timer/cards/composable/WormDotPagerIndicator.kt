@@ -38,7 +38,7 @@ internal fun Modifier.wormTransition(
         top = 0f,
         right = tail,
         bottom = size.height,
-        cornerRadius = CornerRadius(50f)
+        cornerRadius = CornerRadius(x = 50f)
     )
 
     val path = Path().apply {
@@ -57,14 +57,13 @@ internal fun WormDotPagerIndicator(
     activeDotColor: Color = LocalCorruptedPallet.current.neutral.senary,
     inactiveDotColor: Color = LocalCorruptedPallet.current.neutral.quaternary
 ) {
-
     Box(
         modifier = modifier,
         contentAlignment = Alignment.CenterStart
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(spacing),
-            modifier = modifier
+            modifier = Modifier
                 .height(size.times(2)),
             verticalAlignment = Alignment.CenterVertically,
         ) {

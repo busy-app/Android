@@ -9,10 +9,9 @@ import com.flipperdevices.bsb.timer.cards.model.EXAMPLE_DATA
 import com.flipperdevices.bsb.timer.cards.model.LayoutOffsetData
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun CardsScreenComposable(modifier: Modifier = Modifier) {
+fun CardsScreenComposable() {
     val items = EXAMPLE_DATA
     val layoutOffsetDataState = remember { mutableStateOf(LayoutOffsetData()) }
     val pagerState = rememberPagerState { items.size }

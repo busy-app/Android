@@ -1,8 +1,5 @@
 package com.flipperdevices.bsb.timer.cards.api
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -10,7 +7,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.flipperdevices.bsb.preference.api.ThemeStatusBarIconStyleProvider
 import com.flipperdevices.bsb.timer.cards.composable.CardsScreenComposable
-import com.flipperdevices.bsb.timer.cards.composable.OldCardsScreenComposable
 import com.flipperdevices.bsb.timer.cards.viewmodel.CardsViewModel
 import com.flipperdevices.bsb.timer.controller.TimerControllerApi
 import com.flipperdevices.bsb.timer.setup.api.CardEditSheetDecomposeComponent
@@ -50,7 +46,7 @@ class CardsDecomposeComponentImpl(
 //            modifier = modifier
 //        )
 //        Box(modifier = Modifier.navigationBarsPadding().systemBarsPadding()) {
-            CardsScreenComposable()
+        CardsScreenComposable()
 //        }
     }
 

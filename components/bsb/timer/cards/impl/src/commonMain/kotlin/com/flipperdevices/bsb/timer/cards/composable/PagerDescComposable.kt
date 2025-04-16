@@ -9,7 +9,6 @@ import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
 import com.flipperdevices.bsb.dao.model.TimerSettings
 import com.flipperdevices.ui.timeline.util.toFormattedTime
 
-
 /**
  * [withCoercedAtMostAlpha] will not allow [alpha] be more than [Color.alpha]
  * Furthermore, alpha range will be resized [0;1] -> [0;0.4]

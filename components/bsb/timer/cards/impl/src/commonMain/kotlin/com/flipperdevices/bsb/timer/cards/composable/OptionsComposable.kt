@@ -29,7 +29,7 @@ internal fun OptionsComposable() {
         initialValue = 0f,
         targetValue = 12f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1000),
+            animation = tween(durationMillis = 1000),
             repeatMode = RepeatMode.Reverse
         )
     )
