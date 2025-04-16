@@ -22,6 +22,7 @@ commonDependencies {
     implementation(projects.components.core.ui.lifecycle)
     implementation(projects.components.core.ui.timeline)
     implementation(projects.components.core.ui.cardFrame)
+    implementation(projects.components.core.ui.video)
 
 
     implementation(projects.components.bsb.root.api)
