@@ -1,6 +1,7 @@
 package com.flipperdevices.bsb.timer.cards.composable
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +38,8 @@ import kotlin.math.sign
 internal fun CardsCardSelectionComposable(
     layoutOffsetDataState: MutableState<LayoutOffsetData>,
     currentData: PagerData,
-    pagerState: PagerState
+    pagerState: PagerState,
+    onNameClick: () -> Unit
 ) {
     val pagerItemAlpha by animateFloatAsState(
         targetValue = pagerState.currentPageOffsetFraction
@@ -57,6 +59,7 @@ internal fun CardsCardSelectionComposable(
             modifier = Modifier
                 .padding(16.dp)
                 .padding(top = 86.dp)
+                .clickable(onClick = onNameClick)
                 .onGloballyPositioned {
                     layoutOffsetDataState.value = layoutOffsetDataState.value.copy(
                         titleHeightDp = with(localDensity) { it.size.height.toDp() },
