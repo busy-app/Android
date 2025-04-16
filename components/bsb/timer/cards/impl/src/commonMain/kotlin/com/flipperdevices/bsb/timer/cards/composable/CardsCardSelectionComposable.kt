@@ -39,7 +39,8 @@ internal fun CardsCardSelectionComposable(
     layoutOffsetDataState: MutableState<LayoutOffsetData>,
     currentData: PagerData,
     pagerState: PagerState,
-    onNameClick: () -> Unit
+    onNameClick: () -> Unit,
+    onOptionsClick: () -> Unit
 ) {
     val pagerItemAlpha by animateFloatAsState(
         targetValue = pagerState.currentPageOffsetFraction
@@ -91,7 +92,7 @@ internal fun CardsCardSelectionComposable(
             onClick = {}
         )
         Spacer(Modifier.height(40.dp))
-        OptionsComposable()
+        OptionsComposable(onClick = onOptionsClick)
         Box(Modifier.weight(1f))
         WormDotPagerIndicator(
             count = pagerState.pageCount,

@@ -53,8 +53,8 @@ private fun <C : Any> getLogicEventFlow(
             }
 
             instance != null &&
-                modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
-                modalSheetState.targetDetent != SheetDetent.Companion.FullyExpanded -> {
+                    modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
+                    modalSheetState.targetDetent != SheetDetent.Companion.FullyExpanded -> {
                 LogicEvent.CloseAndOpen(instance)
             }
 
@@ -70,6 +70,7 @@ private fun <C : Any> getLogicEventFlow(
 private suspend fun <C : Any> handleLogicEvent(
     logicEvent: LogicEvent<C>,
     modalSheetState: ModalBottomSheetState,
+    targetDetent: SheetDetent,
     childContent: MutableState<@Composable ModalBottomSheetScope.() -> Unit>,
     content: @Composable ModalBottomSheetScope.(C) -> Unit
 ) {
@@ -83,13 +84,13 @@ private suspend fun <C : Any> handleLogicEvent(
         is LogicEvent.CloseAndOpen<C> -> {
             withRetry {
                 modalSheetState.animateTo(SheetDetent.Companion.Hidden)
-                modalSheetState.animateTo(SheetDetent.Companion.FullyExpanded)
+                modalSheetState.animateTo(targetDetent)
             }
             childContent.value = { content(logicEvent.instance) }
         }
 
         is LogicEvent.Open<C> -> {
-            modalSheetState.animateTo(SheetDetent.Companion.FullyExpanded)
+            modalSheetState.animateTo(targetDetent)
             childContent.value = { content(logicEvent.instance) }
         }
 
@@ -103,19 +104,22 @@ fun <C : Any> ModalBottomSheetSlot(
     instance: C?,
     onDismiss: () -> Unit,
     initialDetent: SheetDetent = SheetDetent.Companion.Hidden,
+    targetDetent: SheetDetent = SheetDetent.FullyExpanded,
+    detents: List<SheetDetent> = listOf(SheetDetent.Hidden, SheetDetent.FullyExpanded),
     content: @Composable ModalBottomSheetScope.(C) -> Unit
 ) {
     val childContent = remember { mutableStateOf(emptyContent) }
 
     val modalSheetState = rememberModalBottomSheetState(
-        initialDetent = initialDetent
+        initialDetent = initialDetent,
+        detents = detents
     )
 
     LaunchedEffect(modalSheetState) {
         snapshotFlow {
             modalSheetState.targetDetent == SheetDetent.Companion.Hidden &&
-                modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
-                modalSheetState.isIdle
+                    modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
+                    modalSheetState.isIdle
         }
             .distinctUntilChanged()
             .drop(1)
@@ -134,7 +138,8 @@ fun <C : Any> ModalBottomSheetSlot(
                 logicEvent = logicEvent,
                 modalSheetState = modalSheetState,
                 childContent = childContent,
-                content = content
+                content = content,
+                targetDetent =  targetDetent
             )
         }.collect()
     }
