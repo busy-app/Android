@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.timer.cards.model.LayoutOffsetData
+import com.flipperdevices.bsb.timer.cards.model.LocalVideoLayoutInfo
 import com.flipperdevices.bsb.timer.cards.model.PagerData
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerComposable
 import com.flipperdevices.bsb.timer.common.composable.appbar.ButtonTimerState
@@ -36,7 +35,6 @@ import kotlin.math.sign
 
 @Composable
 internal fun CardsCardSelectionComposable(
-    layoutOffsetDataState: MutableState<LayoutOffsetData>,
     currentData: PagerData,
     pagerState: PagerState,
     onNameClick: () -> Unit,
@@ -50,6 +48,7 @@ internal fun CardsCardSelectionComposable(
             .absoluteValue,
     )
     val localDensity: Density = LocalDensity.current
+    val localVideoLayoutInfo = LocalVideoLayoutInfo.current
     Column(
         modifier = Modifier.fillMaxSize()
             .systemBarsPadding()
@@ -62,9 +61,14 @@ internal fun CardsCardSelectionComposable(
                 .padding(top = 86.dp)
                 .clickable(onClick = onNameClick)
                 .onGloballyPositioned {
-                    layoutOffsetDataState.value = layoutOffsetDataState.value.copy(
-                        titleHeightDp = with(localDensity) { it.size.height.toDp() },
-                        titleOffsetYDp = with(localDensity) { it.positionInParent().y.toDp() }
+                    localVideoLayoutInfo.clearVideoTopOffsets()
+                    localVideoLayoutInfo.addVideoTopOffset(
+                        key = "title_height",
+                        offset = with(localDensity) { it.size.height.toDp() }
+                    )
+                    localVideoLayoutInfo.addVideoTopOffset(
+                        key = "title_offset_y",
+                        offset = with(localDensity) { it.positionInParent().y.toDp() }
                     )
                 },
             text = currentData.timerSettings.name,
@@ -79,7 +83,7 @@ internal fun CardsCardSelectionComposable(
         Spacer(Modifier.height(8.dp))
         Box(
             modifier = Modifier
-                .height(layoutOffsetDataState.value.videoHeightDp)
+                .height(LocalVideoLayoutInfo.current.videoHeightDp)
                 .fillMaxWidth()
         )
         PagerDescComposable(

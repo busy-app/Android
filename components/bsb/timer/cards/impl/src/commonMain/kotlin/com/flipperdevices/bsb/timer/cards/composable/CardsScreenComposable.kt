@@ -2,10 +2,6 @@ package com.flipperdevices.bsb.timer.cards.composable
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.awaitVerticalDragOrCancellation
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +21,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -39,11 +34,9 @@ import com.composables.core.Sheet
 import com.composables.core.SheetDetent
 import com.flipperdevices.bsb.timer.cards.composable.State.*
 import com.flipperdevices.bsb.timer.cards.model.EXAMPLE_DATA
-import com.flipperdevices.bsb.timer.cards.model.LayoutOffsetData
 import com.flipperdevices.ui.sheet.ModalBottomSheetSlot
-import kotlin.math.absoluteValue
-import kotlinx.coroutines.awaitCancellation
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import kotlin.math.absoluteValue
 
 sealed interface State {
     data object Selecting : State
@@ -55,7 +48,6 @@ sealed interface State {
 @Composable
 fun CardsScreenComposable() {
     val items = EXAMPLE_DATA
-    val layoutOffsetDataState = remember { mutableStateOf(LayoutOffsetData()) }
     val pagerState = rememberPagerState { items.size }
     var state = remember { mutableStateOf<State>(State.Selecting) }
 
@@ -72,13 +64,11 @@ fun CardsScreenComposable() {
         CardsVideoComposable(
             pagerState = pagerState,
             items = items,
-            layoutOffsetDataState = layoutOffsetDataState
         )
         Crossfade(state.value) { localState ->
             when (val localState = localState) {
                 is Renaming -> {
                     EditCardNameComposable(
-                        layoutOffsetDataState = layoutOffsetDataState,
                         name = localState.name,
                         onFinish = {
                             state.value = Selecting
@@ -91,7 +81,6 @@ fun CardsScreenComposable() {
 
                 Selecting -> {
                     CardsCardSelectionComposable(
-                        layoutOffsetDataState = layoutOffsetDataState,
                         currentData = items[pagerState.currentPage],
                         pagerState = pagerState,
                         onNameClick = {
@@ -136,7 +125,6 @@ fun CardsScreenComposable() {
                     .fillMaxWidth()
                     .imePadding(),
             ) {
-
                 Column {
                     DragIndication()
                     LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {

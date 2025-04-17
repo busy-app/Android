@@ -53,8 +53,8 @@ private fun <C : Any> getLogicEventFlow(
             }
 
             instance != null &&
-                    modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
-                    modalSheetState.targetDetent != SheetDetent.Companion.FullyExpanded -> {
+                modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
+                modalSheetState.targetDetent != SheetDetent.Companion.FullyExpanded -> {
                 LogicEvent.CloseAndOpen(instance)
             }
 
@@ -118,8 +118,8 @@ fun <C : Any> ModalBottomSheetSlot(
     LaunchedEffect(modalSheetState) {
         snapshotFlow {
             modalSheetState.targetDetent == SheetDetent.Companion.Hidden &&
-                    modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
-                    modalSheetState.isIdle
+                modalSheetState.currentDetent == SheetDetent.Companion.Hidden &&
+                modalSheetState.isIdle
         }
             .distinctUntilChanged()
             .drop(1)
@@ -139,7 +139,7 @@ fun <C : Any> ModalBottomSheetSlot(
                 modalSheetState = modalSheetState,
                 childContent = childContent,
                 content = content,
-                targetDetent =  targetDetent
+                targetDetent = targetDetent
             )
         }.collect()
     }

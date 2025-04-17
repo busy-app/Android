@@ -19,7 +19,6 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,11 +39,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
-import com.flipperdevices.bsb.timer.cards.model.LayoutOffsetData
+import com.flipperdevices.bsb.timer.cards.model.LocalVideoLayoutInfo
 
 @Composable
 internal fun EditCardNameComposable(
-    layoutOffsetDataState: MutableState<LayoutOffsetData>,
     name: String,
     onFinish: () -> Unit,
     onNameChange: (String) -> Unit
@@ -74,6 +72,7 @@ internal fun EditCardNameComposable(
     val localDensity: Density = LocalDensity.current
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val localVideoLayoutInfo = LocalVideoLayoutInfo.current
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -122,9 +121,14 @@ internal fun EditCardNameComposable(
                 .padding(16.dp)
                 .border(2.dp, LocalCorruptedPallet.current.neutral.primary, RoundedCornerShape(16.dp))
                 .onGloballyPositioned {
-                    layoutOffsetDataState.value = layoutOffsetDataState.value.copy(
-                        titleHeightDp = with(localDensity) { it.size.height.toDp() },
-                        titleOffsetYDp = with(localDensity) { it.positionInParent().y.toDp() }
+                    localVideoLayoutInfo.clearVideoTopOffsets()
+                    localVideoLayoutInfo.addVideoTopOffset(
+                        key = "title_edit_text_height",
+                        offset = with(localDensity) { it.size.height.toDp() }
+                    )
+                    localVideoLayoutInfo.addVideoTopOffset(
+                        key = "title_edit_text_offset_y",
+                        offset = with(localDensity) { it.positionInParent().y.toDp() }
                     )
                 }
         )
