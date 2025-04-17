@@ -40,4 +40,5 @@ commonDependencies {
     implementation(libs.essenty.lifecycle.coroutines)
     implementation(libs.composables)
     implementation(libs.kotlin.immutable)
+    implementation(libs.decompose.experimental)
 }

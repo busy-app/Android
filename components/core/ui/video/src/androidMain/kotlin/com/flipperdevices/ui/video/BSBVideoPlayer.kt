@@ -27,6 +27,8 @@ import androidx.media3.ui.compose.modifiers.resizeWithContentScale
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
+fun SharedExoPlayerComposable()
+
 @OptIn(UnstableApi::class)
 @Composable
 actual fun BSBVideoPlayer(
