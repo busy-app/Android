@@ -49,7 +49,6 @@ class WearWearMessageSyncService(
     wearConnectionApiProvider: KIProvider<WearConnectionApi>,
     wearMessageConsumerProvider: KIProvider<WearMessageConsumer>,
     wearMessageProducerProvider: KIProvider<WearMessageProducer>,
-    vibratorProvider: KIProvider<BVibratorApi>,
 ) : WearMessageSyncService {
     override val TAG = "WearWearMessageSyncService"
 
@@ -58,7 +57,6 @@ class WearWearMessageSyncService(
 
     private val wearMessageConsumer by wearMessageConsumerProvider
     private val wearMessageProducer by wearMessageProducerProvider
-    private val vibrator by vibratorProvider
 
     private val scope = CoroutineScope(SupervisorJob() + FlipperDispatchers.default)
     private val jobs = mutableListOf<Job>()
@@ -83,27 +81,6 @@ class WearWearMessageSyncService(
         wearConnectionApi.statusFlow
             .filterIsInstance<WearConnectionApi.Status.Connected>()
             .collectLatest { sendTimerTimestampMessage() }
-    }
-
-    @Suppress("MagicNumber")
-    private fun startAndGetIntervalEndVibratorJob(): Job {
-        return timerApi
-            .getState()
-            .distinctUntilChangedBy { state -> state::class }
-            .map {
-                when (it) {
-                    is ControlledTimerState.Finished -> 10
-                    is ControlledTimerState.InProgress.Await -> 10
-                    is ControlledTimerState.InProgress.Running.LongRest -> 0
-                    is ControlledTimerState.InProgress.Running.Rest -> 0
-                    is ControlledTimerState.InProgress.Running.Work -> 0
-                    ControlledTimerState.NotStarted -> -1
-                }
-            }
-            .overflowChunked(2)
-            .filter { (was, now) -> now >= was }
-            .onEach { vibrator.vibrateOnce(VIBRATOR_DURATION) }
-            .launchIn(scope)
     }
 
     private fun startAndGetMessageJob(): Job {
@@ -141,7 +118,6 @@ class WearWearMessageSyncService(
                 jobs.add(startAndGetStateChangeJob())
                 jobs.add(startAndGetMessageJob())
                 jobs.add(startAndGetClientConnectJob())
-                jobs.add(startAndGetIntervalEndVibratorJob())
             }
         }
     }
@@ -151,9 +127,5 @@ class WearWearMessageSyncService(
         jobs.map { job -> job.cancel() }
         jobs.clear()
         scope.cancel()
-    }
-
-    companion object {
-        private val VIBRATOR_DURATION = 500.milliseconds
     }
 }

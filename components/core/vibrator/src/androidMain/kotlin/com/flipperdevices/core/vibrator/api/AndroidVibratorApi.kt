@@ -4,32 +4,47 @@ import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import com.flipperdevices.core.di.AppGraph
-import me.tatarka.inject.annotations.Inject
-import software.amazon.lastmile.kotlin.inject.anvil.ContributesBinding
-import software.amazon.lastmile.kotlin.inject.anvil.SingleIn
-import kotlin.time.Duration
 
-@Inject
-@SingleIn(AppGraph::class)
-@ContributesBinding(AppGraph::class, BVibratorApi::class)
-class AndroidVibratorApi(private val context: Context) : BVibratorApi {
-    override fun vibrateOnce(duration: Duration) {
+class AndroidVibratorApi(
+    private val context: Context
+) : BVibratorApi {
+    @Suppress("DEPRECATION")
+    override fun vibrateOnce(vibrateMode: VibrateMode) {
         val vibrator = ContextCompat
             .getSystemService(context, Vibrator::class.java)
             ?: return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(
-                VibrationEffect.createOneShot(
-                    duration.inWholeMilliseconds,
-                    VibrationEffect.DEFAULT_AMPLITUDE
-                )
-            )
-        } else {
-            // deprecated in API 26
-            @Suppress("DEPRECATION")
-            vibrator.vibrate(duration.inWholeMilliseconds)
+
+        when (vibrateMode) {
+            VibrateMode.TICK -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                vibrator.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
+            } else {
+                vibrator.vibrate(vibrateMode.duration.inWholeMilliseconds)
+            }
+
+            VibrateMode.THUD -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                    isPrimitiveSupported(
+                        vibrator,
+                        VibrationEffect.Composition.PRIMITIVE_THUD
+                    )
+                ) {
+                    vibrator.vibrate(
+                        VibrationEffect.startComposition()
+                            .addPrimitive(VibrationEffect.Composition.PRIMITIVE_THUD)
+                            .compose()
+                    )
+                } else {
+                    vibrator.vibrate(vibrateMode.duration.inWholeMilliseconds)
+                }
+            }
         }
     }
+}
+
+
+@RequiresApi(Build.VERSION_CODES.R)
+private fun isPrimitiveSupported(vibrator: Vibrator, primitiveId: Int): Boolean {
+    return vibrator.areAllPrimitivesSupported(primitiveId)
 }

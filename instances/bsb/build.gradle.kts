@@ -181,7 +181,6 @@ commonDependencies {
     implementation(projects.components.bsb.deeplink.impl)
     implementation(projects.components.bsb.inappnotification.api)
     implementation(projects.components.bsb.inappnotification.impl)
-    implementation(projects.components.bsb.sound.api)
     implementation(projects.components.bsb.sound.impl)
 
     implementation(projects.components.bsb.appblocker.core.api)

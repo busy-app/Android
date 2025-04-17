@@ -1,5 +1,6 @@
 plugins {
     id("flipper.anvil-multiplatform")
+    id("flipper.multiplatform-compose")
     id("flipper.multiplatform-dependencies")
 }
 

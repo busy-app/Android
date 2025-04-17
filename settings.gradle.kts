@@ -82,7 +82,6 @@ include(
     ":components:bsb:deeplink:impl",
     ":components:bsb:inappnotification:api",
     ":components:bsb:inappnotification:impl",
-    ":components:bsb:sound:api",
     ":components:bsb:sound:impl",
     ":components:bsb:liveactivity:api",
 
@@ -164,6 +163,7 @@ include(
     ":components:bsb:timer:notification:wearos",
     ":components:bsb:timer:notification:common",
     ":components:bsb:timer:controller",
+    ":components:bsb:timer:vibration:impl",
 
     ":components:bsb:wear:bridge:messenger:api",
     ":components:bsb:wear:bridge:messenger:impl",

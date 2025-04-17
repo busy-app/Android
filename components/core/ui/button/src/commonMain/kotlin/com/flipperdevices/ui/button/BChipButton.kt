@@ -41,6 +41,8 @@ import busystatusbar.components.core.ui.res_preview.generated.resources.ic_previ
 import com.flipperdevices.bsb.core.theme.BusyBarThemeInternal
 import com.flipperdevices.bsb.core.theme.LocalBusyBarFonts
 import com.flipperdevices.bsb.core.theme.LocalCorruptedPallet
+import com.flipperdevices.core.vibrator.api.VibrateMode
+import com.flipperdevices.core.vibrator.api.rememberVibratorApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -78,6 +80,8 @@ fun BChipButton(
     dashedBorderColor: Color? = null,
     content: @Composable BoxScope.() -> Unit
 ) {
+    val vibrationApi = rememberVibratorApi()
+
     Box(
         modifier = modifier
             .then(
@@ -90,7 +94,10 @@ fun BChipButton(
             .animateContentSize()
             .clip(RoundedCornerShape(112.dp))
             .background(background)
-            .clickable(enabled = enabled, onClick = onClick)
+            .clickable(enabled = enabled, onClick = {
+                vibrationApi.vibrateOnce(VibrateMode.TICK)
+                onClick()
+            })
             .padding(contentPadding),
         contentAlignment = Alignment.Center,
         content = content

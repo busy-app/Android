@@ -5,14 +5,12 @@ plugins {
 }
 
 commonDependencies {
-    implementation(projects.components.bsb.sound.api)
     implementation(projects.components.core.di)
 }
 
 androidDependencies {
     implementation(projects.components.core.ktx)
     implementation(projects.components.core.log)
-    implementation(projects.components.core.vibrator)
     implementation(projects.components.core.activityholder)
 
     implementation(projects.components.bsb.dao.api)
