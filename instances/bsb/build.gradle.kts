@@ -246,6 +246,7 @@ commonDependencies {
     implementation(projects.components.bsb.timer.notification.common)
     implementation(projects.components.bsb.timer.notification.android)
     implementation(projects.components.bsb.timer.controller)
+    implementation(projects.components.bsb.timer.vibration.impl)
 }
 
 dependencies {

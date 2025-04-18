@@ -5,5 +5,5 @@ import androidx.compose.runtime.remember
 
 @Composable
 actual fun rememberVibratorApi(): BVibratorApi {
-    return NoopVibratorApi
+    return remember { NoopVibratorApi() }
 }

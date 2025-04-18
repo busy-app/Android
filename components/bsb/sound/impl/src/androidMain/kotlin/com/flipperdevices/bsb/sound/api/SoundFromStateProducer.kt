@@ -71,8 +71,6 @@ class SoundFromStateProducer(
         if (lastSoundEvent != soundEvent) {
             soundPlayHelper.play(sound)
             lastSoundEvent = soundEvent
-        } else {
-            info { "Skip, because ${state.currentIteration to state.timerSettings} already exist" }
         }
     }
 

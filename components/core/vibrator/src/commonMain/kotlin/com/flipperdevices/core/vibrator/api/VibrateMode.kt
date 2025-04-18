@@ -6,5 +6,5 @@ import kotlin.time.Duration.Companion.seconds
 
 enum class VibrateMode(val duration: Duration) {
     TICK(500.milliseconds),
-    THUD(1.seconds)
+    THUD(500.milliseconds)
 }

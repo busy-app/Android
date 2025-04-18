@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @JvmInline
 @Serializable
@@ -28,17 +29,17 @@ data class TimerSettings(
     @Serializable
     data class IntervalsSettings(
         @SerialName("work")
-        val work: Duration = 25.minutes,
+        val work: Duration = 10.seconds,
         @SerialName("rest")
-        val rest: Duration = 5.minutes,
+        val rest: Duration = 10.seconds,
         @SerialName("long_rest")
-        val longRest: Duration = 15.minutes,
+        val longRest: Duration = 10.seconds,
         @SerialName("auto_start_work")
-        val autoStartWork: Boolean = true,
+        val autoStartWork: Boolean = false,
         @SerialName("auto_start_rest")
-        val autoStartRest: Boolean = true,
+        val autoStartRest: Boolean = false,
         @SerialName("is_enabled")
-        val isEnabled: Boolean = false
+        val isEnabled: Boolean = true
     )
 
     @Serializable

@@ -27,7 +27,7 @@ class SoundTimerListenerImpl(
         if (!timerSettings.soundSettings.alertWhenIntervalEnds) {
             return
         }
-        runBlocking { soundFromStateProducer.clear() }
+        soundFromStateProducer.clear()
         timerStateListenerJob = scope.launch {
             timerApi.getState().collectLatest { internalState ->
                 return@collectLatest when (internalState) {
@@ -45,7 +45,7 @@ class SoundTimerListenerImpl(
 
     override suspend fun onTimerStop() {
         timerStateListenerJob?.cancel()
-        runBlocking { soundFromStateProducer.clear() }
+        soundFromStateProducer.clear()
     }
 
     @Inject
