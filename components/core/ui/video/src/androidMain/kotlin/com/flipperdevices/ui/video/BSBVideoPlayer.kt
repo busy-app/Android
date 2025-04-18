@@ -1,15 +1,12 @@
 package com.flipperdevices.ui.video
 
-import android.content.Context
 import androidx.annotation.OptIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -27,7 +24,6 @@ import androidx.media3.ui.compose.modifiers.resizeWithContentScale
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
-fun SharedExoPlayerComposable()
 
 @OptIn(UnstableApi::class)
 @Composable
@@ -37,24 +33,7 @@ actual fun BSBVideoPlayer(
     modifier: Modifier,
     fallback: DrawableResource,
 ) {
-    val context = LocalContext.current
-    val exoPlayer = rememberPlayer(context)
-    var isPlayerReady by remember { mutableStateOf(false) }
-
-    DisposableEffect(exoPlayer, uri) {
-        val listener = object : Player.Listener {
-            override fun onRenderedFirstFrame() {
-                isPlayerReady = true
-            }
-        }
-        exoPlayer.addListener(listener)
-        exoPlayer.addMediaItem(MediaItem.fromUri(uri))
-        exoPlayer.prepare()
-        onDispose {
-            exoPlayer.removeListener(listener)
-            exoPlayer.release()
-        }
-    }
+    val exoPlayerState = rememberPlayer(uri)
 
     Box(
         modifier = modifier,
@@ -65,11 +44,11 @@ actual fun BSBVideoPlayer(
                 contentScale = ContentScale.FillWidth,
                 sourceSizeDp = null
             ),
-            player = exoPlayer,
+            player = exoPlayerState.exoPlayer,
             surfaceType = SURFACE_TYPE_TEXTURE_VIEW,
         )
 
-        if (!isPlayerReady) {
+        if (!exoPlayerState.isReady) {
             Image(
                 modifier = Modifier,
                 painter = painterResource(firstFrame),
@@ -79,17 +58,48 @@ actual fun BSBVideoPlayer(
     }
 }
 
+interface ExoPlayerState {
+    val exoPlayer: ExoPlayer
+    val isReady: Boolean
+}
+
+class ExoPlayerStateImpl(override val exoPlayer: ExoPlayer) : ExoPlayerState {
+    val isReadyState = mutableStateOf(false)
+    override val isReady: Boolean
+        get() = isReadyState.value
+}
+
 @OptIn(UnstableApi::class)
 @Composable
-fun rememberPlayer(context: Context) = remember {
-    ExoPlayer.Builder(context)
-        .setMediaSourceFactory(
-            ProgressiveMediaSource.Factory(DefaultDataSource.Factory(context))
+fun rememberPlayer(uri: String): ExoPlayerState {
+    val context = LocalContext.current
+    val exoPlayerState = remember {
+        ExoPlayerStateImpl(
+            exoPlayer = ExoPlayer.Builder(context)
+                .setMediaSourceFactory(
+                    ProgressiveMediaSource.Factory(DefaultDataSource.Factory(context))
+                )
+                .setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
+                .build()
+                .apply {
+                    playWhenReady = true
+                    repeatMode = Player.REPEAT_MODE_ALL
+                }
         )
-        .setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
-        .build()
-        .apply {
-            playWhenReady = true
-            repeatMode = Player.REPEAT_MODE_ALL
+    }
+    DisposableEffect(exoPlayerState.exoPlayer, uri) {
+        val listener = object : Player.Listener {
+            override fun onRenderedFirstFrame() {
+                exoPlayerState.isReadyState.value = true
+            }
         }
+        exoPlayerState.exoPlayer.addListener(listener)
+        exoPlayerState.exoPlayer.addMediaItem(MediaItem.fromUri(uri))
+        exoPlayerState.exoPlayer.prepare()
+        onDispose {
+            exoPlayerState.exoPlayer.removeListener(listener)
+            exoPlayerState.exoPlayer.release()
+        }
+    }
+    return exoPlayerState
 }
