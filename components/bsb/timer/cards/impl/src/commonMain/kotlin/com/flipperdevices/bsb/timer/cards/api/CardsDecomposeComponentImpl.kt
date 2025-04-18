@@ -94,7 +94,7 @@ class CardsDecomposeComponentImpl(
             com.arkivanov.decompose.extensions.compose.experimental.stack.ChildStack(
                 modifier = modifier,
                 stack = childStack,
-                animation = stackAnimation(fade())
+//                animation = stackAnimation(fade())
             ) { child ->
                 CompositionLocalProvider(
                     LocalAnimatedVisibilityScope provides this,

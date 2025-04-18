@@ -1,23 +1,15 @@
 package com.flipperdevices.bsb.timer.cards.api
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.timer.cards.composable.CardsCardSelectionComposable
 import com.flipperdevices.bsb.timer.cards.composable.CardsVideoComposable
-import com.flipperdevices.bsb.timer.cards.composable.EditCardNameComposable
-import com.flipperdevices.bsb.timer.cards.composable.State
-import com.flipperdevices.bsb.timer.cards.composable.State.Modal
-import com.flipperdevices.bsb.timer.cards.composable.State.Renaming
-import com.flipperdevices.bsb.timer.cards.composable.State.Selecting
 import com.flipperdevices.bsb.timer.cards.model.EXAMPLE_DATA
 import com.flipperdevices.ui.decompose.DecomposeOnBackParameter
 import com.flipperdevices.ui.decompose.ScreenDecomposeComponent

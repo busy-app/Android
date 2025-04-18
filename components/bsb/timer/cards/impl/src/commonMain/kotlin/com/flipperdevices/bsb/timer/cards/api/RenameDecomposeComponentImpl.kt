@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.Res
 import busystatusbar.components.bsb.timer.cards.impl.generated.resources.ic_three_dots
+import busystatusbar.components.bsb.timer.cards.impl.generated.resources.img_dots_first_frame
+import busystatusbar.components.bsb.timer.cards.impl.generated.resources.img_particles_first_frame
 import com.arkivanov.decompose.ComponentContext
 import com.flipperdevices.bsb.timer.cards.composable.EditCardNameComposable
 import com.flipperdevices.bsb.timer.cards.composable.SQUARE_RATIO
@@ -59,31 +61,28 @@ class RenameDecomposeComponentImpl(
                 }
         ) {
             with(LocalSharedTransitionScope.current) {
-                Box(
-                    Modifier.sharedBounds(
-                        sharedContentState = rememberSharedContentState(key = "video"),
-                        animatedVisibilityScope = LocalAnimatedVisibilityScope.current,
-                        enter = fadeIn(),
-                        exit = fadeOut(),
-                        resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
-                    )
-                ) {
-                    BSBVideoPlayer(
-                        modifier = Modifier
-                            .zIndex(-1f)
-                            .fillMaxWidth()
-                            .systemBarsPadding()
-                            .padding(top = animateDpAsState(LocalVideoLayoutInfo.current.videoTopOffsetDp).value)
-                            .padding(horizontal = 32.dp)
-                            .aspectRatio(SQUARE_RATIO)
-                            .onGloballyPositioned { layoutCoordinates ->
-                                val heightDp = with(density) { layoutCoordinates.size.height.toDp() }
-                                videoLayoutInfo.setVideoHeightDp(heightDp)
-                            },
-                        uri = cardRenameItem.videoUri,
-                        firstFrame = Res.drawable.ic_three_dots // todo
-                    )
-                }
+                BSBVideoPlayer(
+                    modifier = Modifier
+                        .zIndex(-1f)
+                        .fillMaxWidth()
+                        .systemBarsPadding()
+                        .padding(top = animateDpAsState(LocalVideoLayoutInfo.current.videoTopOffsetDp).value)
+                        .padding(horizontal = 32.dp)
+                        .aspectRatio(SQUARE_RATIO)
+                        .sharedBounds(
+                            sharedContentState = rememberSharedContentState(key = "video"),
+                            animatedVisibilityScope = LocalAnimatedVisibilityScope.current,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                            resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
+                        )
+                        .onGloballyPositioned { layoutCoordinates ->
+                            val heightDp = with(density) { layoutCoordinates.size.height.toDp() }
+                            videoLayoutInfo.setVideoHeightDp(heightDp)
+                        },
+                    uri = cardRenameItem.videoUri,
+                    firstFrame = Res.drawable.img_dots_first_frame // todo
+                )
             }
 
             EditCardNameComposable(

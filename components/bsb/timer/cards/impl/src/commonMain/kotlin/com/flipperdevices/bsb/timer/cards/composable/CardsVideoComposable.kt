@@ -26,6 +26,7 @@ import com.flipperdevices.bsb.timer.cards.model.LocalVideoLayoutInfo
 import com.flipperdevices.bsb.timer.cards.model.PagerData
 import com.flipperdevices.ui.video.BSBVideoPlayer
 import kotlinx.collections.immutable.ImmutableList
+import org.jetbrains.compose.resources.DrawableResource
 
 internal const val SQUARE_RATIO = 1f / 1f
 
@@ -64,7 +65,7 @@ internal fun CardsVideoComposable(
                             videoLayoutInfo.setVideoHeightDp(heightDp)
                         },
                     uri = data.videoUri,
-                    firstFrame = Res.drawable.ic_three_dots // todo
+                    firstFrame = data.firstFrame
                 )
             }
         }
